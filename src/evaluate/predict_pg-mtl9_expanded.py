@@ -14,7 +14,7 @@ from scipy.stats import spearmanr
 from joblib import dump, load
 import re
 import os
-
+import time
 
 #file to save results to
 save_file_path = '../../results/pgmtl_transfer_results_expanded.csv'
@@ -38,6 +38,7 @@ output_to_file = True
 k = 9
 verbose=False
 
+exec_times = np.empty((len(test_lakes)))
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
@@ -105,6 +106,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
+
+    start_time = time.time()
     (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, all_phys_data_target, all_dates_target,
     _) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
@@ -263,12 +266,11 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     print("Total rmse=", mat_rmse)
     rmse_per_lake[targ_ct] = mat_rmse
-    glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
+    glm_rmse = float(metadata[metadata['site_id'] == "nhdhr_"+target_id].glm_uncal_rmse_full)
     mat_csv.append(",".join(["nhdhr_"+target_id," : ".join([source_id for source_id in top_ids]), str(glm_rmse),str(mat_rmse)]))
-
-
-
-
+    print("exec time: ",(time.time() - start_time))
+    exec_times[targ_ct] = (time.time() - start_time)
+pdb.set_trace()
 
 
 
