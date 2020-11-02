@@ -79,6 +79,7 @@ for lake_ind, name in enumerate(ids):
     var_per_lake[lake_ind,1:] = [meteo[:,a].std() ** 2 for a in range(n_features)]
 
     glm_temps = pd.read_csv(base_path+'predictions/pb0_nhdhr_'+name+'_temperatures.csv')
+    pdb.set_trace()
     glm_temps = glm_temps.values[:]
     n_total_dates = glm_temps.shape[0]
 
