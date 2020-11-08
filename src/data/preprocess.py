@@ -82,7 +82,6 @@ if not hardcode:
         var_per_lake[lake_ind,1:] = [meteo[:,a].std() ** 2 for a in range(n_features)]
 
         glm_temps = pd.read_csv(base_path+'predictions/pb0_nhdhr_'+name+'_temperatures.csv')
-        pdb.set_trace()
         glm_temps = glm_temps.values[:]
         n_total_dates = glm_temps.shape[0]
 
@@ -273,7 +272,6 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
         sys.exit()
     assert(glm_temps[-1,-1] == meteo_dates[-1])
     assert(glm_temps_pt[-1,-1] == meteo_dates_pt[-1])
-    pdb.set_trace()
     glm_temps = glm_temps[:,0]
     glm_temps_pt = glm_temps_pt[:,0]
     obs = obs.values[:,1:] #remove needless nhd column
