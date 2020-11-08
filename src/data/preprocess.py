@@ -31,6 +31,7 @@ means_per_lake[:] = np.nan
 var_per_lake = np.zeros((n_lakes,8),dtype=np.float_)
 var_per_lake[:] = np.nan
 
+max_surface_depth = 0.25
 #calculate averages and std_dev for each input driver across all lakes
 hardcode = True
 if not hardcode:
@@ -105,8 +106,8 @@ if not hardcode:
 
 
 #can uncomment and hard code here 
-mean_feats = np.array([5.43610635, 1.66308346e02, 2.91540662e02, 6.68199233e00, 7.37268070e01, 4.79260805e00, 1.81936454e-03, 2.30189504e-03])
-std_feats = np.array([3.27680686e+00, 8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
+mean_feats = np.array([1.66308346e02, 2.91540662e02, 6.68199233e00, 7.37268070e01, 4.79260805e00, 1.81936454e-03, 2.30189504e-03])
+std_feats = np.array([8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
 #now preprocess every lakes data for modeling
 for it_ct,nid in enumerate(ids): #for each new additional lake
     name = str(nid)
@@ -133,18 +134,15 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
         glm_temps = np.append(glm_temps, tmp, axis=1)
         glm_temps_pt = np.append(glm_temps_pt, tmp, axis=1)
 
-    n_depths = glm_temps.shape[1]-1 #minus date 
-    max_depth = 0.5*(n_depths-1)
-    depths = np.arange(0, max_depth+0.5, 0.5)
-    depths_normalized = np.divide(depths - mean_feats[0], std_feats[0])
-
     ice_flags = pd.read_csv(base_path+ 'ice_flags/pb0_nhdhr_'+name+'_ice_flags.csv').values[:]
     ice_flags_pt = pd.read_csv(base_path + 'ice_flags/pb0_nhdhr_'+name+'_ice_flags.csv').values[:]
 
     #lower/uppur cutoff indices (to match observations)
     obs = pd.read_feather(base_path+'obs/nhdhr_'+name+"_obs.feather")
-    obs = obs[obs['depth'] <= max_depth] 
+    pdb.set_trace()
+    obs = obs[obs['depth'] <= max_surface_depth] 
     obs.sort_values(by='date', axis=0, ascending=True, inplace=True, kind='quicksort', na_position='last', ignore_index=False)
+    
     #sort observations
     start_date = obs.values[0,1]
     start_date_pt = glm_temps[0,-1]
@@ -284,6 +282,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
         sys.exit()
     assert(glm_temps[-1,-1] == meteo_dates[-1])
     assert(glm_temps_pt[-1,-1] == meteo_dates_pt[-1])
+    pdb.set_trace()
     glm_temps = glm_temps[:,:-1]
     glm_temps_pt = glm_temps_pt[:,:-1]
     obs = obs.values[:,1:] #remove needless nhd column
@@ -294,44 +293,38 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     ############################################################
     #fill numpy matrices
     ##################################################################
-    feat_mat_pt = np.empty((n_depths, n_dates_pt, n_features+2)) #[depth->7 meteo features-> ice flag]
+    feat_mat_pt = np.empty((n_dates_pt, n_features+2)) #[7 meteo features-> ice flag]
     feat_mat_pt[:] = np.nan
-    feat_norm_mat_pt = np.empty((n_depths, n_dates_pt, n_features+1)) #[standardized depth -> 7 std meteo features]
+    feat_norm_mat_pt = np.empty((n_dates_pt, n_features)) #[7 std meteo features]
     feat_norm_mat_pt[:] = np.nan
-    glm_mat_pt = np.empty((n_depths, n_dates_pt))
+    glm_mat_pt = np.empty((n_dates_pt))
     glm_mat_pt[:] = np.nan
 
 
-    feat_mat = np.empty((n_depths, n_dates, n_features+2)) #[depth->7 meteo features-> ice flag]
+    feat_mat = np.empty((n_dates, n_features+1)) #[7 meteo features-> ice flag]
     feat_mat[:] = np.nan
-    feat_norm_mat = np.empty((n_depths, n_dates, n_features+1)) #[standardized depth -> 7 std meteo features]
+    feat_norm_mat = np.empty((n_dates, n_features+1)) #[standardized depth -> 7 std meteo features]
     feat_norm_mat[:] = np.nan
-    glm_mat = np.empty((n_depths, n_dates))
+    glm_mat = np.empty((n_dates))
     glm_mat[:] = np.nan
-    obs_trn_mat = np.empty((n_depths, n_dates))
+    obs_trn_mat = np.empty((n_dates))
     obs_trn_mat[:] = np.nan
-    obs_tst_mat = np.empty((n_depths, n_dates))
+    obs_tst_mat = np.empty((n_dates))
     obs_tst_mat[:] = np.nan
     # print("n depths: " + str(n_depths))
-    for d in range(n_depths):
-        #fill pretrain data
-        feat_mat_pt[d,:,0] = depths[d] 
-        feat_mat_pt[d,:,1:-1] = meteo_pt[:]
-        feat_mat_pt[d,:,-1] = ice_flags_pt[:,1]        
-        feat_norm_mat_pt[d,:,0] = depths_normalized[d]
-        feat_norm_mat_pt[d,:,1:] = meteo_norm_pt[:]
-        glm_mat_pt[d,:] = glm_temps_pt[:,d]
 
-        #fill train data
-        feat_mat[d,:,0] = depths[d] 
-        feat_mat[d,:,1:-1] = meteo[:]
-        feat_mat[d,:,-1] = ice_flags[:,1]        
-        feat_norm_mat[d,:,0] = depths_normalized[d]
-        feat_norm_mat[d,:,1:] = meteo_norm[:]
-        glm_mat[d,:] = glm_temps[:,d]
+    feat_mat_pt[:,:-1] = meteo_pt[:]
+    feat_mat_pt[:,-1] = ice_flags_pt[:,1]        
+    feat_norm_mat_pt[:,:] = meteo_norm_pt[:]
+    glm_mat_pt[:] = glm_temps_pt[:]
+
+    #fill train data
+    feat_mat[:,:-1] = meteo[:]
+    feat_mat[:,-1] = ice_flags[:,1]        
+    feat_norm_mat[:,:] = meteo_norm[:]
+    glm_mat[:] = glm_temps[:]
 
     #verify all mats filled
-
     if np.isnan(np.sum(feat_mat)):
         raise Exception("ERROR: Preprocessing failed, there is missing data: features for training")
         sys.exit()
@@ -345,37 +338,6 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
         raise Exception("ERROR: Preprocessing failed, there is missing data feat norm")
         sys.exit() 
 
-    #interpolate glm
-    if np.isnan(np.sum(glm_mat)):
-        # print("Warning: there is missing data in glm output")
-        for i in range(n_depths):
-            for t in range(n_dates):
-                if np.isnan(glm_mat[i,t]):
-                    x = depths[i]
-                    xp = depths[0:(i)]
-                    yp = glm_mat[0:(i),t]
-                    if xp.shape[0] == 1:
-                        glm_mat[i,t] = glm_mat[i-1,t]
-                    else:
-                        f = interpolate.interp1d(xp, yp,  fill_value="extrapolate")
-                        glm_mat[i,t] = f(x) #interp_temp
-
-        assert not np.isnan(np.sum(glm_mat))
-    if np.isnan(np.sum(glm_mat_pt)):
-        # print("Warning: there is missing data in glm output")
-        for i in range(n_depths):
-            for t in range(n_dates_pt):
-                if np.isnan(glm_mat_pt[i,t]):
-                    x = depths[i]
-                    xp = depths[0:(i)]
-                    yp = glm_mat_pt[0:(i),t]
-                    if xp.shape[0] == 1:
-                        glm_mat_pt[i,t] = glm_mat_pt[i-1,t]
-                    else:
-                        f = interpolate.interp1d(xp, yp,  fill_value="extrapolate")
-                        glm_mat_pt[i,t] = f(x) #interp_temp
-
-        assert not np.isnan(np.sum(glm_mat_pt))
 
     #observations, round to nearest 0.5m depth and put in train/test matrices
     obs_g = 0
@@ -403,35 +365,26 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     n_trn_obs_placed = 0
     for o in range(0,last_tst_obs_ind+1):
         #verify data in depth range
-        if obs[o,1] > depths[-1]:
-            obs_g += 1
-            # print("observation depth " + str(obs[o,1]) + " is greater than the max depth of " + str(max_depth))
-            continue
         if len(np.where(meteo_dates == obs[o,0])[0]) < 1:
+            # print("not within meteo dates")
             obs_d += 1
             continue
         if len(np.where(depths == np.round(obs[o,1]*2)/2)[0]) == 0:
             print("depth value shouldn't exist")
             pdb.set_trace()
-        depth_ind = np.where(depths == np.round(obs[o,1]*2)/2)[0][0]
         date_ind = np.where(meteo_dates == obs[o,0])[0][0]
-        obs_tst_mat[depth_ind, date_ind] = obs[o,2]
+        obs_tst_mat[date_ind] = obs[o,2]
         n_tst_obs_placed += 1
 
     #train data
     for o in range(last_tst_obs_ind+1, n_obs):
-        if obs[o,1] > depths[-1]:
-            obs_g += 1
-            # print("observation depth " + str(obs[o,1]) + " is greater than the max depth of " + str(max_depth))
-            continue
-        depth_ind = np.where(depths == np.round(obs[o,1]*2)/2)[0][0]
         if len(np.where(meteo_dates == obs[o,0])[0]) < 1:
             obs_d += 1
             continue
 
         date_ind = np.where(meteo_dates == obs[o,0])[0][0]
 
-        obs_trn_mat[depth_ind, date_ind] = obs[o,2]
+        obs_trn_mat[date_ind] = obs[o,2]
         n_trn_obs_placed += 1
 
 
@@ -440,7 +393,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
         d_str = ", and "+str(obs_d) + " observations outside of combined date range of meteorological and GLM output"
     # if obs_g > 0 or obs_d > 0:
         # continue
-    print("lake " + str(it_ct) + ",  id: " + name + ": " + str(obs_g) + "/" + str(n_obs) + " observations greater than max depth " + str(max_depth) + d_str)
+    # print("lake " + str(it_ct) + ",  id: " + name + ": " + str(obs_g) + "/" + str(n_obs) + " observations greater than max depth " + str(max_depth) + d_str)
     #write features and labels to processed data
     print("pre-training: ", first_pretrain_date, "->", last_pretrain_date, "(", n_pretrain, ")")
     print("training: ", first_train_date, "->", last_train_date, "(", n_trn, ")")
