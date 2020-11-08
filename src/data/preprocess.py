@@ -133,6 +133,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     obs = obs[obs['depth'] <= max_surface_depth] 
     if obs.shape[0] == 0:
         print("|\n|\nNO SURFACE OBSERVATIONS\n|\n|\n|")
+        no_obs_ids.append(name)
         no_obs_ct +=1 
         continue
 
@@ -419,7 +420,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     n_obs_per.append(np.count_nonzero(np.isfinite(full)))
     print("completed!")
 
-
+print(no_obs_ids)
 print(repr(n_obs_per))
 pdb.set_trace()
 
