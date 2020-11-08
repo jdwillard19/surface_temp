@@ -139,7 +139,6 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
 
     #lower/uppur cutoff indices (to match observations)
     obs = pd.read_feather(base_path+'obs/nhdhr_'+name+"_obs.feather")
-    pdb.set_trace()
     obs = obs[obs['depth'] <= max_surface_depth] 
     obs.sort_values(by='date', axis=0, ascending=True, inplace=True, kind='quicksort', na_position='last', ignore_index=False)
     
