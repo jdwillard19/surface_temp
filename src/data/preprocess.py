@@ -23,6 +23,7 @@ ids = np.array([re.search('nhdhr_(.*)', x).group(1) for x in ids])
 no_obs_ct = 0
 n_features = 7
 n_obs_per = []
+no_obs_ids = []
 n_lakes = ids.shape[0]
 
 #accumulation data structs for averaging
