@@ -20,9 +20,9 @@ obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
 metadata = pd.read_feather("../../metadata/lake_metadata.feather")
 ids = np.unique(obs_df['site_id'].values)
 ids = np.array([re.search('nhdhr_(.*)', x).group(1) for x in ids])
-
+no_obs_ct = 0
 n_features = 7
-
+n_obs_per = []
 n_lakes = ids.shape[0]
 
 #accumulation data structs for averaging
@@ -131,6 +131,11 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     #lower/uppur cutoff indices (to match observations)
     obs = pd.read_feather(base_path+'obs/nhdhr_'+name+"_obs.feather")
     obs = obs[obs['depth'] <= max_surface_depth] 
+    is obs.shape[0] == 0:
+        print("|\n|\nNO SURFACE OBSERVATIONS\n|\n|\n|")
+        no_obs_ct +=1 
+        continue
+
     obs.sort_values(by='date', axis=0, ascending=True, inplace=True, kind='quicksort', na_position='last', ignore_index=False)
     
     #sort observations
@@ -398,6 +403,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     dates_path_pt = "../../data/processed/"+name+"/dates_pt"
 
 
+
     np.save(feat_path, feat_mat)
     np.save(feat_path_pt, feat_mat_pt)
     np.save(norm_feat_path, feat_norm_mat)
@@ -411,7 +417,12 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     full = obs_trn_mat
     full[np.nonzero(np.isfinite(obs_tst_mat))] = obs_tst_mat[np.isfinite(obs_tst_mat)]
     np.save(full_path, full)
+    n_obs_per.append(np.count_nonzero(np.isfinite(full)))
     print("completed!")
+
+
+print(repr(n_obs_per))
+pdb.set_trace()
 
 
 
