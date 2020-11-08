@@ -139,7 +139,6 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     obs.sort_values(by='date', axis=0, ascending=True, inplace=True, kind='quicksort', na_position='last', ignore_index=False)
     
     #sort observations
-    pdb.set_trace()
     start_date = obs.values[0,1]
     start_date_pt = glm_temps[0,-1]
 
