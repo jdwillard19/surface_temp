@@ -131,7 +131,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     #lower/uppur cutoff indices (to match observations)
     obs = pd.read_feather(base_path+'obs/nhdhr_'+name+"_obs.feather")
     obs = obs[obs['depth'] <= max_surface_depth] 
-    is obs.shape[0] == 0:
+    if obs.shape[0] == 0:
         print("|\n|\nNO SURFACE OBSERVATIONS\n|\n|\n|")
         no_obs_ct +=1 
         continue
