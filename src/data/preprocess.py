@@ -105,10 +105,8 @@ if not hardcode:
 
 
 #can uncomment and hard code here 
-mean feats = np.array([5.43610635e+00, 1.66308346e+02, 2.91540662e+02, 6.68199233e+00,\
-       7.37268070e+01, 4.79260805e+00, 1.81936454e-03, 2.30189504e-03])
-std feats = np.array([3.27680686e+00, 8.52790273e+01, 6.10175316e+01, 1.28183124e+01,\
-       1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
+mean feats = np.array([5.43610635e+00, 1.66308346e+02, 2.91540662e+02, 6.68199233e+00, 7.37268070e+01, 4.79260805e+00, 1.81936454e-03, 2.30189504e-03])
+std feats = np.array([3.27680686e+00, 8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
 #now preprocess every lakes data for modeling
 for it_ct,nid in enumerate(ids): #for each new additional lake
     name = str(nid)
