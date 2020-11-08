@@ -191,8 +191,8 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     meteo_pt = meteo_pt[lower_cutoff_pt:upper_cutoff_pt,:]
 
     #normalize data
-    meteo_norm = (meteo - mean_feats[1:]) / std_feats[1:]
-    meteo_norm_pt = (meteo_pt - mean_feats[1:]) / std_feats[1:]
+    meteo_norm = (meteo - mean_feats[:]) / std_feats[:]
+    meteo_norm_pt = (meteo_pt - mean_feats[:]) / std_feats[:]
 
     ################################################################################
     # read/format GLM temperatures and observation data for numpy
