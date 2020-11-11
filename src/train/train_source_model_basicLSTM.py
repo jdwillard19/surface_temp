@@ -122,29 +122,29 @@ for n_hidden in n_hidden_list:
     #Dataset classes
     class TemperatureTrainDataset(Dataset):
     #training dataset class, allows Dataloader to load both input/target
-    def __init__(self, trn_data):
-        self.len = trn_data.shape[0]
-        self.x_data = trn_data[:,:,:-1].float()
-        self.y_data = trn_data[:,:,-1].float()
+        def __init__(self, trn_data):
+            self.len = trn_data.shape[0]
+            self.x_data = trn_data[:,:,:-1].float()
+            self.y_data = trn_data[:,:,-1].float()
 
-    def __getitem__(self, index):
-        return self.x_data[index], self.y_data[index]
+        def __getitem__(self, index):
+            return self.x_data[index], self.y_data[index]
 
-    def __len__(self):
-        return self.len
+        def __len__(self):
+            return self.len
 
     class TotalModelOutputDataset(Dataset):
     #dataset for unsupervised input(in this case all the data)
-    def __init__(self, all_data, all_phys_data,all_dates):
-        #data of all model output, and corresponding unstandardized physical quantities
-        #needed to calculate physical loss
-        self.len = all_data.shape[0]
-        self.data = all_data[:,:,:-1].float()
-        self.label = all_data[:,:,-1].float() #DO NOT USE IN MODEL
-        self.phys = all_phys_data.float()
-        helper = np.vectorize(lambda x: date.toordinal(pd.Timestamp(x).to_pydatetime()))
-        dates = helper(all_dates)
-        self.dates = dates
+        def __init__(self, all_data, all_phys_data,all_dates):
+            #data of all model output, and corresponding unstandardized physical quantities
+            #needed to calculate physical loss
+            self.len = all_data.shape[0]
+            self.data = all_data[:,:,:-1].float()
+            self.label = all_data[:,:,-1].float() #DO NOT USE IN MODEL
+            self.phys = all_phys_data.float()
+            helper = np.vectorize(lambda x: date.toordinal(pd.Timestamp(x).to_pydatetime()))
+            dates = helper(all_dates)
+            self.dates = dates
 
     def __getitem__(self, index):
         return self.data[index], self.phys[index], self.dates[index], self.label[index]
