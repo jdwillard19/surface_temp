@@ -103,7 +103,9 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
     assert feat_mat.shape[0] == trn.shape[0]
     win_shift_tst = begin_loss_ind
     udates = dates
-    n_dates = feat_mat.shape[1]
+    n_dates = feat_mat.shape[0]
+    if verbose:
+        print("n dates: ", n_dates)
     seq_per_depth = math.floor(n_dates / seq_length)
     train_seq_per_depth = seq_per_depth
     test_seq_per_depth = seq_per_depth
@@ -171,6 +173,7 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
         X_all[all_seq_ind,:,-1] = np.nan #no label
         X_phys[all_seq_ind, :, :] = feat_mat_raw[start_index:end_index,:]
         all_seq_ind += 1   
+
         #now do sliding windows for training data 
         for w in range(0, win_per_seq):
             win_start_ind = start_index + w*win_shift
