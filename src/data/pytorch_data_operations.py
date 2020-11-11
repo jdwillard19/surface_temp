@@ -60,20 +60,20 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
 
     #post process train/test splits
 
-    if postProcessSplits:
-        shape0 = trn.shape[0]
-        trn_flt = trn.flatten()
-        tst_flt = tst.flatten()
-        np.put(trn_flt, np.where(np.isfinite(tst_flt))[0], tst_flt[np.isfinite(tst_flt)])
-        trn_tst = trn_flt.reshape((shape0))
-        last_tst_col = int(np.round(np.unique(np.where(np.isfinite(trn_tst))).shape[0]/3))
-        unq_col = np.unique(np.where(np.isfinite(trn_tst))[1])
-        trn = np.empty_like(trn_tst)
-        trn[:] = np.nan
-        tst = np.empty_like(trn_tst)
-        tst[:] = np.nan
-        trn[:,unq_col[last_tst_col]:] = trn_tst[:,unq_col[last_tst_col]:]
-        tst[:,:unq_col[last_tst_col]] = trn_tst[:,:unq_col[last_tst_col]]
+    # if postProcessSplits:
+    #     shape0 = trn.shape[0]
+    #     trn_flt = trn.flatten()
+    #     tst_flt = tst.flatten()
+    #     np.put(trn_flt, np.where(np.isfinite(tst_flt))[0], tst_flt[np.isfinite(tst_flt)])
+    #     trn_tst = trn_flt.reshape((shape0))
+    #     last_tst_col = int(np.round(np.unique(np.where(np.isfinite(trn_tst))).shape[0]/3))
+    #     unq_col = np.unique(np.where(np.isfinite(trn_tst))[1])
+    #     trn = np.empty_like(trn_tst)
+    #     trn[:] = np.nan
+    #     tst = np.empty_like(trn_tst)
+    #     tst[:] = np.nan
+    #     trn[:,unq_col[last_tst_col]:] = trn_tst[:,unq_col[last_tst_col]:]
+    #     tst[:,:unq_col[last_tst_col]] = trn_tst[:,:unq_col[last_tst_col]]
 
     np.random.seed(seed=randomSeed)
     if sparseCustom is not None:
