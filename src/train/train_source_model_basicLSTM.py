@@ -264,7 +264,6 @@ for n_hidden in n_hidden_list:
         lstm_net.train(True)
         avg_loss = 0
         batches_done = 0
-        pdb.set_trace()
         for i, batches in enumerate(multi_loader):
             #load data
             inputs = None
