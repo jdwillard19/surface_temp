@@ -81,6 +81,9 @@ grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 
 
 
+ep_list20 = [] #list of epochs at which models were saved for 20 hidden units
+ep_list50 = [] #list of epochs at which models were saved for 50 hidden units
+
 lakename = site_id
 print("lake: "+lakename)
 data_dir = "../../data/processed/"+lakename+"/"
@@ -242,12 +245,19 @@ for n_hidden in n_hidden_list:
     min_mse = 99999
     min_mse_tsterr = None
     ep_min_mse = -1
+    ep_since_min = 0
     best_pred_mat = np.empty(())
     manualSeed = [random.randint(1, 99999999) for i in range(train_epochs)]
+
+    #stop training if true
+    done = False
 
     for epoch in range(train_epochs):
         if verbose:
             print("train epoch: ", epoch)
+
+        if done:
+            break
 
         running_loss = 0.0
 
@@ -322,9 +332,44 @@ for n_hidden in n_hidden_list:
         if verbose:
             print("rmse loss=", avg_loss)
 
-        if epoch % 50 == 0 and epoch != 0:
+        if avg_loss < min_mse:
+            min_mse = avg_loss
+            ep_min_mse = epoch
+            ep_since_min = 0
+
+        else:
+            ep_since_min += 1
+
+        if ep_since_min == patience:
+            done = True
+            break
+
+
+
+
+        if epoch % 100 == 0 and epoch != 0:
+
             save_path = "../../models/"+lakename+"/LSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
+
             saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+            if n_hidden == 20:
+                ep_list20.append(save_path)
+            elif n_hidden == 50:
+                ep_list50.append(save_path)
+
             print("saved at ",save_path)
 
 
+            break
+
+
+
+##################################################################
+# transfer all models to all other source lakes to find best one
+########################################################################
+
+#load all other source lakes
+glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
+train_lakes = np.array([re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)])
+
+pdb.set_trace()
