@@ -315,7 +315,6 @@ for n_hidden in n_hidden_list:
             #zero the parameter gradients
             optimizer.zero_grad()
             avg_loss += loss
-            avg_unsup_loss += unsup_loss
             batches_done += 1
 
         #check for convergence
