@@ -184,25 +184,25 @@ for n_hidden in n_hidden_list:
             self.w_upper_to_lower = []
             self.w_lower_to_upper = []
 
-    def init_hidden(self, batch_size=0):
-        # initialize both hidden layers
-        if batch_size == 0:
-            batch_size = self.batch_size
-        ret = (xavier_normal_(torch.empty(1, batch_size, self.hidden_size)),
-                xavier_normal_(torch.empty(1, batch_size, self.hidden_size)))
-        if use_gpu:
-            item0 = ret[0].cuda(non_blocking=True)
-            item1 = ret[1].cuda(non_blocking=True)
-            ret = (item0,item1)
-        return ret
+        def init_hidden(self, batch_size=0):
+            # initialize both hidden layers
+            if batch_size == 0:
+                batch_size = self.batch_size
+            ret = (xavier_normal_(torch.empty(1, batch_size, self.hidden_size)),
+                    xavier_normal_(torch.empty(1, batch_size, self.hidden_size)))
+            if use_gpu:
+                item0 = ret[0].cuda(non_blocking=True)
+                item1 = ret[1].cuda(non_blocking=True)
+                ret = (item0,item1)
+            return ret
 
-    def forward(self, x, hidden):
-        self.lstm.flatten_parameters()
-        x = x.float()
-        x, hidden = self.lstm(x, self.hidden)
-        self.hidden = hidden
-        x = self.out(x)
-        return x, hidden
+        def forward(self, x, hidden):
+            self.lstm.flatten_parameters()
+            x = x.float()
+            x, hidden = self.lstm(x, self.hidden)
+            self.hidden = hidden
+            x = self.out(x)
+            return x, hidden
 
     #method to calculate l1 norm of model
     def calculate_l1_loss(model):
