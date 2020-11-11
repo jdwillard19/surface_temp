@@ -12,12 +12,13 @@ import pdb
 import random
 import math
 import sys
+import re
 import os
 sys.path.append('../../data')
 sys.path.append('../data')
 sys.path.append('../../models')
 sys.path.append('../models')
-from pytorch_data_operations import buildLakeDataForRNNPretrain, calculate_ec_loss_manylakes, calculate_dc_loss
+from pytorch_data_operations import buildLakeDataForRNNPretrain
 from pytorch_model_operations import saveModel
 import pytorch_data_operations
 import datetime
