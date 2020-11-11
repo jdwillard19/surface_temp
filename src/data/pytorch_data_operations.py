@@ -118,8 +118,7 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
         print("n train seq: ", n_train_seq)
 
     n_train_seq_no_window = train_seq_per_depth 
-    pdb.set_trace()
-    last_test_date_ind = np.where(np.isfinite(tst))[1][-1]
+    last_test_date_ind = np.where(np.isfinite(tst))[0][-1]
     n_test_seq = (test_seq_per_depth) * tst_win_per_seq
     if last_test_date_ind % seq_length > 0 and last_test_date_ind - seq_length > 0:
         n_test_seq += 1
