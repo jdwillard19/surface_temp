@@ -146,11 +146,11 @@ for n_hidden in n_hidden_list:
             dates = helper(all_dates)
             self.dates = dates
 
-    def __getitem__(self, index):
-        return self.data[index], self.phys[index], self.dates[index], self.label[index]
+        def __getitem__(self, index):
+            return self.data[index], self.phys[index], self.dates[index], self.label[index]
 
-    def __len__(self):
-        return self.len
+        def __len__(self):
+            return self.len
 
 
 
