@@ -173,16 +173,16 @@ for n_hidden in n_hidden_list:
 
     #define LSTM model class
     class myLSTM_Net(nn.Module):
-    def __init__(self, input_size, hidden_size, batch_size):
-        super(myLSTM_Net, self).__init__()
-        self.input_size = input_size
-        self.hidden_size = hidden_size
-        self.batch_size = batch_size
-        self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers) #batch_first=True?
-        self.out = nn.Linear(hidden_size, 1) #1?
-        self.hidden = self.init_hidden()
-        self.w_upper_to_lower = []
-        self.w_lower_to_upper = []
+        def __init__(self, input_size, hidden_size, batch_size):
+            super(myLSTM_Net, self).__init__()
+            self.input_size = input_size
+            self.hidden_size = hidden_size
+            self.batch_size = batch_size
+            self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers) #batch_first=True?
+            self.out = nn.Linear(hidden_size, 1) #1?
+            self.hidden = self.init_hidden()
+            self.w_upper_to_lower = []
+            self.w_lower_to_upper = []
 
     def init_hidden(self, batch_size=0):
         # initialize both hidden layers
@@ -206,27 +206,27 @@ for n_hidden in n_hidden_list:
 
     #method to calculate l1 norm of model
     def calculate_l1_loss(model):
-    def l1_loss(x):
-        return torch.abs(x).sum()
+        def l1_loss(x):
+            return torch.abs(x).sum()
 
-    to_regularize = []
-    # for name, p in model.named_parameters():
-    for name, p in model.named_parameters():
-        if 'bias' in name:
-            continue
-        else:
-            #take absolute value of weights and sum
-            to_regularize.append(p.view(-1))
-    l1_loss_val = torch.tensor(1, requires_grad=True, dtype=torch.float32)
-    l1_loss_val = l1_loss(torch.cat(to_regularize))
-    return l1_loss_val
+        to_regularize = []
+        # for name, p in model.named_parameters():
+        for name, p in model.named_parameters():
+            if 'bias' in name:
+                continue
+            else:
+                #take absolute value of weights and sum
+                to_regularize.append(p.view(-1))
+        l1_loss_val = torch.tensor(1, requires_grad=True, dtype=torch.float32)
+        l1_loss_val = l1_loss(torch.cat(to_regularize))
+        return l1_loss_val
 
 
     lstm_net = myLSTM_Net(n_features, n_hidden, batch_size)
 
     #tell model to use GPU if needed
     if use_gpu:
-    lstm_net = lstm_net.cuda()
+        lstm_net = lstm_net.cuda()
 
 
 
