@@ -256,7 +256,6 @@ for n_hidden in n_hidden_list:
 
         alldataloader = DataLoader(total_data, batch_sampler=batch_sampler_all, pin_memory=True)
         trainloader = DataLoader(train_data, batch_sampler=batch_sampler, pin_memory=True)
-        pdb.set_trace()
         multi_loader = pytorch_data_operations.MultiLoader([trainloader, alldataloader])
 
 

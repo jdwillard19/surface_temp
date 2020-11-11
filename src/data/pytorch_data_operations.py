@@ -1631,7 +1631,6 @@ def transformTempToDensity(temp, use_gpu):
 
     return densities
 
-
 #Iterator through multiple dataloaders
 class MyIter(object):
   """An iterator."""
