@@ -62,11 +62,10 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
 
     if postProcessSplits:
         shape0 = trn.shape[0]
-        shape1 = trn.shape[1]
         trn_flt = trn.flatten()
         tst_flt = tst.flatten()
         np.put(trn_flt, np.where(np.isfinite(tst_flt))[0], tst_flt[np.isfinite(tst_flt)])
-        trn_tst = trn_flt.reshape((shape0, shape1))
+        trn_tst = trn_fslt.reshape((shape0))
         last_tst_col = int(np.round(np.unique(np.where(np.isfinite(trn_tst))[1]).shape[0]/3))
         unq_col = np.unique(np.where(np.isfinite(trn_tst))[1])
         trn = np.empty_like(trn_tst)
@@ -106,8 +105,6 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
     assert feat_mat.shape[1] == trn.shape[1]
     assert feat_mat.shape[1] == feat_mat_raw.shape[1]
     win_shift_tst = begin_loss_ind
-    depth_values = feat_mat_raw[:, 0, 0]
-    assert np.unique(depth_values).size == n_depths
     udates = dates
     n_dates = feat_mat.shape[1]
     seq_per_depth = math.floor(n_dates / seq_length)
@@ -116,18 +113,18 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
     win_per_seq = math.floor(seq_length / win_shift) - 1 #windows per sequence (only training)
     win_per_seq = 2#windows per sequence (only training)
     tst_win_per_seq = 2 #windows per sequence (only training)
-    n_train_seq = train_seq_per_depth * n_depths * win_per_seq
+    n_train_seq = train_seq_per_depth * win_per_seq
     if n_dates % seq_length > 0 and n_dates - seq_length > 0:
-        n_train_seq += n_depths
+        n_train_seq += 1
 
     if debug:
         print("n train seq: ", n_train_seq)
 
-    n_train_seq_no_window = train_seq_per_depth * n_depths
+    n_train_seq_no_window = train_seq_per_depth 
     last_test_date_ind = np.where(np.isfinite(tst))[1][-1]
-    n_test_seq = (test_seq_per_depth) * n_depths * tst_win_per_seq
+    n_test_seq = (test_seq_per_depth) * tst_win_per_seq
     if last_test_date_ind % seq_length > 0 and last_test_date_ind - seq_length > 0:
-        n_test_seq += n_depths
+        n_test_seq += 1
 
 
     n_all_seq = n_train_seq_no_window 
@@ -172,38 +169,35 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
             X_trn = np.delete(X_trn, np.arange(X_trn.shape[0],X_trn.shape[0]-win_per_seq*n_depths,-1), axis=0)
             trn_dates = np.delete(trn_dates, np.arange(trn_dates.shape[0], trn_dates.shape[0] - n_depths*win_per_seq,-1), axis=0)
             continue
-        for d in range(0, n_depths):
-            #first do total model data
-            X_all[all_seq_ind, :, :-1] = feat_mat[d,start_index:end_index,:] #feat
-            all_dates[all_seq_ind, :] = dates[start_index:end_index] #dates
-            X_all[all_seq_ind,:,-1] = np.nan #no label
-            X_phys[all_seq_ind, :, :] = feat_mat_raw[d, start_index:end_index,:]
-            all_seq_ind += 1   
+        X_all[all_seq_ind, :, :-1] = feat_mat[start_index:end_index,:] #feat
+        all_dates[all_seq_ind, :] = dates[start_index:end_index] #dates
+        X_all[all_seq_ind,:,-1] = np.nan #no label
+        X_phys[all_seq_ind, :, :] = feat_mat_raw[start_index:end_index,:]
+        all_seq_ind += 1   
         #now do sliding windows for training data 
         for w in range(0, win_per_seq):
             win_start_ind = start_index + w*win_shift
             win_end_ind = win_start_ind + seq_length
 
-            for d in range(0,n_depths):
-                if win_end_ind > n_dates:
-                    n_train_seq -= 1
-                    X_trn = np.delete(X_trn, -1, axis=0)
-                    trn_dates = np.delete(trn_dates, -1, axis=0)
-                    continue
-                X_trn[tr_seq_ind, :, :-1] = feat_mat[d,win_start_ind:win_end_ind,:]
-                X_trn[tr_seq_ind,:,-1] = trn[d,win_start_ind:win_end_ind]
-                trn_dates[tr_seq_ind,:] = dates[win_start_ind:win_end_ind]
-                tr_seq_ind += 1
+
+            if win_end_ind > n_dates:
+                n_train_seq -= 1
+                X_trn = np.delete(X_trn, -1, axis=0)
+                trn_dates = np.delete(trn_dates, -1, axis=0)
+                continue
+            X_trn[tr_seq_ind, :, :-1] = feat_mat[win_start_ind:win_end_ind,:]
+            X_trn[tr_seq_ind,:,-1] = trn[win_start_ind:win_end_ind]
+            trn_dates[tr_seq_ind,:] = dates[win_start_ind:win_end_ind]
+            tr_seq_ind += 1
     #final seq starts at end and goes inward [seq_length]
     # print("n dates: ", n_dates, ", seq len: ", seq_length)
     if n_dates % seq_length > 0:
         end_ind = n_dates
         start_ind = end_ind - seq_length
-        for d in range(0,n_depths):
-            X_trn[tr_seq_ind, :, :-1] = feat_mat[d,start_ind:end_ind,:]
-            X_trn[tr_seq_ind,:,-1] = trn[d,start_ind:end_ind]
-            trn_dates[tr_seq_ind,:] = dates[start_ind:end_ind]
-            tr_seq_ind += 1
+        X_trn[tr_seq_ind, :, :-1] = feat_mat[start_ind:end_ind,:]
+        X_trn[tr_seq_ind,:,-1] = trn[start_ind:end_ind]
+        trn_dates[tr_seq_ind,:] = dates[start_ind:end_ind]
+        tr_seq_ind += 1
 
     if debug:
         print("x_trn shape after populating ", X_trn.shape)
@@ -227,23 +221,23 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
                 start_index = s*seq_length
                 end_index = (s+1)*seq_length
                 if end_index > n_dates:
-                    n_test_seq -= tst_win_per_seq*n_depths
-                    X_tst = np.delete(X_tst, np.arange(X_tst.shape[0], X_tst.shape[0] - tst_win_per_seq*n_depths,-1), axis=0)
-                    tst_dates = np.delete(tst_dates, np.arange(tst_dates.shape[0], tst_dates.shape[0] - tst_win_per_seq*n_depths,-1), axis=0)
+                    n_test_seq -= tst_win_per_seq
+                    X_tst = np.delete(X_tst, np.arange(X_tst.shape[0], X_tst.shape[0] - tst_win_per_seq,-1), axis=0)
+                    tst_dates = np.delete(tst_dates, np.arange(tst_dates.shape[0], tst_dates.shape[0] - tst_win_per_seq,-1), axis=0)
                     continue
                 for w in range(0, tst_win_per_seq):
                     win_start_ind = start_index+w*win_shift_tst
                     win_end_ind = win_start_ind + seq_length
                     if win_end_ind > n_dates:
-                        n_test_seq -= n_depths
-                        X_tst = np.delete(X_tst, np.arange(X_tst.shape[0], X_tst.shape[0] - n_depths,-1), axis=0)
-                        tst_dates = np.delete(tst_dates, np.arange(tst_dates.shape[0], tst_dates.shape[0] - n_depths,-1), axis=0)
+                        n_test_seq -= 1
+                        X_tst = np.delete(X_tst, np.arange(X_tst.shape[0], X_tst.shape[0] - 1,-1), axis=0)
+                        tst_dates = np.delete(tst_dates, np.arange(tst_dates.shape[0], tst_dates.shape[0] - 1,-1), axis=0)
                         continue
-                    for d in range(0, n_depths):
-                        X_tst[ts_seq_ind, :, :-1] = feat_mat[d,win_start_ind:win_end_ind,:]
-                        X_tst[ts_seq_ind,:,-1] = tst[d,win_start_ind:win_end_ind]
-                        tst_dates[ts_seq_ind,:] = dates[win_start_ind:win_end_ind]
-                        ts_seq_ind += 1
+
+                    X_tst[ts_seq_ind, :, :-1] = feat_mat[win_start_ind:win_end_ind,:]
+                    X_tst[ts_seq_ind,:,-1] = tst[win_start_ind:win_end_ind]
+                    tst_dates[ts_seq_ind,:] = dates[win_start_ind:win_end_ind]
+                    ts_seq_ind += 1
                            #final seq starts at end and goes inward [seq_length]
         if debug:
             print("last_test_date_ind: ", last_test_date_ind, ", sl ", seq_length)
@@ -252,11 +246,11 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
             end_ind = last_test_date_ind
             if not end_ind - seq_length < 0:
                 start_ind = end_ind - seq_length
-                for d in range(0,n_depths):
-                    X_tst[ts_seq_ind, :, :-1] = feat_mat[d,start_ind:end_ind,:]
-                    X_tst[ts_seq_ind,:,-1] = trn[d,start_ind:end_ind]
-                    tst_dates[ts_seq_ind,:] = dates[start_ind:end_ind]
-                    ts_seq_ind += 1
+
+                X_tst[ts_seq_ind, :, :-1] = feat_mat[start_ind:end_ind,:]
+                X_tst[ts_seq_ind,:,-1] = trn[start_ind:end_ind]
+                tst_dates[ts_seq_ind,:] = dates[start_ind:end_ind]
+                ts_seq_ind += 1
     while np.isnat(tst_dates[-1,0]):
         if debug:
             print("NaT?")
@@ -332,21 +326,13 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
 
     unique_tst_dates = dates[tst_date_lower_bound:tst_date_upper_bound]
 
-    hyps_dir = data_dir + "geometry" #hypsography file
-    hyps = []
-    my_path = os.path.abspath(os.path.dirname(__file__))
-
-    if os.path.exists(os.path.join(my_path, hyps_dir)):
-
-        hyps = getHypsographyManyLakes(hyps_dir, lakename, depth_values)
-
 
     assert np.isfinite(X_all[:,:,:-1]).all(), "X_all has nan"
     assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
     assert np.isfinite(X_phys).all(), "X_phys has nan"
     # assert np.isfinite(all_dates).any(), "all_dates has nan"
     return (torch.from_numpy(X_trn), trn_dates, torch.from_numpy(X_tst), tst_dates, unique_tst_dates,torch.from_numpy(X_all), 
-            torch.from_numpy(X_phys), all_dates, hyps)
+            torch.from_numpy(X_phys), all_dates)
 
 
 
