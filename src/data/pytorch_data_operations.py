@@ -66,7 +66,7 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
         tst_flt = tst.flatten()
         np.put(trn_flt, np.where(np.isfinite(tst_flt))[0], tst_flt[np.isfinite(tst_flt)])
         trn_tst = trn_flt.reshape((shape0))
-        last_tst_col = int(np.round(np.unique(np.where(np.isfinite(trn_tst))[1]).shape[0]/3))
+        last_tst_col = int(np.round(np.unique(np.where(np.isfinite(trn_tst))).shape[0]/3))
         unq_col = np.unique(np.where(np.isfinite(trn_tst))[1])
         trn = np.empty_like(trn_tst)
         trn[:] = np.nan
