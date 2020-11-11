@@ -101,9 +101,6 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
     assert feat_mat.shape[0] == feat_mat_raw.shape[0]
     assert feat_mat.shape[0] == tst.shape[0]
     assert feat_mat.shape[0] == trn.shape[0]
-    assert feat_mat.shape[1] == tst.shape[1]
-    assert feat_mat.shape[1] == trn.shape[1]
-    assert feat_mat.shape[1] == feat_mat_raw.shape[1]
     win_shift_tst = begin_loss_ind
     udates = dates
     n_dates = feat_mat.shape[1]
