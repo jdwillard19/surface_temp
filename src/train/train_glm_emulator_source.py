@@ -375,7 +375,7 @@ other_source_ids = train_lakes[~np.isin(train_lakes,site_id)] #remove site id
 other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121623126',\
                                                                 '121860894','143249413',\
                                                                 '143249864', '152335372',\
-                                                                '155635994'])] #remove cuz only 1,0,0,0,1,0,0 surf temp obs
+                                                                '155635994','70332223'])] #remove cuz <= 1 surf temp obs
 
 
 err_per_epoch20 = np.empty((len(ep_list20)))
