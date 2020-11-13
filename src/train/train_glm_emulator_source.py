@@ -114,11 +114,10 @@ for n_hidden in n_hidden_list:
     # data preprocess
     ##################################
     #create train and test sets
-    (trn_data, trn_dates, tst_data, tst_dates, unique_tst_dates, all_data, all_phys_data, all_dates) = buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features,
-                                   win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                   outputFullTestMatrix=True, allTestSeq=True) 
 
-    trn_data = tst_data
+    (trn_data, all_data, all_phys_data, all_dates) = buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features,
+                                       win_shift= win_shift, begin_loss_ind=begin_loss_ind,
+                                       excludeTest=False, normAll=False, normGE10=False)
     batch_size = trn_data.size()[0]
 
 
@@ -340,6 +339,7 @@ for n_hidden in n_hidden_list:
             ep_since_min += 1
 
         if ep_since_min == patience:
+            print("patience met")
             done = True
             break
 
@@ -362,7 +362,7 @@ for n_hidden in n_hidden_list:
             break
 
 
-
+print("|\n|\nTraining Candidate Models Complete\n|\n|")
 ##################################################################
 # transfer all models to all other source lakes to find best one
 ########################################################################
