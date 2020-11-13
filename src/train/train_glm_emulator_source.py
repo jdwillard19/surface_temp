@@ -461,7 +461,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
             for i, source_id in enumerate(top_ids): 
                 #for each top id
-                source_id = re.search('nhdhr_(.*)', source_id).group(1)
+                # source_id = re.search('nhdhr_(.*)', source_id).group(1)
                 #load source model
                 load_path = "../../models/"+source_id+"/LSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
                 lstm_net = LSTM(n_features, n_hidden, batch_size)
