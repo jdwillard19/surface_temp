@@ -49,6 +49,7 @@ site_id = sys.argv[1]
 ### debug tools
 debug_train = False
 debug_end = False
+debug_eval = True
 verbose = True
 save = True
 
@@ -91,7 +92,11 @@ data_dir = "../../data/processed/"+lakename+"/"
 ##################################
 #create train and test sets
 
+
 for n_hidden in n_hidden_list:
+
+    if debug_eval:
+        break
     #####################################################################################
     ####################################################3
     # fine tune
@@ -395,7 +400,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
     for ep_ct, eps in enumerate(ep_list):
         for target_id in other_source_ids:
-
+            print("TARGET: ", target_id)
             data_dir_target = "../../data/processed/"+target_id+"/" 
             #target agnostic model and data params
             use_gpu = True
