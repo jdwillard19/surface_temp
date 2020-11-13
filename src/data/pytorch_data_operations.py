@@ -440,6 +440,7 @@ def buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features, win_
 
     assert np.isfinite(X_trn).all(), "X_trn has nan at" + str(np.argwhere(np.isfinite(X_trn)))
     assert np.isfinite(X_all[:,:,:-1]).all(), "X_all has nan"
+    pdb.set_trace()
     assert np.isfinite(X_phys).any(), "X_phys has nan"
     # assert np.isfinite(all_dates).any(), "all_dates has nan"
     return (torch.from_numpy(X_trn), torch.from_numpy(X_all), torch.from_numpy(X_phys), all_dates, hyps)
