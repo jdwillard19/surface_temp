@@ -50,9 +50,7 @@ site_id = sys.argv[1]
 debug_train = False
 debug_end = False
 verbose = True
-pretrain = True
 save = True
-save_pretrain = True
 
 #RMSE threshold for pretraining
 num_layers = 1
@@ -406,8 +404,9 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
             seq_length = 350
             win_shift = 175
             begin_loss_ind = 0
-            (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, all_phys_data_target, all_dates_target,
-            _) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
+            (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, \
+             all_phys_data_target, all_dates_target)\
+            = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                                outputFullTestMatrix=True, allTestSeq=True)
             
