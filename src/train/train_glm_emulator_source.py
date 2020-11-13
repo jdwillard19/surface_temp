@@ -359,7 +359,6 @@ for n_hidden in n_hidden_list:
             print("saved at ",save_path)
 
 
-            break
 
 
 print("|\n|\nTraining Candidate Models Complete\n|\n|")
