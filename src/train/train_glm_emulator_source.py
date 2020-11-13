@@ -77,7 +77,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 
 
-n_eps = 200
+n_eps = 300
 
 ep_list20 = [] #list of epochs at which models were saved for 20 hidden units
 ep_list50 = [] #list of epochs at which models were saved for 50 hidden units
@@ -389,8 +389,8 @@ err_per_epoch50[:] = np.nan
 top_ids = [site_id]
 
 #data structs to record transfer test results
-err_per_hid_ep20 = np.empty((len(n_hidden_list), len(ep_list20)))
-err_per_hid_ep50 = np.empty((len(n_hidden_list), len(ep_list50)))
+err_per_hid_ep20 = np.empty((len(ep_list20)))
+err_per_hid_ep50 = np.empty((len(ep_list50)))
 
 for hid_ct, n_hidden in enumerate(n_hidden_list):
     ep_list = []
@@ -399,7 +399,6 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
     elif n_hidden == 50:
         ep_list = ep_list50
 
-    pdb.set_trace()
     for ep_ct, eps in enumerate(ep_list):
         for target_id in other_source_ids:
             print("TARGET: ", target_id)
@@ -570,9 +569,10 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
             print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
 
             if n_hidden == 20:
-                err_per_hid_ep20[hid_ct, ep_ct] = mat_rmse
+                err_per_hid_ep20[ep_ct] = mat_rmse
             elif n_hidden == 50:
-                err_per_hid_ep50[hid_ct, ep_ct] = mat_rmse
+                err_per_hid_ep50[ep_ct] = mat_rmse
+
 
 
 
