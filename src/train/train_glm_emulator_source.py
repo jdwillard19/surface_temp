@@ -171,7 +171,7 @@ for n_hidden in n_hidden_list:
 
 
     #load val/test data into enumerator based on batch size
-    testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
+    # testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
 
 
     #define LSTM model class
