@@ -402,6 +402,7 @@ def buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features, win_
         X_all[all_seq_ind, :, :-1] = feat_mat[start_index:end_index,:] #feat
         all_dates[all_seq_ind, :] = dates[start_index:end_index] #dates
         X_all[all_seq_ind,:,-1] = Y_mat[start_index:end_index] #label
+        pdb.set_trace()
         X_phys[all_seq_ind, :, :] = feat_mat_raw[start_index:end_index,:]
         all_seq_ind += 1   
         #now do sliding windows for training data 
