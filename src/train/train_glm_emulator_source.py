@@ -533,7 +533,6 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
                         mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
                         # print(source_id+" rmse=", mat_rmse)
-                        err_per_source[i,targ_ct] = mat_rmse
 
                         # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
 
