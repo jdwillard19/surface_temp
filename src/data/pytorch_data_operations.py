@@ -381,7 +381,7 @@ def buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features, win_
 
     X_all = np.empty(shape=(n_all_seq, seq_length, n_features+1))
     all_dates = np.empty(shape=(n_all_seq, seq_length), dtype='datetime64[s]')
-    X_phys = np.empty(shape=(n_all_seq, seq_length, n_features+1)) #short wave, long wave, modeled temp, depth
+    X_phys = np.empty(shape=(n_all_seq, seq_length, n_features)) #short wave, long wave, modeled temp, depth
 
     X_trn[:] = np.nan
     X_all[:] = np.nan
