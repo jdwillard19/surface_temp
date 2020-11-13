@@ -391,7 +391,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
     ep_list = []
     if n_hidden == 20:
         ep_list = ep_list20
-    elif: n_hidden == 50:
+    elif n_hidden == 50:
         ep_list = ep_list50
 
 
