@@ -524,7 +524,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
                                                                         n_test_dates_target,
                                                                         unique_tst_dates_target) 
                         #to store output
-                        output_mats[i,:,:] = outputm_npy
+                        output_mats[i,:] = outputm_npy
                         if i == 0:
                             #store label
                             label_mats = labelm_npy
