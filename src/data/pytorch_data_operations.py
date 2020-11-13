@@ -384,7 +384,7 @@ def buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features, win_
 
     X_all = np.empty(shape=(n_all_seq, seq_length, n_features+1))
     all_dates = np.empty(shape=(n_all_seq, seq_length), dtype='datetime64[s]')
-    X_phys = np.empty(shape=(n_all_seq, seq_length, n_features)) #short wave, long wave, modeled temp, depth
+    X_phys = np.empty(shape=(n_all_seq, seq_length, n_features+1)) #meteo plus, ice
 
     X_trn[:] = np.nan
     X_all[:] = np.nan
@@ -402,8 +402,7 @@ def buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features, win_
         X_all[all_seq_ind, :, :-1] = feat_mat[start_index:end_index,:] #feat
         all_dates[all_seq_ind, :] = dates[start_index:end_index] #dates
         X_all[all_seq_ind,:,-1] = Y_mat[start_index:end_index] #label
-        pdb.set_trace()
-        X_phys[all_seq_ind, :, :] = feat_mat_raw[start_index:end_index,:]
+        X_phys[all_seq_ind, :, :] = feat_mat_raw[start_index:end_index,:] #exclude ice flag
         all_seq_ind += 1   
         #now do sliding windows for training data 
         for w in range(0, win_per_seq):
@@ -661,7 +660,8 @@ def calculate_ec_loss(inputs, outputs, phys, labels, dates, depth_areas, n_depth
         # diff_vec = diff_vec[np.where((doy[:] > 134) & (doy[:] < 342))[0]]
 
         #actual ice
-        diff_vec = diff_vec[np.where((phys[0,1:-1,9] == 0))[0]]
+        # diff_vec = diff_vec[np.where((phys[0,1:-1,9] == 0))[0]]
+        diff_vec = diff_vec[np.where((phys[0,1:-1,-1] == 0))[0]] #change from 9 to -1 not verified
         # #compute difference to be used as penalty
         if diff_vec.size() == torch.Size([0]):
             diff_per_set[i] = 0
