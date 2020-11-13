@@ -357,7 +357,8 @@ def buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features, win_
 
     years = dates.astype('datetime64[Y]').astype(int) + 1970
  
-
+    #for debugging
+    debug = True
 
     assert np.isfinite(feat_mat).all(), "feat_mat has nan at" + str(np.argwhere(np.isfinite(feat_mat)))
     assert np.isfinite(feat_mat_raw).all(), "feat_mat_raw has nan at" + str(np.argwhere(np.isfinite(feat_mat_raw)))
@@ -374,7 +375,9 @@ def buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features, win_
     n_train_seq_no_window = train_seq_per_depth
     n_all_seq = n_train_seq_no_window
 
-
+    if debug:
+        print("sequences: ", seq_per_depth)
+        print("window per seq: ", win_per_seq)
 
     #build train and test sets, add all data for physical loss
     X_trn = np.empty(shape=(n_train_seq, seq_length, n_features+1)) #features + label
