@@ -971,8 +971,7 @@ def parseMatricesFromSeqs(pred, targ, dates, n_tst_dates, u_dates):
             print("invalid date")
             continue
         date_ind = np.where(u_dates == dates[i,0])[0][0]
-        # print("depth ind: ", depth_ind, ", date ind: ",date_ind)
-        if out_mat[depth_ind, date_ind:].shape[0] < seq_len:
+        if out_mat[date_ind:].shape[0] < seq_len:
             sizeToCopy = out_mat[date_ind:].shape[0] #this is to not copy data beyond test dates
             out_mat[date_ind:] = pred[i,:sizeToCopy]
             lab_mat[date_ind:] = targ[i,:sizeToCopy]
@@ -981,7 +980,6 @@ def parseMatricesFromSeqs(pred, targ, dates, n_tst_dates, u_dates):
             out_mat[date_ind:date_ind+seq_len] = pred[i,:]
             lab_mat[date_ind:date_ind+seq_len][indices] = targ[i,:][indices]
             # for t in range(seq_len):
-            #     if np.isnan(out_mat[depth_ind,date_ind+t]):
             #         out_mat[depth_ind, date_ind+t] = pred[i,t]
             #         lab_mat[depth_ind, date_ind+t] = targ[i,t]
         # print(np.count_nonzero(np.isfinite(lab_mat))," labels set")
