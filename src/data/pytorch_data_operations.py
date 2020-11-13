@@ -120,6 +120,8 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
         print("n train seq: ", n_train_seq)
 
     n_train_seq_no_window = train_seq_per_depth 
+    if lakename == '121622699':
+        pdb.set_trace()
     last_test_date_ind = np.where(np.isfinite(tst))[0][-1]
     n_test_seq = (test_seq_per_depth) * tst_win_per_seq
     if last_test_date_ind % seq_length > 0 and last_test_date_ind - seq_length > 0:
@@ -979,10 +981,6 @@ def parseMatricesFromSeqs(pred, targ, dates, n_tst_dates, u_dates):
             indices = np.isfinite(targ[i,:])
             out_mat[date_ind:date_ind+seq_len] = pred[i,:]
             lab_mat[date_ind:date_ind+seq_len][indices] = targ[i,:][indices]
-            # for t in range(seq_len):
-            #         out_mat[depth_ind, date_ind+t] = pred[i,t]
-            #         lab_mat[depth_ind, date_ind+t] = targ[i,t]
-        # print(np.count_nonzero(np.isfinite(lab_mat))," labels set")
                 
     return (out_mat, lab_mat)
 
