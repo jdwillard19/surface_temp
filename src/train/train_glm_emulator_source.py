@@ -245,12 +245,12 @@ for n_hidden in n_hidden_list:
     ep_min_mse = -1
     ep_since_min = 0
     best_pred_mat = np.empty(())
-    manualSeed = [random.randint(1, 99999999) for i in range(train_epochs)]
+    manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
 
     #stop training if true
     done = False
 
-    for epoch in range(train_epochs):
+    for epoch in range(n_eps):
         if verbose:
             print("train epoch: ", epoch)
 
