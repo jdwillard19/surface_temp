@@ -63,7 +63,7 @@ num_layers = 2
 first_save_epoch = 0
 patience = 100
 
-n_hidden_list = [16,32] #fixed
+n_hidden_list = [64,128] #fixed
 
 unsup_loss_cutoff = 40
 dc_unsup_loss_cutoff = 1e-3
