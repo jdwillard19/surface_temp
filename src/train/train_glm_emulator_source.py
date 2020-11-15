@@ -77,7 +77,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 
 
-n_eps = 1000
+n_eps = 10000
 
 ep_list20 = [] #list of epochs at which models were saved for 20 hidden units
 ep_list50 = [] #list of epochs at which models were saved for 50 hidden units
@@ -587,6 +587,7 @@ else:
 
 
 pdb.set_trace()
+print("BEST_MODEL_PATH:../../models/105954753/LSTM_source_model_"+str(best_hid)+"hid_"+str(best_ep)+"ep")
 with open(save_file_path,'w') as file:
     for line in mat_csv:
         file.write(line)
