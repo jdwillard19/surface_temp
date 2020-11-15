@@ -351,9 +351,9 @@ for n_hidden in n_hidden_list:
             save_path = "../../models/"+lakename+"/LSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
 
             saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-            if n_hidden == 20:
+            if n_hidden == n_hidden_list[0]:
                 ep_list20.append(epoch)
-            elif n_hidden == 50:
+            elif n_hidden == n_hidden_list[1]:
                 ep_list50.append(epoch)
 
             print("saved at ",save_path)
