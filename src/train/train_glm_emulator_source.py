@@ -63,7 +63,7 @@ num_layers = 2
 first_save_epoch = 0
 patience = 100
 
-n_hidden_list = [64,128] #fixed
+n_hidden_list = [32,64] #fixed
 
 unsup_loss_cutoff = 40
 dc_unsup_loss_cutoff = 1e-3
@@ -75,7 +75,7 @@ n_features = 7  #number of physical drivers
 win_shift = 50 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
-
+dropout = .1
 
 n_eps = 10000
 
@@ -181,7 +181,7 @@ for n_hidden in n_hidden_list:
             self.input_size = input_size
             self.hidden_size = hidden_size
             self.batch_size = batch_size
-            self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers) #batch_first=True?
+            self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
             self.out = nn.Linear(hidden_size, 1) #1?
             self.hidden = self.init_hidden()
             self.w_upper_to_lower = []
@@ -427,7 +427,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
                     self.input_size = input_size
                     self.hidden_size = hidden_size
                     self.batch_size = batch_size
-                    self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True, num_layers=num_layers) 
+                    self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True, num_layers=num_layers,dropout=dropout) 
                     self.out = nn.Linear(hidden_size, 1)
                     self.hidden = self.init_hidden()
 
