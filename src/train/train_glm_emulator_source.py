@@ -63,7 +63,7 @@ num_layers = 1
 first_save_epoch = 0
 patience = 100
 
-n_hidden_list = [20,50] #fixed
+n_hidden_list = [35,70] #fixed
 
 unsup_loss_cutoff = 40
 dc_unsup_loss_cutoff = 1e-3
@@ -393,9 +393,9 @@ err_per_hid_ep50 = np.empty((len(ep_list50)))
 
 for hid_ct, n_hidden in enumerate(n_hidden_list):
     ep_list = []
-    if n_hidden == 20:
+    if n_hidden == n_hidden_list[0]:
         ep_list = ep_list20
-    elif n_hidden == 50:
+    elif n_hidden == n_hidden_list[1]:
         ep_list = ep_list50
 
     for ep_ct, eps in enumerate(ep_list):
@@ -405,7 +405,6 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
             #target agnostic model and data params
             use_gpu = True
             n_features = 7
-            # n_hidden = 20
             seq_length = 350
             win_shift = 175
             begin_loss_ind = 0
@@ -567,23 +566,23 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
             print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
 
-            if n_hidden == 20:
+            if n_hidden == n_hidden_list[0]:
                 err_per_hid_ep20[ep_ct] = mat_rmse
-            elif n_hidden == 50:
+            elif n_hidden == n_hidden_list[1]:
                 err_per_hid_ep50[ep_ct] = mat_rmse
 
 
 
 best_hid = None
 best_ep = None
-if err_per_hid_ep20.min() < err_per_hid_ep20.min():
+if err_per_hid_ep20.min() < err_per_hid_ep50.min():
     min_ep_ind = np.argmin(err_per_hid_ep20)
     best_ep = (min_ep_ind+1)*100
-    best_hid = 20
+    best_hid = n_hidden_list[0]
 else:
     min_ep_ind = np.argmin(err_per_hid_ep50)
     best_ep = (min_ep_ind+1)*100
-    best_hid = 50
+    best_hid = n_hidden_list[1]
 
 
 pdb.set_trace()
