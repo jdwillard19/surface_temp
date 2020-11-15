@@ -61,7 +61,7 @@ save = True
 first_save_epoch = 0
 patience = 100
 
-n_hidden_list = [16,64] #fixed
+n_hidden_list = [16,32,64,128] #fixed
 
 unsup_loss_cutoff = 40
 dc_unsup_loss_cutoff = 1e-3
@@ -74,11 +74,12 @@ win_shift = 50 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = .1
-num_layers = 3
+num_layers = 1
 n_eps = 10000
 
-ep_list20 = [] #list of epochs at which models were saved for 20 hidden units
-ep_list50 = [] #list of epochs at which models were saved for 50 hidden units
+ep_list16 = [] #list of epochs at which models were saved for * hidden units
+ep_list32 = [] 
+ep_list64 = [] 
 
 lakename = site_id
 print("lake: "+lakename)
@@ -350,9 +351,11 @@ for n_hidden in n_hidden_list:
 
             saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
             if n_hidden == n_hidden_list[0]:
-                ep_list20.append(epoch)
+                ep_list16.append(epoch)
             elif n_hidden == n_hidden_list[1]:
-                ep_list50.append(epoch)
+                ep_list32.append(epoch)
+            elif n_hidden is n_hidden_list[2]:
+                ep_list64.append(epoch)
 
             print("saved at ",save_path)
 
@@ -376,18 +379,23 @@ other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121
                                                                 '75474779'])] #remove cuz <= 1 surf temp obs
 
 
-err_per_epoch20 = np.empty((len(ep_list20)))
-err_per_epoch20[:] = np.nan
+err_per_epoch16 = np.empty((len(ep_list16)))
+err_per_epoch16[:] = np.nan
 
-err_per_epoch50 = np.empty((len(ep_list50)))
-err_per_epoch50[:] = np.nan
+err_per_epoch32 = np.empty((len(ep_list32)))
+err_per_epoch32[:] = np.nan
+
+err_per_epoch64 = np.empty((len(ep_list64)))
+err_per_epoch64[:] = np.nan
 
 
 top_ids = [site_id]
 
 #data structs to record transfer test results
+err_per_16hid_ep = np.empty((len(ep_list16)))
 err_per_hid_ep20 = np.empty((len(ep_list20)))
-err_per_hid_ep50 = np.empty((len(ep_list50)))
+err_per_32hid_ep = np.empty((len(ep_list32)))
+err_per_64hid_ep = np.empty((len(ep_list64)))
 
 for hid_ct, n_hidden in enumerate(n_hidden_list):
     ep_list = []
@@ -565,26 +573,30 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
             print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
 
             if n_hidden == n_hidden_list[0]:
-                err_per_hid_ep20[ep_ct] = mat_rmse
+                err_per_16hid_ep[ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[1]:
-                err_per_hid_ep50[ep_ct] = mat_rmse
+                err_per_32hid_ep[ep_ct] = mat_rmse
+            elif n_hidden == n_hidden_list[2]:
+                err_per_64hid_ep[ep_ct] = mat_rmse
 
 
 
 best_hid = None
 best_ep = None
-if err_per_hid_ep20.min() < err_per_hid_ep50.min():
-    min_ep_ind = np.argmin(err_per_hid_ep20)
-    best_ep = (min_ep_ind+1)*100
-    best_hid = n_hidden_list[0]
-else:
-    min_ep_ind = np.argmin(err_per_hid_ep50)
-    best_ep = (min_ep_ind+1)*100
-    best_hid = n_hidden_list[1]
+
+min_ep_ind_16hid = np.argmin(err_per_16hid_ep)
+best_ep_16hid = (min_ep_ind_16hid+1)*100
+
+min_ep_ind_32hid = np.argmin(err_per_32hid_ep)
+best_ep_32hid = (min_ep_ind_32hid+1)*100
+
+min_ep_ind_64hid = np.argmin(err_per_64hid_ep)
+best_ep_64hid = (min_ep_ind_64hid+1)*100
 
 
-pdb.set_trace()
-print("BEST_MODEL_PATH:../../models/105954753/LSTM_source_model_"+str(best_hid)+"hid_"+str(best_ep)+"ep")
+print("BEST_MODEL_PATH_16HID:../../models/105954753/LSTM_source_model_16hid_"+str(best_ep_16hid)+"ep")
+print("BEST_MODEL_PATH_32HID:../../models/105954753/LSTM_source_model_32hid_"+str(best_ep_32hid)+"ep")
+print("BEST_MODEL_PATH_64HID:../../models/105954753/LSTM_source_model_64hid_"+str(best_ep_64hid)+"ep")
 with open(save_file_path,'w') as file:
     for line in mat_csv:
         file.write(line)
