@@ -251,7 +251,7 @@ for n_hidden in n_hidden_list:
     done = False
 
     for epoch in range(n_eps):
-        if verbose:
+        if verbose and epoch % 100 == 0:
             print("train epoch: ", epoch)
 
         if done:
