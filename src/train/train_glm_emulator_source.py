@@ -398,7 +398,7 @@ top_ids = [site_id]
 
 #data structs to record transfer test results
 err_per_16hid_ep = np.empty((len(ep_list16)))
-err_per_hid_ep20 = np.empty((len(ep_list20)))
+# err_per_hid_ep20 = np.empty((len(ep_list20)))
 err_per_32hid_ep = np.empty((len(ep_list32)))
 err_per_64hid_ep = np.empty((len(ep_list64)))
 err_per_128hid_ep = np.empty((len(ep_list128)))
