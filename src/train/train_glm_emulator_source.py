@@ -435,8 +435,8 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
                     # initialize both hidden layers
                     if batch_size == 0:
                         batch_size = self.batch_size
-                    ret = (xavier_normal_(torch.empty(1, batch_size, self.hidden_size)),
-                            xavier_normal_(torch.empty(1, batch_size, self.hidden_size)))
+                    ret = (xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)),
+                            xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)))
                     if use_gpu:
                         item0 = ret[0].cuda(non_blocking=True)
                         item1 = ret[1].cuda(non_blocking=True)
