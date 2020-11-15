@@ -327,7 +327,7 @@ for n_hidden in n_hidden_list:
 
         #check for convergence
         avg_loss = avg_loss / batches_done
-        if verbose and epoch %100 = 0:
+        if verbose and epoch %100 is 0:
             print("rmse loss=", avg_loss)
 
         if avg_loss < min_mse:
