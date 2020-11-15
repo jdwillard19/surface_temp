@@ -52,8 +52,6 @@ debug_end = False
 verbose = True
 save = True
 
-#layers of units LSTM
-num_layers = 2
 
 
 
@@ -63,7 +61,7 @@ num_layers = 2
 first_save_epoch = 0
 patience = 100
 
-n_hidden_list = [32,64] #fixed
+n_hidden_list = [16,64] #fixed
 
 unsup_loss_cutoff = 40
 dc_unsup_loss_cutoff = 1e-3
@@ -76,7 +74,7 @@ win_shift = 50 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = .1
-
+num_layers = 3
 n_eps = 10000
 
 ep_list20 = [] #list of epochs at which models were saved for 20 hidden units
