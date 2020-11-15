@@ -77,7 +77,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 
 
-n_eps = 300
+n_eps = 1000
 
 ep_list20 = [] #list of epochs at which models were saved for 20 hidden units
 ep_list50 = [] #list of epochs at which models were saved for 50 hidden units
@@ -574,6 +574,16 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
 
 
+best_hid = None
+best_ep = None
+if err_per_hid_ep20.min() < err_per_hid_ep20.min():
+    min_ep_ind = np.argmin(err_per_hid_ep20)
+    best_ep = (min_ep_ind+1)*100
+    best_hid = 20
+else:
+    min_ep_ind = np.argmin(err_per_hid_ep50)
+    best_ep = (min_ep_ind+1)*100
+    best_hid = 50
 
 
 pdb.set_trace()
