@@ -14,7 +14,7 @@ import numpy as np
 #         `  
 #######################################
 
-train_lakes = np.load("../../data/static/lists/source_lakes_wrr")
+train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 
 
 
