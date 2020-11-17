@@ -365,7 +365,6 @@ for n_hidden in n_hidden_list:
 
 
 print("|\n|\nTraining Candidate Models Complete\n|\n|")
-pdb.set_trace()
 ##################################################################
 # transfer all models to all other source lakes to find best one
 ########################################################################
