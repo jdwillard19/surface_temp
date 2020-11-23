@@ -21,10 +21,10 @@ err_per_glm128 = np.empty((n_lakes))
 err_per_glm128[:] = np.nan
 
 def job_path(site_id):
-	return "../hpc/jobs/train_glm_emulator_"+str(site_id)+".out"
+    return "../hpc/jobs/train_glm_emulator_"+str(site_id)+".out"
 for site_ct, site_id in enumerate(train_ids):
-	print("starting lake #",site_ct)
-	#load result
+    print("starting lake #",site_ct)
+    #load result
     out_f = open(job_path(site_id), "r")
     out_txt = out_f.read()
     match16 = re.findall(pattern="BEST_MODEL_PATH_16HID:../../models/"+str(site_id)+"/LSTM_source_model_16hid_(\d+)ep\nRMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
