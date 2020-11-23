@@ -50,12 +50,8 @@ site_id = sys.argv[1]
 debug_train = False
 debug_end = False
 verbose = True
-pretrain = True
 save = True
-save_pretrain = True
 
-#RMSE threshold for pretraining
-num_layers = 1
 
 
 
@@ -65,7 +61,7 @@ num_layers = 1
 first_save_epoch = 0
 patience = 100
 
-n_hidden_list = [20,50] #fixed
+n_hidden_list = [16,32,64,128] #fixed
 
 unsup_loss_cutoff = 40
 dc_unsup_loss_cutoff = 1e-3
@@ -77,12 +73,14 @@ n_features = 7  #number of physical drivers
 win_shift = 50 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
+dropout = 0
+num_layers = 1
+n_eps = 10000
 
-
-n_eps = 200
-
-ep_list20 = [] #list of epochs at which models were saved for 20 hidden units
-ep_list50 = [] #list of epochs at which models were saved for 50 hidden units
+ep_list16 = [] #list of epochs at which models were saved for * hidden units
+ep_list32 = [] 
+ep_list64 = [] 
+ep_list128 = [] 
 
 lakename = site_id
 print("lake: "+lakename)
@@ -94,6 +92,8 @@ data_dir = "../../data/processed/"+lakename+"/"
 #create train and test sets
 
 for n_hidden in n_hidden_list:
+
+
     #####################################################################################
     ####################################################3
     # fine tune
@@ -114,11 +114,11 @@ for n_hidden in n_hidden_list:
     # data preprocess
     ##################################
     #create train and test sets
-    (trn_data, trn_dates, tst_data, tst_dates, unique_tst_dates, all_data, all_phys_data, all_dates) = buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features,
+
+    (trn_data, trn_dates, tst_data, tst_dates, unique_tst_dates, all_data, all_phys_data, all_dates) = \
+                                   buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features,
                                    win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                    outputFullTestMatrix=True, allTestSeq=True) 
-
-    trn_data = tst_data
     batch_size = trn_data.size()[0]
 
 
@@ -172,7 +172,7 @@ for n_hidden in n_hidden_list:
 
 
     #load val/test data into enumerator based on batch size
-    testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
+    # testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
 
 
     #define LSTM model class
@@ -182,7 +182,7 @@ for n_hidden in n_hidden_list:
             self.input_size = input_size
             self.hidden_size = hidden_size
             self.batch_size = batch_size
-            self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers) #batch_first=True?
+            self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
             self.out = nn.Linear(hidden_size, 1) #1?
             self.hidden = self.init_hidden()
             self.w_upper_to_lower = []
@@ -192,8 +192,8 @@ for n_hidden in n_hidden_list:
             # initialize both hidden layers
             if batch_size == 0:
                 batch_size = self.batch_size
-            ret = (xavier_normal_(torch.empty(1, batch_size, self.hidden_size)),
-                    xavier_normal_(torch.empty(1, batch_size, self.hidden_size)))
+            ret = (xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)),
+                    xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)))
             if use_gpu:
                 item0 = ret[0].cuda(non_blocking=True)
                 item1 = ret[1].cuda(non_blocking=True)
@@ -246,13 +246,13 @@ for n_hidden in n_hidden_list:
     ep_min_mse = -1
     ep_since_min = 0
     best_pred_mat = np.empty(())
-    manualSeed = [random.randint(1, 99999999) for i in range(train_epochs)]
+    manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
 
     #stop training if true
     done = False
 
-    for epoch in range(train_epochs):
-        if verbose:
+    for epoch in range(n_eps):
+        if verbose and epoch % 100 == 0:
             print("train epoch: ", epoch)
 
         if done:
@@ -328,7 +328,7 @@ for n_hidden in n_hidden_list:
 
         #check for convergence
         avg_loss = avg_loss / batches_done
-        if verbose:
+        if verbose and epoch %100 is 0:
             print("rmse loss=", avg_loss)
 
         if avg_loss < min_mse:
@@ -340,6 +340,7 @@ for n_hidden in n_hidden_list:
             ep_since_min += 1
 
         if ep_since_min == patience:
+            print("patience met")
             done = True
             break
 
@@ -348,21 +349,23 @@ for n_hidden in n_hidden_list:
 
         if epoch % 100 == 0 and epoch != 0:
 
-            save_path = "../../models/"+lakename+"/LSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
+            save_path = "../../models/"+lakename+"/basicLSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
 
             saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-            if n_hidden == 20:
-                ep_list20.append(epoch)
-            elif n_hidden == 50:
-                ep_list50.append(epoch)
+            if n_hidden == n_hidden_list[0]:
+                ep_list16.append(epoch)
+            elif n_hidden == n_hidden_list[1]:
+                ep_list32.append(epoch)
+            elif n_hidden is n_hidden_list[2]:
+                ep_list64.append(epoch)
+            elif n_hidden is n_hidden_list[3]:
+                ep_list128.append(epoch)
 
             print("saved at ",save_path)
 
 
-            break
 
-
-
+print("|\n|\nTraining Candidate Models Complete\n|\n|")
 ##################################################################
 # transfer all models to all other source lakes to find best one
 ########################################################################
@@ -372,42 +375,59 @@ glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv"
 train_lakes = np.array([re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)])
 
 other_source_ids = train_lakes[~np.isin(train_lakes,site_id)] #remove site id
+other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121623126',\
+                                                                '121860894','143249413',\
+                                                                '143249864', '152335372',\
+                                                                '155635994','70332223',\
+                                                                '75474779'])] #remove cuz <= 1 surf temp obs
 
 
-err_per_epoch20 = np.empty((len(ep_list20)))
-err_per_epoch20[:] = np.nan
+err_per_epoch16 = np.empty((len(ep_list16)))
+err_per_epoch16[:] = np.nan
 
-err_per_epoch50 = np.empty((len(ep_list50)))
-err_per_epoch50[:] = np.nan
+err_per_epoch32 = np.empty((len(ep_list32)))
+err_per_epoch32[:] = np.nan
 
+err_per_epoch64 = np.empty((len(ep_list64)))
+err_per_epoch64[:] = np.nan
+
+err_per_epoch128 = np.empty((len(ep_list128)))
+err_per_epoch128[:] = np.nan
 
 top_ids = [site_id]
 
 #data structs to record transfer test results
-err_per_hid_ep20 = np.empty((len(n_hidden_list), len(ep_list20)))
-err_per_hid_ep50 = np.empty((len(n_hidden_list), len(ep_list50)))
+err_per_16hid_ep = np.empty((len(ep_list16)))
+# err_per_hid_ep20 = np.empty((len(ep_list20)))
+err_per_32hid_ep = np.empty((len(ep_list32)))
+err_per_64hid_ep = np.empty((len(ep_list64)))
+err_per_128hid_ep = np.empty((len(ep_list128)))
 
 for hid_ct, n_hidden in enumerate(n_hidden_list):
     ep_list = []
-    if n_hidden == 20:
-        ep_list = ep_list20
-    elif: n_hidden == 50:
-        ep_list = ep_list50
+    if n_hidden == n_hidden_list[0]:
+        ep_list = ep_list16
+    elif n_hidden == n_hidden_list[1]:
+        ep_list = ep_list32
+    elif n_hidden == n_hidden_list[2]:
+        ep_list = ep_list64
+    elif n_hidden == n_hidden_list[3]:
+        ep_list = ep_list128
 
 
     for ep_ct, eps in enumerate(ep_list):
         for target_id in other_source_ids:
-
+            print("TARGET: ", target_id)
             data_dir_target = "../../data/processed/"+target_id+"/" 
             #target agnostic model and data params
             use_gpu = True
             n_features = 7
-            # n_hidden = 20
             seq_length = 350
             win_shift = 175
             begin_loss_ind = 0
-            (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, all_phys_data_target, all_dates_target,
-            _) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
+            (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, \
+             all_phys_data_target, all_dates_target)\
+            = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                                outputFullTestMatrix=True, allTestSeq=True)
             
@@ -424,7 +444,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
                     self.input_size = input_size
                     self.hidden_size = hidden_size
                     self.batch_size = batch_size
-                    self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True, num_layers=num_layers) 
+                    self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True, num_layers=num_layers,dropout=dropout) 
                     self.out = nn.Linear(hidden_size, 1)
                     self.hidden = self.init_hidden()
 
@@ -432,8 +452,8 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
                     # initialize both hidden layers
                     if batch_size == 0:
                         batch_size = self.batch_size
-                    ret = (xavier_normal_(torch.empty(1, batch_size, self.hidden_size)),
-                            xavier_normal_(torch.empty(1, batch_size, self.hidden_size)))
+                    ret = (xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)),
+                            xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)))
                     if use_gpu:
                         item0 = ret[0].cuda(non_blocking=True)
                         item1 = ret[1].cuda(non_blocking=True)
@@ -462,9 +482,9 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
             for i, source_id in enumerate(top_ids): 
                 #for each top id
-                source_id = re.search('nhdhr_(.*)', source_id).group(1)
+                # source_id = re.search('nhdhr_(.*)', source_id).group(1)
                 #load source model
-                load_path = "../../models/"+source_id+"/LSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
+                load_path = "../../models/"+source_id+"/basicLSTM_source_model_"+str(n_hidden)+"hid_"+str(eps)+"ep"
                 lstm_net = LSTM(n_features, n_hidden, batch_size)
                 if use_gpu:
                     lstm_net = lstm_net.cuda(0)
@@ -525,7 +545,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
                                                                         n_test_dates_target,
                                                                         unique_tst_dates_target) 
                         #to store output
-                        output_mats[i,:,:] = outputm_npy
+                        output_mats[i,:] = outputm_npy
                         if i == 0:
                             #store label
                             label_mats = labelm_npy
@@ -534,7 +554,6 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
                         mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
                         # print(source_id+" rmse=", mat_rmse)
-                        err_per_source[i,targ_ct] = mat_rmse
 
                         # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
 
@@ -544,38 +563,46 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
             #save model 
             total_output_npy = np.average(output_mats, axis=0)
 
-            # if output_to_file:
-            #     outputm_npy = np.transpose(total_output_npy)
-            #     label_mat= np.transpose(label_mats)
-            #     output_df = pd.DataFrame(data=outputm_npy, columns=[str(float(x/2)) for x in range(outputm_npy.shape[1])], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
-            #     label_df = pd.DataFrame(data=label_mat, columns=[str(float(x/2)) for x in range(label_mat.shape[1])], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
-            #     output_df.rename(columns={'index': 'depth'})
-            #     label_df.rename(columns={'index': 'depth'})
-
-            #     assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
-            #     lake_output_path = output_path+target_id
-            #     if not os.path.exists(lake_output_path):
-            #         os.mkdir(lake_output_path)
-            #     output_df.to_feather(lake_output_path+"/PGMTL_outputs.feather")
-                
             loss_output = total_output_npy[~np.isnan(label_mats)]
             loss_label = label_mats[~np.isnan(label_mats)]
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
 
             print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
 
-            if n_hidden == 20:
-                err_per_hid_ep20[hid_ct, ep_ct] = mat_rmse
-            elif n_hidden == 50:
-                err_per_hid_ep50[hid_ct, ep_ct] = mat_rmse
+            if n_hidden == n_hidden_list[0]:
+                err_per_16hid_ep[ep_ct] = mat_rmse
+            elif n_hidden == n_hidden_list[1]:
+                err_per_32hid_ep[ep_ct] = mat_rmse
+            elif n_hidden == n_hidden_list[2]:
+                err_per_64hid_ep[ep_ct] = mat_rmse
+            elif n_hidden == n_hidden_list[3]:
+                err_per_128hid_ep[ep_ct] = mat_rmse
 
 
 
+best_hid = None
+best_ep = None
 
-pdb.set_trace()
-with open(save_file_path,'w') as file:
-    for line in mat_csv:
-        file.write(line)
-            file.write('\n')
+min_ep_ind_16hid = np.argmin(err_per_16hid_ep)
+best_ep_16hid = (min_ep_ind_16hid+1)*100
+
+min_ep_ind_32hid = np.argmin(err_per_32hid_ep)
+best_ep_32hid = (min_ep_ind_32hid+1)*100
+
+min_ep_ind_64hid = np.argmin(err_per_64hid_ep)
+best_ep_64hid = (min_ep_ind_64hid+1)*100
+
+min_ep_ind_128hid = np.argmin(err_per_128hid_ep)
+best_ep_128hid = (min_ep_ind_128hid+1)*100
+
+
+print("BEST_MODEL_PATH_16HID:../../models/"+str(lakename)+"/basicLSTM_source_model_16hid_"+str(best_ep_16hid)+"ep\nRMSE="+str(err_per_16hid_ep.min()))
+print("BEST_MODEL_PATH_32HID:../../models/"+str(lakename)+"/basicLSTM_source_model_32hid_"+str(best_ep_32hid)+"ep\nRMSE="+str(err_per_32hid_ep.min()))
+print("BEST_MODEL_PATH_64HID:../../models/"+str(lakename)+"/basicLSTM_source_model_64hid_"+str(best_ep_64hid)+"ep\nRMSE="+str(err_per_64hid_ep.min()))
+print("BEST_MODEL_PATH_128HID:../../models/"+str(lakename)+"/basicLSTM_source_model_128hid_"+str(best_ep_128hid)+"ep\nRMSE="+str(err_per_128hid_ep.min()))
+# with open(save_file_path,'w') as file:
+#     for line in mat_csv:
+#         file.write(line)
+#         file.write('\n')
 
 
