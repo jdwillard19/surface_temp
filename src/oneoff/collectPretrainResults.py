@@ -23,7 +23,7 @@ err_per_glm128[:] = np.nan
 def job_path(site_id):
     return "../hpc/jobs/train_glm_emulator_"+str(site_id)+".out"
 for site_ct, site_id in enumerate(train_ids):
-    print("starting lake #",site_ct)
+    print("starting lake #",site_ct,": ", site_id)
     #load result
     out_f = open(job_path(site_id), "r")
     out_txt = out_f.read()
