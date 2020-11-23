@@ -5,7 +5,7 @@ import pdb
 
 
 train_ids = np.load("../../data/static/lists/source_lakes_wrr.npy")
-n_lakes = train_lakes.shape[0]
+n_lakes = train_ids.shape[0]
 job_base_path = "../hpc/jobs/train_glm_emulator_"
 
 err_per_glm16 = np.empty((n_lakes))
