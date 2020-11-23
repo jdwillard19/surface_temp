@@ -119,6 +119,7 @@ for n_hidden in n_hidden_list:
                                    buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features,
                                    win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                    outputFullTestMatrix=True, allTestSeq=True) 
+    trn_data = tst_data
     batch_size = trn_data.size()[0]
 
 
