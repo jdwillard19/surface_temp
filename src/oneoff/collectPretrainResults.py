@@ -14,6 +14,6 @@ for site_id in train_ids:
 	#load result
     out_f = open(job_path(site_id), "r")
     out_txt = out_f.read(out_f)
-    match16 = re.findall(pattern="BEST_MODEL_PATH_16HID:../../models/105954753/LSTM_source_model_16hid_(\d+)ep\nRMSE=(\d*\.?\d+)",string=out_txt,flags=flags=re.M | re.DOTALL)
+    match16 = re.findall(pattern="BEST_MODEL_PATH_16HID:../../models/105954753/LSTM_source_model_16hid_(\d+)ep\nRMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     pdb.set_trace()
     hid16rmse = match16[2]
