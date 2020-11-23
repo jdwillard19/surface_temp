@@ -4,7 +4,7 @@ import re
 import pdb
 
 
-train_ids = np.load("../../data/static/lists/source_lakes_wrr")
+train_ids = np.load("../../data/static/lists/source_lakes_wrr.npy")
 
 job_base_path = "../hpc/jobs/train_glm_emulator_"
 
