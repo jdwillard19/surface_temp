@@ -75,8 +75,8 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0
 num_layers = 1
-n_eps = 1000
-ep_per_save = 100
+n_eps = 150
+ep_per_save = 50
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
@@ -612,6 +612,25 @@ print("BEST_MODEL_PATH_16HID:../../models/"+str(lakename)+"/PGDL_source_model_16
 print("BEST_MODEL_PATH_32HID:../../models/"+str(lakename)+"/PGDL_source_model_32hid_"+str(best_ep_32hid)+"ep\nRMSE="+str(err_per_32hid_ep.min()))
 print("BEST_MODEL_PATH_64HID:../../models/"+str(lakename)+"/PGDL_source_model_64hid_"+str(best_ep_64hid)+"ep\nRMSE="+str(err_per_64hid_ep.min()))
 print("BEST_MODEL_PATH_128HID:../../models/"+str(lakename)+"/PGDL_source_model_128hid_"+str(best_ep_128hid)+"ep\nRMSE="+str(err_per_128hid_ep.min()))
+
+
+if err_per_16hid_ep.min() == min(err_per_16hid_ep.min(), err_per_32hid_ep.min(), err_per_64hid_ep.min(),err_per_128hid_ep.min()):
+    print("16 min, saved at")
+    os.rename("../../models/"+str(lakename)+"/PGDL_source_model_16hid_"+str(best_ep_16hid)+"ep","../../models/"+site_id+"/PGDL_source_model_final")
+elif err_per_32hid_ep.min() == min(err_per_16hid_ep.min(), err_per_32hid_ep.min(), err_per_64hid_ep.min(),err_per_128hid_ep.min()):
+    print("32 min, saved at")
+    os.rename("../../models/"+str(lakename)+"/PGDL_source_model_32hid_"+str(best_ep_32hid)+"ep","../../models/"+site_id+"/PGDL_source_model_final")
+elif err_per_64hid_ep.min() == min(err_per_16hid_ep.min(), err_per_32hid_ep.min(), err_per_64hid_ep.min(),err_per_128hid_ep.min()):
+    print("64 min, saved at")
+    os.rename("../../models/"+str(lakename)+"/PGDL_source_model_64hid_"+str(best_ep_64hid)+"ep","../../models/"+site_id+"/PGDL_source_model_final")
+elif err_per_128hid_ep.min() == min(err_per_16hid_ep.min(), err_per_32hid_ep.min(), err_per_64hid_ep.min(),err_per_128hid_ep.min()):
+    print("128 min, saved at")
+    os.rename("../../models/"+str(lakename)+"/PGDL_source_model_128hid_"+str(best_ep_128hid)+"ep","../../models/"+site_id+"/PGDL_source_model_final")
+else:
+    print("terminal error")
+    pdb.set_trace()
+print("../../models/"+site_id+"/PGDL_source_model_final")
+
 # with open(save_file_path,'w') as file:
 #     for line in mat_csv:
 #         file.write(line)
