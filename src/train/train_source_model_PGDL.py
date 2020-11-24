@@ -385,35 +385,34 @@ print("|\n|\nTraining Candidate Models Complete\n|\n|")
 #load all other source lakes
 glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
 train_lakes = np.array([re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)])
-
 other_source_ids = train_lakes[~np.isin(train_lakes,site_id)] #remove site id
 other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121623126',\
                                                                 '121860894','143249413',\
                                                                 '143249864', '152335372',\
                                                                 '155635994','70332223',\
                                                                 '75474779'])] #remove cuz <= 1 surf temp obs
+n_other_sources = len(other_source_ids)
 
+# err_per_epoch16 = np.empty((n_other_sources,len(ep_list16)))
+# err_per_epoch16[:] = np.nan
 
-err_per_epoch16 = np.empty((len(ep_list16)))
-err_per_epoch16[:] = np.nan
+# err_per_epoch32 = np.empty((n_other_sources,len(ep_list32)))
+# err_per_epoch32[:] = np.nan
 
-err_per_epoch32 = np.empty((len(ep_list32)))
-err_per_epoch32[:] = np.nan
+# err_per_epoch64 = np.empty((n_other_sources,len(ep_list64)))
+# err_per_epoch64[:] = np.nan
 
-err_per_epoch64 = np.empty((len(ep_list64)))
-err_per_epoch64[:] = np.nan
-
-err_per_epoch128 = np.empty((len(ep_list128)))
-err_per_epoch128[:] = np.nan
+# err_per_epoch128 = np.empty((n_other_sources,len(ep_list128)))
+# err_per_epoch128[:] = np.nan
 
 top_ids = [site_id]
 
 #data structs to record transfer test results
-err_per_16hid_ep = np.empty((len(ep_list16)))
+err_per_16hid_ep = np.empty((n_other_sources,len(ep_list16)))
 # err_per_hid_ep20 = np.empty((len(ep_list20)))
-err_per_32hid_ep = np.empty((len(ep_list32)))
-err_per_64hid_ep = np.empty((len(ep_list64)))
-err_per_128hid_ep = np.empty((len(ep_list128)))
+err_per_32hid_ep = np.empty((n_other_sources,len(ep_list32)))
+err_per_64hid_ep = np.empty((n_other_sources,len(ep_list64)))
+err_per_128hid_ep = np.empty((n_other_sources,len(ep_list128)))
 
 for hid_ct, n_hidden in enumerate(n_hidden_list):
     ep_list = []
@@ -428,7 +427,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
 
     for ep_ct, eps in enumerate(ep_list):
-        for target_id in other_source_ids:
+        for targ_ct,target_id in enumerate(other_source_ids):
             print("TARGET: ", target_id)
             data_dir_target = "../../data/processed/"+target_id+"/" 
             #target agnostic model and data params

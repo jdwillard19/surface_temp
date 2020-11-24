@@ -383,26 +383,15 @@ other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121
                                                                 '75474779'])] #remove cuz <= 1 surf temp obs
 
 
-err_per_epoch16 = np.empty((len(ep_list16)))
-err_per_epoch16[:] = np.nan
+n_other_sources = len(other_source_ids)
 
-err_per_epoch32 = np.empty((len(ep_list32)))
-err_per_epoch32[:] = np.nan
-
-err_per_epoch64 = np.empty((len(ep_list64)))
-err_per_epoch64[:] = np.nan
-
-err_per_epoch128 = np.empty((len(ep_list128)))
-err_per_epoch128[:] = np.nan
 
 top_ids = [site_id]
-
-#data structs to record transfer test results
-err_per_16hid_ep = np.empty((len(ep_list16)))
+err_per_16hid_ep = np.empty((n_other_sources,len(ep_list16)))
 # err_per_hid_ep20 = np.empty((len(ep_list20)))
-err_per_32hid_ep = np.empty((len(ep_list32)))
-err_per_64hid_ep = np.empty((len(ep_list64)))
-err_per_128hid_ep = np.empty((len(ep_list128)))
+err_per_32hid_ep = np.empty((n_other_sources,len(ep_list32)))
+err_per_64hid_ep = np.empty((n_other_sources,len(ep_list64)))
+err_per_128hid_ep = np.empty((n_other_sources,len(ep_list128)))
 
 for hid_ct, n_hidden in enumerate(n_hidden_list):
     ep_list = []
@@ -417,7 +406,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
 
     for ep_ct, eps in enumerate(ep_list):
-        for target_id in other_source_ids:
+        for targ_ct,target_id in enumerate(other_source_ids):
             print("TARGET: ", target_id)
             data_dir_target = "../../data/processed/"+target_id+"/" 
             #target agnostic model and data params
@@ -570,14 +559,15 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
             print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
 
+
             if n_hidden == n_hidden_list[0]:
-                err_per_16hid_ep[ep_ct] = mat_rmse
+                err_per_16hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[1]:
-                err_per_32hid_ep[ep_ct] = mat_rmse
+                err_per_32hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[2]:
-                err_per_64hid_ep[ep_ct] = mat_rmse
+                err_per_64hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[3]:
-                err_per_128hid_ep[ep_ct] = mat_rmse
+                err_per_128hid_ep[targ_ct, ep_ct] = mat_rmse
 
 
 

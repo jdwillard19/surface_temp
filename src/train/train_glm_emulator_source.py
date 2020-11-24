@@ -76,6 +76,7 @@ grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0
 num_layers = 1
 n_eps = 10000
+ep_per_save = 400
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
@@ -346,7 +347,7 @@ for n_hidden in n_hidden_list:
 
 
 
-        if epoch % 100 == 0 and epoch != 0:
+        if epoch % ep_per_save == 0 and epoch != 0:
 
             save_path = "../../models/"+lakename+"/LSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
 
@@ -379,28 +380,29 @@ other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121
                                                                 '143249864', '152335372',\
                                                                 '155635994','70332223',\
                                                                 '75474779'])] #remove cuz <= 1 surf temp obs
+n_other_sources = len(other_source_ids)
 
 
-err_per_epoch16 = np.empty((len(ep_list16)))
-err_per_epoch16[:] = np.nan
+# err_per_epoch16 = np.empty((len(ep_list16)))
+# err_per_epoch16[:] = np.nan
 
-err_per_epoch32 = np.empty((len(ep_list32)))
-err_per_epoch32[:] = np.nan
+# err_per_epoch32 = np.empty((len(ep_list32)))
+# err_per_epoch32[:] = np.nan
 
-err_per_epoch64 = np.empty((len(ep_list64)))
-err_per_epoch64[:] = np.nan
+# err_per_epoch64 = np.empty((len(ep_list64)))
+# err_per_epoch64[:] = np.nan
 
-err_per_epoch128 = np.empty((len(ep_list128)))
-err_per_epoch128[:] = np.nan
+# err_per_epoch128 = np.empty((len(ep_list128)))
+# err_per_epoch128[:] = np.nan
 
 top_ids = [site_id]
 
 #data structs to record transfer test results
-err_per_16hid_ep = np.empty((len(ep_list16)))
+err_per_16hid_ep = np.empty((n_other_sources,len(ep_list16)))
 # err_per_hid_ep20 = np.empty((len(ep_list20)))
-err_per_32hid_ep = np.empty((len(ep_list32)))
-err_per_64hid_ep = np.empty((len(ep_list64)))
-err_per_128hid_ep = np.empty((len(ep_list128)))
+err_per_32hid_ep = np.empty((n_other_sources,len(ep_list32)))
+err_per_64hid_ep = np.empty((n_other_sources,len(ep_list64)))
+err_per_128hid_ep = np.empty((n_other_sources,len(ep_list128)))
 
 for hid_ct, n_hidden in enumerate(n_hidden_list):
     ep_list = []
@@ -415,7 +417,7 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
 
     for ep_ct, eps in enumerate(ep_list):
-        for target_id in other_source_ids:
+        for targ_ct,target_id in enumerate(other_source_ids):
             print("TARGET: ", target_id)
             data_dir_target = "../../data/processed/"+target_id+"/" 
             #target agnostic model and data params
@@ -569,36 +571,36 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
             print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
 
             if n_hidden == n_hidden_list[0]:
-                err_per_16hid_ep[ep_ct] = mat_rmse
+                err_per_16hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[1]:
-                err_per_32hid_ep[ep_ct] = mat_rmse
+                err_per_32hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[2]:
-                err_per_64hid_ep[ep_ct] = mat_rmse
+                err_per_64hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[3]:
-                err_per_128hid_ep[ep_ct] = mat_rmse
+                err_per_128hid_ep[targ_ct, ep_ct] = mat_rmse
 
 
 
 best_hid = None
 best_ep = None
+pdb.set_trace()
+min_ep_ind_16hid = np.argmin(err_per_16hid_ep.mean(axis=0))
+best_ep_16hid = (min_ep_ind_16hid+1)*ep_per_save
 
-min_ep_ind_16hid = np.argmin(err_per_16hid_ep)
-best_ep_16hid = (min_ep_ind_16hid+1)*100
+min_ep_ind_32hid = np.argmin(err_per_32hid_ep.mean(axis=0))
+best_ep_32hid = (min_ep_ind_32hid+1)*ep_per_save
 
-min_ep_ind_32hid = np.argmin(err_per_32hid_ep)
-best_ep_32hid = (min_ep_ind_32hid+1)*100
+min_ep_ind_64hid = np.argmin(err_per_64hid_ep.mean(axis=0))
+best_ep_64hid = (min_ep_ind_64hid+1)*ep_per_save
 
-min_ep_ind_64hid = np.argmin(err_per_64hid_ep)
-best_ep_64hid = (min_ep_ind_64hid+1)*100
-
-min_ep_ind_128hid = np.argmin(err_per_128hid_ep)
-best_ep_128hid = (min_ep_ind_128hid+1)*100
+min_ep_ind_128hid = np.argmin(err_per_128hid_ep.mean(axis=0))
+best_ep_128hid = (min_ep_ind_128hid+1)*ep_per_save
 
 
-print("BEST_MODEL_PATH_16HID:../../models/105954753/LSTM_source_model_16hid_"+str(best_ep_16hid)+"ep\nRMSE="+str(err_per_16hid_ep.min()))
-print("BEST_MODEL_PATH_32HID:../../models/105954753/LSTM_source_model_32hid_"+str(best_ep_32hid)+"ep\nRMSE="+str(err_per_32hid_ep.min()))
-print("BEST_MODEL_PATH_64HID:../../models/105954753/LSTM_source_model_64hid_"+str(best_ep_64hid)+"ep\nRMSE="+str(err_per_64hid_ep.min()))
-print("BEST_MODEL_PATH_128HID:../../models/105954753/LSTM_source_model_128hid_"+str(best_ep_128hid)+"ep\nRMSE="+str(err_per_128hid_ep.min()))
+print("BEST_MODEL_PATH_16HID:../../models/"+site_id+"/glm_emulator_16hid_"+str(best_ep_16hid)+"ep\nMean RMSE="+str(err_per_16hid_ep.mean(axis=0).min()))
+print("BEST_MODEL_PATH_32HID:../../models/"+site_id+"/glm_emulator_32hid_"+str(best_ep_32hid)+"ep\nMean RMSE="+str(err_per_32hid_ep.mean(axis=0).min()))
+print("BEST_MODEL_PATH_64HID:../../models/"+site_id+"/glm_emulator_64hid_"+str(best_ep_64hid)+"ep\nMean RMSE="+str(err_per_64hid_ep.mean(axis=0).min()))
+print("BEST_MODEL_PATH_128HID:../../models/"+site_id+"/glm_emulator_128hid_"+str(best_ep_128hid)+"ep\nMean RMSE="+str(err_per_128hid_ep.mean(axis=0).min()))
 # with open(save_file_path,'w') as file:
 #     for line in mat_csv:
 #         file.write(line)
