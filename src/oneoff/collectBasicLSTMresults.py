@@ -40,17 +40,17 @@ for site_ct, site_id in enumerate(train_ids):
     match128 = re.findall(pattern="BEST_MODEL_PATH_128HID:../../models/"+site_id+"/basicLSTM_source_model_128hid_(\d+)ep\nRMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm128[site_ct] = match128[0][1]
 
-    if err_per_glm16[site_ct] == [err_per_glm16[site_ct], err_per_glm32[site_ct], err_per_glm64[site_ct], err_per_glm128[site_ct]].min():
+    if err_per_glm16[site_ct] == min([err_per_glm16[site_ct], err_per_glm32[site_ct], err_per_glm64[site_ct], err_per_glm128[site_ct]]):
         print("16 is min")
         #rename
         os.rename("../../models/"+site_id+"/basicLSTM_source_model_16hid_"+match16[0][0]+"ep","../../models/"+site_id+"/basicLSTM_source_model_final")
-    elif err_per_glm32[site_ct] == [err_per_glm16[site_ct], err_per_glm32[site_ct], err_per_glm64[site_ct], err_per_glm128[site_ct]].min():
+    elif err_per_glm32[site_ct] == min([err_per_glm16[site_ct], err_per_glm32[site_ct], err_per_glm64[site_ct], err_per_glm128[site_ct]]):
         print("32 is min")
         os.rename("../../models/"+site_id+"/basicLSTM_source_model_32hid_"+match32[0][0]+"ep","../../models/"+site_id+"/basicLSTM_source_model_final")
-    elif err_per_glm64[site_ct] == [err_per_glm16[site_ct], err_per_glm32[site_ct], err_per_glm64[site_ct], err_per_glm128[site_ct]].min():
+    elif err_per_glm64[site_ct] == min([err_per_glm16[site_ct], err_per_glm32[site_ct], err_per_glm64[site_ct], err_per_glm128[site_ct]]):
         print("64 is min")
         os.rename("../../models/"+site_id+"/basicLSTM_source_model_64hid_"+match64[0][0]+"ep","../../models/"+site_id+"/basicLSTM_source_model_final")
-    elif err_per_glm128[site_ct] == [err_per_glm16[site_ct], err_per_glm32[site_ct], err_per_glm64[site_ct], err_per_glm128[site_ct]].min():
+    elif err_per_glm128[site_ct] == min([err_per_glm16[site_ct], err_per_glm32[site_ct], err_per_glm64[site_ct], err_per_glm128[site_ct]]):
         print("128 is min")
         os.rename("../../models/"+site_id+"/basicLSTM_source_model_128hid_"+match128[0][0]+"ep","../../models/"+site_id+"/basicLSTM_source_model_final")
     else:
