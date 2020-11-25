@@ -275,14 +275,13 @@ for epoch in range(n_eps):
     avg_loss = 0
     batches_done = 0
     ct = 0
-    for data in enumerate(trainloader, 0):
-        pdb.set_trace()
+    for m, data in enumerate(trainloader, 0):
         #now for mendota data
         #this loop is dated, there is now only one item in testloader
 
         #parse data into inputs and targets
-        inputs = data[:,:,:n_features].float()
-        targets = data[:,:,-1].float()
+        inputs = data[0].float()
+        targets = data[1].float()
         targets = targets[:, begin_loss_ind:]
         # tmp_dates = tst_dates_target[:, begin_loss_ind:]
         # depths = inputs[:,:,0]
