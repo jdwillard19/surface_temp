@@ -102,9 +102,8 @@ lakenames = np.load("../../data/static/lists/source_lakes_wrr.npy")
 ###########################
 first_save_epoch = 0
 n_hidden = 16
-patience = 50
 epoch_since_best = 0
-lambda1 = 0.0001
+lambda1 = 0.000
 yhat_batch_size = 1
 
 ###############################
@@ -238,7 +237,7 @@ if use_gpu:
 
 #define loss and optimizer
 mse_criterion = nn.MSELoss()
-optimizer = optim.Adam(lstm_net.parameters(), lr=.001)#, weight_decay=0.01)
+optimizer = optim.Adam(lstm_net.parameters(), lr=.005)#, weight_decay=0.01)
 
 #training loop
 
@@ -400,6 +399,18 @@ for epoch in range(n_eps):
             # loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
             # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+
+            if avg_mse < min_mse:
+                save_path = "../../models/global_model_"+str(n_hidden)+"hid_"str(num_layers)+"layer_"+str(dropout)+"drop"
+                saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+                min_mse = avg_mse
+                ep_since_min = 0
+            else:
+                ep_since_min += 1
+                if ep_since_min == patience:
+                    print("patience met")
+                    break
+
             print("Test RMSE: ", avg_mse)
 
     # if epoch % 100 == 0 and epoch != 0:
@@ -416,7 +427,7 @@ for epoch in range(n_eps):
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
 
-    #     print("saved at ",save_path)
+print("saved at ",save_path)
 
 
 
