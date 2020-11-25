@@ -13,7 +13,7 @@ import pdb
 from scipy import interpolate
 
 
-def buildLakeDataForRNN_multilakemodel(lakenames, data_dir, seq_length, n_features, \
+def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
                                             test_seq_per_depth=1, sparseCustom=None, \
                                             allTestSeq=False, \
