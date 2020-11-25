@@ -111,12 +111,14 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-(trn_data, trn_dates, tst_data, tst_dates) = buildLakeDataForRNN_multilakemodel(lakenames,\
-                                                seq_length, n_features,\
-                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                allTestSeq=False) 
+# (trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
+#                                                 seq_length, n_features,\
+#                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+#                                                 allTestSeq=False) 
+
+trn_data = np.load("global_trn_data.npy")
+tst_data = np.load("global_val_data.npy")
 # trn_data = tst_data
-pdb.set_trace()
 batch_size = trn_data.size()[0]
 
 
@@ -135,24 +137,24 @@ class TemperatureTrainDataset(Dataset):
     def __len__(self):
         return self.len
 
-class TotalModelOutputDataset(Dataset):
-#dataset for unsupervised input(in this case all the data)
-    def __init__(self, all_data, all_phys_data,all_dates):
-        #data of all model output, and corresponding unstandardized physical quantities
-        #needed to calculate physical loss
-        self.len = all_data.shape[0]
-        self.data = all_data[:,:,:-1].float()
-        self.label = all_data[:,:,-1].float() #DO NOT USE IN MODEL
-        self.phys = all_phys_data.float()
-        helper = np.vectorize(lambda x: date.toordinal(pd.Timestamp(x).to_pydatetime()))
-        dates = helper(all_dates)
-        self.dates = dates
+# class TotalModelOutputDataset(Dataset):
+# #dataset for unsupervised input(in this case all the data)
+#     def __init__(self, all_data, all_phys_data,all_dates):
+#         #data of all model output, and corresponding unstandardized physical quantities
+#         #needed to calculate physical loss
+#         self.len = all_data.shape[0]
+#         self.data = all_data[:,:,:-1].float()
+#         self.label = all_data[:,:,-1].float() #DO NOT USE IN MODEL
+#         self.phys = all_phys_data.float()
+#         helper = np.vectorize(lambda x: date.toordinal(pd.Timestamp(x).to_pydatetime()))
+#         dates = helper(all_dates)
+#         self.dates = dates
 
-    def __getitem__(self, index):
-        return self.data[index], self.phys[index], self.dates[index], self.label[index]
+#     def __getitem__(self, index):
+#         return self.data[index], self.phys[index], self.dates[index], self.label[index]
 
-    def __len__(self):
-        return self.len
+#     def __len__(self):
+#         return self.len
 
 
 
@@ -162,7 +164,7 @@ train_data = TemperatureTrainDataset(trn_data)
 
 
 #format total y-hat data for loading
-total_data = TotalModelOutputDataset(all_data, all_phys_data, all_dates)
+# total_data = TotalModelOutputDataset(all_data, all_phys_data, all_dates)
 n_batches = math.floor(trn_data.size()[0] / batch_size)
 
 #batch samplers used to draw samples in dataloaders
@@ -170,7 +172,7 @@ batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_bat
 
 
 #load val/test data into enumerator based on batch size
-# testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
+testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
 
 
 #define LSTM model class
@@ -250,7 +252,8 @@ manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
 done = False
 
 for epoch in range(n_eps):
-    if verbose and epoch % 100 == 0:
+    # if verbose and epoch % 10 == 0:
+    if verbose:
         print("train epoch: ", epoch)
 
     if done:
@@ -261,11 +264,8 @@ for epoch in range(n_eps):
     #reload loader for shuffle
     #batch samplers used to draw samples in dataloaders
     batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_batches)
-    batch_sampler_all = pytorch_data_operations.RandomContiguousBatchSampler(all_data.size()[0], seq_length, yhat_batch_size, n_batches)
 
-    alldataloader = DataLoader(total_data, batch_sampler=batch_sampler_all, pin_memory=True)
     trainloader = DataLoader(train_data, batch_sampler=batch_sampler, pin_memory=True)
-    multi_loader = pytorch_data_operations.MultiLoader([trainloader, alldataloader])
 
 
     #zero the parameter gradients
@@ -273,13 +273,17 @@ for epoch in range(n_eps):
     lstm_net.train(True)
     avg_loss = 0
     batches_done = 0
-    for i, batches in enumerate(multi_loader):
-        #load data
-        inputs = None
-        targets = None
-        for j, b in enumerate(batches):
-            if j == 0:
-                inputs, targets = b
+    ct = 0
+    for m, data in enumerate(trainloader, 0):
+        #now for mendota data
+        #this loop is dated, there is now only one item in testloader
+
+        #parse data into inputs and targets
+        inputs = data[:,:,:n_features].float()
+        targets = data[:,:,-1].float()
+        targets = targets[:, begin_loss_ind:]
+        # tmp_dates = tst_dates_target[:, begin_loss_ind:]
+        # depths = inputs[:,:,0]
 
 
         #cuda commands
@@ -326,7 +330,8 @@ for epoch in range(n_eps):
 
     #check for convergence
     avg_loss = avg_loss / batches_done
-    if verbose and epoch %100 is 0:
+    # if verbose and epoch %100 is 0:
+    if verbose:
         print("rmse loss=", avg_loss)
 
     if avg_loss < min_mse:
@@ -343,23 +348,77 @@ for epoch in range(n_eps):
         break
 
 
+   with torch.no_grad():
+        avg_mse = 0
+        ct = 0
+        for m, data in enumerate(testloader, 0):
+            #now for mendota data
+            #this loop is dated, there is now only one item in testloader
+
+            #parse data into inputs and targets
+            inputs = data[:,:,:n_features].float()
+            targets = data[:,:,-1].float()
+            targets = targets[:, begin_loss_ind:]
+            tmp_dates = tst_dates_target[:, begin_loss_ind:]
+            depths = inputs[:,:,0]
+
+            if use_gpu:
+                inputs = inputs.cuda()
+                targets = targets.cuda()
+
+            #run model
+            h_state = None
+            lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+            pred, h_state = lstm_net(inputs, h_state)
+            pred = pred.view(pred.size()[0],-1)
+            pred = pred[:, begin_loss_ind:]
+
+            #calculate error
+            targets = targets.cpu()
+            loss_indices = np.where(~np.isnan(targets))
+            if use_gpu:
+                targets = targets.cuda()
+            inputs = inputs[:, begin_loss_ind:, :]
+            depths = depths[:, begin_loss_ind:]
+            mse = mse_criterion(pred[loss_indices], targets[loss_indices])
+            # print("test loss = ",mse)
+            avg_mse += mse
+
+            if mse > 0: #obsolete i think
+                ct += 1
+            avg_mse = avg_mse / ct
 
 
-    if epoch % 100 == 0 and epoch != 0:
+            #save model 
+            (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
+                                                            n_test_dates_target,
+                                                            unique_tst_dates_target) 
+            #to store output
+            output_mats[i,:] = outputm_npy
+            if i == 0:
+                #store label
+                label_mats = labelm_npy
+            loss_output = outputm_npy[~np.isnan(labelm_npy)]
+            loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
-        save_path = "../../models/"+lakename+"/basicLSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
+            mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+            print("Test RMSE: ", mat_rmse)
 
-        saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-        if n_hidden == n_hidden_list[0]:
-            ep_list16.append(epoch)
-        elif n_hidden == n_hidden_list[1]:
-            ep_list32.append(epoch)
-        elif n_hidden is n_hidden_list[2]:
-            ep_list64.append(epoch)
-        elif n_hidden is n_hidden_list[3]:
-            ep_list128.append(epoch)
+    # if epoch % 100 == 0 and epoch != 0:
 
-        print("saved at ",save_path)
+    #     save_path = "../../models/"+lakename+"/basicLSTM_source_model_"+str(n_hidden)+"hid_"+str(epoch)+"ep"
+
+    #     saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+    #     if n_hidden == n_hidden_list[0]:
+    #         ep_list16.append(epoch)
+    #     elif n_hidden == n_hidden_list[1]:
+    #         ep_list32.append(epoch)
+    #     elif n_hidden is n_hidden_list[2]:
+    #         ep_list64.append(epoch)
+    #     elif n_hidden is n_hidden_list[3]:
+    #         ep_list128.append(epoch)
+
+    #     print("saved at ",save_path)
 
 
 
