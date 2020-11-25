@@ -378,6 +378,7 @@ for epoch in range(n_eps):
             if use_gpu:
                 targets = targets.cuda()
             inputs = inputs[:, begin_loss_ind:, :]
+            pdb.set_trace()
             mse = mse_criterion(pred[loss_indices], targets[loss_indices])
             # print("test loss = ",mse)
             avg_mse += mse
