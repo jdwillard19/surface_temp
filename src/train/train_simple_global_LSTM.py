@@ -378,7 +378,6 @@ for epoch in range(n_eps):
             if use_gpu:
                 targets = targets.cuda()
             inputs = inputs[:, begin_loss_ind:, :]
-            depths = depths[:, begin_loss_ind:]
             mse = mse_criterion(pred[loss_indices], targets[loss_indices])
             # print("test loss = ",mse)
             avg_mse += mse
@@ -421,234 +420,234 @@ for epoch in range(n_eps):
 
 
 
-print("|\n|\nTraining Candidate Models Complete\n|\n|")
-##################################################################
-# transfer all models to all other source lakes to find best one
-########################################################################
+# print("|\n|\nTraining Candidate Models Complete\n|\n|")
+# ##################################################################
+# # transfer all models to all other source lakes to find best one
+# ########################################################################
 
-#load all other source lakes
-glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
-train_lakes = np.array([re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)])
+# #load all other source lakes
+# glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
+# train_lakes = np.array([re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)])
 
-other_source_ids = train_lakes[~np.isin(train_lakes,site_id)] #remove site id
-other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121623126',\
-                                                                '121860894','143249413',\
-                                                                '143249864', '152335372',\
-                                                                '155635994','70332223',\
-                                                                '75474779'])] #remove cuz <= 1 surf temp obs
-
-
-n_other_sources = len(other_source_ids)
+# other_source_ids = train_lakes[~np.isin(train_lakes,site_id)] #remove site id
+# other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121623126',\
+#                                                                 '121860894','143249413',\
+#                                                                 '143249864', '152335372',\
+#                                                                 '155635994','70332223',\
+#                                                                 '75474779'])] #remove cuz <= 1 surf temp obs
 
 
-top_ids = [site_id]
-err_per_16hid_ep = np.empty((n_other_sources,len(ep_list16)))
-# err_per_hid_ep20 = np.empty((len(ep_list20)))
-err_per_32hid_ep = np.empty((n_other_sources,len(ep_list32)))
-err_per_64hid_ep = np.empty((n_other_sources,len(ep_list64)))
-err_per_128hid_ep = np.empty((n_other_sources,len(ep_list128)))
-
-for hid_ct, n_hidden in enumerate(n_hidden_list):
-    ep_list = []
-    if n_hidden == n_hidden_list[0]:
-        ep_list = ep_list16
-    elif n_hidden == n_hidden_list[1]:
-        ep_list = ep_list32
-    elif n_hidden == n_hidden_list[2]:
-        ep_list = ep_list64
-    elif n_hidden == n_hidden_list[3]:
-        ep_list = ep_list128
+# n_other_sources = len(other_source_ids)
 
 
-    for ep_ct, eps in enumerate(ep_list):
-        for targ_ct,target_id in enumerate(other_source_ids):
-            print("TARGET: ", target_id)
-            data_dir_target = "../../data/processed/"+target_id+"/" 
-            #target agnostic model and data params
-            use_gpu = True
-            n_features = 7
-            seq_length = 350
-            win_shift = 175
-            begin_loss_ind = 0
-            (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, \
-             all_phys_data_target, all_dates_target)\
-            = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
-                                               win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                               outputFullTestMatrix=True, allTestSeq=True)
+# top_ids = [site_id]
+# err_per_16hid_ep = np.empty((n_other_sources,len(ep_list16)))
+# # err_per_hid_ep20 = np.empty((len(ep_list20)))
+# err_per_32hid_ep = np.empty((n_other_sources,len(ep_list32)))
+# err_per_64hid_ep = np.empty((n_other_sources,len(ep_list64)))
+# err_per_128hid_ep = np.empty((n_other_sources,len(ep_list128)))
+
+# for hid_ct, n_hidden in enumerate(n_hidden_list):
+#     ep_list = []
+#     if n_hidden == n_hidden_list[0]:
+#         ep_list = ep_list16
+#     elif n_hidden == n_hidden_list[1]:
+#         ep_list = ep_list32
+#     elif n_hidden == n_hidden_list[2]:
+#         ep_list = ep_list64
+#     elif n_hidden == n_hidden_list[3]:
+#         ep_list = ep_list128
+
+
+#     for ep_ct, eps in enumerate(ep_list):
+#         for targ_ct,target_id in enumerate(other_source_ids):
+#             print("TARGET: ", target_id)
+#             data_dir_target = "../../data/processed/"+target_id+"/" 
+#             #target agnostic model and data params
+#             use_gpu = True
+#             n_features = 7
+#             seq_length = 350
+#             win_shift = 175
+#             begin_loss_ind = 0
+#             (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, \
+#              all_phys_data_target, all_dates_target)\
+#             = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
+#                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
+#                                                outputFullTestMatrix=True, allTestSeq=True)
             
 
-            #useful values, LSTM params
-            batch_size = all_data_target.size()[0]
-            n_test_dates_target = unique_tst_dates_target.shape[0]
+#             #useful values, LSTM params
+#             batch_size = all_data_target.size()[0]
+#             n_test_dates_target = unique_tst_dates_target.shape[0]
 
 
-            #define LSTM model
-            class LSTM(nn.Module):
-                def __init__(self, input_size, hidden_size, batch_size):
-                    super(LSTM, self).__init__()
-                    self.input_size = input_size
-                    self.hidden_size = hidden_size
-                    self.batch_size = batch_size
-                    self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True, num_layers=num_layers,dropout=dropout) 
-                    self.out = nn.Linear(hidden_size, 1)
-                    self.hidden = self.init_hidden()
+#             #define LSTM model
+#             class LSTM(nn.Module):
+#                 def __init__(self, input_size, hidden_size, batch_size):
+#                     super(LSTM, self).__init__()
+#                     self.input_size = input_size
+#                     self.hidden_size = hidden_size
+#                     self.batch_size = batch_size
+#                     self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True, num_layers=num_layers,dropout=dropout) 
+#                     self.out = nn.Linear(hidden_size, 1)
+#                     self.hidden = self.init_hidden()
 
-                def init_hidden(self, batch_size=0):
-                    # initialize both hidden layers
-                    if batch_size == 0:
-                        batch_size = self.batch_size
-                    ret = (xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)),
-                            xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)))
-                    if use_gpu:
-                        item0 = ret[0].cuda(non_blocking=True)
-                        item1 = ret[1].cuda(non_blocking=True)
-                        ret = (item0,item1)
-                    return ret
+#                 def init_hidden(self, batch_size=0):
+#                     # initialize both hidden layers
+#                     if batch_size == 0:
+#                         batch_size = self.batch_size
+#                     ret = (xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)),
+#                             xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)))
+#                     if use_gpu:
+#                         item0 = ret[0].cuda(non_blocking=True)
+#                         item1 = ret[1].cuda(non_blocking=True)
+#                         ret = (item0,item1)
+#                     return ret
                 
-                def forward(self, x, hidden): #forward network propagation 
-                    self.lstm.flatten_parameters()
-                    x = x.float()
-                    x, hidden = self.lstm(x, self.hidden)
-                    self.hidden = hidden
-                    x = self.out(x)
-                    return x, hidden
+#                 def forward(self, x, hidden): #forward network propagation 
+#                     self.lstm.flatten_parameters()
+#                     x = x.float()
+#                     x, hidden = self.lstm(x, self.hidden)
+#                     self.hidden = hidden
+#                     x = self.out(x)
+#                     return x, hidden
 
 
 
-            #output matrix
-            n_lakes = len(top_ids)
-            output_mats = np.empty((n_lakes, n_test_dates_target))
-            ind_rmses = np.empty((n_lakes))
-            ind_rmses[:] = np.nan
-            label_mats = np.empty((n_test_dates_target)) 
-            output_mats[:] = np.nan
-            label_mats[:] = np.nan
+#             #output matrix
+#             n_lakes = len(top_ids)
+#             output_mats = np.empty((n_lakes, n_test_dates_target))
+#             ind_rmses = np.empty((n_lakes))
+#             ind_rmses[:] = np.nan
+#             label_mats = np.empty((n_test_dates_target)) 
+#             output_mats[:] = np.nan
+#             label_mats[:] = np.nan
 
 
-            for i, source_id in enumerate(top_ids): 
-                #for each top id
-                # source_id = re.search('nhdhr_(.*)', source_id).group(1)
-                #load source model
-                load_path = "../../models/"+source_id+"/basicLSTM_source_model_"+str(n_hidden)+"hid_"+str(eps)+"ep"
-                lstm_net = LSTM(n_features, n_hidden, batch_size)
-                if use_gpu:
-                    lstm_net = lstm_net.cuda(0)
-                pretrain_dict = torch.load(load_path)['state_dict']
-                model_dict = lstm_net.state_dict()
-                pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
-                model_dict.update(pretrain_dict)
-                lstm_net.load_state_dict(pretrain_dict)
+#             for i, source_id in enumerate(top_ids): 
+#                 #for each top id
+#                 # source_id = re.search('nhdhr_(.*)', source_id).group(1)
+#                 #load source model
+#                 load_path = "../../models/"+source_id+"/basicLSTM_source_model_"+str(n_hidden)+"hid_"+str(eps)+"ep"
+#                 lstm_net = LSTM(n_features, n_hidden, batch_size)
+#                 if use_gpu:
+#                     lstm_net = lstm_net.cuda(0)
+#                 pretrain_dict = torch.load(load_path)['state_dict']
+#                 model_dict = lstm_net.state_dict()
+#                 pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
+#                 model_dict.update(pretrain_dict)
+#                 lstm_net.load_state_dict(pretrain_dict)
 
-                #things needed to predict test data
-                mse_criterion = nn.MSELoss()
-                testloader = torch.utils.data.DataLoader(tst_data_target, batch_size=tst_data_target.size()[0], shuffle=False, pin_memory=True)
+#                 #things needed to predict test data
+#                 mse_criterion = nn.MSELoss()
+#                 testloader = torch.utils.data.DataLoader(tst_data_target, batch_size=tst_data_target.size()[0], shuffle=False, pin_memory=True)
 
-                lstm_net.eval()
-                with torch.no_grad():
-                    avg_mse = 0
-                    ct = 0
-                    for m, data in enumerate(testloader, 0):
-                        #now for mendota data
-                        #this loop is dated, there is now only one item in testloader
+#                 lstm_net.eval()
+#                 with torch.no_grad():
+#                     avg_mse = 0
+#                     ct = 0
+#                     for m, data in enumerate(testloader, 0):
+#                         #now for mendota data
+#                         #this loop is dated, there is now only one item in testloader
 
-                        #parse data into inputs and targets
-                        inputs = data[:,:,:n_features].float()
-                        targets = data[:,:,-1].float()
-                        targets = targets[:, begin_loss_ind:]
-                        tmp_dates = tst_dates_target[:, begin_loss_ind:]
-                        depths = inputs[:,:,0]
+#                         #parse data into inputs and targets
+#                         inputs = data[:,:,:n_features].float()
+#                         targets = data[:,:,-1].float()
+#                         targets = targets[:, begin_loss_ind:]
+#                         tmp_dates = tst_dates_target[:, begin_loss_ind:]
+#                         depths = inputs[:,:,0]
 
-                        if use_gpu:
-                            inputs = inputs.cuda()
-                            targets = targets.cuda()
+#                         if use_gpu:
+#                             inputs = inputs.cuda()
+#                             targets = targets.cuda()
 
-                        #run model
-                        h_state = None
-                        lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-                        pred, h_state = lstm_net(inputs, h_state)
-                        pred = pred.view(pred.size()[0],-1)
-                        pred = pred[:, begin_loss_ind:]
+#                         #run model
+#                         h_state = None
+#                         lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+#                         pred, h_state = lstm_net(inputs, h_state)
+#                         pred = pred.view(pred.size()[0],-1)
+#                         pred = pred[:, begin_loss_ind:]
 
-                        #calculate error
-                        targets = targets.cpu()
-                        loss_indices = np.where(~np.isnan(targets))
-                        if use_gpu:
-                            targets = targets.cuda()
-                        inputs = inputs[:, begin_loss_ind:, :]
-                        depths = depths[:, begin_loss_ind:]
-                        mse = mse_criterion(pred[loss_indices], targets[loss_indices])
-                        # print("test loss = ",mse)
-                        avg_mse += mse
+#                         #calculate error
+#                         targets = targets.cpu()
+#                         loss_indices = np.where(~np.isnan(targets))
+#                         if use_gpu:
+#                             targets = targets.cuda()
+#                         inputs = inputs[:, begin_loss_ind:, :]
+#                         depths = depths[:, begin_loss_ind:]
+#                         mse = mse_criterion(pred[loss_indices], targets[loss_indices])
+#                         # print("test loss = ",mse)
+#                         avg_mse += mse
 
-                        if mse > 0: #obsolete i think
-                            ct += 1
-                        avg_mse = avg_mse / ct
-
-
-                        #save model 
-                        (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
-                                                                        n_test_dates_target,
-                                                                        unique_tst_dates_target) 
-                        #to store output
-                        output_mats[i,:] = outputm_npy
-                        if i == 0:
-                            #store label
-                            label_mats = labelm_npy
-                        loss_output = outputm_npy[~np.isnan(labelm_npy)]
-                        loss_label = labelm_npy[~np.isnan(labelm_npy)]
-
-                        mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-                        # print(source_id+" rmse=", mat_rmse)
-
-                        # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
-
-                        # mat_csv.append(",".join(["nhdhr_"+target_id,"nhdhr_"+ source_id,str(meta_rmse_per_lake[targ_ct]),str(srcorr_per_lake[targ_ct]), str(glm_rmse),str(mat_rmse)] + [str(x) for x in lake_df.iloc[i][feats].values]))
+#                         if mse > 0: #obsolete i think
+#                             ct += 1
+#                         avg_mse = avg_mse / ct
 
 
-            #save model 
-            total_output_npy = np.average(output_mats, axis=0)
+#                         #save model 
+#                         (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
+#                                                                         n_test_dates_target,
+#                                                                         unique_tst_dates_target) 
+#                         #to store output
+#                         output_mats[i,:] = outputm_npy
+#                         if i == 0:
+#                             #store label
+#                             label_mats = labelm_npy
+#                         loss_output = outputm_npy[~np.isnan(labelm_npy)]
+#                         loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
-            loss_output = total_output_npy[~np.isnan(label_mats)]
-            loss_label = label_mats[~np.isnan(label_mats)]
-            mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+#                         mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+#                         # print(source_id+" rmse=", mat_rmse)
 
-            print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
+#                         # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
 
-
-            if n_hidden == n_hidden_list[0]:
-                err_per_16hid_ep[targ_ct, ep_ct] = mat_rmse
-            elif n_hidden == n_hidden_list[1]:
-                err_per_32hid_ep[targ_ct, ep_ct] = mat_rmse
-            elif n_hidden == n_hidden_list[2]:
-                err_per_64hid_ep[targ_ct, ep_ct] = mat_rmse
-            elif n_hidden == n_hidden_list[3]:
-                err_per_128hid_ep[targ_ct, ep_ct] = mat_rmse
-
-
-
-best_hid = None
-best_ep = None
-
-min_ep_ind_16hid = np.argmin(err_per_16hid_ep)
-best_ep_16hid = (min_ep_ind_16hid+1)*100
-
-min_ep_ind_32hid = np.argmin(err_per_32hid_ep)
-best_ep_32hid = (min_ep_ind_32hid+1)*100
-
-min_ep_ind_64hid = np.argmin(err_per_64hid_ep)
-best_ep_64hid = (min_ep_ind_64hid+1)*100
-
-min_ep_ind_128hid = np.argmin(err_per_128hid_ep)
-best_ep_128hid = (min_ep_ind_128hid+1)*100
+#                         # mat_csv.append(",".join(["nhdhr_"+target_id,"nhdhr_"+ source_id,str(meta_rmse_per_lake[targ_ct]),str(srcorr_per_lake[targ_ct]), str(glm_rmse),str(mat_rmse)] + [str(x) for x in lake_df.iloc[i][feats].values]))
 
 
-print("BEST_MODEL_PATH_16HID:../../models/"+str(lakename)+"/basicLSTM_source_model_16hid_"+str(best_ep_16hid)+"ep\nRMSE="+str(err_per_16hid_ep.min()))
-print("BEST_MODEL_PATH_32HID:../../models/"+str(lakename)+"/basicLSTM_source_model_32hid_"+str(best_ep_32hid)+"ep\nRMSE="+str(err_per_32hid_ep.min()))
-print("BEST_MODEL_PATH_64HID:../../models/"+str(lakename)+"/basicLSTM_source_model_64hid_"+str(best_ep_64hid)+"ep\nRMSE="+str(err_per_64hid_ep.min()))
-print("BEST_MODEL_PATH_128HID:../../models/"+str(lakename)+"/basicLSTM_source_model_128hid_"+str(best_ep_128hid)+"ep\nRMSE="+str(err_per_128hid_ep.min()))
-# with open(save_file_path,'w') as file:
-#     for line in mat_csv:
-#         file.write(line)
-#         file.write('\n')
+#             #save model 
+#             total_output_npy = np.average(output_mats, axis=0)
+
+#             loss_output = total_output_npy[~np.isnan(label_mats)]
+#             loss_label = label_mats[~np.isnan(label_mats)]
+#             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+
+#             print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
+
+
+#             if n_hidden == n_hidden_list[0]:
+#                 err_per_16hid_ep[targ_ct, ep_ct] = mat_rmse
+#             elif n_hidden == n_hidden_list[1]:
+#                 err_per_32hid_ep[targ_ct, ep_ct] = mat_rmse
+#             elif n_hidden == n_hidden_list[2]:
+#                 err_per_64hid_ep[targ_ct, ep_ct] = mat_rmse
+#             elif n_hidden == n_hidden_list[3]:
+#                 err_per_128hid_ep[targ_ct, ep_ct] = mat_rmse
+
+
+
+# best_hid = None
+# best_ep = None
+
+# min_ep_ind_16hid = np.argmin(err_per_16hid_ep)
+# best_ep_16hid = (min_ep_ind_16hid+1)*100
+
+# min_ep_ind_32hid = np.argmin(err_per_32hid_ep)
+# best_ep_32hid = (min_ep_ind_32hid+1)*100
+
+# min_ep_ind_64hid = np.argmin(err_per_64hid_ep)
+# best_ep_64hid = (min_ep_ind_64hid+1)*100
+
+# min_ep_ind_128hid = np.argmin(err_per_128hid_ep)
+# best_ep_128hid = (min_ep_ind_128hid+1)*100
+
+
+# print("BEST_MODEL_PATH_16HID:../../models/"+str(lakename)+"/basicLSTM_source_model_16hid_"+str(best_ep_16hid)+"ep\nRMSE="+str(err_per_16hid_ep.min()))
+# print("BEST_MODEL_PATH_32HID:../../models/"+str(lakename)+"/basicLSTM_source_model_32hid_"+str(best_ep_32hid)+"ep\nRMSE="+str(err_per_32hid_ep.min()))
+# print("BEST_MODEL_PATH_64HID:../../models/"+str(lakename)+"/basicLSTM_source_model_64hid_"+str(best_ep_64hid)+"ep\nRMSE="+str(err_per_64hid_ep.min()))
+# print("BEST_MODEL_PATH_128HID:../../models/"+str(lakename)+"/basicLSTM_source_model_128hid_"+str(best_ep_128hid)+"ep\nRMSE="+str(err_per_128hid_ep.min()))
+# # with open(save_file_path,'w') as file:
+# #     for line in mat_csv:
+# #         file.write(line)
+# #         file.write('\n')
 
 
