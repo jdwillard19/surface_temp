@@ -104,7 +104,6 @@ first_save_epoch = 0
 patience = 50
 epoch_since_best = 0
 lambda1 = 0.0001
-data_dir = "../../data/processed/"+lakename+"/"
 yhat_batch_size = 1
 
 ###############################
