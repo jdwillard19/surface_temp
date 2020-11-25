@@ -400,7 +400,7 @@ for epoch in range(n_eps):
             # loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
             # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-            print("Test RMSE: ", mat_rmse)
+            print("Test RMSE: ", avg_mse)
 
     # if epoch % 100 == 0 and epoch != 0:
 
