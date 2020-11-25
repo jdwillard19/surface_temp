@@ -101,6 +101,7 @@ lakenames = np.load("../../data/static/lists/source_lakes_wrr.npy")
 #params
 ###########################
 first_save_epoch = 0
+n_hidden = 16
 patience = 50
 epoch_since_best = 0
 lambda1 = 0.0001
