@@ -401,7 +401,7 @@ for epoch in range(n_eps):
             # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
 
             if avg_mse < min_mse:
-                save_path = "../../models/global_model_"+str(n_hidden)+"hid_"str(num_layers)+"layer_"+str(dropout)+"drop"
+                save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
                 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
                 min_mse = avg_mse
                 ep_since_min = 0
