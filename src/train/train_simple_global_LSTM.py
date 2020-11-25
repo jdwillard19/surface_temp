@@ -116,8 +116,8 @@ yhat_batch_size = 1
 #                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
 #                                                 allTestSeq=False) 
 
-trn_data = np.load("global_trn_data.npy")
-tst_data = np.load("global_val_data.npy")
+trn_data = torch.from_numpy(np.load("global_trn_data.npy"))
+tst_data = torch.from_numpy(np.load("global_val_data.npy"))
 # trn_data = tst_data
 pdb.set_trace()
 batch_size = trn_data.size()[0]
