@@ -59,11 +59,6 @@ save = True
 first_save_epoch = 0
 patience = 100
 
-n_hidden_list = [16,32,64,128] #fixed
-
-unsup_loss_cutoff = 40
-dc_unsup_loss_cutoff = 1e-3
-dc_unsup_loss_cutoff2 = 1e-2
 #ow
 seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
@@ -73,6 +68,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0
 num_layers = 1
+n_hidden = 32
 n_eps = 10000
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
@@ -101,7 +97,6 @@ lakenames = np.load("../../data/static/lists/source_lakes_wrr.npy")
 #params
 ###########################
 first_save_epoch = 0
-n_hidden = 16
 epoch_since_best = 0
 lambda1 = 0.000
 yhat_batch_size = 1
@@ -411,7 +406,7 @@ for epoch in range(n_eps):
                     print("patience met")
                     break
 
-            print("Test RMSE: ", avg_mse)
+            print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min)
 
     # if epoch % 100 == 0 and epoch != 0:
 
