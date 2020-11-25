@@ -348,7 +348,7 @@ for epoch in range(n_eps):
         break
 
 
-   with torch.no_grad():
+    with torch.no_grad():
         avg_mse = 0
         ct = 0
         for m, data in enumerate(testloader, 0):
