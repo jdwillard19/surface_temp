@@ -68,7 +68,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0
 num_layers = 1
-n_hidden = 32
+n_hidden = 16
 n_eps = 10000
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
@@ -329,18 +329,18 @@ for epoch in range(n_eps):
     if verbose:
         print("rmse loss=", avg_loss)
 
-    if avg_loss < min_mse:
-        min_mse = avg_loss
-        ep_min_mse = epoch
-        ep_since_min = 0
+    # if avg_loss < min_mse:
+    #     min_mse = avg_loss
+    #     ep_min_mse = epoch
+    #     ep_since_min = 0
 
-    else:
-        ep_since_min += 1
+    # else:
+    #     ep_since_min += 1
 
-    if ep_since_min == patience:
-        print("patience met")
-        done = True
-        break
+    # if ep_since_min == patience:
+    #     print("patience met")
+    #     done = True
+    #     break
 
 
     with torch.no_grad():
