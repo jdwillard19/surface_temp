@@ -583,7 +583,6 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 
 best_hid = None
 best_ep = None
-pdb.set_trace()
 min_ep_ind_16hid = np.argmin(err_per_16hid_ep.mean(axis=0))
 best_ep_16hid = (min_ep_ind_16hid+1)*ep_per_save
 
