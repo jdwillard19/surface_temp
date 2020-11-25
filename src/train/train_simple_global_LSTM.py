@@ -68,7 +68,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0
 num_layers = 1
-n_hidden = 16
+n_hidden = 32
 n_eps = 10000
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
@@ -404,7 +404,7 @@ for epoch in range(n_eps):
                 ep_since_min += 1
                 if ep_since_min == patience:
                     print("patience met")
-                    break
+                    sys.exit()
 
             print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min)
 
