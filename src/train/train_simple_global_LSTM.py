@@ -42,8 +42,6 @@ use_gpu = True
 torch.backends.cudnn.benchmark = True
 torch.set_printoptions(precision=10)
 
-#cmd args
-site_id = sys.argv[1]
 
 
 ### debug tools
@@ -84,8 +82,6 @@ ep_list128 = []
 
 lakenames = np.load("../../data/static/lists/source_lakes_wrr.npy")
 
-print("lake: "+lakename)
-data_dir = "../../data/processed/"+lakename+"/"
 
 ###############################
 # data preprocess
@@ -116,8 +112,8 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-(trn_data, trn_dates, tst_data, tst_dates) = buildLakeDataForRNN_multilakemodel(lakenames, \
-                                                data_dir, seq_length, n_features,\
+(trn_data, trn_dates, tst_data, tst_dates) = buildLakeDataForRNN_multilakemodel(lakenames,\
+                                                seq_length, n_features,\
                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                 allTestSeq=False) 
 # trn_data = tst_data
