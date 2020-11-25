@@ -276,6 +276,7 @@ for epoch in range(n_eps):
     batches_done = 0
     ct = 0
     for data in enumerate(trainloader, 0):
+        pdb.set_trace()
         #now for mendota data
         #this loop is dated, there is now only one item in testloader
 
