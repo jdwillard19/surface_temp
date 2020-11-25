@@ -322,7 +322,7 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
 
         assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
         # assert np.isfinite(all_dates).any(), "all_dates has nan"
-
+        pdb.set_trace()
         X_trn_comp = torch.stack([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
         trn_dates_comp = torch.stack([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
         X_tst_comp = torch.stack([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
