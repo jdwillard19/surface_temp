@@ -360,8 +360,6 @@ for epoch in range(n_eps):
             inputs = data[:,:,:n_features].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
-            tmp_dates = tst_dates_target[:, begin_loss_ind:]
-            depths = inputs[:,:,0]
 
             if use_gpu:
                 inputs = inputs.cuda()
@@ -385,24 +383,24 @@ for epoch in range(n_eps):
             # print("test loss = ",mse)
             avg_mse += mse
 
-            if mse > 0: #obsolete i think
-                ct += 1
-            avg_mse = avg_mse / ct
+            # if mse > 0: #obsolete i think
+            #     ct += 1
+            # avg_mse = avg_mse / ct
 
 
-            #save model 
-            (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
-                                                            n_test_dates_target,
-                                                            unique_tst_dates_target) 
-            #to store output
-            output_mats[i,:] = outputm_npy
-            if i == 0:
-                #store label
-                label_mats = labelm_npy
-            loss_output = outputm_npy[~np.isnan(labelm_npy)]
-            loss_label = labelm_npy[~np.isnan(labelm_npy)]
+            # #save model 
+            # (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
+            #                                                 n_test_dates_target,
+            #                                                 unique_tst_dates_target) 
+            # #to store output
+            # output_mats[i,:] = outputm_npy
+            # if i == 0:
+            #     #store label
+            #     label_mats = labelm_npy
+            # loss_output = outputm_npy[~np.isnan(labelm_npy)]
+            # loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
-            mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+            avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
             print("Test RMSE: ", mat_rmse)
 
     # if epoch % 100 == 0 and epoch != 0:
