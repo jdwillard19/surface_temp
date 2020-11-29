@@ -75,7 +75,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0
 num_layers = 1
-n_eps = 10000
+n_eps = 100
 ep_per_save = 25
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
@@ -595,34 +595,38 @@ best_hid = None
 best_ep = None
 
 min_ep_ind_16hid = np.argmin(np.quantile(err_per_16hid_ep,.10,axis=0))
+min_ep_rmse_16hid = np.quantile(err_per_16hid_ep,.10,axis=0).min()
 best_ep_16hid = (min_ep_ind_16hid+1)*ep_per_save
 
-min_ep_ind_32hid = np.argmin(err_per_32hid_ep.mean(axis=0))
+min_ep_ind_32hid = np.argmin(np.quantile(err_per_32hid_ep,.10,axis=0))
+min_ep_rmse_32hid = np.quantile(err_per_32hid_ep,.10,axis=0).min()
 best_ep_32hid = (min_ep_ind_32hid+1)*ep_per_save
 
-min_ep_ind_64hid = np.argmin(err_per_64hid_ep.mean(axis=0))
+min_ep_ind_64hid = np.argmin(np.quantile(err_per_64hid_ep,.10,axis=0))
+min_ep_rmse_64hid = np.quantile(err_per_64hid_ep,.10,axis=0).min()
 best_ep_64hid = (min_ep_ind_64hid+1)*ep_per_save
 
-min_ep_ind_128hid = np.argmin(err_per_128hid_ep.mean(axis=0))
+min_ep_ind_128hid = np.argmin(np.quantile(err_per_128hid_ep,.10,axis=0))
+min_ep_rmse_128hid = np.quantile(err_per_128hid_ep,.10,axis=0).min()
 best_ep_128hid = (min_ep_ind_128hid+1)*ep_per_save
 
 
-print("BEST_MODEL_PATH_16HID:../../models/"+str(lakename)+"/PGDL_source_model_16hid_"+str(best_ep_16hid)+"ep\nRMSE="+str(err_per_16hid_ep.min()))
-print("BEST_MODEL_PATH_32HID:../../models/"+str(lakename)+"/PGDL_source_model_32hid_"+str(best_ep_32hid)+"ep\nRMSE="+str(err_per_32hid_ep.min()))
-print("BEST_MODEL_PATH_64HID:../../models/"+str(lakename)+"/PGDL_source_model_64hid_"+str(best_ep_64hid)+"ep\nRMSE="+str(err_per_64hid_ep.min()))
-print("BEST_MODEL_PATH_128HID:../../models/"+str(lakename)+"/PGDL_source_model_128hid_"+str(best_ep_128hid)+"ep\nRMSE="+str(err_per_128hid_ep.min()))
+print("BEST_MODEL_PATH_16HID:../../models/"+str(lakename)+"/PGDL_source_model_16hid_"+str(best_ep_16hid)+"ep\nRMSE="+str(min_ep_rmse_16hid))
+print("BEST_MODEL_PATH_32HID:../../models/"+str(lakename)+"/PGDL_source_model_32hid_"+str(best_ep_32hid)+"ep\nRMSE="+str(min_ep_rmse_32hid))
+print("BEST_MODEL_PATH_64HID:../../models/"+str(lakename)+"/PGDL_source_model_64hid_"+str(best_ep_64hid)+"ep\nRMSE="+str(min_ep_rmse_64hid))
+print("BEST_MODEL_PATH_128HID:../../models/"+str(lakename)+"/PGDL_source_model_128hid_"+str(best_ep_128hid)+"ep\nRMSE="+str(min_ep_rmse_128hid))
 
 
-if err_per_16hid_ep.min() == min(err_per_16hid_ep.min(), err_per_32hid_ep.min(), err_per_64hid_ep.min(),err_per_128hid_ep.min()):
+if min_ep_rmse_16hid == min(min_ep_rmse_16hid, min_ep_rmse_32hid, min_ep_rmse_64hid,min_ep_rmse_128hid):
     print("16 min, saved at")
     os.rename("../../models/"+str(lakename)+"/PGDL_source_model_16hid_"+str(best_ep_16hid)+"ep","../../models/"+site_id+"/PGDL_source_model_final")
-elif err_per_32hid_ep.min() == min(err_per_16hid_ep.min(), err_per_32hid_ep.min(), err_per_64hid_ep.min(),err_per_128hid_ep.min()):
+elif min_ep_rmse_32hid == min(min_ep_rmse_16hid, min_ep_rmse_32hid, min_ep_rmse_64hid,min_ep_rmse_128hid):
     print("32 min, saved at")
     os.rename("../../models/"+str(lakename)+"/PGDL_source_model_32hid_"+str(best_ep_32hid)+"ep","../../models/"+site_id+"/PGDL_source_model_final")
-elif err_per_64hid_ep.min() == min(err_per_16hid_ep.min(), err_per_32hid_ep.min(), err_per_64hid_ep.min(),err_per_128hid_ep.min()):
+elif min_ep_rmse_64hid == min(min_ep_rmse_16hid, min_ep_rmse_32hid, min_ep_rmse_64hid,min_ep_rmse_128hid):
     print("64 min, saved at")
     os.rename("../../models/"+str(lakename)+"/PGDL_source_model_64hid_"+str(best_ep_64hid)+"ep","../../models/"+site_id+"/PGDL_source_model_final")
-elif err_per_128hid_ep.min() == min(err_per_16hid_ep.min(), err_per_32hid_ep.min(), err_per_64hid_ep.min(),err_per_128hid_ep.min()):
+elif min_ep_rmse_128hid == min(min_ep_rmse_16hid, min_ep_rmse_32hid, min_ep_rmse_64hid,min_ep_rmse_128hid):
     print("128 min, saved at")
     os.rename("../../models/"+str(lakename)+"/PGDL_source_model_128hid_"+str(best_ep_128hid)+"ep","../../models/"+site_id+"/PGDL_source_model_final")
 else:
