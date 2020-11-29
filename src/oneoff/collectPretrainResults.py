@@ -58,5 +58,13 @@ min64_ind = np.argmin(err_per_glm64)
 min128_ind = np.argmin(err_per_glm128)
 
 site16 = train_ids[min16_ind]
-print("best 16: ../../models/"+site_id+"/glm_emulator_16hid_"+match16[0][0]+"ep")
-print("best 32: ../../models/"+site_id+"/glm_emulator_16hid_"+match16[0][0]+"ep")
+print("best 16: ",best16_paths[min16_ind])
+
+site32 = train_ids[min32_ind]
+print("best 32: ",best32_paths[min32_ind])
+
+site64 = train_ids[min64_ind]
+print("best 64: ",best64_paths[min64_ind])
+
+site128 = train_ids[min128_ind]
+print("best 128: ",best128_paths[min128_ind])
