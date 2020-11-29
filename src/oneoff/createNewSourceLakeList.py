@@ -16,3 +16,6 @@ train_lakes = train_lakes[~np.isin(train_lakes, ['121623043','121623126',\
 
 
 np.save("../../data/static/lists/source_lakes_wrr",train_lakes)
+
+
+
