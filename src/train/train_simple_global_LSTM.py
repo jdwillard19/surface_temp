@@ -67,8 +67,8 @@ win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
-num_layers = 1
-n_hidden = 32
+num_layers = 2
+n_hidden = 16
 # lambda1 = 
 lambda1 = 0
 

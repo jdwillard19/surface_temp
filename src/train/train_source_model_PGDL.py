@@ -594,16 +594,16 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
 best_hid = None
 best_ep = None
 
-min_ep_ind_16hid = np.argmin(err_per_16hid_ep)
+min_ep_ind_16hid = np.argmin(np.quantile(err_per_16hid_ep,.10,axis=0))
 best_ep_16hid = (min_ep_ind_16hid+1)*ep_per_save
 
-min_ep_ind_32hid = np.argmin(err_per_32hid_ep)
+min_ep_ind_32hid = np.argmin(err_per_32hid_ep.mean(axis=0))
 best_ep_32hid = (min_ep_ind_32hid+1)*ep_per_save
 
-min_ep_ind_64hid = np.argmin(err_per_64hid_ep)
+min_ep_ind_64hid = np.argmin(err_per_64hid_ep.mean(axis=0))
 best_ep_64hid = (min_ep_ind_64hid+1)*ep_per_save
 
-min_ep_ind_128hid = np.argmin(err_per_128hid_ep)
+min_ep_ind_128hid = np.argmin(err_per_128hid_ep.mean(axis=0))
 best_ep_128hid = (min_ep_ind_128hid+1)*ep_per_save
 
 
