@@ -20,6 +20,11 @@ err_per_glm64[:] = np.nan
 err_per_glm128 = np.empty((n_lakes))
 err_per_glm128[:] = np.nan
 
+best16_paths = np.empty((n_lakes))
+best32_paths = np.empty((n_lakes))
+best64_paths = np.empty((n_lakes))
+best128_paths = np.empty((n_lakes))
+
 def job_path(site_id):
     return "../hpc/jobs/train_glm_emulator_"+str(site_id)+".out"
 for site_ct, site_id in enumerate(train_ids):
@@ -29,15 +34,29 @@ for site_ct, site_id in enumerate(train_ids):
     out_txt = out_f.read()
     match16 = re.findall(pattern="BEST_MODEL_PATH_16HID:../../models/"+site_id+"/glm_emulator_16hid_(\d+)ep\nMean\s+RMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm16[site_ct] = match16[0][1]
+    best16_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_16hid_"+match16[0][2]+"ep"
 
     match32 = re.findall(pattern="BEST_MODEL_PATH_32HID:../../models/"+site_id+"/glm_emulator_32hid_(\d+)ep\nMean\s+RMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm32[site_ct] = match32[0][1]
+    best32_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_32hid_"+match32[0][2]+"ep"
+
 
     match64 = re.findall(pattern="BEST_MODEL_PATH_64HID:../../models/"+site_id+"/glm_emulator_64hid_(\d+)ep\nMean\s+RMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm64[site_ct] = match64[0][1]
+    best64_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_64hid_"+match64[0][2]+"ep"
+
 
     match128 = re.findall(pattern="BEST_MODEL_PATH_128HID:../../models/"+site_id+"/glm_emulator_128hid_(\d+)ep\nMean\s+RMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm128[site_ct] = match128[0][1]
+    best128_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_128hid_"+match128[0][2]+"ep"
 
 
 pdb.set_trace()
+min16_ind = np.argmin(err_per_glm16)
+min32_ind = np.argmin(err_per_glm32)
+min64_ind = np.argmin(err_per_glm64)
+min128_ind = np.argmin(err_per_glm128)
+
+site16 = train_ids[min16_ind]
+print("best 16: ../../models/"+site_id+"/glm_emulator_16hid_"+match16[0][0]+"ep")
+print("best 32: ../../models/"+site_id+"/glm_emulator_16hid_"+match16[0][0]+"ep")
