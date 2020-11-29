@@ -20,10 +20,10 @@ err_per_glm64[:] = np.nan
 err_per_glm128 = np.empty((n_lakes))
 err_per_glm128[:] = np.nan
 
-best16_paths = np.empty((n_lakes))
-best32_paths = np.empty((n_lakes))
-best64_paths = np.empty((n_lakes))
-best128_paths = np.empty((n_lakes))
+best16_paths = np.empty((n_lakes),dtype=np.object)
+best32_paths = np.empty((n_lakes),dtype=np.object)
+best64_paths = np.empty((n_lakes),dtype=np.object)
+best128_paths = np.empty((n_lakes),dtype=np.object)
 
 def job_path(site_id):
     return "../hpc/jobs/train_glm_emulator_"+str(site_id)+".out"
