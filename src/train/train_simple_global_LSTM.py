@@ -66,9 +66,9 @@ n_features = 7  #number of physical drivers
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
-dropout = 0
+dropout = 0.5
 num_layers = 2
-n_hidden = 24
+n_hidden = 16
 n_eps = 10000
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
