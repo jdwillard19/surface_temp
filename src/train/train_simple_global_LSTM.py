@@ -68,9 +68,9 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 2
-n_hidden = 32
+n_hidden = 64
 # lambda1 = 
-lambda1 = 1e-6
+lambda1 = 1
 
 n_eps = 10000
 
