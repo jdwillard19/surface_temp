@@ -34,21 +34,21 @@ for site_ct, site_id in enumerate(train_ids):
     out_txt = out_f.read()
     match16 = re.findall(pattern="BEST_MODEL_PATH_16HID:../../models/"+site_id+"/glm_emulator_16hid_(\d+)ep\nMean\s+RMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm16[site_ct] = match16[0][1]
-    best16_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_16hid_"+match16[0][2]+"ep"
+    best16_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_16hid_"+match16[0][0]+"ep"
 
     match32 = re.findall(pattern="BEST_MODEL_PATH_32HID:../../models/"+site_id+"/glm_emulator_32hid_(\d+)ep\nMean\s+RMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm32[site_ct] = match32[0][1]
-    best32_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_32hid_"+match32[0][2]+"ep"
+    best32_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_32hid_"+match32[0][0]+"ep"
 
 
     match64 = re.findall(pattern="BEST_MODEL_PATH_64HID:../../models/"+site_id+"/glm_emulator_64hid_(\d+)ep\nMean\s+RMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm64[site_ct] = match64[0][1]
-    best64_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_64hid_"+match64[0][2]+"ep"
+    best64_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_64hid_"+match64[0][0]+"ep"
 
 
     match128 = re.findall(pattern="BEST_MODEL_PATH_128HID:../../models/"+site_id+"/glm_emulator_128hid_(\d+)ep\nMean\s+RMSE=(\d*\.?\d+)",string=out_txt,flags=re.M | re.DOTALL)
     err_per_glm128[site_ct] = match128[0][1]
-    best128_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_128hid_"+match128[0][2]+"ep"
+    best128_paths[site_ct] = "../../models/"+site_id+"/LSTM_source_model_128hid_"+match128[0][0]+"ep"
 
 
 pdb.set_trace()
