@@ -66,9 +66,11 @@ n_features = 7  #number of physical drivers
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
-dropout = 0.25
+dropout = 0.
 num_layers = 2
-n_hidden = 16
+n_hidden = 32
+lambda1 = 1e-4
+
 n_eps = 10000
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
@@ -98,7 +100,6 @@ lakenames = np.load("../../data/static/lists/source_lakes_wrr.npy")
 ###########################
 first_save_epoch = 0
 epoch_since_best = 0
-lambda1 = 0.000
 yhat_batch_size = 1
 
 ###############################
