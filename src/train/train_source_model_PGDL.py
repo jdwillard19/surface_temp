@@ -87,10 +87,10 @@ lakename = site_id
 print("lake: "+lakename)
 data_dir = "../../data/processed/"+lakename+"/"
 
-pretrain_paths = ["../../models/91692521/LSTM_source_model_16hid_1800ep",\
-                  "../../models/91692521/LSTM_source_model_32hid_900ep",\
-                  "../../models/91692521/LSTM_source_model_64hid_800ep",\
-                  "../../models/91692521/LSTM_source_model_128hid_1400ep"]
+pretrain_paths = ["../../models/120018084/LSTM_source_model_16hid_4600ep",\
+                  "../../models/120020204/LSTM_source_model_32hid_5000ep",\
+                  "../../models/120020204/LSTM_source_model_64hid_2200ep",\
+                  "../../models/120020204/LSTM_source_model_128hid_2800ep"]
 
 ###############################
 # data preprocess
@@ -581,13 +581,13 @@ for hid_ct, n_hidden in enumerate(n_hidden_list):
             print("source ",site_id, "-> target ", target_id,": Total rmse=", mat_rmse)
 
             if n_hidden == n_hidden_list[0]:
-                err_per_16hid_ep[ep_ct] = mat_rmse
+                err_per_16hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[1]:
-                err_per_32hid_ep[ep_ct] = mat_rmse
+                err_per_32hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[2]:
-                err_per_64hid_ep[ep_ct] = mat_rmse
+                err_per_64hid_ep[targ_ct, ep_ct] = mat_rmse
             elif n_hidden == n_hidden_list[3]:
-                err_per_128hid_ep[ep_ct] = mat_rmse
+                err_per_128hid_ep[targ_ct, ep_ct] = mat_rmse
 
 
 
