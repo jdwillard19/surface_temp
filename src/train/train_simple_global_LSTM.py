@@ -67,8 +67,8 @@ win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0
-num_layers = 1
-n_hidden = 24
+num_layers = 2
+n_hidden = 32
 n_eps = 10000
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
