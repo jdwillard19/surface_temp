@@ -167,12 +167,10 @@ for i, lake in enumerate(ids):
     #processed obs file / feats / files
     obs1 = np.load("../../data/processed/" + ids_nop[i] + "/train.npy")
     obs2 = np.load("../../data/processed/" + ids_nop[i] + "/test.npy")
-    shape0 = obs1.shape[0]
-    shape1 = obs1.shape[1]
     trn_flt = obs1.flatten()
     tst_flt = obs2.flatten()
     np.put(trn_flt, np.where(np.isfinite(tst_flt))[0], tst_flt[np.isfinite(tst_flt)])
-    trn_tst = trn_flt.reshape((shape0, shape1))
+    # trn_tst = trn_flt.reshape((shape0, shape1))
     obs_f = trn_tst
     # np.save("../../../data/processed/lake_data/"+lake+"/full_obs.npy", trn_tst)
     feats_f = np.load("../../data/processed/" + ids_nop[i] + "/features.npy")
