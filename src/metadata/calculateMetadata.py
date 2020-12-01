@@ -253,4 +253,4 @@ for i, lake in enumerate(ids):
                 skew_obs_temp, kurt_obs_temp, subzero_ind, at_amp, lathrop, glm_strat_perc, ws_sp_mix], index=new_lab)
     metadata = metadata.append(new_feat, ignore_index=True)
     metadata = metadata.drop(['max_depth','obs_depth_mean_frac','lathrop_strat','glm_strat_perc','canopy','n_prof'],axis=1)
-    metadata.to_feather("../../metadata/lake_metadata_full.feather")
+    metadata.to_feather("../../metadata/lake_metadata_surf.feather")
