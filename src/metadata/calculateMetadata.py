@@ -252,5 +252,5 @@ for i, lake in enumerate(ids):
                 int(n_obs), int(n_prof), int(n_obs_wi), int(n_obs_sp), int(n_obs_su), int(n_obs_au), mean_obs_frac, mean_obs_temp, std_obs_temp, \
                 skew_obs_temp, kurt_obs_temp, subzero_ind, at_amp, lathrop, glm_strat_perc, ws_sp_mix], index=new_lab)
     metadata = metadata.append(new_feat, ignore_index=True)
-    pdb.set_trace()
+    metadata = metadata.drop(['max_depth','obs_depth_mean_frac','lathrop_strat','glm_strat_perc','canopy','n_prof'],axis=1)
     metadata.to_feather("../../metadata/lake_metadata_full.feather")
