@@ -171,7 +171,7 @@ for i, lake in enumerate(ids):
     tst_flt = obs2.flatten()
     np.put(trn_flt, np.where(np.isfinite(tst_flt))[0], tst_flt[np.isfinite(tst_flt)])
     # trn_tst = trn_flt.reshape((shape0, shape1))
-    obs_f = trn_tst
+    obs_f = trn_flt
     # np.save("../../../data/processed/lake_data/"+lake+"/full_obs.npy", trn_tst)
     feats_f = np.load("../../data/processed/" + ids_nop[i] + "/features.npy")
 
