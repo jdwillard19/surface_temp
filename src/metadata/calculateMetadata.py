@@ -180,6 +180,7 @@ for i, lake in enumerate(ids):
 
     #count seasonal observations
     obs_seasons = np.array([get_season(pd.Timestamp(t).to_pydatetime()) for t in obs['date']])
+    pdb.set_trace()
     n_obs_wi = np.sum(obs_seasons == 'winter')
     n_obs_sp = np.sum(obs_seasons == 'spring')
     n_obs_su = np.sum(obs_seasons == 'summer')
