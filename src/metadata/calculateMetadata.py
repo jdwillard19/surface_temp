@@ -184,7 +184,6 @@ for i, lake in enumerate(ids):
     n_obs_sp = np.sum(obs_seasons == 'spring')
     n_obs_su = np.sum(obs_seasons == 'summer')
     n_obs_au = np.sum(obs_seasons == 'autumn')
-    pdb.set_trace()
     #count profiles
     n_prof = np.sum(np.count_nonzero(np.isfinite(obs_f), axis=0) > 0)
 
