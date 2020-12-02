@@ -46,7 +46,7 @@ for i, lake in enumerate(ids):
     targ['obs_temp_kurt'] = 0
 
     others = meta.drop(lake, axis=0)
-    others.drop(['fullname', 'canopy', 'glm_uncal_rmse_third', 'glm_uncal_rmse_full'], axis=1, inplace=True)
+    others.drop(['fullname', 'glm_uncal_rmse_third', 'glm_uncal_rmse_full'], axis=1, inplace=True)
 
 
     others['obs_temp_mean_airdif'] = others['at_mean'] - others['obs_temp_mean']
