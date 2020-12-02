@@ -162,6 +162,7 @@ for i, lake in enumerate(ids):
 
     #now do observation data
     obs = all_obs[all_obs['site_id'] == lake]
+    max_depth = .25
     obs = obs[obs['depth'] <= max_depth]
 
     #processed obs file / feats / files
@@ -177,15 +178,13 @@ for i, lake in enumerate(ids):
 
     #number of obs
     n_obs = np.count_nonzero(np.isfinite(obs_f))
-
     #count seasonal observations
     obs_seasons = np.array([get_season(pd.Timestamp(t).to_pydatetime()) for t in obs['date']])
-    pdb.set_trace()
     n_obs_wi = np.sum(obs_seasons == 'winter')
     n_obs_sp = np.sum(obs_seasons == 'spring')
     n_obs_su = np.sum(obs_seasons == 'summer')
     n_obs_au = np.sum(obs_seasons == 'autumn')
-
+    pdb.set_trace()
     #count profiles
     n_prof = np.sum(np.count_nonzero(np.isfinite(obs_f), axis=0) > 0)
 
