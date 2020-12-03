@@ -47,6 +47,8 @@ new_lab = ['site_id', 'K_d', 'SDF', 'fullname', 'glm_uncal_rmse_third', 'glm_unc
 metadata = pd.DataFrame(columns=new_lab)
 # metadata = pd.read_feather("../../../metadata/lake_metadata_2700plus_temp.feather")
 for i, lake in enumerate(ids):
+    if i < 68:
+        continue
     print("lake ", i, ": ", lake)
     name = lake
     #load meteorological data
@@ -193,6 +195,7 @@ for i, lake in enumerate(ids):
         glm_uncal_rmse_third = np.nan
         glm_uncal_rmse_full = np.nan
     else:
+        pdb.set_trace()
         n_obs_wi = np.sum(obs_seasons == 'winter')
         n_obs_sp = np.sum(obs_seasons == 'spring')
         n_obs_su = np.sum(obs_seasons == 'summer')
@@ -252,6 +255,7 @@ for i, lake in enumerate(ids):
         obs_temps = np.delete(obs_temps, ind_to_del, axis=0)
         glm_temps_full = np.delete(glm_temps_full, ind_to_del_full, axis=0)
         obs_temps_full = np.delete(obs_temps_full, ind_to_del_full, axis=0)
+        pdb.set_trace()
         glm_uncal_rmse_third = rmse(glm_temps, obs_temps)
         glm_uncal_rmse_full = rmse(glm_temps_full, obs_temps_full)
 
