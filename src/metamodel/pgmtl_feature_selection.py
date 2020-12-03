@@ -25,8 +25,7 @@ n_lakes = len(train_lakes)
 
 train_df = pd.DataFrame()
 
-pdb.set_trace()
-feats = pd.read_feather("../../metadata/diffs/target_91685677.feather").columns
+feats = pd.read_feather("../../metadata/diffs/target_nhdhr_91685677.feather").columns[1:][75:]
 #compile all the meta-features and meta-target values into one dataframe
 for _, lake_id in enumerate(train_lakes):
 
