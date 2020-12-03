@@ -25,13 +25,7 @@ from pytorch_data_operations import buildLakeDataForRNN_manylakes_finetune2, par
 #############################################################################################
 
 #read in needed data
-metadata = pd.read_feather("../../metadata/lake_metadata.feather")
-metadata.set_index("site_id", inplace=True)
-metadata.columns = [c.replace(' ', '_') for c in metadata.columns]
-ids = pd.read_csv('../../metadata/pball_site_ids.csv', header=None)
-glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
-train_lakes = [re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)]
-
+train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy") 
 #write results to below lists
 csv_all = [] 
 first_row_str_all = "target_id,source_id,rmse"
@@ -58,11 +52,11 @@ for ctt, target_id in enumerate(train_lakes):
     data_dir_target = "../../data/processed/"+target_id+"/" 
 
 
-    (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, all_phys_data_target, all_dates_target,
-    hypsography_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
-                                       win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                       latter_third_test=True, outputFullTestMatrix=True, 
-                                       allTestSeq=True, oldFeat=False, postProcessSplits=False)
+    (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, \
+             all_phys_data_target, all_dates_target)\
+            = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
+                                               win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
+                                               outputFullTestMatrix=True, allTestSeq=True)
 
     #csv to append to for each source lake
     csv_targ = []
@@ -129,7 +123,7 @@ for ctt, target_id in enumerate(train_lakes):
         label_mats[:] = np.nan
 
         #save output path
-        save_output_path = "../../results/transfer_learning/target_"+target_id+"/source_"+source_id+"/PGRNN_basic_pball"
+        save_output_path = "../../results/transfer_learning/target_"+target_id+"/source_"+source_id+"/PGDL_output"
         save_label_path = "../../results/transfer_learning/target_"+target_id+"/label"
 
         if not os.path.exists("../../results/transfer_learning/target_"+target_id+"/"):
@@ -141,7 +135,7 @@ for ctt, target_id in enumerate(train_lakes):
 
 
         #load model
-        load_path = "../../models/"+source_id+"/PGRNN_source_model_0.7"
+        load_path = "../../models/"+source_id+"/PGDL_source_model_final"
         n_hidden = torch.load(load_path)['state_dict']['out.weight'].shape[1]
         lstm_net = LSTM(n_features, n_hidden, batch_size)
         if use_gpu:
@@ -219,8 +213,8 @@ for ctt, target_id in enumerate(train_lakes):
 
 
 
-    with open("../../results/transfer_learning/target_"+target_id+"/resultsPGRNNbasic_pball",'a') as file:
-        print("saving to ../../../results/transfer_learning/target_"+target_id+"/resultsPGRNNbasic_pball")
+    with open("../../results/transfer_learning/target_"+target_id+"/PGDL_transfer_results",'a') as file:
+        print("saving to ../../../results/transfer_learning/target_"+target_id+"/PGDL_transfer_results")
         for line in csv_targ:
             file.write(line)
             file.write('\n')
