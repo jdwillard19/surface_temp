@@ -181,68 +181,80 @@ for i, lake in enumerate(ids):
     #count seasonal observations
     obs_seasons = np.array([get_season(pd.Timestamp(t).to_pydatetime()) for t in obs['date']])
     pdb.set_trace()
-    n_obs_wi = np.sum(obs_seasons == 'winter')
-    n_obs_sp = np.sum(obs_seasons == 'spring')
-    n_obs_su = np.sum(obs_seasons == 'summer')
-    n_obs_au = np.sum(obs_seasons == 'autumn')
-    #count profiles
-    n_prof = np.sum(np.count_nonzero(np.isfinite(obs_f), axis=0) > 0)
+    if obs.empty:
+        n_obs_wi = 0
+        n_obs_sp = 0
+        n_obs_su = 0
+        n_obs_au = 0
+        mean_obs_frac = np.nan
+        mean_obs_temp = np.nan
+        std_obs_temp = np.nan
+        skew_obs_temp = np.nan
+        kurt_obs_temp = np.nan
+        glm_uncal_rmse_third = np.nan
+        glm_uncal_rmse_full = np.nan
+    else:
+        n_obs_wi = np.sum(obs_seasons == 'winter')
+        n_obs_sp = np.sum(obs_seasons == 'spring')
+        n_obs_su = np.sum(obs_seasons == 'summer')
+        n_obs_au = np.sum(obs_seasons == 'autumn')
+        mean_obs_frac = obs['depth'].mean() / max_depth
+        mean_obs_temp = obs['temp'].mean() 
+        std_obs_temp = obs['temp'].std()
+        skew_obs_temp = skew(obs['temp'])
+        kurt_obs_temp = kurtosis(obs['temp'])
 
-    #statistics
-    mean_obs_frac = obs['depth'].mean() / max_depth
-    mean_obs_temp = obs['temp'].mean() 
-    std_obs_temp = obs['temp'].std()
-    skew_obs_temp = skew(obs['temp'])
-    kurt_obs_temp = kurtosis(obs['temp'])
+        #count profiles
 
-    #calculate glm error
-    ind_to_del = []
-    ind_to_del_full = []
-    obs_temps_full = np.array(obs.values[:,3])
-    last_tst_ind = math.floor(obs.shape[0]/3)
-    obs_temps = np.array(obs.values[:last_tst_ind,3])
-    glm_temps = np.empty((last_tst_ind))
-    glm_temps_full = np.empty((obs_temps_full.shape[0]))
-    glm_temps[:] = np.nan
-    glm_temps_full[:] = np.nan
-    for t in range(last_tst_ind):
-        # if len(np.where(glm['DateTime'] == pd.to_datetime(obs['date'][t]).tz_localize('Etc/GMT+6'))[0]) == 0:
-        if np.datetime64(pd.to_datetime(obs['date'].values[t]).tz_localize('Etc/GMT+6')).astype('datetime64[D]') < np.datetime64(pd.to_datetime(glm['date'][0]).tz_localize('Etc/GMT+6')).astype('datetime64[D]'):
-            ind_to_del.append(t)
-            continue
-        # if len(np.where(glm['DateTime'] == np.datetime64(pd.to_datetime(obs['date'][t]).tz_localize('Etc/GMT+6')).astype('datetime64[D]'))[0]) == 0:
-        row_ind = np.where(glm['date'] == obs['date'].values[t])[0][0]
-        col_ind = int(obs.iloc[t].depth / 0.5) + 1
-        if col_ind > glm.shape[1]-1:
-            ind_to_del.append(t)
-            continue
-        elif math.isnan(glm.iloc[row_ind, col_ind]):
-            ind_to_del.append(t)
-        else:
-            glm_temps[t] = glm.iloc[row_ind, col_ind]
 
-    for t in range(obs_temps_full.shape[0]):
-        # if len(np.where(glm['DateTime'] == pd.to_datetime(obs['date'][t]).tz_localize('Etc/GMT+6'))[0]) == 0:
-        if np.datetime64(pd.to_datetime(obs['date'].values[t]).tz_localize('Etc/GMT+6')).astype('datetime64[D]') < np.datetime64(pd.to_datetime(glm['date'][0]).tz_localize('Etc/GMT+6')).astype('datetime64[D]'):
-            ind_to_del_full.append(t)
-            continue
-        # if len(np.where(glm['DateTime'] == np.datetime64(pd.to_datetime(obs['date'][t]).tz_localize('Etc/GMT+6')).astype('datetime64[D]'))[0]) == 0:
-        row_ind = np.where(glm['date'] == obs['date'].values[t])[0][0]
-        col_ind = int(obs.iloc[t].depth / 0.5) + 1
-        if col_ind > glm.shape[1]-1:
-            ind_to_del_full.append(t)
-            continue
-        elif math.isnan(glm.iloc[row_ind, col_ind]):
-            ind_to_del_full.append(t)
-        else:
-            glm_temps_full[t] = glm.iloc[row_ind, col_ind]
+        #calculate glm error
+        ind_to_del = []
+        ind_to_del_full = []
+        obs_temps_full = np.array(obs.values[:,3])
+        last_tst_ind = math.floor(obs.shape[0]/3)
+        obs_temps = np.array(obs.values[:last_tst_ind,3])
+        glm_temps = np.empty((last_tst_ind))
+        glm_temps_full = np.empty((obs_temps_full.shape[0]))
+        glm_temps[:] = np.nan
+        glm_temps_full[:] = np.nan
+        for t in range(last_tst_ind):
+            # if len(np.where(glm['DateTime'] == pd.to_datetime(obs['date'][t]).tz_localize('Etc/GMT+6'))[0]) == 0:
+            if np.datetime64(pd.to_datetime(obs['date'].values[t]).tz_localize('Etc/GMT+6')).astype('datetime64[D]') < np.datetime64(pd.to_datetime(glm['date'][0]).tz_localize('Etc/GMT+6')).astype('datetime64[D]'):
+                ind_to_del.append(t)
+                continue
+            # if len(np.where(glm['DateTime'] == np.datetime64(pd.to_datetime(obs['date'][t]).tz_localize('Etc/GMT+6')).astype('datetime64[D]'))[0]) == 0:
+            row_ind = np.where(glm['date'] == obs['date'].values[t])[0][0]
+            col_ind = int(obs.iloc[t].depth / 0.5) + 1
+            if col_ind > glm.shape[1]-1:
+                ind_to_del.append(t)
+                continue
+            elif math.isnan(glm.iloc[row_ind, col_ind]):
+                ind_to_del.append(t)
+            else:
+                glm_temps[t] = glm.iloc[row_ind, col_ind]
 
-    glm_temps = np.delete(glm_temps, ind_to_del, axis=0)
-    obs_temps = np.delete(obs_temps, ind_to_del, axis=0)
-    glm_temps_full = np.delete(glm_temps_full, ind_to_del_full, axis=0)
-    obs_temps_full = np.delete(obs_temps_full, ind_to_del_full, axis=0)
-    glm_uncal_rmse_third = rmse(glm_temps, obs_temps)
-    glm_uncal_rmse_full = rmse(glm_temps_full, obs_temps_full)
+        for t in range(obs_temps_full.shape[0]):
+            # if len(np.where(glm['DateTime'] == pd.to_datetime(obs['date'][t]).tz_localize('Etc/GMT+6'))[0]) == 0:
+            if np.datetime64(pd.to_datetime(obs['date'].values[t]).tz_localize('Etc/GMT+6')).astype('datetime64[D]') < np.datetime64(pd.to_datetime(glm['date'][0]).tz_localize('Etc/GMT+6')).astype('datetime64[D]'):
+                ind_to_del_full.append(t)
+                continue
+            # if len(np.where(glm['DateTime'] == np.datetime64(pd.to_datetime(obs['date'][t]).tz_localize('Etc/GMT+6')).astype('datetime64[D]'))[0]) == 0:
+            row_ind = np.where(glm['date'] == obs['date'].values[t])[0][0]
+            col_ind = int(obs.iloc[t].depth / 0.5) + 1
+            if col_ind > glm.shape[1]-1:
+                ind_to_del_full.append(t)
+                continue
+            elif math.isnan(glm.iloc[row_ind, col_ind]):
+                ind_to_del_full.append(t)
+            else:
+                glm_temps_full[t] = glm.iloc[row_ind, col_ind]
+
+        glm_temps = np.delete(glm_temps, ind_to_del, axis=0)
+        obs_temps = np.delete(obs_temps, ind_to_del, axis=0)
+        glm_temps_full = np.delete(glm_temps_full, ind_to_del_full, axis=0)
+        obs_temps_full = np.delete(obs_temps_full, ind_to_del_full, axis=0)
+        glm_uncal_rmse_third = rmse(glm_temps, obs_temps)
+        glm_uncal_rmse_full = rmse(glm_temps_full, obs_temps_full)
 
     new_feat = pd.Series([lake, k_d, sdf, np.nan, fullname, glm_uncal_rmse_third, glm_uncal_rmse_full, lat, lon, max_depth, surf_area, sw_m, sw_s, lw_m, lw_s, at_m, at_s, rh_m, rh_s, ws_m, ws_s, r_m, r_s, s_m, s_s, \
                 sw_m_wi, sw_s_wi, lw_m_wi, lw_s_wi, at_m_wi, at_s_wi, rh_m_wi, rh_s_wi, ws_m_wi, ws_s_wi, r_m_wi, r_s_wi, s_m_wi, s_s_wi, \
