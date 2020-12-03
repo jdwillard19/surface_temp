@@ -24,8 +24,8 @@ days_per_year = 366
 usgs_meta = pd.read_csv("../../metadata/lake_metadata_from_data_release.csv")
 verbose = True
 
-new_lab = ['site_id', 'K_d', 'SDF', 'canopy', 'fullname', 'glm_uncal_rmse_third', 'glm_uncal_rmse_full',
-       'latitude', 'longitude', 'max_depth', 'surface_area', 'sw_mean',
+new_lab = ['site_id', 'K_d', 'SDF', 'fullname', 'glm_uncal_rmse_third', 'glm_uncal_rmse_full',
+       'latitude', 'longitude', 'surface_area', 'sw_mean',
        'sw_std', 'lw_mean', 'lw_std', 'at_mean', 'at_std', 'rh_mean', 'rh_std',
        'ws_mean', 'ws_std', 'rain_mean', 'rain_std', 'snow_mean', 'snow_std',
        'sw_mean_sp', 'sw_std_sp', 'lw_mean_sp', 'lw_std_sp', 'at_mean_sp',
@@ -40,10 +40,10 @@ new_lab = ['site_id', 'K_d', 'SDF', 'canopy', 'fullname', 'glm_uncal_rmse_third'
        'sw_mean_wi', 'sw_std_wi', 'lw_mean_wi', 'lw_std_wi', 'at_mean_wi',
        'at_std_wi', 'rh_mean_wi', 'rh_std_wi', 'ws_mean_wi', 'ws_std_wi',
        'rain_mean_wi', 'rain_std_wi', 'snow_mean_wi', 'snow_std_wi', 'n_obs',
-       'n_prof', 'n_obs_wi', 'n_obs_sp', 'n_obs_su', 'n_obs_au',
-       'obs_depth_mean_frac', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_skew',
-       'obs_temp_kurt', 'zero_temp_doy', 'at_amp', 'lathrop_strat',
-       'glm_strat_perc', 'ws_sp_mix']
+       'n_obs_wi', 'n_obs_sp', 'n_obs_su', 'n_obs_au',
+       'obs_temp_mean', 'obs_temp_std', 'obs_temp_skew',
+       'obs_temp_kurt', 'zero_temp_doy', 'at_amp',
+       'ws_sp_mix']
 metadata = pd.DataFrame(columns=new_lab)
 # metadata = pd.read_feather("../../../metadata/lake_metadata_2700plus_temp.feather")
 for i, lake in enumerate(ids):
@@ -256,13 +256,13 @@ for i, lake in enumerate(ids):
         glm_uncal_rmse_third = rmse(glm_temps, obs_temps)
         glm_uncal_rmse_full = rmse(glm_temps_full, obs_temps_full)
 
-    new_feat = pd.Series([lake, k_d, sdf, np.nan, fullname, glm_uncal_rmse_third, glm_uncal_rmse_full, lat, lon, max_depth, surf_area, sw_m, sw_s, lw_m, lw_s, at_m, at_s, rh_m, rh_s, ws_m, ws_s, r_m, r_s, s_m, s_s, \
+    new_feat = pd.Series([lake, k_d, sdf, fullname, glm_uncal_rmse_third, glm_uncal_rmse_full, lat, lon, surf_area, sw_m, sw_s, lw_m, lw_s, at_m, at_s, rh_m, rh_s, ws_m, ws_s, r_m, r_s, s_m, s_s, \
                 sw_m_wi, sw_s_wi, lw_m_wi, lw_s_wi, at_m_wi, at_s_wi, rh_m_wi, rh_s_wi, ws_m_wi, ws_s_wi, r_m_wi, r_s_wi, s_m_wi, s_s_wi, \
                 sw_m_sp, sw_s_sp, lw_m_sp, lw_s_sp, at_m_sp, at_s_sp, rh_m_sp, rh_s_sp, ws_m_sp, ws_s_sp, r_m_sp, r_s_sp, s_m_sp, s_s_sp, \
                 sw_m_su, sw_s_su, lw_m_su, lw_s_su, at_m_su, at_s_su, rh_m_su, rh_s_su, ws_m_su, ws_s_su, r_m_su, r_s_su, s_m_su, s_s_su, \
                 sw_m_au, sw_s_au, lw_m_au, lw_s_au, at_m_au, at_s_au, rh_m_au, rh_s_au, ws_m_au, ws_s_au, r_m_au, r_s_au, s_m_au, s_s_au, \
-                int(n_obs), int(n_prof), int(n_obs_wi), int(n_obs_sp), int(n_obs_su), int(n_obs_au), mean_obs_frac, mean_obs_temp, std_obs_temp, \
-                skew_obs_temp, kurt_obs_temp, subzero_ind, at_amp, lathrop, glm_strat_perc, ws_sp_mix], index=new_lab)
+                int(n_obs), int(n_obs_wi), int(n_obs_sp), int(n_obs_su), int(n_obs_au), mean_obs_temp, std_obs_temp, \
+                skew_obs_temp, kurt_obs_temp, subzero_ind, at_amp, ws_sp_mix], index=new_lab)
     metadata = metadata.append(new_feat, ignore_index=True)
-    metadata = metadata.drop(['max_depth','obs_depth_mean_frac','lathrop_strat','glm_strat_perc','canopy','n_prof'],axis=1)
+    # metadata = metadata.drop(['max_depth','obs_depth_mean_frac','lathrop_strat','glm_strat_perc','canopy','n_prof'],axis=1)
     metadata.to_feather("../../metadata/lake_metadata_surf.feather")
