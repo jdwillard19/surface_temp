@@ -187,8 +187,8 @@ for ctt, target_id in enumerate(train_lakes):
                 avg_mse += mse
 
                 #format prediction and labels into depths by days matrices
-                (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), depths, tmp_dates, n_depths, 
-                                                                n_test_dates_target, u_depths_target,
+                (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
+                                                                n_test_dates_target,
                                                                 unique_tst_dates_target) 
                 #store output
                 output_mats[0,:,:] = outputm_npy
