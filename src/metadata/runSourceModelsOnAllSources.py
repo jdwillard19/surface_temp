@@ -33,7 +33,7 @@ csv_all.append(first_row_str_all)
 
 #target agnostic model and data params
 use_gpu = True
-n_features = 8
+n_features = 7
 seq_length = 350
 win_shift = 175
 begin_loss_ind = 0
