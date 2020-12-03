@@ -102,7 +102,7 @@ for i, lake in enumerate(ids):
     final_meta.reset_index(inplace=True)
     if not os.path.exists("../../metadata/diffs/"+lake):
         os.mkdir("../../metadata/diffs/"+lake)
-    pdb.set_trace()
+    # pdb.set_trace()
     final_meta.to_feather("../../metadata/diffs/target_"+lake+".feather")
 
 
