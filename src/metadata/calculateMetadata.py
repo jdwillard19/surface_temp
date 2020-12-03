@@ -256,8 +256,12 @@ for i, lake in enumerate(ids):
         glm_temps_full = np.delete(glm_temps_full, ind_to_del_full, axis=0)
         obs_temps_full = np.delete(obs_temps_full, ind_to_del_full, axis=0)
         pdb.set_trace()
-        glm_uncal_rmse_third = rmse(glm_temps, obs_temps)
-        glm_uncal_rmse_full = rmse(glm_temps_full, obs_temps_full)
+        if obs_temps.shape[0] == 0:
+            glm_uncal_rmse_full = np.nan
+            glm_uncal_rmse_third = np.nan
+        else:
+            glm_uncal_rmse_third = rmse(glm_temps, obs_temps)
+            glm_uncal_rmse_full = rmse(glm_temps_full, obs_temps_full)
 
     new_feat = pd.Series([lake, k_d, sdf, fullname, glm_uncal_rmse_third, glm_uncal_rmse_full, lat, lon, surf_area, sw_m, sw_s, lw_m, lw_s, at_m, at_s, rh_m, rh_s, ws_m, ws_s, r_m, r_s, s_m, s_s, \
                 sw_m_wi, sw_s_wi, lw_m_wi, lw_s_wi, at_m_wi, at_s_wi, rh_m_wi, rh_s_wi, ws_m_wi, ws_s_wi, r_m_wi, r_s_wi, s_m_wi, s_s_wi, \
