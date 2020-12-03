@@ -18,6 +18,7 @@ import re
 # train_df = pd.read_feather("../../results/transfer_learning/glm/train_rmses_pball.feather")
 # train_lakes = [re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)]
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
+train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
 # train_lakes_wp = np.unique(glm_all_f['target_id'].values)
 n_lakes = len(train_lakes)
