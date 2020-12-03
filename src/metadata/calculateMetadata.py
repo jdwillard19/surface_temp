@@ -180,7 +180,6 @@ for i, lake in enumerate(ids):
     n_obs = np.count_nonzero(np.isfinite(obs_f))
     #count seasonal observations
     obs_seasons = np.array([get_season(pd.Timestamp(t).to_pydatetime()) for t in obs['date']])
-    pdb.set_trace()
     if obs.empty:
         n_obs_wi = 0
         n_obs_sp = 0
