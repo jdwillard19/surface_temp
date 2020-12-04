@@ -331,6 +331,8 @@ for epoch in range(n_eps):
     # if verbose and epoch %100 is 0:
     if verbose:
         print("rmse loss=", avg_loss)
+    if avg_loss < 2 and epoch > 673:
+        break
 
     # if avg_loss < min_mse:
     #     min_mse = avg_loss
@@ -424,6 +426,8 @@ for epoch in range(n_eps):
     #         ep_list64.append(epoch)
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
+save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final"
+
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
 print("saved at ",save_path)
