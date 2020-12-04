@@ -84,7 +84,7 @@ rmse_per_lake[:] = np.nan
 # glm_rmse_per_lake[:] = np.nan
 meta_rmse_per_lake[:] = np.nan
 csv = []
-csv.append('target_id,rmse,rmse_pred,spearman')
+csv.append('target_id,rmse,spearman')
 
 
 #where to output files
@@ -286,12 +286,14 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     print("Total rmse=", mat_rmse)
     spcorr = srcorr_per_lake[targ_ct]
     rmse_per_lake[targ_ct] = mat_rmse
+    csv.append(",".join([target_id, str(spcorr), str(mat_rmse)]))
+
 
 
 
 
 with open(save_file_path,'w') as file:
-    for line in mat_csv:
+    for line in csv:
         file.write(line)
         file.write('\n')
 
