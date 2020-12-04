@@ -21,9 +21,20 @@ obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
-test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
+# test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
+# np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
+# print(len(test_lakes), "test lakes")
+remove_ct = 0
+for lake in test_lakes:
+    filter_df = obs_df[obs_df['site_id'] == "nhdhr_"+lake]
+    filter_df = filter_df[filter_df['depth'] <= .25]
+    if filter_df.shape[0] < 2:
+        test_lakes = np.delete(test_lakes,np.where(test_lakes == lake))
+        remove_ct += 1
+
+print(remove_ct, "removed")
 np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
-print(len(test_lakes), "test lakes")
+sys.exit()
 # assert len(test_lakes) == 305
 
 k = 1
