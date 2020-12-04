@@ -24,7 +24,7 @@ test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle
 
 
 k = 1
-output_to_file = True
+output_to_file = False
 
 save_file_path = "../../results/pgmtl_results_surf_temp.csv"
 
