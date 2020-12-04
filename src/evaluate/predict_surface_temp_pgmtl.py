@@ -16,18 +16,17 @@ from joblib import dump, load
 import re
 
 
-base_path = "../../data/raw/sb_mtl_data_release/"
-obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
+# base_path = "../../data/raw/sb_mtl_data_release/"
+# obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy")
 
-assert len(test_lakes) == 305
 
 k = 1
 output_to_file = True
 
-save_file_path = "../../results/pgmtl_results_single_source.csv"
+save_file_path = "../../results/pgmtl_results_surf_temp.csv"
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
@@ -61,12 +60,14 @@ feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
 #load metamodel
 model_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
 model = load(model_path)
-
+importances = model.feature_importances_
+print(importances)
+pdb.set_trace()
 #csv to write to
 mat_csv = ["target_id,source_id,pgmtl_rmse"]
 # mat_csv = ["target_id,source_id,meta_rmse,spearman,pb0_rmse,pgmtl_rmse"]
-for feat in feats:
-    mat_csv[0] = mat_csv[0] + ','+str(feat)
+# for feat in feats:
+    # mat_csv[0] = mat_csv[0] + ','+str(feat)
 
 
 #data structures to fill

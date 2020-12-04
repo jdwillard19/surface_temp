@@ -14,6 +14,7 @@ import re
 # (e.g. feats = ['dif_max_depth', ....]; n_estimators = 4000, etc)
 #############################################################################################################
 
+
 #file to save results to
 save_file_path = '../../results/pbmtl_glm_transfer_results.csv'
 
@@ -21,18 +22,9 @@ save_file_path = '../../results/pbmtl_glm_transfer_results.csv'
 model_path = "../../models/metamodel_glm_RMSE_GBR.joblib"
 
 
-ids = pd.read_csv('../../metadata/pball_site_ids.csv', header=None)
-ids = ids[0].values
-glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
-train_df = pd.read_feather("../../results/glm_transfer/glm_meta_train_data.feather")
-train_site_nhd = np.array(['test_nhdhr_'+x for x in train_df['site_id'].values])
-result_df = pd.read_csv("../../results/glm_transfer/RMSE_transfer_test_extended_glm.csv")
-train_lakes = [re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)]
-train_lakes_wp = np.unique(glm_all_f['target_id'].values) #with prefix
-n_lakes = len(train_lakes)
-test_lakes = ids[~np.isin(ids, train_lakes)]
-test_site_nhd = np.array(['test_nhdhr_'+x for x in test_lakes])
-
+train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
+train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
+test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
 
 #########################################################################################
