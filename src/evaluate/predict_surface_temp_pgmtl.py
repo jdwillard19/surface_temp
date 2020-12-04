@@ -75,16 +75,16 @@ mat_csv = ["target_id,source_id,pgmtl_rmse"]
 
 #data structures to fill
 rmse_per_lake = np.empty(test_lakes.shape[0])
-glm_rmse_per_lake = np.empty(test_lakes.shape[0])
+# glm_rmse_per_lake = np.empty(test_lakes.shape[0])
 srcorr_per_lake = np.empty(test_lakes.shape[0])
 
 meta_rmse_per_lake = np.empty(test_lakes.shape[0])
 med_meta_rmse_per_lake = np.empty(test_lakes.shape[0])
 rmse_per_lake[:] = np.nan
-glm_rmse_per_lake[:] = np.nan
+# glm_rmse_per_lake[:] = np.nan
 meta_rmse_per_lake[:] = np.nan
 csv = []
-csv.append('target_id,rmse,rmse_pred,spearman,glm_rmse')
+csv.append('target_id,rmse,rmse_pred,spearman')
 
 
 #where to output files
@@ -257,9 +257,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 print(source_id+" rmse=", mat_rmse)
                 err_per_source[i,targ_ct] = mat_rmse
 
-                glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
+                # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
 
-                mat_csv.append(",".join(["nhdhr_"+target_id,"nhdhr_"+ source_id,str(meta_rmse_per_lake[targ_ct]),str(srcorr_per_lake[targ_ct]), str(glm_rmse),str(mat_rmse)] + [str(x) for x in lake_df.iloc[i][feats].values]))
+                mat_csv.append(",".join(["nhdhr_"+target_id,"nhdhr_"+ source_id,str(meta_rmse_per_lake[targ_ct]),str(srcorr_per_lake[targ_ct]),str(mat_rmse)] + [str(x) for x in lake_df.iloc[i][feats].values]))
 
 
     #save model 
