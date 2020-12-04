@@ -20,7 +20,7 @@ base_path = "../../data/raw/sb_mtl_data_release/"
 obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
-test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy")
+test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
 assert len(test_lakes) == 305
 
