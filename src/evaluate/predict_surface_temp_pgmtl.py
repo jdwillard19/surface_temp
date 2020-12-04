@@ -241,8 +241,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
 
                 #save model 
-                (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), depths, tmp_dates, n_depths, 
-                                                                n_test_dates_target, u_depths_target,
+            #save model 
+                (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
+                                                                n_test_dates_target,
                                                                 unique_tst_dates_target) 
                 #to store output
                 output_mats[i,:,:] = outputm_npy
