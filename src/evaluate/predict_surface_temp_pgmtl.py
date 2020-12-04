@@ -293,6 +293,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
 
 with open(save_file_path,'w') as file:
+    pdb.set_trace()
     for line in csv:
         file.write(line)
         file.write('\n')
@@ -303,4 +304,6 @@ with open(save_file_path,'w') as file:
 print("median srcorr: ",np.median(srcorr_per_lake))
 print("median meta test RMSE(med): ",np.median(med_meta_rmse_per_lake))
 print("median test RMSE: ",np.median(rmse_per_lake))
+print("q1 test RMSE: ",np.quantile(rmse_per_lake,.25))
+print("q3 test RMSE: ",np.quantile(rmse_per_lake,.75))
 
