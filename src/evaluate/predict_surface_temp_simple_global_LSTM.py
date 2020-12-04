@@ -16,8 +16,8 @@ from joblib import dump, load
 import re
 
 
-base_path = "../../data/raw/sb_mtl_data_release/"
-obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
+# base_path = "../../data/raw/sb_mtl_data_release/"
+# obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
@@ -291,4 +291,5 @@ with open(save_file_path,'w') as file:
 print("median srcorr: ",np.median(srcorr_per_lake))
 print("median meta test RMSE(med): ",np.median(med_meta_rmse_per_lake))
 print("median test RMSE: ",np.median(rmse_per_lake))
-
+print("q1 test RMSE: ",np.quantile(rmse_per_lake,.25))
+print("q3 test RMSE: ",np.quantile(rmse_per_lake,.75))
