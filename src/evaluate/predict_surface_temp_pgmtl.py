@@ -172,10 +172,10 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     #output matrix
     n_lakes = len(top_ids)
-    output_mats = np.empty((n_lakes, n_depths, n_test_dates_target))
+    output_mats = np.empty((n_lakes, n_test_dates_target))
     ind_rmses = np.empty((n_lakes))
     ind_rmses[:] = np.nan
-    label_mats = np.empty((n_depths, n_test_dates_target)) 
+    label_mats = np.empty((n_test_dates_target)) 
     output_mats[:] = np.nan
     label_mats[:] = np.nan
 
@@ -211,7 +211,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 targets = data[:,:,-1].float()
                 targets = targets[:, begin_loss_ind:]
                 tmp_dates = tst_dates_target[:, begin_loss_ind:]
-                depths = inputs[:,:,0]
+                # depths = inputs[:,:,0]
 
                 if use_gpu:
                     inputs = inputs.cuda()
@@ -230,7 +230,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 if use_gpu:
                     targets = targets.cuda()
                 inputs = inputs[:, begin_loss_ind:, :]
-                depths = depths[:, begin_loss_ind:]
+                # depths = depths[:, begin_loss_ind:]
                 mse = mse_criterion(pred[loss_indices], targets[loss_indices])
                 # print("test loss = ",mse)
                 avg_mse += mse
@@ -246,7 +246,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                                                 n_test_dates_target,
                                                                 unique_tst_dates_target) 
                 #to store output
-                output_mats[i,:,:] = outputm_npy
+                output_mats[i,:] = outputm_npy
                 if i == 0:
                     #store label
                     label_mats = labelm_npy
