@@ -25,8 +25,18 @@ ids = ids[0].values
 n_lakes = len(train_lakes)
 test_lakes = ids[~np.isin(ids, train_lakes)]
 
+remove_ct = 0
 for lake in test_lakes:
-    pdb.set_trace()
+    filter_df = obs_df[obs_df['site_id'] == "nhdhr_"+lake]
+    filter_df = filter_df[filter_df['depth'] < .25]
+    if filter_df.empty:
+        ids = np.delete(ids, np.where(ids == lake))
+        remove_ct +=1
+
+print(remove_ct, "removed ")
+
+np.save(ids,"../../data/static/lists/target_lakes_wrr.npy")
+sys.exit()
 assert len(test_lakes) == 305
 
 k = 1
