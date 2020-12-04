@@ -111,7 +111,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     data_dir_target = "../../data/processed/"+target_id+"/" 
     #target agnostic model and data params
     use_gpu = True
-    n_features = 8
+    n_features = 7
     # n_hidden = 20
     seq_length = 350
     win_shift = 175
