@@ -60,9 +60,12 @@ feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
 #load metamodel
 model_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
 model = load(model_path)
-importances = model.feature_importances_
-print(importances)
-pdb.set_trace()
+# importances = model.feature_importances_
+# print(importances)
+# sorted_feats = [x for _,x in sorted(zip(importances,feats))]
+# sorted_imps = [x for x,_ in sorted(zip(importances,feats))]
+
+# pdb.set_trace()
 #csv to write to
 mat_csv = ["target_id,source_id,pgmtl_rmse"]
 # mat_csv = ["target_id,source_id,meta_rmse,spearman,pb0_rmse,pgmtl_rmse"]
