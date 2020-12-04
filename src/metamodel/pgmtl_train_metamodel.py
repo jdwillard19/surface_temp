@@ -6,6 +6,7 @@ import os
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from joblib import dump, load
 import re
+import datetime
 
 ##################################################################3
 # (Sept 2020 - Jared) - PG-MTL training script on 145 source lake 
@@ -13,8 +14,12 @@ import re
 # (e.g. feats = ['dif_max_depth', ....]; n_estimators = 5500, etc)
 ####################################################################3
 
+currentDT = datetime.datetime.now()
+print("script start: ",str(currentDT))
+
 #file to save model  to
-save_file_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
+save_file_path = '../../models/metamodel_pgdl_RMSE_RF.joblib'
+# save_file_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
@@ -52,8 +57,8 @@ feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
 #######################################################################3
 #paste hyperparameters found in "pbmtl_hyperparameter_search.py" here
 #
-n_estimators = 3000
-lr = .05
+n_estimators = 10000
+# lr = .05
 #####################################################################
 
 
@@ -84,7 +89,8 @@ for _, lake_id in enumerate(train_lakes):
 #train model
 X_trn = pd.DataFrame(train_df[feats])
 y_trn = np.array([float(x) for x in np.ravel(pd.DataFrame(train_df['rmse']))])
-model = GradientBoostingRegressor(n_estimators=n_estimators, learning_rate=lr)
+# model = GradientBoostingRegressor(n_estimators=n_estimators, learning_rate=lr)
+model = RandomForestRegressor(n_estimators=n_estimators)
 print("Training metamodel...")
 model.fit(X_trn, y_trn)
 dump(model, save_file_path)
