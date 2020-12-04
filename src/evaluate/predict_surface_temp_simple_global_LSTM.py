@@ -35,7 +35,7 @@ for lake in test_lakes:
 
 print(remove_ct, "removed ")
 
-np.save(ids,"../../data/static/lists/target_lakes_wrr.npy")
+np.save("../../data/static/lists/target_lakes_wrr.npy",ids)
 sys.exit()
 assert len(test_lakes) == 305
 
