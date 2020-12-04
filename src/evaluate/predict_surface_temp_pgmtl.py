@@ -26,7 +26,7 @@ test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle
 k = 10
 output_to_file = False
 
-save_file_path = "../../results/pgmtl_results_surf_temp.csv"
+save_file_path = "../../results/pgmtl_results_surf_temp_ens.csv"
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
