@@ -72,7 +72,7 @@ n_hidden = 16
 # lambda1 = 1e-
 lambda1 = 0
 
-n_eps = 674
+n_eps = 10000
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
