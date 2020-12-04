@@ -81,7 +81,7 @@ def gb_param_selection(X, y, nfolds):
     lrs = [.05,.01]
     # max_d = [3, 5]
     param_grid = {'n_estimators': ests, 'learning_rate' : lrs}
-    grid_search = GridSearchCV(GradientBoostingRegressor(), param_grid, cv=nfolds, n_jobs=-1)
+    grid_search = GridSearchCV(GradientBoostingRegressor(), param_grid, cv=nfolds, n_jobs=-1,verbose=1)
     grid_search.fit(X, y)
     grid_search.best_params_
     return grid_search.best_params_
