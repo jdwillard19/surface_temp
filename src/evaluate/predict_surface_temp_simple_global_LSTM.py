@@ -225,7 +225,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                                             n_test_dates_target,
                                                             unique_tst_dates_target) 
             #to store output
-            output_mats[i,:,:] = outputm_npy
+            # output_mats[i,:,:] = outputm_npy
             if i == 0:
                 #store label
                 label_mats = labelm_npy
