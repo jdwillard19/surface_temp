@@ -21,7 +21,9 @@ obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
-
+test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
+np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
+print(len(test_lakes), "test lakes")
 # assert len(test_lakes) == 305
 
 k = 1
@@ -226,9 +228,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                                             unique_tst_dates_target) 
             #to store output
             # output_mats[i,:,:] = outputm_npy
-            if i == 0:
-                #store label
-                label_mats = labelm_npy
             loss_output = outputm_npy[~np.isnan(labelm_npy)]
             loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
