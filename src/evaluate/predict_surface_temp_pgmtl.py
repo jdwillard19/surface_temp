@@ -184,7 +184,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         #for each top id
         source_id = re.search('nhdhr_(.*)', source_id).group(1)
         #load source model
-        load_path = "../../models/"+source_id+"/PGRNN_source_model_0.7"
+        load_path = "../../models/"+source_id+"/PGDL_source_model_final"
         n_hidden = torch.load(load_path)['state_dict']['out.weight'].shape[1]
         lstm_net = LSTM(n_features, n_hidden, batch_size)
         if use_gpu:
