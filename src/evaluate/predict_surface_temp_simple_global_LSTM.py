@@ -161,15 +161,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
 
 
-    #output matrix
-    n_lakes = len(top_ids)
-    output_mats = np.empty((n_lakes, n_depths, n_test_dates_target))
-    ind_rmses = np.empty((n_lakes))
-    ind_rmses[:] = np.nan
-    label_mats = np.empty((n_depths, n_test_dates_target)) 
-    output_mats[:] = np.nan
-    label_mats[:] = np.nan
-
 
     #load source model
     load_path = "../../models/global_model_16hid_2layer_final"
@@ -243,9 +234,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
             print("globLSTM rmse=", mat_rmse)
-            err_per_source[i,targ_ct] = mat_rmse
+            # err_per_source[i,targ_ct] = mat_rmse
 
-            glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
+            # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
 
             csv.append(",".join(["nhdhr_"+target_id,str(mat_rmse)]))
             rmse_per_lake[targ_ct] = mat_rmse
