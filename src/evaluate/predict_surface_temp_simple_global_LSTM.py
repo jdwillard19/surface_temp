@@ -22,7 +22,7 @@ train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
-assert len(test_lakes) == 305
+# assert len(test_lakes) == 305
 
 k = 1
 output_to_file = True
