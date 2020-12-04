@@ -286,7 +286,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     print("Total rmse=", mat_rmse)
     spcorr = srcorr_per_lake[targ_ct]
     rmse_per_lake[targ_ct] = mat_rmse
-    pdb.set_trace()
     csv.append(",".join([target_id, str(spcorr), str(mat_rmse)]))
 
 
