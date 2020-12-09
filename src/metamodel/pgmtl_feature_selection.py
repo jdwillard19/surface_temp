@@ -71,7 +71,7 @@ dtrain = xgb.DMatrix(X_trn, label=y_trn)
 
 #perform recursive feature elimination
 # rfecv = RFECV(estimator=est, cv=24, step=2, scoring='neg_mean_squared_error', verbose=1, n_jobs=-1)
-# gbm = xgb.XGBRegressor(gpu_id=0).fit(X_trn,y_trn)
+gbm = xgb.XGBRegressor()
 selection = SelectFromModel(gbm, threshold=0.03, prefit=False)
 selection.fit(X_trn,y_trn)
 selected_dataset = selection.transform(X_tst)
