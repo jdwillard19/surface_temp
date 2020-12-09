@@ -71,9 +71,9 @@ dtrain = xgb.DMatrix(X_trn, label=y_trn)
 
 #perform recursive feature elimination
 # rfecv = RFECV(estimator=est, cv=24, step=2, scoring='neg_mean_squared_error', verbose=1, n_jobs=-1)
-gbm = xgb.XGBRegressor().fit(X_train,y_train)
+gbm = xgb.XGBRegressor().fit(X_trn,y_trn)
 selection = SelectFromModel(gbm, threshold=0.03, prefit=True)
-selected_dataset = selection.transform(X_test)
+selected_dataset = selection.transform(X_tst)
 # rfecv.fit(X, y)
 
 # print("Optimal number of features : %d" % rfecv.n_features_)
