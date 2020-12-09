@@ -84,6 +84,21 @@ selected_dataset = selection.transform(X_tst)
 
 # print("scores: ", selection.estimator_.coef_)
 # print("support: ",selection.get_support())
+new_feats = feats[selection.get_support()]
+X_trn = pd.DataFrame(train_df[new_feats])
+y_trn = np.ravel(pd.DataFrame(train_df['rmse']))
+# y_tst = np.ravel(pd.DataFrame(test_df['rmse']))
+dtrain = xgb.DMatrix(X_trn, label=y_trn)
+
+print("new feats: ", new_feats)
+print(selection.estimator_.feature_importances_[selection.get_support()])
+X_trn2 = pd.DataFrame(train_df[new_feats])
+X_tst2 = pd.DataFrame(test_df[feats])
+gbm = xgb.XGBRegressor(booster='gbtree').fit(X_trn2, X_tst2)
+cv  = xgb.cv(data = dtrain, nrounds = 3, nthread = -1, nfold = 12, metrics = list("rmse"),
+                  max_depth = 3, eta = 1, objective = "binary:logistic")
+print(cv)
+
 pdb.set_trace()
 # print("ranking: ", repr(rfecv.ranking_))
 
