@@ -106,4 +106,3 @@ for i, lake in enumerate(ids):
     final_meta.to_feather("../../metadata/diffs/target_"+lake+".feather")
 
 
-
