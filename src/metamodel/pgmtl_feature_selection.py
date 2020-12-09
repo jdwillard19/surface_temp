@@ -82,8 +82,8 @@ selected_dataset = selection.transform(X_tst)
 # Plot number of features VS. cross-validation scores
 # print("ranking: ", rfecv.ranking_)
 
-print("scores: ", selection.estimator_.coef_)
-print("support: ",selection.get_support())
+# print("scores: ", selection.estimator_.coef_)
+# print("support: ",selection.get_support())
 pdb.set_trace()
 # print("ranking: ", repr(rfecv.ranking_))
 
