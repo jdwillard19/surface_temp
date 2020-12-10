@@ -23,7 +23,7 @@ train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
 
-k = 10
+k = 1
 output_to_file = False
 
 save_file_path = "../../results/pgmtl_results_surf_temp_ens.csv"
@@ -100,7 +100,11 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     lake_id = target_id
 
     lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
+    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_targets")
     lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
+    pdb.set_trace()
+    lake_df = pd.merge(left=lake_df, right=lake_df_res.astype('object'), left_on='site_id', right_on='source_id')
+
     X = pd.DataFrame(lake_df[feats])
 
 
