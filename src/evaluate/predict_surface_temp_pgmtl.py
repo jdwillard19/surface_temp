@@ -110,10 +110,12 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     y_pred = model.predict(X)
     lake_df['rmse_pred'] = y_pred
-    y_act = lake_df['rmse_y']
+    y_act = lake_df['rmse']
     lake_df.sort_values(by=['rmse_pred'], inplace=True)
     lowest_rmse = lake_df.iloc[0]['rmse_pred']
-
+    meta_rmse_per_lake[targ_ct] = np.median(np.sqrt(((y_pred - y_act) ** 2).mean()))
+    srcorr_per_lake[targ_ct] = spearmanr(y_pred, y_act).correlation
+    pdb.set_trace()
     top_ids = [str(j) for j in lake_df.iloc[:k]['site_id']]
     
     best_site = top_ids[0]
