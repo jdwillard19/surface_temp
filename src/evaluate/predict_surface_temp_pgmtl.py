@@ -100,7 +100,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     lake_id = target_id
 
     lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
-    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_targets")
+    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_targets", names=['source_id','rmse'])
+    lake_df_res['source_id_wp'] = ['nhdhr_'+x for x in lake_df_res['source_id'].values]
     lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
     pdb.set_trace()
     lake_df = pd.merge(left=lake_df, right=lake_df_res.astype('object'), left_on='site_id', right_on='source_id')
