@@ -70,42 +70,43 @@ y_trn = np.ravel(pd.DataFrame(train_df['rmse']))
 dtrain = xgb.DMatrix(X_trn, label=y_trn)
 
 #perform recursive feature elimination
-# rfecv = RFECV(estimator=est, cv=24, step=2, scoring='neg_mean_squared_error', verbose=1, n_jobs=-1)
+rfecv = RFECV(estimator=est, cv=24, step=2, scoring='neg_mean_squared_error', verbose=1, n_jobs=-1)
 gbm = xgb.XGBRegressor(booster='gbtree')
-selection = SelectFromModel(gbm, threshold=0.03, prefit=False)
-selection.fit(X_trn,y_trn)
-selected_dataset = selection.transform(X_tst)
-# rfecv.fit(X, y)
+# selection = SelectFromModel(gbm, threshold=0.03, prefit=False)
+# selection.fit(X_trn,y_trn)
+# selected_dataset = selection.transform(X_tst)
+rfecv.fit(X_trn, y_trn)
 
-# print("Optimal number of features : %d" % rfecv.n_features_)
+print("Optimal number of features : %d" % rfecv.n_features_)
 
 # Plot number of features VS. cross-validation scores
-# print("ranking: ", rfecv.ranking_)
+print("ranking: ", rfecv.ranking_)
 
 # print("scores: ", selection.estimator_.coef_)
 # print("support: ",selection.get_support())
-new_feats = feats[selection.get_support()]
-X_trn = pd.DataFrame(train_df[new_feats])
-y_trn = np.ravel(pd.DataFrame(train_df['rmse']))
-# y_tst = np.ravel(pd.DataFrame(test_df['rmse']))
-dtrain = xgb.DMatrix(X_trn, label=y_trn)
+# new_feats = feats[selection.get_support()]
+# X_trn = pd.DataFrame(train_df[new_feats])
+# y_trn = np.ravel(pd.DataFrame(train_df['rmse']))
+# # y_tst = np.ravel(pd.DataFrame(test_df['rmse']))
+# dtrain = xgb.DMatrix(X_trn, label=y_trn)
 
-print("new feats: ", new_feats)
-print(selection.estimator_.feature_importances_[selection.get_support()])
-X_trn2 = pd.DataFrame(train_df[new_feats])
-X_tst2 = pd.DataFrame(test_df[feats])
-gbm = xgb.XGBRegressor(booster='gbtree').fit(X_trn2, X_tst2)
-cv  = xgb.cv(data = dtrain, nrounds = 3, nthread = -1, nfold = 12, metrics = list("rmse"),
-                  max_depth = 3, eta = 1, objective = "binary:logistic")
-print(cv)
+# print("new feats: ", new_feats)
+# print(selection.estimator_.feature_importances_[selection.get_support()])
+# X_trn2 = pd.DataFrame(train_df[new_feats])
+# X_tst2 = pd.DataFrame(test_df[feats])
+# gbm = xgb.XGBRegressor(booster='gbtree').fit(X_trn2, X_tst2)
+# cv  = xgb.cv(data = dtrain, nrounds = 3, nthread = -1, nfold = 12, metrics = list("rmse"),
+#                   max_depth = 3, eta = 1, objective = "binary:logistic")
+# print(cv)
 
-pdb.set_trace()
-# print("ranking: ", repr(rfecv.ranking_))
+# pdb.set_trace()
+print("ranking: ", repr(rfecv.ranking_))
 
-# print("scores: ", repr(rfecv.grid_scores_))
+print("scores: ", repr(rfecv.grid_scores_))
 
 print("selected features\n---------------------------------------------------------------------------")
-print(feats[selector.get_support()])
+# print(feats[selector.get_support()])
+print(feats[rfecv.ranking_==1])
 print("------------------------------------------------------------------------")
 
 
