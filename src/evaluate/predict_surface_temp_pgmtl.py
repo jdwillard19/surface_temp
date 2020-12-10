@@ -115,7 +115,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     lowest_rmse = lake_df.iloc[0]['rmse_pred']
     meta_rmse_per_lake[targ_ct] = np.median(np.sqrt(((y_pred - y_act) ** 2).mean()))
     srcorr_per_lake[targ_ct] = spearmanr(y_pred, y_act).correlation
-    pdb.set_trace()
     top_ids = [str(j) for j in lake_df.iloc[:k]['site_id']]
     
     best_site = top_ids[0]
@@ -308,7 +307,7 @@ with open(save_file_path,'w') as file:
 
 
 print("median srcorr: ",np.median(srcorr_per_lake))
-print("median meta test RMSE(med): ",np.median(med_meta_rmse_per_lake))
+print("median meta test RMSE(med): ",np.median(meta_rmse_per_lake))
 print("median test RMSE: ",np.median(rmse_per_lake))
 print("q1 test RMSE: ",np.quantile(rmse_per_lake,.25))
 print("q3 test RMSE: ",np.quantile(rmse_per_lake,.75))
