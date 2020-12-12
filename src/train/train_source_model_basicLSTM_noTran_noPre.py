@@ -76,7 +76,7 @@ grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0
 num_layers = 1
 targ_train_rmse = 1
-n_eps = 10000
+n_eps = 20000
 
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
