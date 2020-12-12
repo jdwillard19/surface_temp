@@ -98,8 +98,6 @@ pretrain_paths = ["../../models/120018084/LSTM_source_model_16hid_4600ep",\
 #create train and test sets
 
 for hid_ct, n_hidden in enumerate(n_hidden_list):
-
-
     #####################################################################################
     ####################################################3
     # fine tune
