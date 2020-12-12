@@ -61,8 +61,8 @@ save = True
 first_save_epoch = 0
 patience = 100
 
-n_hidden_list = [16,32,64,128] #fixed
-
+# n_hidden_list = [16,32,64,128] #fixed
+n_hidden = 16
 # unsup_loss_cutoff = 40
 # dc_unsup_loss_cutoff = 1e-3
 # dc_unsup_loss_cutoff2 = 1e-2
