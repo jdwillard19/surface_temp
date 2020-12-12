@@ -321,7 +321,11 @@ for epoch in range(n_eps):
         save_path = "../../models/"+lakename+"/basicLSTM_source_model_not_transfer_aware_no_pretrain"
         saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
         print("saved at, ",save)
-        break
+        sys.exit()
+
+save_path = "../../models/"+lakename+"/basicLSTM_source_model_not_transfer_aware_no_pretrain"
+saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+print("saved at, ",save)
 
 
 
