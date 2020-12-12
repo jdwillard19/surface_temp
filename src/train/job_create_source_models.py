@@ -15,11 +15,8 @@ import numpy as np
 #######################################
 
 
-n_lakes = 0
-glm_all_f = pd.read_csv("../../results/glm_transfer/RMSE_transfer_glm_pball.csv")
-train_lakes = [re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)]
-ids = pd.read_csv('../../metadata/pball_site_ids.csv')
-ids = train_lakes
+train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy") 
+
 # ids = ids.values
 qsub = ""
 # for name in ids.values.flatten():
@@ -37,7 +34,7 @@ for name in ids:
     header = "#!/bin/bash -l\n#PBS -l walltime=23:59:00,nodes=1:ppn=24:gpus=2,mem=16gb \n#PBS -m abe \n#PBS -N %s_pgml_source \n#PBS -o ./jobs/%s_pgml_source.stdout \n#PBS -q k40 \n"%(l2,l2)
     script = "source takeme_source.sh\n" #cd to directory with training script
     script2 = "source activate mtl_env"
-    script3 = "python train_source_model.py %s"%(l)
+    script3 = "python train_source_model_noTrain_noPre.py %s"%(l)
     # script3 = "python singleModel_customSparse.py %s"%(l)
     all= "\n".join([header,script,script2,script3])
     qsub = "\n".join(["qsub job_%s_pgml_source.sh"%(l),qsub])
