@@ -33,12 +33,12 @@ for name in train_lakes:
         l2 = m.group(1)
 
     # if not os.path.exists("../../../models/single_lake_models/"+name+"/PGRNN_basic_normAll_pball"): 
-    header = "#!/bin/bash -l\n#SBATCH --time=23:59:00\n#SBATCH --ntasks=8\n#SBATCH --mem=20g\n#SBATCH --mail-type=ALL\n#SBATCH --mail-user=willa099@umn.edu\n#SBATCH --output=train_bLSTM_source_%s_noTran_noPre.out\n#SBATCH --error=train_bLSTM_source_%s_noTranNoPre.err\n#SBATCH --gres=gpu:k40:2\n#SBATCH -p k40"%(l2,l2)
+    header = "#!/bin/bash -l\n#SBATCH --time=23:59:00\n#SBATCH --ntasks=8\n#SBATCH --mem=20g\n#SBATCH --mail-type=ALL\n#SBATCH --mail-user=willa099@umn.edu\n#SBATCH --output=train_bLSTM_source_%s_noTran_wPre.out\n#SBATCH --error=train_bLSTM_source_%s_noTran_wPre.err\n#SBATCH --gres=gpu:k40:2\n#SBATCH -p k40"%(l2,l2)
     script = "source /home/kumarv/willa099/takeme_train.sh\n" #cd to directory with training script
-    script2 = "python train_source_model_basicLSTM_noTran_noPre.py %s"%(l)
+    script2 = "python train_source_model_basicLSTM_noTran_wPre.py %s"%(l)
     # script3 = "python singleModel_customSparse.py %s"%(l)
     all= "\n".join([header,script,script2])
-    sbatch = "\n".join(["sbatch job_%s_bLSTM_source_noTran_noPre.sh"%(l),sbatch])
+    sbatch = "\n".join(["sbatch job_%s_bLSTM_source_noTran_wPre.sh"%(l),sbatch])
     with open('./jobs/job_{}_bLSTM_source_noTran_noPre.sh'.format(l), 'w') as output:
         output.write(all)
 
