@@ -103,7 +103,7 @@ def gb_param_selection(X, y, nfolds):
     # max_d = [3, 5]
     # param_grid = {'n_estimators': ests, 'learning_rate' : lrs}
     # grid_search = GridSearchCV(gbm, param_grid, cv=nfolds, n_jobs=-1,verbose=1)
-    grid_search = GridSearchCV(gbm, parameters, n_jobs=-1, cv=nfolds,verbose=1, scoring=mean_squared_error,verbose=1)
+    grid_search = GridSearchCV(gbm, parameters, n_jobs=-1, cv=nfolds, scoring=mean_squared_error,verbose=1)
     grid_search.fit(X, y)
     # print(grid_search.best_params_)
     return grid_search.best_params_
