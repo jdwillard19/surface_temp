@@ -49,22 +49,22 @@ for _, lake_id in enumerate(train_lakes):
 	new_df = lake_df
 	train_df = pd.concat([train_df, new_df], ignore_index=True)
 
-test_df = pd.DataFrame()
+# test_df = pd.DataFrame()
 
-for targ_ct, target_id in enumerate(test_lakes): #for each target lake
-    # print(str(targ_ct),'/',len(test_lakes),':',target_id)
-    lake_df = pd.DataFrame()
-    lake_id = target_id
-    lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
-    lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
-    X = pd.DataFrame(lake_df[feats])
-    test_df = pd.concat([test_df, lake_df])
+# for targ_ct, target_id in enumerate(test_lakes): #for each target lake
+#     # print(str(targ_ct),'/',len(test_lakes),':',target_id)
+#     lake_df = pd.DataFrame()
+#     lake_id = target_id
+#     lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
+#     lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
+#     X = pd.DataFrame(lake_df[feats])
+#     test_df = pd.concat([test_df, lake_df])
 
 
 #declare model and predictors and response
 # est = GradientBoostingRegressor(n_estimators=800, learning_rate=0.1)
 X_trn = pd.DataFrame(train_df[feats])
-X_tst = pd.DataFrame(test_df[feats])
+# X_tst = pd.DataFrame(test_df[feats])
 y_trn = np.ravel(pd.DataFrame(train_df['rmse']))
 # y_tst = np.ravel(pd.DataFrame(test_df['rmse']))
 dtrain = xgb.DMatrix(X_trn, label=y_trn)
