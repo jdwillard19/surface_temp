@@ -216,7 +216,7 @@ for ctt, target_id in enumerate(test_lakes):
 
 
     with open("../../results/transfer_learning/target_"+target_id+"/PGDL_transfer_results_targets",'a') as file:
-        print("saving to ../../../results/transfer_learning/target_"+target_id+"/PGDL_transfer_results_targets")
+        print("saving to ../../results/transfer_learning/target_"+target_id+"/PGDL_transfer_results_targets")
         for line in csv_targ:
             file.write(line)
             file.write('\n')
