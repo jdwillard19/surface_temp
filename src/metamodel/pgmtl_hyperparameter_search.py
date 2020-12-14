@@ -6,6 +6,7 @@ sys.path.append('../../data')
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import GridSearchCV
 import re 
+from sklearn.metrics import mean_squared_error
 
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
@@ -21,30 +22,39 @@ nfolds = 24
 #        'dif_glm_strat_perc', 'perc_dif_max_depth', 'perc_dif_surface_area',
 #        'perc_dif_sqrt_surface_area']
 
-feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
-       'obs_temp_std', 'obs_temp_skew', 'obs_temp_kurt', 'ad_zero_temp_doy',
-       'ad_at_amp', 'ad_ws_sp_mix', 'obs_temp_mean_airdif', 'dif_SDF',
-       'dif_k_d', 'dif_lat', 'dif_long', 'dif_surface_area', 'dif_sw_mean',
-       'dif_sw_std', 'dif_lw_mean', 'dif_lw_std', 'dif_at_std', 'dif_rh_mean',
-       'dif_rh_std', 'dif_ws_mean', 'dif_ws_std', 'dif_rain_mean',
-       'dif_rain_std', 'dif_snow_std', 'dif_sw_mean_sp', 'dif_sw_std_sp',
-       'dif_lw_mean_sp', 'dif_lw_std_sp', 'dif_at_mean_sp', 'dif_at_std_sp',
-       'dif_rh_mean_sp', 'dif_rh_std_sp', 'dif_ws_mean_sp', 'dif_ws_std_sp',
-       'dif_rain_mean_sp', 'dif_rain_std_sp', 'dif_snow_std_sp',
-       'dif_sw_mean_su', 'dif_sw_std_su', 'dif_lw_mean_su', 'dif_lw_std_su',
-       'dif_at_mean_su', 'dif_at_std_su', 'dif_rh_mean_su', 'dif_rh_std_su',
-       'dif_ws_mean_su', 'dif_ws_std_su', 'dif_rain_mean_su',
-       'dif_rain_std_su', 'dif_snow_mean_su', 'dif_snow_std_su',
-       'dif_sw_mean_au', 'dif_sw_std_au', 'dif_lw_mean_au', 'dif_lw_std_au',
-       'dif_at_mean_au', 'dif_at_std_au', 'dif_rh_mean_au', 'dif_rh_std_au',
-       'dif_ws_mean_au', 'dif_ws_std_au', 'dif_rain_mean_au',
-       'dif_rain_std_au', 'dif_snow_std_au', 'dif_sw_mean_wi', 'dif_sw_std_wi',
-       'dif_lw_mean_wi', 'dif_lw_std_wi', 'dif_at_mean_wi', 'dif_at_std_wi',
-       'dif_rh_std_wi', 'dif_ws_mean_wi', 'dif_ws_std_wi', 'dif_rain_mean_wi',
-       'dif_rain_std_wi', 'dif_snow_mean_wi', 'dif_snow_std_wi',
-       'dif_zero_temp_doy', 'dif_at_amp', 'dif_ws_sp_mix',
-       'perc_dif_surface_area', 'dif_sqrt_surface_area',
-       'perc_dif_sqrt_surface_area']
+# feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
+#        'obs_temp_std', 'obs_temp_skew', 'obs_temp_kurt', 'ad_zero_temp_doy',
+#        'ad_at_amp', 'ad_ws_sp_mix', 'obs_temp_mean_airdif', 'dif_SDF',
+#        'dif_k_d', 'dif_lat', 'dif_long', 'dif_surface_area', 'dif_sw_mean',
+#        'dif_sw_std', 'dif_lw_mean', 'dif_lw_std', 'dif_at_std', 'dif_rh_mean',
+#        'dif_rh_std', 'dif_ws_mean', 'dif_ws_std', 'dif_rain_mean',
+#        'dif_rain_std', 'dif_snow_std', 'dif_sw_mean_sp', 'dif_sw_std_sp',
+#        'dif_lw_mean_sp', 'dif_lw_std_sp', 'dif_at_mean_sp', 'dif_at_std_sp',
+#        'dif_rh_mean_sp', 'dif_rh_std_sp', 'dif_ws_mean_sp', 'dif_ws_std_sp',
+#        'dif_rain_mean_sp', 'dif_rain_std_sp', 'dif_snow_std_sp',
+#        'dif_sw_mean_su', 'dif_sw_std_su', 'dif_lw_mean_su', 'dif_lw_std_su',
+#        'dif_at_mean_su', 'dif_at_std_su', 'dif_rh_mean_su', 'dif_rh_std_su',
+#        'dif_ws_mean_su', 'dif_ws_std_su', 'dif_rain_mean_su',
+#        'dif_rain_std_su', 'dif_snow_mean_su', 'dif_snow_std_su',
+#        'dif_sw_mean_au', 'dif_sw_std_au', 'dif_lw_mean_au', 'dif_lw_std_au',
+#        'dif_at_mean_au', 'dif_at_std_au', 'dif_rh_mean_au', 'dif_rh_std_au',
+#        'dif_ws_mean_au', 'dif_ws_std_au', 'dif_rain_mean_au',
+#        'dif_rain_std_au', 'dif_snow_std_au', 'dif_sw_mean_wi', 'dif_sw_std_wi',
+#        'dif_lw_mean_wi', 'dif_lw_std_wi', 'dif_at_mean_wi', 'dif_at_std_wi',
+#        'dif_rh_std_wi', 'dif_ws_mean_wi', 'dif_ws_std_wi', 'dif_rain_mean_wi',
+#        'dif_rain_std_wi', 'dif_snow_mean_wi', 'dif_snow_std_wi',
+#        'dif_zero_temp_doy', 'dif_at_amp', 'dif_ws_sp_mix',
+#        'perc_dif_surface_area', 'dif_sqrt_surface_area',
+#        'perc_dif_sqrt_surface_area']
+
+#W TRANSFER OPTIM, W PRETRAIN
+feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
+       'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
+       'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
+       'perc_dif_surface_area']
+
+
+
 # feats = ['n_obs', 'obs_temp_mean', 'dif_max_depth', 'dif_surface_area',
 #        'dif_rh_mean_au', 'dif_lathrop_strat', 'dif_glm_strat_perc',
 #        'perc_dif_max_depth', 'perc_dif_surface_area',
@@ -72,18 +82,30 @@ for _, lake_id in enumera0te(train_lakes):
     train_df = pd.concat([train_df, new_df], ignore_index=True)
 
 
-
+parameters = {'nthread':[4], #when use hyperthread, xgboost may become slower
+              'objective':['binary:logistic'],
+              'learning_rate': [0.05], #so called `eta` value
+              'max_depth': [6],
+              'min_child_weight': [11],
+              'silent': [1],
+              'subsample': [0.8],
+              'colsample_bytree': [0.7],
+              'n_estimators': [5], #number of trees, change it to 1000 for better results
+              'missing':[-999],
+              'seed': [1337]}
 X = pd.DataFrame(train_df[feats])
 y = np.ravel(pd.DataFrame(train_df['rmse']))
+gbm = xgb.XGBRegressor(booster='gbtree')
 
 def gb_param_selection(X, y, nfolds):
     ests = np.arange(1000,6000,600)
     lrs = [.05,.01]
     # max_d = [3, 5]
-    param_grid = {'n_estimators': ests, 'learning_rate' : lrs}
-    grid_search = GridSearchCV(GradientBoostingRegressor(), param_grid, cv=nfolds, n_jobs=-1,verbose=1)
+    # param_grid = {'n_estimators': ests, 'learning_rate' : lrs}
+    # grid_search = GridSearchCV(gbm, param_grid, cv=nfolds, n_jobs=-1,verbose=1)
+    grid_search = GridSearchCV(gbm, parameters, n_jobs=-1, cv=nfolds,verbose=1, scoring=mean_squared_error,verbose=1)
     grid_search.fit(X, y)
-    grid_search.best_params_
+    # print(grid_search.best_params_)
     return grid_search.best_params_
 
 
