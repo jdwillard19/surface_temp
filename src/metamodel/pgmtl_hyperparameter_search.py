@@ -65,7 +65,7 @@ feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
 train_df = pd.DataFrame()
 
 
-for _, lake_id in enumera0te(train_lakes):
+for _, lake_id in enumerate(train_lakes):
     new_df = pd.DataFrame()
 
    #get performance results (metatargets), filter out target as source
