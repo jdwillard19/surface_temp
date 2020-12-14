@@ -39,11 +39,11 @@ for name in train_lakes:
     # script3 = "python singleModel_customSparse.py %s"%(l)
     all= "\n".join([header,script,script2])
     sbatch = "\n".join(["sbatch job_%s_bLSTM_source_noTran_wPre.sh"%(l),sbatch])
-    with open('./jobs/job_{}_bLSTM_source_noTran_noPre.sh'.format(l), 'w') as output:
+    with open('./jobs/job_{}_bLSTM_source_noTran_wPre.sh'.format(l), 'w') as output:
         output.write(all)
 
 
-compile_job_path= './jobs/sbatch_script_bLSTM_source_noTran_noPre.sh'
+compile_job_path= './jobs/sbatch_script_bLSTM_source_noTran_wPre.sh'
 with open(compile_job_path, 'w') as output2:
     output2.write(sbatch)
 
