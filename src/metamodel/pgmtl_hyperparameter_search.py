@@ -7,6 +7,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import GridSearchCV
 import re 
 from sklearn.metrics import mean_squared_error
+import xgboost as xgb
 
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
@@ -82,15 +83,14 @@ for _, lake_id in enumerate(train_lakes):
     train_df = pd.concat([train_df, new_df], ignore_index=True)
 
 
-parameters = {'nthread':[4], #when use hyperthread, xgboost may become slower
-              'objective':['binary:logistic'],
+parameters = {'objective':['reg:squarederror','rank:pairwise'],
               'learning_rate': [0.05], #so called `eta` value
               'max_depth': [6],
               'min_child_weight': [11],
               'silent': [1],
               'subsample': [0.8],
               'colsample_bytree': [0.7],
-              'n_estimators': [5], #number of trees, change it to 1000 for better results
+              'n_estimators': [1000], #number of trees, change it to 1000 for better results
               'missing':[-999],
               'seed': [1337]}
 X = pd.DataFrame(train_df[feats])
@@ -98,8 +98,8 @@ y = np.ravel(pd.DataFrame(train_df['rmse']))
 gbm = xgb.XGBRegressor(booster='gbtree')
 
 def gb_param_selection(X, y, nfolds):
-    ests = np.arange(1000,6000,600)
-    lrs = [.05,.01]
+    # ests = np.arange(1000,6000,600)
+    # lrs = [.05,.01]
     # max_d = [3, 5]
     # param_grid = {'n_estimators': ests, 'learning_rate' : lrs}
     # grid_search = GridSearchCV(gbm, param_grid, cv=nfolds, n_jobs=-1,verbose=1)
