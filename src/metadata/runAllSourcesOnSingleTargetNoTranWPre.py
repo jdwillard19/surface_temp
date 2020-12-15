@@ -213,7 +213,7 @@ for cts, source_id in enumerate(all_but_target):
 
 
 
-with open("../../results/transfer_learning/target_"+target_id+"/",'a') as file:
+with open("../../results/transfer_learning/target_"+target_id+"/PGDL_transfer_results_noTran_wPre",'a') as file:
     print("saving to ../../../results/transfer_learning/target_"+target_id+"/PGDL_transfer_results_noTran_wPre")
     for line in csv_targ:
         file.write(line)
