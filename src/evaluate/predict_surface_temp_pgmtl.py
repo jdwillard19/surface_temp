@@ -43,12 +43,12 @@ feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
 model_path = '../../models/metamodel_xgb_pgdl.joblib'
 
 model = load(model_path)
-# importances = model.feature_importances_
-# print(importances)
-# sorted_feats = [x for _,x in sorted(zip(importances,feats))]
-# sorted_imps = [x for x,_ in sorted(zip(importances,feats))]
+importances = model.feature_importances_
+print(importances)
+sorted_feats = [x for _,x in sorted(zip(importances,feats))]
+sorted_imps = [x for x,_ in sorted(zip(importances,feats))]
 
-# pdb.set_trace()
+pdb.set_trace()
 #csv to write to
 mat_csv = ["target_id,source_id,pgmtl_rmse"]
 # mat_csv = ["target_id,source_id,meta_rmse,spearman,pb0_rmse,pgmtl_rmse"]
