@@ -24,7 +24,7 @@ train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
 
-k = 1
+k = 10
 output_to_file = False
 
 save_file_path = "../../results/pgmtl_results_surf_temp_ens.csv"
