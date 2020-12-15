@@ -49,19 +49,19 @@ nfolds = 24
 #        'perc_dif_sqrt_surface_area']
 
 #W TRANSFER OPTIM, W PRETRAIN
-feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
-       'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
-       'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
-       'perc_dif_surface_area']
+# feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
+#        'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
+#        'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
+#        'perc_dif_surface_area']
 
 #NO TRAN NO PRETRAIN
-# feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
-#        'obs_temp_skew', 'obs_temp_kurt', 'obs_temp_mean_airdif',
-#        'dif_surface_area', 'dif_lw_std', 'dif_at_std', 'dif_snow_mean',
-#        'dif_rh_std_su', 'dif_snow_mean_su', 'dif_sw_mean_au', 'dif_lw_mean_au',
-#        'dif_lw_std_au', 'dif_at_std_au', 'dif_rh_std_au', 'dif_rain_mean_au',
-#        'dif_snow_mean_au', 'dif_lw_std_wi', 'dif_rain_mean_wi',
-#        'perc_dif_surface_area']
+feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
+       'obs_temp_skew', 'obs_temp_kurt', 'obs_temp_mean_airdif',
+       'dif_surface_area', 'dif_lw_std', 'dif_at_std', 'dif_snow_mean',
+       'dif_rh_std_su', 'dif_snow_mean_su', 'dif_sw_mean_au', 'dif_lw_mean_au',
+       'dif_lw_std_au', 'dif_at_std_au', 'dif_rh_std_au', 'dif_rain_mean_au',
+       'dif_snow_mean_au', 'dif_lw_std_wi', 'dif_rain_mean_wi',
+       'perc_dif_surface_area']
 
 
 
@@ -80,7 +80,8 @@ for _, lake_id in enumerate(train_lakes):
     new_df = pd.DataFrame()
 
    #get performance results (metatargets), filter out target as source
-    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
+    # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
+    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_noPre",header=None,names=['source_id','rmse'])
     lake_df_res = lake_df_res[lake_df_res.source_id != 'source_id']
 
     #get metadata differences between target and all the sources
