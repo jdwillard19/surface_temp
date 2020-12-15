@@ -18,7 +18,7 @@ currentDT = datetime.datetime.now()
 print("script start: ",str(currentDT))
 
 #file to save model  to
-save_file_path = '../../models/metamodel_pgdl_RMSE_RF.joblib'
+save_file_path = '../../models/metamodel_xgb_pgdl.joblib'
 # save_file_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
 
 #########################################################################################
@@ -57,9 +57,26 @@ feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
 #######################################################################3
 #paste hyperparameters found in "pbmtl_hyperparameter_search.py" here
 #
-n_estimators = 10000
-# lr = .05
+#
+n_estimators = 300
+objective = 'reg:squarederror'
+learning_rate = .05
+colsample_bytree=.7
+max_depth=6
+min_child_weight=11
+subsample=.8
 #####################################################################
+
+
+#{'colsample_bytree': 0.7, 'learning_rate': 0.05, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 300, 'objective': 'reg:squarederror', 'subsample': 0.8}
+
+########################
+##########################
+#metamodel training code
+##########################
+#######################
+
+
 
 
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
@@ -90,7 +107,10 @@ for _, lake_id in enumerate(train_lakes):
 X_trn = pd.DataFrame(train_df[feats])
 y_trn = np.array([float(x) for x in np.ravel(pd.DataFrame(train_df['rmse']))])
 # model = GradientBoostingRegressor(n_estimators=n_estimators, learning_rate=lr)
-model = RandomForestRegressor(n_estimators=n_estimators)
+# print("Model training in progress...")
+model = xgb.XGBRegressor(booster='gbtree',n_estimators=n_estimators,objective=objective,learning_rate=learning_rate,colsample_bytree=colsample_bytree,
+             max_depth=6,min_child_weight=min_child_weight,subsample=subsample)
+# model = RandomForestRegressor(n_estimators=n_estimators)
 print("Training metamodel...")
 model.fit(X_trn, y_trn)
 dump(model, save_file_path)
