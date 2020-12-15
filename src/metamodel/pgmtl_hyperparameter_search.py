@@ -94,12 +94,12 @@ for _, lake_id in enumerate(train_lakes):
 
 
 parameters = {'objective':['reg:squarederror'],
-              'learning_rate': [0.05, .1], #so called `eta` value
-              'max_depth': [6,8],
+              'learning_rate': [.025, 0.05, .1], #so called `eta` value
+              'max_depth': [6],
               'min_child_weight': [11],
               'subsample': [0.8],
               'colsample_bytree': [0.7],
-              'n_estimators': [500,1000,2000,4000], #number of trees, change it to 1000 for better results
+              'n_estimators': [100,300,500,1000], #number of trees, change it to 1000 for better results
               }
 X = pd.DataFrame(train_df[feats])
 y = np.ravel(pd.DataFrame(train_df['rmse']))
