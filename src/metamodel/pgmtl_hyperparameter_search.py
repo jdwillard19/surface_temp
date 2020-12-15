@@ -54,6 +54,16 @@ feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
        'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
        'perc_dif_surface_area']
 
+#NO TRAN NO PRETRAIN
+# feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
+#        'obs_temp_skew', 'obs_temp_kurt', 'obs_temp_mean_airdif',
+#        'dif_surface_area', 'dif_lw_std', 'dif_at_std', 'dif_snow_mean',
+#        'dif_rh_std_su', 'dif_snow_mean_su', 'dif_sw_mean_au', 'dif_lw_mean_au',
+#        'dif_lw_std_au', 'dif_at_std_au', 'dif_rh_std_au', 'dif_rain_mean_au',
+#        'dif_snow_mean_au', 'dif_lw_std_wi', 'dif_rain_mean_wi',
+#        'perc_dif_surface_area']
+
+
 
 
 # feats = ['n_obs', 'obs_temp_mean', 'dif_max_depth', 'dif_surface_area',
@@ -83,13 +93,13 @@ for _, lake_id in enumerate(train_lakes):
     train_df = pd.concat([train_df, new_df], ignore_index=True)
 
 
-parameters = {'objective':['reg:squarederror','rank:pairwise'],
+parameters = {'objective':['reg:squarederror'],
               'learning_rate': [0.05, .1], #so called `eta` value
               'max_depth': [6,8],
               'min_child_weight': [11],
               'subsample': [0.8],
               'colsample_bytree': [0.7],
-              'n_estimators': [500, 1000,2000], #number of trees, change it to 1000 for better results
+              'n_estimators': [500,1000,2000,4000], #number of trees, change it to 1000 for better results
               }
 X = pd.DataFrame(train_df[feats])
 y = np.ravel(pd.DataFrame(train_df['rmse']))
