@@ -10,7 +10,9 @@ import torch.nn as nn
 import torch.utils.data
 from torch.utils.data import Dataset, DataLoader
 from torch.nn.init import xavier_normal_
-from sklearn.ensemble import GradientBoostingRegressor
+# from sklearn.ensemble import GradientBoostingRegressor
+import xgboost as xgb
+
 from scipy.stats import spearmanr
 from joblib import dump, load
 import re
@@ -34,14 +36,19 @@ save_file_path = "../../results/pgmtl_results_single_source.csv"
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
-feats = ['n_obs_sp', 'n_obs_su', 'dif_max_depth', 'dif_surface_area',
-       'dif_glm_strat_perc', 'perc_dif_max_depth', 'perc_dif_surface_area',
-       'perc_dif_sqrt_surface_area']
+# feats = ['n_obs_sp', 'n_obs_su', 'dif_max_depth', 'dif_surface_area',
+#        'dif_glm_strat_perc', 'perc_dif_max_depth', 'perc_dif_surface_area',
+#        'perc_dif_sqrt_surface_area']
+feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
+       'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
+       'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
+       'perc_dif_surface_area']
 ###################################################################################
 
 
 #load metamodel
-model_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
+# model_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
+model_path = '../../models/metamodel_xgb_pgdl.joblib'
 model = load(model_path)
 
 #csv to write to
