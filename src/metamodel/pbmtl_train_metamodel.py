@@ -24,24 +24,17 @@ feats = ['n_obs_su', 'obs_temp_mean', 'obs_temp_skew', 'obs_temp_kurt',
        'ad_glm_strat_perc', 'obs_temp_mean_airdif', 'dif_max_depth',
        'dif_surface_area', 'dif_sw_mean_au', 'dif_ws_mean_au',
        'dif_lathrop_strat', 'dif_glm_strat_perc', 'perc_dif_max_depth',
-       'perc_dif_sqrt_surface_area']
-feats = 
+       'perc_dif_sqrt_surface_area']z
 ###################################################################################
 
 #######################################################################3
 #paste hyperparameters found in "pbmtl_hyperparameter_search.py" here
 #
-n_estimators = 300
-objective = 'reg:squarederror'
-learning_rate = .05
-colsample_bytree=.7
-max_depth=6
-min_child_weight=11
-subsample=.8
+n_estimators = 4000
+lr = .05
 #####################################################################
 
 
-#{'colsample_bytree': 0.7, 'learning_rate': 0.05, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 300, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
 ########################
 ##########################
@@ -51,9 +44,7 @@ subsample=.8
 
 
 print("Model training in progress...")
-model = xgb.XGBRegressor(booster='gbtree',n_estimators=n_estimators,objective=objective,learning_rate=learning_rate,colsample_bytree=colsample_bytree,
-						 max_depth=6,min_child_weight=min_child_weight,subsample=subsample)
-
+model = GradientBoostingRegressor(n_estimators=n_estimators,learning_rate=lr)
 X = pd.DataFrame(train_df[feats])
 y = np.ravel(pd.DataFrame(train_df['rmse']))
 
