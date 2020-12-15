@@ -27,7 +27,7 @@ n_lakes = len(train_lakes)
 # feats = train_df.columns[80:-1]
 
 train_df = pd.DataFrame()
-
+#PGDL_transfer_results_noTran_wPre
 feats = pd.read_feather("../../metadata/diffs/target_nhdhr_91685677.feather").columns[1:][75:]
 
 

@@ -72,7 +72,7 @@ dtrain = xgb.DMatrix(X_trn, label=y_trn)
 
 #perform recursive feature elimination
 gbm = xgb.XGBRegressor(booster='gbtree')
-rfecv = RFECV(estimator=gbm, cv=24, step=2, scoring='neg_mean_squared_error', verbose=1, n_jobs=-1)
+rfecv = RFECV(estimator=gbm, cv=24, step=2, scoring='neg_mean_squared_error', verbose=1, n_jobs=29)
 
 # selection = SelectFromModel(gbm, threshold=0.03, prefit=False)
 # selection.fit(X_trn,y_trn)
