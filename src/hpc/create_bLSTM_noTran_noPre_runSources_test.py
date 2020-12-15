@@ -23,7 +23,8 @@ test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle
 n_lakes = 0
 sbatch = ""
 ct = 0
-for name in train_lakes:
+# for name in train_lakes:
+for name in test_lakes:
     ct += 1
     #for each unique lake
     print(name)
