@@ -21,7 +21,7 @@ print("script start: ",str(currentDT))
 
 #file to save model  to
 # save_file_path = '../../models/metamodel_xgb_pgdl.joblib'
-save_file_path = '../../models/metamodel_xgb_noTran_noPre.joblib'
+save_file_path = '../../models/metamodel_xgb_noTran_wPre.joblib'
 # save_file_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
 
 #########################################################################################
@@ -38,14 +38,28 @@ save_file_path = '../../models/metamodel_xgb_noTran_noPre.joblib'
 #        'perc_dif_surface_area']
 
 #NO TRAN NO PRETRAIN
-feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
-       'obs_temp_skew', 'obs_temp_kurt', 'obs_temp_mean_airdif',
-       'dif_surface_area', 'dif_lw_std', 'dif_at_std', 'dif_snow_mean',
-       'dif_rh_std_su', 'dif_snow_mean_su', 'dif_sw_mean_au', 'dif_lw_mean_au',
-       'dif_lw_std_au', 'dif_at_std_au', 'dif_rh_std_au', 'dif_rain_mean_au',
-       'dif_snow_mean_au', 'dif_lw_std_wi', 'dif_rain_mean_wi',
-       'perc_dif_surface_area']
+# feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
+#        'obs_temp_skew', 'obs_temp_kurt', 'obs_temp_mean_airdif',
+#        'dif_surface_area', 'dif_lw_std', 'dif_at_std', 'dif_snow_mean',
+#        'dif_rh_std_su', 'dif_snow_mean_su', 'dif_sw_mean_au', 'dif_lw_mean_au',
+#        'dif_lw_std_au', 'dif_at_std_au', 'dif_rh_std_au', 'dif_rain_mean_au',
+#        'dif_snow_mean_au', 'dif_lw_std_wi', 'dif_rain_mean_wi',
+#        'perc_dif_surface_area']
 
+#NO TRAN W PRETRAIN
+feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
+       'obs_temp_std', 'obs_temp_skew', 'obs_temp_kurt', 'ad_zero_temp_doy',
+       'obs_temp_mean_airdif', 'dif_SDF', 'dif_k_d', 'dif_surface_area',
+       'dif_sw_mean', 'dif_lw_std', 'dif_at_std', 'dif_rh_mean', 'dif_rh_std',
+       'dif_rain_mean', 'dif_rain_std', 'dif_sw_std_sp', 'dif_at_mean_sp',
+       'dif_sw_mean_su', 'dif_sw_std_su', 'dif_lw_std_su', 'dif_rh_mean_su',
+       'dif_rh_std_su', 'dif_ws_mean_su', 'dif_rain_mean_su',
+       'dif_snow_mean_su', 'dif_snow_std_su', 'dif_sw_mean_au',
+       'dif_lw_std_au', 'dif_at_mean_au', 'dif_at_std_au', 'dif_rh_mean_au',
+       'dif_rh_std_au', 'dif_ws_mean_au', 'dif_rain_mean_au',
+       'dif_rain_std_au', 'dif_snow_mean_au', 'dif_sw_std_wi',
+       'dif_rh_mean_wi', 'dif_ws_mean_wi', 'dif_zero_temp_doy',
+       'dif_ws_sp_mix', 'perc_dif_surface_area', 'dif_sqrt_surface_area']
 
 ###################################################################################
 
@@ -57,7 +71,8 @@ feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
 # n_estimators = 300 #full models
 n_estimators = 1000 #no tran no pre
 objective = 'reg:squarederror'
-learning_rate = .05 #no tran no pre and full model
+# learning_rate = .05 #no tran no pre and full model
+learning_rate = .025 #no tran w pre
 colsample_bytree=.7
 max_depth=6
 min_child_weight=11
@@ -86,7 +101,8 @@ for _, lake_id in enumerate(train_lakes):
 
     #get performance results (metatargets), filter out target as source
     # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
-    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_noPre",header=None,names=['source_id','rmse'])
+    # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_noPre",header=None,names=['source_id','rmse'])
+    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_wPre",header=None,names=['source_id','rmse'])
     lake_df_res = lake_df_res[lake_df_res.source_id != 'source_id']
 
     #get metadata differences between target and all the sources
