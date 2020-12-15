@@ -7,6 +7,8 @@ from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from joblib import dump, load
 import re
 import datetime
+import xgboost as xgb
+
 
 ##################################################################3
 # (Sept 2020 - Jared) - PG-MTL training script on 145 source lake 
