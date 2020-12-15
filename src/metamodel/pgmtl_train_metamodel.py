@@ -20,7 +20,8 @@ currentDT = datetime.datetime.now()
 print("script start: ",str(currentDT))
 
 #file to save model  to
-save_file_path = '../../models/metamodel_xgb_pgdl.joblib'
+# save_file_path = '../../models/metamodel_xgb_pgdl.joblib'
+save_file_path = '../../models/metamodel_xgb_noTran_noPre.joblib'
 # save_file_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
 
 #########################################################################################
@@ -29,10 +30,22 @@ save_file_path = '../../models/metamodel_xgb_pgdl.joblib'
 #        'dif_glm_strat_perc', 'perc_dif_max_depth', 'perc_dif_surface_area',
 #        'perc_dif_sqrt_surface_area']
 
-feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
-       'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
-       'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
+
+#W TRANSFER OPTIM, W PRETRAIN
+# feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
+#        'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
+#        'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
+#        'perc_dif_surface_area']
+
+#NO TRAN NO PRETRAIN
+feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
+       'obs_temp_skew', 'obs_temp_kurt', 'obs_temp_mean_airdif',
+       'dif_surface_area', 'dif_lw_std', 'dif_at_std', 'dif_snow_mean',
+       'dif_rh_std_su', 'dif_snow_mean_su', 'dif_sw_mean_au', 'dif_lw_mean_au',
+       'dif_lw_std_au', 'dif_at_std_au', 'dif_rh_std_au', 'dif_rain_mean_au',
+       'dif_snow_mean_au', 'dif_lw_std_wi', 'dif_rain_mean_wi',
        'perc_dif_surface_area']
+
 
 ###################################################################################
 
@@ -41,9 +54,10 @@ feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
 #paste hyperparameters found in "pbmtl_hyperparameter_search.py" here
 #
 #
-n_estimators = 300
+# n_estimators = 300 #full models
+n_estimators = 1000 #no tran no pre
 objective = 'reg:squarederror'
-learning_rate = .05
+learning_rate = .05 #no tran no pre and full model
 colsample_bytree=.7
 max_depth=6
 min_child_weight=11
@@ -51,7 +65,6 @@ subsample=.8
 #####################################################################
 
 
-#{'colsample_bytree': 0.7, 'learning_rate': 0.05, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 300, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
 ########################
 ##########################
@@ -72,7 +85,8 @@ for _, lake_id in enumerate(train_lakes):
     new_df = pd.DataFrame()
 
     #get performance results (metatargets), filter out target as source
-    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
+    # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
+    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_noPre",header=None,names=['source_id','rmse'])
     lake_df_res = lake_df_res[lake_df_res.source_id != 'source_id']
 
     #get metadata differences between target and all the sources
