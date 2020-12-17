@@ -26,16 +26,14 @@ save_file_path = '../../models/metamodel_xgb_pgdl2.joblib'
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
-feats = ['n_obs_sp', 'n_obs_su', 'dif_max_depth', 'dif_surface_area',
-       'dif_glm_strat_perc', 'perc_dif_max_depth', 'perc_dif_surface_area',
-       'perc_dif_sqrt_surface_area']
+
 
 
 #W TRANSFER OPTIM, W PRETRAIN
-# feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
-#        'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
-#        'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
-#        'perc_dif_surface_area']
+feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
+       'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
+       'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
+       'perc_dif_surface_area']
 
 #NO TRAN NO PRETRAIN
 # feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
