@@ -5,12 +5,15 @@ import pdb
 
 
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
+test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
+train_lakes = test_lakes
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
 train_df = pd.DataFrame()
 train_df2 = pd.DataFrame()
 for lake_id in train_lakes:
-    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
+    # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
+    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_target",header=None,names=['source_id','rmse'])
     # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_noPre",header=None,names=['source_id','rmse'])
     lake_df_res2 = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_wPre",header=None,names=['source_id','rmse'])
     lake_df_res = lake_df_res[lake_df_res.source_id != 'source_id']
