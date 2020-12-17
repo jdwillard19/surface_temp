@@ -24,7 +24,7 @@ train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
 
-k = 10
+k = 1
 output_to_file = False
 
 save_file_path = "../../results/pgmtl_results_surf_temp_ens.csv"
@@ -40,7 +40,7 @@ feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
 
 #load metamodel
 # model_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
-model_path = '../../models/metamodel_xgb_pgdl.joblib'
+model_path = '../../models/metamodel_xgb_pgdl2.joblib'
 
 
 model = load(model_path)
