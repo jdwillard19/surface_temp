@@ -24,25 +24,34 @@ train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
 
-k = 10
+k = 1
 output_to_file = False
 
 save_file_path = "../../results/pgmtl_results_surf_temp_ens.csv"
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
-feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
-       'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
-       'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
-       'perc_dif_surface_area']
+
+feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
+       'obs_temp_std', 'obs_temp_skew', 'obs_temp_kurt', 'ad_zero_temp_doy',
+       'obs_temp_mean_airdif', 'dif_SDF', 'dif_k_d', 'dif_surface_area',
+       'dif_sw_mean', 'dif_lw_std', 'dif_at_std', 'dif_rh_mean', 'dif_rh_std',
+       'dif_rain_mean', 'dif_rain_std', 'dif_sw_std_sp', 'dif_at_mean_sp',
+       'dif_sw_mean_su', 'dif_sw_std_su', 'dif_lw_std_su', 'dif_rh_mean_su',
+       'dif_rh_std_su', 'dif_ws_mean_su', 'dif_rain_mean_su',
+       'dif_snow_mean_su', 'dif_snow_std_su', 'dif_sw_mean_au',
+       'dif_lw_std_au', 'dif_at_mean_au', 'dif_at_std_au', 'dif_rh_mean_au',
+       'dif_rh_std_au', 'dif_ws_mean_au', 'dif_rain_mean_au',
+       'dif_rain_std_au', 'dif_snow_mean_au', 'dif_sw_std_wi',
+       'dif_rh_mean_wi', 'dif_ws_mean_wi', 'dif_zero_temp_doy',
+       'dif_ws_sp_mix', 'perc_dif_surface_area', 'dif_sqrt_surface_area']
 ###################################################################################
 
 
 #load metamodel
 # model_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
-model_path = '../../models/metamodel_xgb_pgdl.joblib'
-
-
+# model_path = '../../models/metamodel_xgb_noTran_noPe.joblib'
+model_path = '../../models/metamodel_xgb_noTran_wPre.joblib'
 model = load(model_path)
 importances = model.feature_importances_
 print(importances)

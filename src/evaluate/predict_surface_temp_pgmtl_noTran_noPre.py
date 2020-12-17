@@ -24,24 +24,27 @@ train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
 
-k = 10
+k = 1
 output_to_file = False
 
 save_file_path = "../../results/pgmtl_results_surf_temp_ens.csv"
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
-feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
-       'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
-       'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
+
+feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
+       'obs_temp_skew', 'obs_temp_kurt', 'obs_temp_mean_airdif',
+       'dif_surface_area', 'dif_lw_std', 'dif_at_std', 'dif_snow_mean',
+       'dif_rh_std_su', 'dif_snow_mean_su', 'dif_sw_mean_au', 'dif_lw_mean_au',
+       'dif_lw_std_au', 'dif_at_std_au', 'dif_rh_std_au', 'dif_rain_mean_au',
+       'dif_snow_mean_au', 'dif_lw_std_wi', 'dif_rain_mean_wi',
        'perc_dif_surface_area']
 ###################################################################################
 
 
 #load metamodel
 # model_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
-model_path = '../../models/metamodel_xgb_pgdl.joblib'
-
+model_path = '../../models/metamodel_xgb_noTran_noPe.joblib'
 
 model = load(model_path)
 importances = model.feature_importances_
@@ -84,7 +87,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     lake_id = target_id
 
     lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
-    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_targets", names=['source_id','rmse'])
+    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_wPre", names=['source_id','rmse'])
     lake_df_res['source_id_wp'] = ['nhdhr_'+x for x in lake_df_res['source_id'].values]
     lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
     lake_df = pd.merge(left=lake_df, right=lake_df_res.astype('object'), left_on='site_id', right_on='source_id_wp')
@@ -172,7 +175,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         #for each top id
         source_id = re.search('nhdhr_(.*)', source_id).group(1)
         #load source model
-        load_path = "../../models/"+source_id+"/PGDL_source_model_final"
+        load_path = "../../models/"+source_id+"/basicLSTM_source_model_not_transfer_aware_w_pretrain"
         n_hidden = torch.load(load_path)['state_dict']['out.weight'].shape[1]
         lstm_net = LSTM(n_features, n_hidden, batch_size)
         if use_gpu:
@@ -282,7 +285,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
 
 with open(save_file_path,'w') as file:
-    pdb.set_trace()
     for line in csv:
         file.write(line)
         file.write('\n')
