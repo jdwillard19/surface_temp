@@ -5,6 +5,7 @@ import pdb
 
 
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
+train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
 train_df = pd.DataFrame()
 train_df2 = pd.DataFrame()
