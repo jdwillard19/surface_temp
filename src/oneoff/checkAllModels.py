@@ -12,7 +12,6 @@ train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 train_df = pd.DataFrame()
 train_df2 = pd.DataFrame()
 for lake_id in train_lakes:
-    pdb.set_trace()
     # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
     lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_targets",header=None,names=['source_id','rmse'])
     # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_noPre",header=None,names=['source_id','rmse'])
