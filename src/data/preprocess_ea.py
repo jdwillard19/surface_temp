@@ -244,7 +244,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     else:
         upper_cutoff = np.where(glm_temps[:,-1] == end_date)[0][0] +1
 
-    # glm_temps = glm_temps[lower_cutoff:upper_cutoff,:]
+    glm_temps = glm_temps[lower_cutoff:upper_cutoff,:]
     ice_flags = ice_flags[lower_cutoff:upper_cutoff,:]
     # n_dates_pt = glm_temps_pt.shape[0]
     n_dates = glm_temps.shape[0]
@@ -284,7 +284,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     # obs = obs.values[:,1:] #remove needless nhd column
     # n_obs = obs.shape[0]
 
-    print("pretrain dates: ", start_date_pt, "->", end_date_pt)
+    # print("pretrain dates: ", start_date_pt, "->", end_date_pt)
     print("train dates: ", start_date, "->", end_date)
     ############################################################
     #fill numpy matrices
