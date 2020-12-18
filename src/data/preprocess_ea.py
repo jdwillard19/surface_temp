@@ -389,8 +389,13 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
 
 
     #add static features
+    static_feat_means = metadata[static_feats].mean(axis=0)
+    static_feat_std = metadata[static_feats].std(axis=0)
     for feat in static_feats:
-        pdb.set_trace()
+        feat_mat[:,-n_static_feats:] = metadata[metadata['site_id']==nid][static_feats]
+        feat_norm_mat[:,-n_static_feats:] = (metadata[metadata['site_id']==nid][static_feats] - static_feat_means) / static_feat_std
+
+
 
 
     if np.isnan(np.sum(feat_mat)):
