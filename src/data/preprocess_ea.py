@@ -299,12 +299,12 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
                     'rain_mean_au',\
                     'snow_mean_au']
     n_static_feats = len(static_feats)
-    feat_mat_pt = np.empty((n_dates_pt, n_features+1+n_static_feats)) #[7 meteo features-> ice flag]
-    feat_mat_pt[:] = np.nan
-    feat_norm_mat_pt = np.empty((n_dates_pt, n_features+n_static_feats)) #[7 std meteo features]
-    feat_norm_mat_pt[:] = np.nan
-    glm_mat_pt = np.empty((n_dates_pt))
-    glm_mat_pt[:] = np.nan
+    # feat_mat_pt = np.empty((n_dates_pt, n_features+1+n_static_feats)) #[7 meteo features-> ice flag]
+    # feat_mat_pt[:] = np.nan
+    # feat_norm_mat_pt = np.empty((n_dates_pt, n_features+n_static_feats)) #[7 std meteo features]
+    # feat_norm_mat_pt[:] = np.nan
+    # glm_mat_pt = np.empty((n_dates_pt))
+    # glm_mat_pt[:] = np.nan
 
 
     feat_mat = np.empty((n_dates, n_features+1+n_static_feats)) #[7 meteo features-> ice flag]
@@ -412,9 +412,9 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     # if not os.path.exists("../../models/"+name):
         # os.mkdir("../../models/"+name)
     # feat_path_pt = "../../data/processed/"+name+"/features_pt"
-    feat_path = "../../data/processed/"+name+"/features"
+    feat_path = "../../data/processed/"+name+"/features_ea"
     # norm_feat_path_pt = "../../data/processed/"+name+"/processed_features_pt"
-    norm_feat_path = "../../data/processed/"+name+"/processed_features"
+    norm_feat_path = "../../data/processed/"+name+"/processed_features_ea"
     # glm_path_pt = "../../data/processed/"+name+"/glm_pt"
     # glm_path = "../../data/processed/"+name+"/glm"
     # trn_path = "../../data/processed/"+name+"/train"
