@@ -291,7 +291,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     ##################################################################
 
     #list static feats fo EA-LSTM
-    static_feats = ['surface_area','SDF','k_d',\
+    static_feats = ['surface_area','SDF','K_d',\
                     'lw_std',\
                     'sw_mean', 'sw_std_sp','sw_mean_au',
                     'at_std_au','at_mean_au',\
