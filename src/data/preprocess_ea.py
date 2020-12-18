@@ -330,15 +330,7 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
     # glm_mat[:] = glm_temps[:]
 
     #verify all mats filled
-    if np.isnan(np.sum(feat_mat)):
-        raise Exception("ERROR: Preprocessing failed, there is missing data: features for training")
-        sys.exit()
-    # if np.isnan(np.sum(feat_mat_pt)):
-    #     raise Exception("ERROR: Preprocessing failed, there is missing data: features for pretraining ")
-    #     sys.exit()
-    if np.isnan(np.sum(feat_norm_mat)):
-        raise Exception("ERROR: Preprocessing failed, there is missing data feat norm")
-        sys.exit() 
+
     # if np.isnan(np.sum(feat_norm_mat)):
     #     raise Exception("ERROR: Preprocessing failed, there is missing data feat norm")
     #     sys.exit() 
@@ -401,7 +393,15 @@ for it_ct,nid in enumerate(ids): #for each new additional lake
         pdb.set_trace()
 
 
-
+    if np.isnan(np.sum(feat_mat)):
+        raise Exception("ERROR: Preprocessing failed, there is missing data: features for training")
+        sys.exit()
+    # if np.isnan(np.sum(feat_mat_pt)):
+    #     raise Exception("ERROR: Preprocessing failed, there is missing data: features for pretraining ")
+    #     sys.exit()
+    if np.isnan(np.sum(feat_norm_mat)):
+        raise Exception("ERROR: Preprocessing failed, there is missing data feat norm")
+        sys.exit() 
     #remember add sqrt surfarea
     #write features and labels to processed data
     # print("pre-training: ", first_pretrain_date, "->", last_pretrain_date, "(", n_pretrain, ")")
