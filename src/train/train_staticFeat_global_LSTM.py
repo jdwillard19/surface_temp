@@ -63,6 +63,8 @@ patience = 100
 seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
 n_features = 7  #number of physical drivers
+n_static_feats = 13
+n_features += n_static_feats
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
@@ -108,12 +110,13 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-(trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
-                                                seq_length, n_features,\
-                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                allTestSeq=True,static_feats=True,n_static_feats=13) 
-# np.save("global_trn_data_wStatic.npy",trn_data)
-# np.save("global_tst_data_wStatic.npy",tst_data)
+# (trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
+#                                                 seq_length, n_features,\
+#                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+#                                                 allTestSeq=False,static_feats=True,n_static_feats=n_static_feats) 
+np.save("global_trn_data_wStatic.npy",trn_data)
+np.save("global_tst_data_wStatic.npy",tst_data)
+sys.exit()
 trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
 tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
 # trn_data = tst_data
