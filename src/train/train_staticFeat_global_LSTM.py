@@ -70,7 +70,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 64
+n_hidden = 16
 # lambda1 = 1e-
 lambda1 = 0
 
@@ -337,8 +337,8 @@ for epoch in range(n_eps):
     # if verbose and epoch %100 is 0:
     if verbose:
         print("rmse loss=", avg_loss)
-    if avg_loss < 2 and epoch > 673:
-        break
+    # if avg_loss < 2 and epoch > 673:
+    #     break
 
     # if avg_loss < min_mse:
     #     min_mse = avg_loss
