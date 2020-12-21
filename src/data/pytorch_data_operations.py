@@ -17,7 +17,7 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
                                             test_seq_per_depth=1, sparseCustom=None, \
                                             allTestSeq=False, \
-                                            oldFeat = False, normGE10=False, postProcessSplits=True, randomSeed=0):
+                                            oldFeat = False, normGE10=False, postProcessSplits=True, randomSeed=0,static_feats=False,n_static_feats = 0):
 
     #NONAN
     #PARAMETERS
@@ -28,6 +28,7 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
         #@begin_loss_ind = index in sequence to begin calculating loss function (to avoid poor accuracy in early parts of the sequence)
 
     #composite data structures
+    n_features = n_features+n_static_feats
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
     trn_dates_comp = torch.Tensor(0, seq_length)
     X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
@@ -43,8 +44,13 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
         verbose = True
         my_path = os.path.abspath(os.path.dirname(__file__))
 
-        feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features.npy"))
-        feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features.npy"))
+        if not static_feats:
+            feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features.npy"))
+            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features.npy"))
+        else:
+            feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea.npy"))
+            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea.npy"))
+
 
         tst = []
         trn = []
