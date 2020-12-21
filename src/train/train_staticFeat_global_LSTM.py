@@ -112,10 +112,10 @@ yhat_batch_size = 1
                                                 seq_length, n_features,\
                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                 allTestSeq=True,static_feats=True,n_static_feats=13) 
-np.save("global_trn_data_wStatic.npy",trn_data)
-np.save("global_tst_data_wStatic.npy",tst_data)
-# trn_data = torch.from_numpy(np.load("global_trn_data.npy"))
-# tst_data = torch.from_numpy(np.load("global_val_data.npy"))
+# np.save("global_trn_data_wStatic.npy",trn_data)
+# np.save("global_tst_data_wStatic.npy",tst_data)
+trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
+tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
 # trn_data = tst_data
 # trn_data = tst_data
 batch_size = trn_data.size()[0]
