@@ -48,7 +48,7 @@ torch.set_printoptions(precision=10)
 debug_train = False
 debug_end = False
 verbose = True
-save = True
+save = False
 test = True
 
 
@@ -252,7 +252,8 @@ manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
 
 #stop training if true
 done = False
-
+min_train_rmse = 999
+min_train_ep = -1
 for epoch in range(n_eps):
     # if verbose and epoch % 10 == 0:
     if verbose:
@@ -332,6 +333,7 @@ for epoch in range(n_eps):
 
     #check for convergence
     avg_loss = avg_loss / batches_done
+    train_avg_loss = avg_loss
     # if verbose and epoch %100 is 0:
     if verbose:
         print("rmse loss=", avg_loss)
@@ -407,12 +409,15 @@ for epoch in range(n_eps):
                 if avg_mse < min_mse:
                     save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
                     saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+                    min_train_ep = epoch
+                    min_train_rmse = train_avg_loss
                     min_mse = avg_mse
                     ep_since_min = 0
                 else:
                     ep_since_min += 1
                     if ep_since_min == patience:
                         print("patience met")
+                        print("min train ep/rmse: ",min_train_ep,"\n",min_train_rmse)
                         sys.exit()
 
                 print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min)
