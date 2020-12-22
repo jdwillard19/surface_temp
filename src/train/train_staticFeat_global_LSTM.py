@@ -75,7 +75,9 @@ n_hidden = 16
 lambda1 = 0
 
 n_eps = 10000
-
+# n_ep/rmse = (1013/1.52)(957/1.51?
+targ_ep = 975
+targ_rmse = 1.52
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
 ep_list64 = [] 
@@ -337,8 +339,8 @@ for epoch in range(n_eps):
     # if verbose and epoch %100 is 0:
     if verbose:
         print("rmse loss=", avg_loss)
-    # if avg_loss < 2 and epoch > 673:
-    #     break
+    if avg_loss < targ_rmse and epoch > targ_ep:
+        break
 
     # if avg_loss < min_mse:
     #     min_mse = avg_loss
@@ -435,7 +437,7 @@ for epoch in range(n_eps):
     #         ep_list64.append(epoch)
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
-save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final"
+save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_wStatic"
 
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
