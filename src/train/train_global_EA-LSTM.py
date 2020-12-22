@@ -546,6 +546,7 @@ for epoch in range(n_eps):
         if use_gpu:
             loss_outputs = loss_outputs.cuda()
             loss_targets = loss_targets.cuda()
+        pdb.set_trace()
         loss = mse_criterion(loss_outputs[loss_indices], loss_targets[loss_indices]) + lambda1*reg1_loss 
         #backward
 
