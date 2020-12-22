@@ -315,7 +315,6 @@ class EALSTM(nn.Module):
         c_n : torch.Tensor]
             The cell states of each time step of each sample in the batch.
         """
-        # pdb.set_trace()
         if self.batch_first:
             x_d = x_d.transpose(0, 1)
             # x_s = x_s.transpose(0, 1)
@@ -328,7 +327,6 @@ class EALSTM(nn.Module):
 
         # empty lists to temporally store all intermediate hidden/cell states
         h_n, c_n = [], []
-        pdb.set_trace()
         # expand bias vectors to batch size
         bias_batch = (self.bias.unsqueeze(0).expand(batch_size, *self.bias.size()))
 
@@ -433,7 +431,6 @@ class Model(nn.Module):
         c_n : torch,Tensor
             Tensor containing the cell states of each time step
         """
-        pdb.set_trace()
         if self.concat_static or self.no_static:
             h_n, c_n = self.lstm(x_d)
         else:
@@ -529,7 +526,8 @@ for epoch in range(n_eps):
         # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         # lstm_net.reset_parameters()
         # h_state = None
-        outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,:,n_features:])
+        outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+        pdb.set_trace()
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
@@ -548,7 +546,6 @@ for epoch in range(n_eps):
         if use_gpu:
             loss_outputs = loss_outputs.cuda()
             loss_targets = loss_targets.cuda()
-        pdb.set_trace()
         loss = mse_criterion(loss_outputs[loss_indices], loss_targets[loss_indices]) + lambda1*reg1_loss 
         #backward
 
