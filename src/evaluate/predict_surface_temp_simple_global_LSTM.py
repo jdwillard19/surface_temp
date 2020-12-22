@@ -90,7 +90,7 @@ rmse_per_lake[:] = np.nan
 # meta_rmse_per_lake[:] = np.nan
 csv = []
 csv.append('target_id,rmse')
-num_layers = 2
+num_layers = 1
 
 #where to output files
 # output_path = "../../results/outputs/"
