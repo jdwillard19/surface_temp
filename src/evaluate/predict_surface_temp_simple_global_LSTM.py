@@ -130,10 +130,12 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
+    n_static_feats = 13
+    n_total_features = n_features+n_static_feats
     (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target,\
     all_data_target, all_phys_data_target, all_dates_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                       outputFullTestMatrix=True, allTestSeq=True, static_feats=True,n_static_feats=13)
+                                       outputFullTestMatrix=True, allTestSeq=True, static_feats=True,n_static_feats=n_static_feats)
     
 
     #useful values, LSTM params
@@ -150,7 +152,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             self.input_size = input_size
             self.hidden_size = hidden_size
             self.batch_size = batch_size
-            self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers) #batch_first=True?
+            self.lstm = nn.LSTM(input_size = n_total_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers) #batch_first=True?
             self.out = nn.Linear(hidden_size, 1)
             self.hidden = self.init_hidden()
 
@@ -181,7 +183,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     # load_path = "../../models/global_model_16hid_2layer_final"
     load_path = "../../models/global_model_16hid_1layer_final_wStatic"
     n_hidden = torch.load(load_path)['state_dict']['out.weight'].shape[1]
-    lstm_net = LSTM(n_features, n_hidden, batch_size)
+    lstm_net = LSTM(n_total_features, n_hidden, batch_size)
     if use_gpu:
         lstm_net = lstm_net.cuda(0)
     pretrain_dict = torch.load(load_path)['state_dict']
@@ -203,7 +205,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             #this loop is dated, there is now only one item in testloader
 
             #parse data into inputs and targets
-            inputs = data[:,:,:n_features].float()
+            inputs = data[:,:,:n_total_features].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates_target[:, begin_loss_ind:]
