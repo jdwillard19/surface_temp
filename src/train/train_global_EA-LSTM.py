@@ -318,6 +318,7 @@ class EALSTM(nn.Module):
         pdb.set_trace()
         if self.batch_first:
             x_d = x_d.transpose(0, 1)
+            x_s = x_s.transpose(0, 1)
 
         seq_len, batch_size, _ = x_d.size()
 
