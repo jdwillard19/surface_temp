@@ -526,7 +526,7 @@ for epoch in range(n_eps):
         # lstm_net.reset_parameters()
         # h_state = None
         pdb.set_trace()
-        outputs, h_state, c_state = lstm_net(inputs[:n_features,:], inputs[n_features:,:])
+        outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,:,n_features:])
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
