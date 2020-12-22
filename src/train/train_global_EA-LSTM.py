@@ -523,7 +523,7 @@ for epoch in range(n_eps):
 
         #forward  prop
         # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-        lstm_net.reset_parameters()
+        # lstm_net.reset_parameters()
         # h_state = None
         outputs, h_state, c_state = lstm_net(inputs[:n_features,:], inputs[n_features:,:])
         outputs = outputs.view(outputs.size()[0],-1)
