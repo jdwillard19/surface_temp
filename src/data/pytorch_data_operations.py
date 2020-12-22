@@ -342,7 +342,7 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
                                             win_shift= 1, begin_loss_ind = 100, \
                                             test_seq_per_depth=1,latter_third_test=True, \
                                             outputFullTestMatrix=False, sparseCustom=None, \
-                                            allTestSeq=False, \
+                                            allTestSeq=False, static_feats=False,n_static_feats=0,\
                                             oldFeat = False, normGE10=False, postProcessSplits=True, randomSeed=0):
 
     #NONAN
@@ -353,12 +353,19 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
         #@win_shift = days to move in the sliding window for the training set
         #@begin_loss_ind = index in sequence to begin calculating loss function (to avoid poor accuracy in early parts of the sequence)
     #load data created in preprocess.py based on lakename
+    n_features = n_features+n_static_feats
     debug = False
     verbose = True
     my_path = os.path.abspath(os.path.dirname(__file__))
 
-    feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features.npy"))
-    feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features.npy"))
+    feat_mat_raw = None
+    feat_mat = None
+    if static_feats:
+        feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea.npy"))
+        feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea.npy"))
+    else:
+        feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features.npy"))
+        feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features.npy"))
 
     tst = []
     trn = []
