@@ -48,8 +48,8 @@ torch.set_printoptions(precision=10)
 debug_train = False
 debug_end = False
 verbose = True
-save = False
-test = True
+save = True
+test = False
 
 
 
@@ -112,16 +112,16 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-# (trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
-#                                                 seq_length, n_features,\
-#                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-#                                                 allTestSeq=False,static_feats=True,n_static_feats=n_static_feats) 
+(trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
+                                                seq_length, n_features,\
+                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                allTestSeq=True,static_feats=True,n_static_feats=n_static_feats) 
 # np.save("global_trn_data_wStatic.npy",trn_data)
 # np.save("global_tst_data_wStatic.npy",tst_data)
 # sys.exit()
-trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
-tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
-# trn_data = tst_data
+# trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
+# tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
+trn_data = tst_data
 # trn_data = tst_data
 batch_size = trn_data.size()[0]
 
