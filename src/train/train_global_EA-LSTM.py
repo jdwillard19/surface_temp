@@ -522,7 +522,7 @@ for epoch in range(n_eps):
             targets = targets.cuda()
 
         #forward  prop
-        lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+        # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         h_state = None
         outputs, h_state = lstm_net(inputs, h_state)
         outputs = outputs.view(outputs.size()[0],-1)
