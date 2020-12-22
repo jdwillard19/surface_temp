@@ -315,6 +315,7 @@ class EALSTM(nn.Module):
         c_n : torch.Tensor]
             The cell states of each time step of each sample in the batch.
         """
+        pdb.set_trace()
         if self.batch_first:
             x_d = x_d.transpose(0, 1)
 
@@ -433,7 +434,6 @@ class Model(nn.Module):
         if self.concat_static or self.no_static:
             h_n, c_n = self.lstm(x_d)
         else:
-            pdb.set_trace()
             h_n, c_n = self.lstm(x_d, x_s)
         last_h = self.dropout(h_n[:, -1, :])
         out = self.fc(last_h)
