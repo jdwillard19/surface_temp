@@ -49,8 +49,8 @@ torch.set_printoptions(precision=10)
 debug_train = False
 debug_end = False
 verbose = True
-save = True
-test = False
+save = False
+test = True
 
 
 
@@ -528,7 +528,6 @@ for epoch in range(n_eps):
         # lstm_net.reset_parameters()
         # h_state = None
         outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-        pdb.set_trace()
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
@@ -638,8 +637,8 @@ for epoch in range(n_eps):
                 # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
 
                 if avg_mse < min_mse:
-                    save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
-                    saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+                    # save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
+                    # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
                     min_train_ep = epoch
                     min_train_rmse = train_avg_loss
                     min_mse = avg_mse
@@ -666,7 +665,7 @@ for epoch in range(n_eps):
     #         ep_list64.append(epoch)
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
-save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_wStatic"
+save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_wStaticEA"
 
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
