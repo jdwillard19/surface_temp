@@ -40,7 +40,8 @@ test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle
 k = 1
 output_to_file = True
 
-save_file_path = "../../results/pgmtl_results_simpleGlobalLSTM.csv"
+# save_file_path = "../../results/pgmtl_results_simpleGlobalLSTM.csv"
+save_file_path = "../../results/pgmtl_results_staticFeatGlobalLSTM.csv"
 
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
@@ -129,9 +130,10 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
-    (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target, all_data_target, all_phys_data_target, all_dates_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
+    (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target,\
+    all_data_target, all_phys_data_target, all_dates_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                       outputFullTestMatrix=True, allTestSeq=True)
+                                       outputFullTestMatrix=True, allTestSeq=True, staticFeats=True,n_static_feats=13)
     
 
     #useful values, LSTM params
@@ -176,7 +178,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
 
     #load source model
-    load_path = "../../models/global_model_16hid_2layer_final"
+    # load_path = "../../models/global_model_16hid_2layer_final"
+    load_path = "../../models/global_model_16hid_1layer_final_wStatic"
     n_hidden = torch.load(load_path)['state_dict']['out.weight'].shape[1]
     lstm_net = LSTM(n_features, n_hidden, batch_size)
     if use_gpu:
