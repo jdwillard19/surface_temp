@@ -122,7 +122,7 @@ yhat_batch_size = 1
 # sys.exit()
 trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
 tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
-trn_data = tst_data
+# trn_data = tst_data
 # trn_data = tst_data
 batch_size = trn_data.size()[0]
 
