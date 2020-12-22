@@ -433,6 +433,7 @@ class Model(nn.Module):
         if self.concat_static or self.no_static:
             h_n, c_n = self.lstm(x_d)
         else:
+            pdb.set_trace()
             h_n, c_n = self.lstm(x_d, x_s)
         last_h = self.dropout(h_n[:, -1, :])
         out = self.fc(last_h)
