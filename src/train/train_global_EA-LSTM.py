@@ -328,12 +328,13 @@ class EALSTM(nn.Module):
 
         # empty lists to temporally store all intermediate hidden/cell states
         h_n, c_n = [], []
-
+        pdb.set_trace()
         # expand bias vectors to batch size
         bias_batch = (self.bias.unsqueeze(0).expand(batch_size, *self.bias.size()))
 
         # calculate input gate only once because inputs are static
         bias_s_batch = (self.bias_s.unsqueeze(0).expand(batch_size, *self.bias_s.size()))
+
         i = torch.sigmoid(torch.addmm(bias_s_batch, x_s, self.weight_sh))
 
         # perform forward steps over input sequence
