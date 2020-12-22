@@ -133,7 +133,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target,\
     all_data_target, all_phys_data_target, all_dates_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                       outputFullTestMatrix=True, allTestSeq=True, staticFeats=True,n_static_feats=13)
+                                       outputFullTestMatrix=True, allTestSeq=True, static_feats=True,n_static_feats=13)
     
 
     #useful values, LSTM params
