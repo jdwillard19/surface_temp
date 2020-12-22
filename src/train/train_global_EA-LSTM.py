@@ -435,9 +435,9 @@ class Model(nn.Module):
             h_n, c_n = self.lstm(x_d)
         else:
             h_n, c_n = self.lstm(x_d, x_s)
-        pdb.set_trace()
-        last_h = self.dropout(h_n[:, -1, :])
-        out = self.fc(last_h)
+        h_n = self.dropout(h_n)
+        # last_h = self.dropout(h_n[:, -1, :])
+        out = self.fc(h_n)
         return out, h_n, c_n
 
     # © 2020 GitHub, Inc.
