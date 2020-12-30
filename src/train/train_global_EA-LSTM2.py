@@ -23,7 +23,6 @@ from pytorch_data_operations import buildLakeDataForRNNPretrain
 from pytorch_model_operations import saveModel
 import pytorch_data_operations
 import datetime
-import pdb
 from torch.utils.data import DataLoader
 from pytorch_data_operations import buildLakeDataForRNN_multilakemodel, parseMatricesFromSeqs
 
@@ -509,7 +508,6 @@ for epoch in range(n_eps):
     batches_done = 0
     ct = 0
     for m, data in enumerate(trainloader, 0):
-        pdb.set_trace()
         #now for mendota data
         #this loop is dated, there is now only one item in testloader
 
