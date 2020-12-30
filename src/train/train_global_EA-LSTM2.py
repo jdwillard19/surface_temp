@@ -70,15 +70,15 @@ win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
-num_layers = 2
-n_hidden = 28
+num_layers = 1
+n_hidden = 256
 # lambda1 = 1e-
 lambda1 = 0
 
 n_eps = 10000
 # n_ep/rmse = (1013/1.52)(957/1.51?
-targ_ep = 975
-targ_rmse = 1.52
+targ_ep = -1
+targ_rmse = 999
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
 ep_list64 = [] 
@@ -567,8 +567,8 @@ for epoch in range(n_eps):
     # if verbose and epoch %100 is 0:
     if verbose:
         print("rmse loss=", avg_loss)
-    if avg_loss < targ_rmse and epoch > targ_ep:
-        break
+    # if avg_loss < targ_rmse and epoch > targ_ep:
+    #     break
 
     # if avg_loss < min_mse:
     #     min_mse = avg_loss
