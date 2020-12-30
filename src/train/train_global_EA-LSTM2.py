@@ -80,7 +80,7 @@ n_eps = 10000
 targ_ep = -1
 targ_rmse = 999
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
-ep_list32 = [] 0
+ep_list32 = [] 
 ep_list64 = [] 
 ep_list128 = [] 
 
