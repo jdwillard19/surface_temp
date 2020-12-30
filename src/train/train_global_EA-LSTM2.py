@@ -80,7 +80,7 @@ n_eps = 10000
 targ_ep = -1
 targ_rmse = 999
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
-ep_list32 = [] 
+ep_list32 = [] 0
 ep_list64 = [] 
 ep_list128 = [] 
 
@@ -509,6 +509,7 @@ for epoch in range(n_eps):
     batches_done = 0
     ct = 0
     for m, data in enumerate(trainloader, 0):
+        pdb.set_trace()
         #now for mendota data
         #this loop is dated, there is now only one item in testloader
 
