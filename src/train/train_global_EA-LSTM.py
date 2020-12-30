@@ -125,7 +125,7 @@ yhat_batch_size = 1
 trn_data = tst_data
 # trn_data = tst_data
 # batch_size = trn_data.size()[0]
-batch_size = 3000
+batch_size = 1800
 
 
 

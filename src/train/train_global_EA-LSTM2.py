@@ -126,7 +126,7 @@ tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
 # trn_data = tst_data
 batch_size = trn_data.size()[0]
 print("trian data size: ", trn_data.size())
-batch_size = 3000
+batch_size = 1800
 
 
 
