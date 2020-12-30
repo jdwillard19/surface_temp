@@ -49,8 +49,8 @@ torch.set_printoptions(precision=10)
 debug_train = False
 debug_end = False
 verbose = True
-save = False
-test = True
+save = True
+test = False
 
 
 
@@ -77,8 +77,8 @@ lambda1 = 0
 
 n_eps = 10000
 # n_ep/rmse = (1013/1.52)(957/1.51?
-targ_ep = -1
-targ_rmse = 999
+targ_ep = 753
+targ_rmse = 1.725
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
 ep_list64 = [] 
@@ -113,16 +113,16 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-# (trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
-#                                                 seq_length, n_features,\
-#                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-#                                                 allTestSeq=False,static_feats=True,n_static_feats=n_static_feats) 
+(trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
+                                                seq_length, n_features,\
+                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                allTestSeq=True,static_feats=True,n_static_feats=n_static_feats) 
 # np.save("global_trn_data_wStatic.npy",trn_data)
 # np.save("global_tst_data_wStatic.npy",tst_data)
 # sys.exit()
-trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
-tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
-# trn_data = tst_data
+# trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
+# tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
+trn_data = tst_data
 # trn_data = tst_data
 batch_size = trn_data.size()[0]
 
@@ -567,8 +567,8 @@ for epoch in range(n_eps):
     # if verbose and epoch %100 is 0:
     if verbose:
         print("rmse loss=", avg_loss)
-    # if avg_loss < targ_rmse and epoch > targ_ep:
-    #     break
+    if avg_loss < targ_rmse and epoch > targ_ep:
+        break
 
     # if avg_loss < min_mse:
     #     min_mse = avg_loss
@@ -583,75 +583,75 @@ for epoch in range(n_eps):
     #     done = True
     #     break
 
-    if test:
-        with torch.no_grad():
-            avg_mse = 0
-            ct = 0
-            for m, data in enumerate(testloader, 0):
-                #now for mendota data
-                #this loop is dated, there is now only one item in testloader
+    # if test:
+    #     with torch.no_grad():
+    #         avg_mse = 0
+    #         ct = 0
+    #         for m, data in enumerate(testloader, 0):
+    #             #now for mendota data
+    #             #this loop is dated, there is now only one item in testloader
 
-                #parse data into inputs and targets
-                inputs = data[:,:,:n_total_feats].float()
-                targets = data[:,:,-1].float()
-                targets = targets[:, begin_loss_ind:]
+    #             #parse data into inputs and targets
+    #             inputs = data[:,:,:n_total_feats].float()
+    #             targets = data[:,:,-1].float()
+    #             targets = targets[:, begin_loss_ind:]
 
-                if use_gpu:
-                    inputs = inputs.cuda()
-                    targets = targets.cuda()
+    #             if use_gpu:
+    #                 inputs = inputs.cuda()
+    #                 targets = targets.cuda()
 
-                #run model
-                h_state = None
-                # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-                # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-                pred, h_state, _ = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-                pred = pred.view(pred.size()[0],-1)
-                pred = pred[:, begin_loss_ind:]
+    #             #run model
+    #             h_state = None
+    #             # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+    #             # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+    #             pred, h_state, _ = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+    #             pred = pred.view(pred.size()[0],-1)
+    #             pred = pred[:, begin_loss_ind:]
 
-                #calculate error
-                targets = targets.cpu()
-                loss_indices = np.where(np.isfinite(targets))
-                if use_gpu:
-                    targets = targets.cuda()
-                inputs = inputs[:, begin_loss_ind:, :]
-                mse = mse_criterion(pred[loss_indices], targets[loss_indices])
-                # print("test loss = ",mse)
-                avg_mse += mse
+    #             #calculate error
+    #             targets = targets.cpu()
+    #             loss_indices = np.where(np.isfinite(targets))
+    #             if use_gpu:
+    #                 targets = targets.cuda()
+    #             inputs = inputs[:, begin_loss_ind:, :]
+    #             mse = mse_criterion(pred[loss_indices], targets[loss_indices])
+    #             # print("test loss = ",mse)
+    #             avg_mse += mse
 
-                # if mse > 0: #obsolete i think
-                #     ct += 1
-                # avg_mse = avg_mse / ct
+    #             # if mse > 0: #obsolete i think
+    #             #     ct += 1
+    #             # avg_mse = avg_mse / ct
 
 
-                # #save model 
-                # (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
-                #                                                 n_test_dates_target,
-                #                                                 unique_tst_dates_target) 
-                # #to store output
-                # output_mats[i,:] = outputm_npy
-                # if i == 0:
-                #     #store label
-                #     label_mats = labelm_npy
-                # loss_output = outputm_npy[~np.isnan(labelm_npy)]
-                # loss_label = labelm_npy[~np.isnan(labelm_npy)]
+    #             # #save model 
+    #             # (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
+    #             #                                                 n_test_dates_target,
+    #             #                                                 unique_tst_dates_target) 
+    #             # #to store output
+    #             # output_mats[i,:] = outputm_npy
+    #             # if i == 0:
+    #             #     #store label
+    #             #     label_mats = labelm_npy
+    #             # loss_output = outputm_npy[~np.isnan(labelm_npy)]
+    #             # loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
-                # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+    #             # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
 
-                if avg_mse < min_mse:
-                    # save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
-                    # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-                    min_train_ep = epoch
-                    min_train_rmse = train_avg_loss
-                    min_mse = avg_mse
-                    ep_since_min = 0
-                else:
-                    ep_since_min += 1
-                    if ep_since_min == patience:
-                        print("patience met")
-                        print("min train ep/rmse: ",min_train_ep,"\n",min_train_rmse)
-                        sys.exit()
+    #             if avg_mse < min_mse:
+    #                 # save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
+    #                 # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+    #                 min_train_ep = epoch
+    #                 min_train_rmse = train_avg_loss
+    #                 min_mse = avg_mse
+    #                 ep_since_min = 0
+    #             else:
+    #                 ep_since_min += 1
+    #                 if ep_since_min == patience:
+    #                     print("patience met")
+    #                     print("min train ep/rmse: ",min_train_ep,"\n",min_train_rmse)
+    #                     sys.exit()
 
-                print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min)
+    #             print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min)
 
         # if epoch % 100 == 0 and epoch != 0:
 
