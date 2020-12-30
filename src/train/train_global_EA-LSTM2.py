@@ -499,7 +499,7 @@ for epoch in range(n_eps):
     #batch samplers used to draw samples in dataloaders
     batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_batches)
 
-    trainloader = DataLoader(train_data, batch_sampler=batch_sampler, pin_memory=True,shuffle=True)
+    trainloader = DataLoader(train_data, batch_sampler=batch_sampler, pin_memory=True)
 
 
     #zero the parameter gradients
