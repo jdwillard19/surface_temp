@@ -23,6 +23,7 @@ import re
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
+test_lakes = train_lakes
 # test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
 # print(len(test_lakes), "test lakes")
