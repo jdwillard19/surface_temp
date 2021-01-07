@@ -143,7 +143,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     
 
     #useful values, LSTM params
-    batch_size = all_data_target.size()[0]
+    batch_size = test_data_target.size()[0]
     u_depths_target = np.unique(all_data_target[:,0,0])
     n_depths = torch.unique(all_data_target[:,:,0]).size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
@@ -476,6 +476,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 targets = targets.cuda()
             inputs = inputs[:, begin_loss_ind:, :]
             depths = depths[:, begin_loss_ind:]
+
             mse = mse_criterion(pred[loss_indices], targets[loss_indices])
             # print("test loss = ",mse)
             avg_mse += mse
