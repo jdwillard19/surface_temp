@@ -425,7 +425,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     # load_path = "../../models/global_model_16hid_2layer_final"
     # load_path = "../../models/global_model_16hid_1layer_final_wStatic"
     load_path = "../../models/global_model_128hid_1layer_final_wStaticEA"
-    
+    pdb.set_trace()
     n_hidden = torch.load(load_path)['state_dict']['out.weight'].shape[1]
     lstm_net = Model(input_size_dyn=7,input_size_stat=13,hidden_size=n_hidden)
     # lstm_net = LSTM(n_total_features, n_hidden, batch_size)
