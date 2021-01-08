@@ -474,7 +474,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-            print("globLSTM rmse=", mat_rmse)
+            print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
             # err_per_source[i,targ_ct] = mat_rmse
 
             # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
