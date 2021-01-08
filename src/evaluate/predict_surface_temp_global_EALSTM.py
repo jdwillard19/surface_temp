@@ -42,7 +42,7 @@ test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle
 
 k = 1
 output_to_file = True
-n_hidden = 128
+# n_hidden = 128
 
 # save_file_path = "../../results/pgmtl_results_simpleGlobalLSTM.csv"
 save_file_path = "../../results/pgmtl_results_GlobalEALSTM.csv"
@@ -398,35 +398,12 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             out = self.fc(h_n)
             return out, h_n, c_n
 
-        # © 2020 GitHub, Inc.
-        # Terms
-        # Privacy
-        # Security
-        # Status
-        # Help
-
-        # Contact GitHub
-        # Pricing
-        # API
-        # Training
-        # Blog
-        # About
-
-
-
-
-    # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-    lstm_net = Model(input_size_dyn=7,input_size_stat=13,hidden_size=n_hidden)
-    #tell model to use GPU if needed
-    if use_gpu:
-        lstm_net = lstm_net.cuda()
-
-
     #load source model
     # load_path = "../../models/global_model_16hid_2layer_final"
     # load_path = "../../models/global_model_16hid_1layer_final_wStatic"
-    load_path = "../../models/global_model_128hid_1layer_final_wStaticEA"
-    load_path = "../../models/global_model_128hid_1layer_final2_wStaticEA"
+    load_path = "../../models/global_model_128hid_1layer_final_wStaticEA" #1.31???
+    load_path = "../../models/global_model_128hid_1layer_final2_wStaticEA" #1.44 more norm
+    load_path = "../../models/global_model_128hid_1layer_final3_wStaticEA"
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=7,input_size_stat=13,hidden_size=n_hidden)
     # lstm_net = LSTM(n_total_features, n_hidden, batch_size)
