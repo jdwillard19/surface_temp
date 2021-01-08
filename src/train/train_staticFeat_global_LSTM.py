@@ -70,14 +70,15 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 16
+# n_hidden = 16
+n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0
 
 n_eps = 10000
 # n_ep/rmse = (1013/1.52)(957/1.51?
-targ_ep = 975
-targ_rmse = 1.52
+targ_ep = 200
+targ_rmse = 1.46
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
 ep_list64 = [] 
@@ -124,6 +125,7 @@ yhat_batch_size = 1
 trn_data = tst_data
 # trn_data = tst_data
 batch_size = trn_data.size()[0]
+batch_size = math.floor(trn_data.size()[0]/2)
 
 
 
@@ -241,7 +243,7 @@ if use_gpu:
 
 #define loss and optimizer
 mse_criterion = nn.MSELoss()
-optimizer = optim.Adam(lstm_net.parameters(), lr=.005)#, weight_decay=0.01)
+optimizer = optim.Adam(lstm_net.parameters(), lr=.001)#, weight_decay=0.01)
 
 #training loop
 
@@ -437,7 +439,7 @@ for epoch in range(n_eps):
     #         ep_list64.append(epoch)
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
-save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_wStatic"
+save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_wStatic2"
 
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
