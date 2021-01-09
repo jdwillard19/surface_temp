@@ -181,8 +181,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     #load source model
     # load_path = "../../models/global_model_16hid_2layer_final"
-    load_path = "../../models/global_model_16hid_1layer_final_wStatic"
-    load_path = "../../models/global_model_128hid_1layer_final_wStaticEA"
+    load_path = "../../models/global_model_16hid_1layer_final_wStatic" #1.44?
+    load_path = "../../models/global_model_128hid_1layer_final_wStatic2" #replicate what EA-LSTM got rly good results with
+    # load_path = "../../models/global_model_128hid_1layer_final_wStaticEA"
     
     n_hidden = torch.load(load_path)['state_dict']['out.weight'].shape[1]
     lstm_net = LSTM(n_total_features, n_hidden, batch_size)
