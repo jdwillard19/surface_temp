@@ -210,7 +210,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             #parse data into inputs and targets
             inputs = data[:,:,:n_total_features].float()
-            attributions, approximation_error = ig.attribute((inputs),
+            attributions, approximation_error = ig.attribute((inputs, None),
                                                  method='gausslegendre',
                                                  return_convergence_delta=True)
             pdb.set_trace()
