@@ -14,7 +14,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from scipy.stats import spearmanr
 from joblib import dump, load
 import re
-
+from captum.attr import IntegratedGradients
 
 # base_path = "../../data/raw/sb_mtl_data_release/"
 # obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
@@ -195,6 +195,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     model_dict.update(pretrain_dict)
     lstm_net.load_state_dict(pretrain_dict)
 
+    ig = IntegratedGradients(lstm_net)
     #things needed to predict test data
     mse_criterion = nn.MSELoss()
     testloader = torch.utils.data.DataLoader(tst_data_target, batch_size=tst_data_target.size()[0], shuffle=False, pin_memory=True)
@@ -209,6 +210,10 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             #parse data into inputs and targets
             inputs = data[:,:,:n_total_features].float()
+            attributions, approximation_error = ig.attribute((inputs),
+                                                 method='gausslegendre',
+                                                 return_convergence_delta=True)
+            pdb.set_trace()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates_target[:, begin_loss_ind:]
