@@ -132,7 +132,7 @@ print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
 # batch_size = trn_data.size()[0]
-batch_size = int(math.floor(trn_data.size()[0]/5))
+batch_size = int(math.floor(trn_data.size()[0]))
 
 
 
@@ -674,7 +674,7 @@ for epoch in range(n_eps):
     #         ep_list64.append(epoch)
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
-save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_wLatLong_wStaticEA_0"
+save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_2feat_wStaticEA_0"
 
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
