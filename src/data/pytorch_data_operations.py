@@ -355,7 +355,7 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
     #load data created in preprocess.py based on lakename
     n_features = n_features+n_static_feats
     debug = False
-    verbose = True
+    verbose = False
     my_path = os.path.abspath(os.path.dirname(__file__))
 
     feat_mat_raw = None
@@ -987,8 +987,6 @@ def calculate_ec_loss(inputs, outputs, phys, labels, dates, depth_areas, n_depth
         doy = doy[1:-1]
         diff_vec = (lake_energy_deltas - lake_energy_fluxes).abs_()
         
-        # mendota og ice guesstimate
-        # diff_vec = diff_vec[np.where((doy[:] > 134) & (doy[:] < 342))[0]]
 
         #actual ice
         # diff_vec = diff_vec[np.where((phys[0,1:-1,9] == 0))[0]]
