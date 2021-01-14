@@ -117,7 +117,6 @@ yhat_batch_size = 1
                                                 seq_length, n_features,\
                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                 allTestSeq=True,static_feats=True,n_static_feats=n_static_feats) 
-pdb.set_trace()
 # np.save("global_trn_data_wStatic.npy",trn_data)
 # np.save("global_tst_data_wStatic.npy",tst_data)
 # sys.exit()
@@ -127,6 +126,7 @@ trn_data = tst_data
 tst_data = tst_data[:,:,[2,7,-1]]
 n_features = 1
 n_static_feats = 1
+n_total_feats = n_features + n_static_feats
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
