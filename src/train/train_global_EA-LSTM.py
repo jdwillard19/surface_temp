@@ -124,7 +124,7 @@ pdb.set_trace()
 # trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
 # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
 trn_data = tst_data
-tst_data = tst_data[:,:,[2,7]]
+tst_data = tst_data[:,:,[2,7,-1]]
 n_features = 1
 n_static_feats = 1
 print("train_data size: ",trn_data.size())
