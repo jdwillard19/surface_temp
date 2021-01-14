@@ -101,16 +101,8 @@ num_layers = 1
 # if not os.path.exists(output_path):
     # os.mkdir(output_path)
 
-class AddGaussianNoise(object):
-    def __init__(self, mean=0., std=1.):
-        self.std = std
-        self.mean = mean
-        
-    def __call__(self, tensor):
-        return tensor + torch.randn(tensor.size()) * self.std + self.mean
-    
-    def __repr__(self):
-        return self.__class__.__name__ + '(mean={0}, std={1})'.format(self.mean, self.std)
+def AddGaussianNoise(tensor,std):
+    return tensor + torch.randn(tensor.size()) * std
 
 feat_ind_to_add_noise = 0 
 gauss_std = .2
@@ -444,7 +436,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             #parse data into inputs and targets
             inputs = data[:,:,:n_total_features].float()
             pdb.set_trace()
-            inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise],std=gauss_std)
+            inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise], gauss_std)
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates_target[:, begin_loss_ind:]
