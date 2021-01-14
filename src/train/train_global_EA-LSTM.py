@@ -465,7 +465,7 @@ class Model(nn.Module):
 
 
 # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-lstm_net = Model(input_size_dyn=7,input_size_stat=n_static_feats,hidden_size=n_hidden)
+lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
 #tell model to use GPU if needed
 if use_gpu:
     lstm_net = lstm_net.cuda()
