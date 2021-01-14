@@ -417,7 +417,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     # load_path = "../../models/global_model_128hid_1layer_final2_wStaticEA" #1.44 more norm
     # load_path = "../../models/global_model_128hid_1layer_final3_wStaticEA" #1.33?
-    load_path = '../../models/global_model_128hid_1layer_final_wLatLong_wStaticEA_1'
+    load_path = '../../models/global_model_128hid_1layer_final_wLatLong_wStaticEA_1' #1.32
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=7,input_size_stat=n_static_feats,hidden_size=n_hidden)
     # lstm_net = LSTM(n_total_features, n_hidden, batch_size)
@@ -443,8 +443,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             #parse data into inputs and targets
             inputs = data[:,:,:n_total_features].float()
-            # pdb.set_trace()
-            # inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise],std=gauss_std)
+            pdb.set_trace()
+            inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise],std=gauss_std)
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates_target[:, begin_loss_ind:]
