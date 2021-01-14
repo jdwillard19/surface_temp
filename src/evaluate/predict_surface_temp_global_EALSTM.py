@@ -104,7 +104,7 @@ num_layers = 1
 def AddGaussianNoise(tensor,std):
     return tensor + torch.randn(tensor.size()) * std
 
-feat_ind_to_add_noise = 0 
+feat_ind_to_add_noise = 1
 gauss_std = .2
 # err_per_source = np.empty((145,len(test_lakes)))
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
