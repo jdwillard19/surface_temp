@@ -209,13 +209,13 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             #parse data into inputs and targets
             inputs = data[:,:,:n_total_features].float()
-            pdb.set_trace()
+            # pdb.set_trace()
 
-            attributions, approximation_error = ig.attribute((inputs, None), method='gausslegendre', return_convergence_delta=True)
-            hid_layer = (xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)), xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)))
-            hid_layer2 = None
+            # attributions, approximation_error = ig.attribute((inputs, None), method='gausslegendre', return_convergence_delta=True)
+            # hid_layer = (xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)), xavier_normal_(torch.empty(num_layers, batch_size, self.hidden_size)))
+            # hid_layer2 = None
             # ig.attribute((inputs), method='gausslegendre', additional_forward_args=(hidden=None),return_convergence_delta=True)
-            pdb.set_trace()
+            # pdb.set_trace()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates_target[:, begin_loss_ind:]

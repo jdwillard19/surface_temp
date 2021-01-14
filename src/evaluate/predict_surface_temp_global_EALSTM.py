@@ -101,7 +101,19 @@ num_layers = 1
 # if not os.path.exists(output_path):
     # os.mkdir(output_path)
 
+class AddGaussianNoise(object):
+    def __init__(self, mean=0., std=1.):
+        self.std = std
+        self.mean = mean
+        
+    def __call__(self, tensor):
+        return tensor + torch.randn(tensor.size()) * self.std + self.mean
+    
+    def __repr__(self):
+        return self.__class__.__name__ + '(mean={0}, std={1})'.format(self.mean, self.std)
 
+feat_ind_to_add_noise = 0 
+gauss_std = .2
 # err_per_source = np.empty((145,len(test_lakes)))
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     print(str(targ_ct),'/',len(test_lakes),':',target_id)
@@ -134,7 +146,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
-    n_static_feats = 13
+    n_static_feats = 15
     n_total_features = n_features+n_static_feats
     (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target,\
     all_data_target, all_phys_data_target, all_dates_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
@@ -401,9 +413,11 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     #load source model
     # load_path = "../../models/global_model_16hid_2layer_final"
     # load_path = "../../models/global_model_16hid_1layer_final_wStatic"
-    load_path = "../../models/global_model_128hid_1layer_final_wStaticEA" #1.31???
-    load_path = "../../models/global_model_128hid_1layer_final2_wStaticEA" #1.44 more norm
-    load_path = "../../models/global_model_128hid_1layer_final3_wStaticEA"
+    # load_path = "../../models/global_model_128hid_1layer_final_wStaticEA" #1.31???
+
+    # load_path = "../../models/global_model_128hid_1layer_final2_wStaticEA" #1.44 more norm
+    # load_path = "../../models/global_model_128hid_1layer_final3_wStaticEA" #1.33?
+    load_path = '../../models/global_model_128hid_1layer_final_wLatLong_wStaticEA_1'
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=7,input_size_stat=13,hidden_size=n_hidden)
     # lstm_net = LSTM(n_total_features, n_hidden, batch_size)
@@ -429,6 +443,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             #parse data into inputs and targets
             inputs = data[:,:,:n_total_features].float()
+            pdb.set_trace()
+            inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise],std=gauss_std)
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates_target[:, begin_loss_ind:]
