@@ -77,7 +77,7 @@ lambda1 = 0
 
 n_eps = 10000
 # n_ep/rmse = (1013/1.52)(957/1.51?
-targ_ep = 100
+targ_ep = 70
 targ_rmse = 1.46
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 

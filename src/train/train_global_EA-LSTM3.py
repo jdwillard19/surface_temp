@@ -64,7 +64,7 @@ patience = 100
 seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
 n_features = 7  #number of physical drivers
-n_static_feats = 13
+n_static_feats = 15
 n_total_feats =n_static_feats+n_features
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
@@ -77,8 +77,8 @@ lambda1 = 0
 
 n_eps = 10000
 # n_ep/rmse = (1013/1.52)(957/1.51?
-targ_ep = 753
-targ_rmse = 1.725
+targ_ep = 70
+targ_rmse = 1.46
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
 ep_list64 = [] 
@@ -113,18 +113,21 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-# (trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
-#                                                 seq_length, n_features,\
-#                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-#                                                 allTestSeq=False,static_feats=True,n_static_feats=n_static_feats) 
+(trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
+                                                seq_length, n_features,\
+                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                allTestSeq=True,static_feats=True,n_static_feats=n_static_feats) 
 # np.save("global_trn_data_wStatic.npy",trn_data)
 # np.save("global_tst_data_wStatic.npy",tst_data)
 # sys.exit()
-trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
-tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
+# trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
+# tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
+trn_data = tst_data
+print("train_data size: ",trn_data.size())
+print(len(lakenames), " lakes of data")
 # trn_data = tst_data
-# trn_data = tst_data
-batch_size = trn_data.size()[0]
+# batch_size = trn_data.size()[0]
+batch_size = int(math.floor(trn_data.size()[0]/5))
 
 
 
@@ -458,7 +461,7 @@ class Model(nn.Module):
 
 
 # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-lstm_net = Model(input_size_dyn=7,input_size_stat=13,hidden_size=n_hidden)
+lstm_net = Model(input_size_dyn=7,input_size_stat=n_static_feats,hidden_size=n_hidden)
 #tell model to use GPU if needed
 if use_gpu:
     lstm_net = lstm_net.cuda()
@@ -666,7 +669,7 @@ for epoch in range(n_eps):
     #         ep_list64.append(epoch)
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
-save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_wStaticEA"
+save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_wLatLong_wStaticEA_2"
 
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
@@ -684,12 +687,6 @@ print("saved at ",save_path)
 # train_lakes = np.array([re.search('nhdhr_(.*)', x).group(1) for x in np.unique(glm_all_f['target_id'].values)])
 
 # other_source_ids = train_lakes[~np.isin(train_lakes,site_id)] #remove site id
-# other_source_ids = other_source_ids[~np.isin(other_source_ids, ['121623043','121623126',\
-#                                                                 '121860894','143249413',\
-#                                                                 '143249864', '152335372',\
-#                                                                 '155635994','70332223',\
-#                                                                 '75474779'])] #remove cuz <= 1 surf temp obs
-
 
 # n_other_sources = len(other_source_ids)
 
