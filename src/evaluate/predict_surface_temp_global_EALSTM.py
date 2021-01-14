@@ -435,7 +435,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             #parse data into inputs and targets
             inputs = data[:,:,:n_total_features].float()
-            pdb.set_trace()
             inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise], gauss_std)
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
