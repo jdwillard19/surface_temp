@@ -120,7 +120,7 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
     # med_meta_rmse_per_lake = np.empty(test_lakes.shape[0])
     rmse_per_lake[:] = np.nan
     for targ_ct, target_id in enumerate(test_lakes): #for each target lake
-        print(str(targ_ct),'/',len(test_lakes),':',target_id)
+        # print(str(targ_ct),'/',len(test_lakes),':',target_id)
         lake_df = pd.DataFrame()
         lake_id = target_id
 
