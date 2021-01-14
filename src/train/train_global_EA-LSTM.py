@@ -535,7 +535,6 @@ for epoch in range(n_eps):
         # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         # lstm_net.reset_parameters()
         # h_state = None
-        pdb.set_trace()
         outputs, h_state, _ = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
         outputs = outputs.view(outputs.size()[0],-1)
 
