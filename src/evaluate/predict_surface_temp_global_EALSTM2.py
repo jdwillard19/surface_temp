@@ -448,7 +448,7 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
 
                 #parse data into inputs and targets
                 inputs = data[:,:,:n_total_features].float()
-                # inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise], gauss_std)
+                inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise], gauss_std)
                 targets = data[:,:,-1].float()
                 targets = targets[:, begin_loss_ind:]
                 tmp_dates = tst_dates_target[:, begin_loss_ind:]
