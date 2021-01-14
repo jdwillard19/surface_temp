@@ -106,7 +106,7 @@ def AddGaussianNoise(tensor,std):
 feat_inds = np.arange(n_total_features)
 err_per_feat_ind = np.empty((feat_inds.shape[0]))
 err_per_feat_ind[:] = np.nan
-gauss_std = .3
+gauss_std = 1.
 # err_per_source = np.empty((145,len(test_lakes)))
 
 for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
