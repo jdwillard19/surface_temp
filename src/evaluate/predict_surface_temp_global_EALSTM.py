@@ -47,6 +47,13 @@ output_to_file = True
 # save_file_path = "../../results/pgmtl_results_simpleGlobalLSTM.csv"
 save_file_path = "../../results/pgmtl_results_GlobalEALSTM.csv"
 n_total_features = 22
+feats = ['SW','LW','AT','RH','WS','Rain','Snow','surface_area','SDF','K_d','longitude','latitude',\
+                    'lw_std',\
+                    'sw_mean', 'sw_std_sp','sw_mean_au',
+                    'at_std_au','at_mean_au',\
+                    'rh_mean_su','rh_mean_au',\
+                    'rain_mean_au',\
+                    'snow_mean_au']
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
 # feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
@@ -103,6 +110,7 @@ gauss_std = .3
 # err_per_source = np.empty((145,len(test_lakes)))
 
 for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
+    print("feat: ", feats[feat_ind_to_add_noise])
     feat_ind_to_add_noise = int(feat_ind_to_add_noise)
     rmse_per_lake = np.empty(test_lakes.shape[0])
     # glm_rmse_per_lake = np.empty(test_lakes.shape[0])
@@ -485,12 +493,12 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
                 loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
                 mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-                print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
+                # print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
                 # err_per_source[i,targ_ct] = mat_rmse
 
                 # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
 
-                csv.append(",".join(["nhdhr_"+target_id,str(mat_rmse)]))
+                # csv.append(",".join(["nhdhr_"+target_id,str(mat_rmse)]))
                 rmse_per_lake[targ_ct] = mat_rmse
 
 
