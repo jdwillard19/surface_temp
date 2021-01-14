@@ -103,6 +103,7 @@ gauss_std = .3
 # err_per_source = np.empty((145,len(test_lakes)))
 
 for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
+    feat_ind_to_add_noise = int(feat_ind_to_add_noise)
     rmse_per_lake = np.empty(test_lakes.shape[0])
     # glm_rmse_per_lake = np.empty(test_lakes.shape[0])
     # srcorr_per_lake = np.empty(test_lakes.shape[0])
