@@ -52,6 +52,14 @@ X = train_df[columns[:-1]]
 y = np.ravel(train_df[columns[-1]])
 gbm = xgb.XGBRegressor(booster='gbtree')
 nfolds = 12
+parameters = {'objective':['reg:squarederror'],
+              'learning_rate': [.025, 0.05, .1], #so called `eta` value
+              'max_depth': [6],
+              'min_child_weight': [11],
+              'subsample': [0.8],
+              'colsample_bytree': [0.7],
+              'n_estimators': [100,300,500,1000], #number of trees, change it to 1000 for better results
+              }
 def gb_param_selection(X, y, nfolds):
     # ests = np.arange(1000,6000,600)
     # lrs = [.05,.01]
