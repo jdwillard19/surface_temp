@@ -28,8 +28,8 @@ save_file_path = '../../models/xgb_surface_temp.joblib'
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
-train_df = pd.DataFrame()
-train_df.columns = ['ShortWave','LongWave','AirTemp','WindSpeed','Surface_Area','Surface_Temp']
+columns = ['ShortWave','LongWave','AirTemp','WindSpeed','Surface_Area','Surface_Temp']
+train_df = pd.DataFrame(columns=columns)
 
 for ct, lake_id in enumerate(train_lakes):
     #load data
