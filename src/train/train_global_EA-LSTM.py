@@ -71,7 +71,7 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 128
+n_hidden = 64
 # lambda1 = 1e-
 lambda1 = 0
 
@@ -122,10 +122,10 @@ yhat_batch_size = 1
 # sys.exit()
 # trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
 # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
-tst_data = tst_data[:,:,[2,7,-1]]
+tst_data = tst_data[:,:,[0,1,2,4,7,-1]]
 
 trn_data = tst_data
-n_features = 1
+n_features = 4
 n_static_feats = 1
 n_total_feats = n_features + n_static_feats
 print("train_data size: ",trn_data.size())
