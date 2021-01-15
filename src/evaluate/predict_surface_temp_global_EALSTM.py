@@ -139,7 +139,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     data_dir_target = "../../data/processed/"+target_id+"/" 
     #target agnostic model and data params
     use_gpu = True
-    n_features = 7
     # n_hidden = 20
     seq_length = 350
     win_shift = 175
@@ -148,8 +147,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     all_data_target, all_phys_data_target, all_dates_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, static_feats=True,n_static_feats=n_static_feats)
-    
-
+        
+    pdb.set_trace()
     tst_data_target = tst_data_target[:,:,feat_inds]
     n_features = 4
     n_static_feats = 1
@@ -421,7 +420,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     load_path = '../../models/global_model_64hid_1layer_final_2feat_wStaticEA_0'
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
-    # lstm_net = LSTM(n_total_features, n_hidden, batch_size)
     if use_gpu:
         lstm_net = lstm_net.cuda(0)
     pretrain_dict = torch.load(load_path)['state_dict']
@@ -457,7 +455,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # h_state = None
             # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
             # pred, h_state = lstm_net(inputs, h_state)
-            
+
             pred, h_state, _ = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
