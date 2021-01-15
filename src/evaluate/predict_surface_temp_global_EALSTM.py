@@ -47,8 +47,8 @@ output_to_file = True
 # save_file_path = "../../results/pgmtl_results_simpleGlobalLSTM.csv"
 save_file_path = "../../results/pgmtl_results_GlobalEALSTM.csv"
 n_features = 7
-n_static_features = 15
-n_total_features = n_features+n_static_features
+n_static_feats = 15
+n_total_features = n_features+n_static_feats
 # feats = ['SW','LW','AT','RH','WS','Rain','Snow','surface_area','SDF','K_d','longitude','latitude',\
 #                     'lw_std',\
 #                     'sw_mean', 'sw_std_sp','sw_mean_au',
@@ -151,8 +151,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     tst_data_target = tst_data_target[:,:,feat_inds]
     n_features = 4
-    n_static_features = 1
-    n_total_features = n_features+n_static_features
+    n_static_feats = 1
+    n_total_features = n_features+n_static_feats
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     u_depths_target = np.unique(all_data_target[:,0,0])
@@ -419,7 +419,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     load_path = '../../models/global_model_128hid_1layer_final_wLatLong_wStaticEA_1' #1.32
     load_path = '../../models/global_model_64hid_1layer_final_2feat_wStaticEA_0'
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-    lstm_net = Model(input_size_dyn=7,input_size_stat=n_static_feats,hidden_size=n_hidden)
+    lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
     # lstm_net = LSTM(n_total_features, n_hidden, batch_size)
     if use_gpu:
         lstm_net = lstm_net.cuda(0)
