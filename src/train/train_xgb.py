@@ -37,15 +37,33 @@ for ct, lake_id in enumerate(train_lakes):
     #load data
     feats = np.load("../../data/processed/"+lake_id+"/features_ea.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
+    # dates = np.load("../../data/processed/"+name+"/dates.npy")
     data = np.concatenate((feats[:,feat_inds],labs.reshape(labs.shape[0],1)),axis=1)
 
     #remove days without obs
     data = data[np.where(np.isfinite(data[:,-1]))]
     new_df = pd.DataFrame(columns=columns,data=data)
     train_df = pd.concat([train_df, new_df], ignore_index=True)
-    pdb.set_trace()
+    # pdb.set_trace()
 
 
+X = train_df[columns[:-1]]
+y = np.ravel(train_df[columns[-1]])
+gbm = xgb.XGBRegressor(booster='gbtree')
+
+def gb_param_selection(X, y, nfolds):
+    # ests = np.arange(1000,6000,600)
+    # lrs = [.05,.01]
+    # max_d = [3, 5]
+    # param_grid = {'n_estimators': ests, 'learning_rate' : lrs}
+    # grid_search = GridSearchCV(gbm, param_grid, cv=nfolds, n_jobs=-1,verbose=1)
+    grid_search = GridSearchCV(gbm, parameters, n_jobs=-1, cv=nfolds,verbose=1)
+    grid_search.fit(X, y)
+    # print(grid_search.best_params_)
+    return grid_search.best_params_
+
+
+print(gb_param_selection(X, y, nfolds))
 
 #do hyperparameter tuning
 
