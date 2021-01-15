@@ -111,7 +111,7 @@ rmse_per_lake = np.empty(test_lakes.shape[0])
 # med_meta_rmse_per_lake = np.empty(test_lakes.shape[0])
 rmse_per_lake[:] = np.nan
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
-    # print(str(targ_ct),'/',len(test_lakes),':',target_id)
+    print(str(targ_ct),'/',len(test_lakes),':',target_id)
     lake_df = pd.DataFrame()
     lake_id = target_id
 
@@ -486,7 +486,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-            # print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
+            print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
             # err_per_source[i,targ_ct] = mat_rmse
 
             # glm_rmse = float(metadata.loc["nhdhr_"+target_id].glm_uncal_rmse_full)
