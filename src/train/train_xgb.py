@@ -29,8 +29,13 @@ train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
 train_df = pd.DataFrame()
+train_df.columns = ['ShortWave','LongWave','AirTemp','WindSpeed','Surface_Area','Surface_Temp']
 
-
+for ct, lake_id in enumerate(train_lakes):
+    #load data
+    feats = np.load("../../data/processed/"+lake_id+"/features_ea")
+    labs = np.load("../../data/processed/"+lake_id+"/full")
+    pdb.set_trace()
 
 
 #########################################################################################
@@ -39,10 +44,10 @@ train_df = pd.DataFrame()
 
 
 #W TRANSFER OPTIM, W PRETRAIN
-feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
-       'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
-       'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
-       'perc_dif_surface_area']
+# feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
+#        'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
+#        'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
+#        'perc_dif_surface_area']
 
 #NO TRAN NO PRETRAIN
 # feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
