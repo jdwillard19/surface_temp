@@ -50,7 +50,7 @@ for ct, lake_id in enumerate(train_lakes):
 X = train_df[columns[:-1]]
 y = np.ravel(train_df[columns[-1]])
 gbm = xgb.XGBRegressor(booster='gbtree')
-
+nfolds = 12
 def gb_param_selection(X, y, nfolds):
     # ests = np.arange(1000,6000,600)
     # lrs = [.05,.01]
