@@ -32,11 +32,22 @@ columns = ['ShortWave','LongWave','AirTemp','WindSpeed','Surface_Area','Surface_
 feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
+#build training set
 for ct, lake_id in enumerate(train_lakes):
     #load data
     feats = np.load("../../data/processed/"+lake_id+"/features_ea.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
+    data = np.concatenate((feats[:,feat_inds],labs.reshape(labs.shape[0],1)),axis=1)
+
+    #remove days without obs
+    data = data[np.where(np.isfinite(data[:,-1]))]
+    new_df = pd.DataFrame(columns=columns,data=data,axis=1)
+    train_df = pd.concat([train_df, new_df], ignore_index=True)
     pdb.set_trace()
+
+
+
+#do hyperparameter tuning
 
 
 #########################################################################################
