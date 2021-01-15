@@ -58,7 +58,7 @@ parameters = {'objective':['reg:squarederror'],
               'min_child_weight': [11],
               'subsample': [0.8],
               'colsample_bytree': [0.7],
-              'n_estimators': [100,300,500,1000,2000,4000], #number of trees, change it to 1000 for better results
+              'n_estimators': [500,1000,2000,4000], #number of trees, change it to 1000 for better results
               }
 def gb_param_selection(X, y, nfolds):
     # ests = np.arange(1000,6000,600)
