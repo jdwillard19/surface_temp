@@ -41,7 +41,7 @@ for ct, lake_id in enumerate(train_lakes):
 
     #remove days without obs
     data = data[np.where(np.isfinite(data[:,-1]))]
-    new_df = pd.DataFrame(columns=columns,data=data,axis=1)
+    new_df = pd.DataFrame(columns=columns,data=data)
     train_df = pd.concat([train_df, new_df], ignore_index=True)
     pdb.set_trace()
 
