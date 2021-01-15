@@ -8,6 +8,7 @@ from joblib import dump, load
 import re
 import datetime
 import xgboost as xgb
+from sklearn.model_selection import GridSearchCV
 
 
 ##################################################################3
