@@ -33,8 +33,8 @@ train_df = pd.DataFrame(columns=columns)
 
 for ct, lake_id in enumerate(train_lakes):
     #load data
-    feats = np.load("../../data/processed/"+lake_id+"/features_ea")
-    labs = np.load("../../data/processed/"+lake_id+"/full")
+    feats = np.load("../../data/processed/"+lake_id+"/features_ea.npy")
+    labs = np.load("../../data/processed/"+lake_id+"/full.npy")
     pdb.set_trace()
 
 
