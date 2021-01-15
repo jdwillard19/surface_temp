@@ -96,7 +96,7 @@ n_total_features = n_features+n_static_feats
 # glm_rmse_per_lake[:] = np.nan
 # meta_rmse_per_lake[:] = np.nan
 num_layers = 1
-feat_inds = [0,1,2,4,7]
+feat_inds = [0,1,2,4,7,-1]
 select_feats = True
 #where to output files
 # output_path = "../../results/outputs/"
@@ -148,7 +148,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, static_feats=True,n_static_feats=n_static_feats)
         
-    pdb.set_trace()
     tst_data_target = tst_data_target[:,:,feat_inds]
     n_features = 4
     n_static_feats = 1
