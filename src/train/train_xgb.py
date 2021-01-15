@@ -29,7 +29,7 @@ train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
 columns = ['ShortWave','LongWave','AirTemp','WindSpeed','Surface_Area','Surface_Temp']
-feat_inds = [0,1,2,4,7]
+feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
 for ct, lake_id in enumerate(train_lakes):
