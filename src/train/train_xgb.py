@@ -8,8 +8,7 @@ from joblib import dump, load
 import re
 import datetime
 import xgboost as xgb
-from sklearn.model_selection import GridSearchCV
-
+from sklearn.model_selection import GridSearchCV, cross_val_score
 
 ##################################################################3
 # (Jan 2020 - Jared) - 
@@ -87,10 +86,16 @@ parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, '
 
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
-print("Training metamodel...")
+
+cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
+print("cv scores ", cv)
+print(np.mean(cv))
+sys.exit()
+print("Training XGB regression model...")
 model.fit(X, y)
 dump(model, save_file_path)
 print("model trained and saved to ", save_file_path)
+
 
 sys.exit()
 
