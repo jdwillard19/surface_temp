@@ -32,7 +32,7 @@ columns = ['ShortWave','LongWave','AirTemp','WindSpeed','Surface_Area','Surface_
 feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
-param_search = False
+param_search = True
 
 #build training set
 for ct, lake_id in enumerate(train_lakes):
