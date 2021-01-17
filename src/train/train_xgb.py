@@ -50,9 +50,9 @@ for ct, lake_id in enumerate(train_lakes):
 
 X = train_df[columns[:-1]]
 y = np.ravel(train_df[columns[-1]])
-lookback = 1
+lookback = 2
 if lookback > 0:
-    X = np.array([np.append(X.iloc[i,:],X.iloc[i-1,:4]) for i in np.arange(1,X.shape[0])],dtype = np.half)
+    X = np.array([np.append(X.iloc[i,:],X.iloc[i-lookback:i-1,:4].flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
     y = y[lookback:]
 #construct lookback feature set??
 if param_search:
@@ -64,7 +64,7 @@ if param_search:
                   'min_child_weight': [11],
                   'subsample': [0.8],
                   'colsample_bytree': [0.7],
-                  'n_estimators': [500,1000,2000,4000], #number of trees, change it to 1000 for better results
+                  'n_estimators': [1000,2000,4000,6000], #number of trees, change it to 1000 for better results
                   }
     def gb_param_selection(X, y, nfolds):
         # ests = np.arange(1000,6000,600)
