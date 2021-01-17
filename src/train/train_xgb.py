@@ -54,6 +54,7 @@ lookback = 2
 if lookback > 0:
     X = np.array([np.append(X.iloc[i,:],X.iloc[i-lookback:i-1,:4].values.flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
     y = y[lookback:]
+print("train set dimensions: ",X.shape)
 #construct lookback feature set??
 if param_search:
     gbm = xgb.XGBRegressor(booster='gbtree')
