@@ -88,10 +88,11 @@ parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, '
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
 print("Training metamodel...")
-model.fit(X_trn, y_trn)
+model.fit(X, y)
 dump(model, save_file_path)
+print("model trained and saved to ", save_file_path)
 
-
+sys.exit()
 
 
 #########################################################################################
