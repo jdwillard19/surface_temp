@@ -33,6 +33,8 @@ columns = ['ShortWave','LongWave','AirTemp','WindSpeed','Surface_Area','Surface_
 feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
+param_search = False
+
 #build training set
 for ct, lake_id in enumerate(train_lakes):
     #load data
@@ -50,39 +52,48 @@ for ct, lake_id in enumerate(train_lakes):
 
 X = train_df[columns[:-1]]
 y = np.ravel(train_df[columns[-1]])
-pdb.set_trace()
+lookback = 0
+if lookback > 0:
+    # X = np.array([np.append(X.iloc[i,:],X.iloc[i-1,:4]) for i in np.arange(1,X.shape[0])],dtype = np.half)
+    # y = y[lookback:]
+# pdb.set_trace()
 #construct lookback feature set??
+if param_search:
+    gbm = xgb.XGBRegressor(booster='gbtree')
+    nfolds = 12
+    parameters = {'objective':['reg:squarederror'],
+                  'learning_rate': [.125,.025, 0.05, .1], #so called `eta` value
+                  'max_depth': [6],
+                  'min_child_weight': [11],
+                  'subsample': [0.8],
+                  'colsample_bytree': [0.7],
+                  'n_estimators': [500,1000,2000,4000], #number of trees, change it to 1000 for better results
+                  }
+    def gb_param_selection(X, y, nfolds):
+        # ests = np.arange(1000,6000,600)
+        # lrs = [.05,.01]
+        # max_d = [3, 5]
+        # param_grid = {'n_estimators': ests, 'learning_rate' : lrs}
+        # grid_search = GridSearchCV(gbm, param_grid, cv=nfolds, n_jobs=-1,verbose=1)
+        grid_search = GridSearchCV(gbm, parameters, n_jobs=-1, cv=nfolds,verbose=1)
+        grid_search.fit(X, y)
+        # print(grid_search.best_params_)
+        return grid_search.best_params_
 
 
-gbm = xgb.XGBRegressor(booster='gbtree')
-nfolds = 12
-parameters = {'objective':['reg:squarederror'],
-              'learning_rate': [.125,.025, 0.05, .1], #so called `eta` value
-              'max_depth': [6],
-              'min_child_weight': [11],
-              'subsample': [0.8],
-              'colsample_bytree': [0.7],
-              'n_estimators': [500,1000,2000,4000], #number of trees, change it to 1000 for better results
-              }
-def gb_param_selection(X, y, nfolds):
-    # ests = np.arange(1000,6000,600)
-    # lrs = [.05,.01]
-    # max_d = [3, 5]
-    # param_grid = {'n_estimators': ests, 'learning_rate' : lrs}
-    # grid_search = GridSearchCV(gbm, param_grid, cv=nfolds, n_jobs=-1,verbose=1)
-    grid_search = GridSearchCV(gbm, parameters, n_jobs=-1, cv=nfolds,verbose=1)
-    grid_search.fit(X, y)
-    # print(grid_search.best_params_)
-    return grid_search.best_params_
-
-
-print(gb_param_selection(X, y, nfolds))
-sys.exit()
+    print(gb_param_selection(X, y, nfolds))
+    sys.exit()
 
 #no lookback params
 parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 2000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
-#do hyperparameter tuning
+#create and fit model
+model = xgb.XGBRegressor(booster='gbtree', parameters**)
+print("Training metamodel...")
+model.fit(X_trn, y_trn)
+dump(model, save_file_path)
+
+
 
 
 #########################################################################################
