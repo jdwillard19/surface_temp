@@ -52,7 +52,7 @@ X = train_df[columns[:-1]]
 y = np.ravel(train_df[columns[-1]])
 lookback = 2
 if lookback > 0:
-    X = np.array([np.append(X.iloc[i,:],X.iloc[i-lookback:i-1,:4].flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
+    X = np.array([np.append(X.iloc[i,:],X.iloc[i-lookback:i-1,:4].values.flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
     y = y[lookback:]
 #construct lookback feature set??
 if param_search:
@@ -83,6 +83,9 @@ if param_search:
 
 #no lookback params
 # parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 2000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+
+#1 lookback params
+#parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 4000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
