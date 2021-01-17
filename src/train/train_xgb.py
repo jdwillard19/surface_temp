@@ -50,7 +50,7 @@ for ct, lake_id in enumerate(train_lakes):
 
 X = train_df[columns[:-1]]
 y = np.ravel(train_df[columns[-1]])
-lookback = 0
+lookback = 1
 if lookback > 0:
     X = np.array([np.append(X.iloc[i,:],X.iloc[i-1,:4]) for i in np.arange(1,X.shape[0])],dtype = np.half)
     y = y[lookback:]
@@ -78,11 +78,11 @@ if param_search:
         return grid_search.best_params_
 
 
-    print(gb_param_selection(X, y, nfolds))
-    sys.exit()
+    parameters = gb_param_selection(X, y, nfolds)
+    print(parameters)
 
 #no lookback params
-parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 2000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+# parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 2000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
