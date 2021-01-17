@@ -50,10 +50,14 @@ for ct, lake_id in enumerate(train_lakes):
 
 X = train_df[columns[:-1]]
 y = np.ravel(train_df[columns[-1]])
+pdb.set_trace()
+#construct lookback feature set??
+
+
 gbm = xgb.XGBRegressor(booster='gbtree')
 nfolds = 12
 parameters = {'objective':['reg:squarederror'],
-              'learning_rate': [.025, 0.05, .1], #so called `eta` value
+              'learning_rate': [.125,.025, 0.05, .1], #so called `eta` value
               'max_depth': [6],
               'min_child_weight': [11],
               'subsample': [0.8],
@@ -74,6 +78,10 @@ def gb_param_selection(X, y, nfolds):
 
 print(gb_param_selection(X, y, nfolds))
 sys.exit()
+
+#no lookback params
+parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 2000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+
 #do hyperparameter tuning
 
 
