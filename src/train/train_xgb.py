@@ -53,7 +53,7 @@ y = np.ravel(train_df[columns[-1]])
 lookback = 2
 if lookback > 0:
     pdb.set_trace()
-    X = np.array([np.append(X.iloc[i,:],X.iloc[i-lookback:i-1,:4].values.flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
+    X = np.array([np.append(X.iloc[i,:],X.iloc[i-lookback:i,:4].values.flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
     y = y[lookback:]
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
