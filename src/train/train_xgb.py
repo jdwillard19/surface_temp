@@ -47,16 +47,14 @@ for ct, lake_id in enumerate(train_lakes):
     data = data[np.where(np.isfinite(data[:,-1]))]
     new_df = pd.DataFrame(columns=columns,data=data)
     train_df = pd.concat([train_df, new_df], ignore_index=True)
-    # pdb.set_trace()
 
 
 X = train_df[columns[:-1]]
 y = np.ravel(train_df[columns[-1]])
 lookback = 0
 if lookback > 0:
-    # X = np.array([np.append(X.iloc[i,:],X.iloc[i-1,:4]) for i in np.arange(1,X.shape[0])],dtype = np.half)
-    # y = y[lookback:]
-# pdb.set_trace()
+    X = np.array([np.append(X.iloc[i,:],X.iloc[i-1,:4]) for i in np.arange(1,X.shape[0])],dtype = np.half)
+    y = y[lookback:]
 #construct lookback feature set??
 if param_search:
     gbm = xgb.XGBRegressor(booster='gbtree')
