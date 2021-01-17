@@ -86,7 +86,7 @@ if param_search:
 parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 2000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
 #create and fit model
-model = xgb.XGBRegressor(booster='gbtree', parameters**)
+model = xgb.XGBRegressor(booster='gbtree', **parameters)
 print("Training metamodel...")
 model.fit(X_trn, y_trn)
 dump(model, save_file_path)
