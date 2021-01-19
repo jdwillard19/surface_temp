@@ -59,6 +59,8 @@ for site_ct, site_id in enumerate(test_lakes):
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
     #remove days without obs
     data = data[np.where(np.isfinite(data[:,-1]))]
+    X = data[:,:-1]
+    y = data[:,-1]
     y_pred = model.predict(X)
     y_act = y
     rmse = calc_rmse(y_pred,y_act)
