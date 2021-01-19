@@ -67,7 +67,7 @@ for site_ct, site_id in enumerate(test_lakes):
     print("rmse: ", rmse)
     result_df.append(pd.DataFrame(['nhdhr_'+site_id, rmse]))
 
-print("median rmse ", np.median(result_df['rmse']))
-print("q1 rmse ", np.quantile(result_df['rmse'],.25))
-print("q3 rmse ", np.quantile(result_df['rmse'],.75))
+print("median rmse ", np.median(result_df['XGB_rmse']))
+print("q1 rmse ", np.quantile(result_df['XGB_rmse'],.25))
+print("q3 rmse ", np.quantile(result_df['XGB_rmse'],.75))
 pdb.set_trace()
