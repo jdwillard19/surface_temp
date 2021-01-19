@@ -37,7 +37,7 @@ columns = ['ShortWave_t-4','LongWave_t-4','AirTemp_t-4','WindSpeed_t-4',\
 feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
-param_search = True
+param_search = False
 
 lookback = 4
 
@@ -105,121 +105,24 @@ if param_search:
 #3 lookback params
 # parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 8000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
+#4 lookback params
+parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 8000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+
 
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
 
-cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
-print("cv scores ", cv)
-print(np.mean(cv))
-sys.exit()
-pdb.set_trace()
+# cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
+# print("cv scores ", cv)
+# print(np.mean(cv))
+# sys.exit()
+# pdb.set_trace()
 print("Training XGB regression model...")
 model.fit(X, y)
 dump(model, save_file_path)
 print("model trained and saved to ", save_file_path)
 
 
-sys.exit()
-
-
-#########################################################################################
-#paste features found in "pbmtl_feature_selection.py" here
 
 
 
-#W TRANSFER OPTIM, W PRETRAIN
-# feats = ['n_obs_sp', 'obs_temp_mean', 'obs_temp_std', 'obs_temp_mean_airdif',
-#        'dif_surface_area', 'dif_sw_mean', 'dif_sw_mean_au', 'dif_lw_std_au',
-#        'dif_at_std_au', 'dif_snow_mean_au', 'dif_zero_temp_doy',
-#        'perc_dif_surface_area']
-
-#NO TRAN NO PRETRAIN
-# feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
-#        'obs_temp_skew', 'obs_temp_kurt', 'obs_temp_mean_airdif',
-#        'dif_surface_area', 'dif_lw_std', 'dif_at_std', 'dif_snow_mean',
-#        'dif_rh_std_su', 'dif_snow_mean_su', 'dif_sw_mean_au', 'dif_lw_mean_au',
-#        'dif_lw_std_au', 'dif_at_std_au', 'dif_rh_std_au', 'dif_rain_mean_au',
-#        'dif_snow_mean_au', 'dif_lw_std_wi', 'dif_rain_mean_wi',
-#        'perc_dif_surface_area']
-
-#NO TRAN W PRETRAIN
-# feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
-#        'obs_temp_std', 'obs_temp_skew', 'obs_temp_kurt', 'ad_zero_temp_doy',
-#        'obs_temp_mean_airdif', 'dif_SDF', 'dif_k_d', 'dif_surface_area',
-#        'dif_sw_mean', 'dif_lw_std', 'dif_at_std', 'dif_rh_mean', 'dif_rh_std',
-#        'dif_rain_mean', 'dif_rain_std', 'dif_sw_std_sp', 'dif_at_mean_sp',
-#        'dif_sw_mean_su', 'dif_sw_std_su', 'dif_lw_std_su', 'dif_rh_mean_su',
-#        'dif_rh_std_su', 'dif_ws_mean_su', 'dif_rain_mean_su',
-#        'dif_snow_mean_su', 'dif_snow_std_su', 'dif_sw_mean_au',
-#        'dif_lw_std_au', 'dif_at_mean_au', 'dif_at_std_au', 'dif_rh_mean_au',
-#        'dif_rh_std_au', 'dif_ws_mean_au', 'dif_rain_mean_au',
-#        'dif_rain_std_au', 'dif_snow_mean_au', 'dif_sw_std_wi',
-#        'dif_rh_mean_wi', 'dif_ws_mean_wi', 'dif_zero_temp_doy',
-#        'dif_ws_sp_mix', 'perc_dif_surface_area', 'dif_sqrt_surface_area']
-
-###################################################################################
-
-
-#######################################################################3
-#paste hyperparameters found in "pbmtl_hyperparameter_search.py" here
-#
-#
-# n_estimators = 300 #full models
-n_estimators = 1000 #no tran no pre
-objective = 'reg:squarederror'
-# learning_rate = .05 #no tran no pre and full model
-learning_rate = .025 #no tran w pre
-colsample_bytree=.7
-max_depth=6
-min_child_weight=11
-subsample=.8
-#####################################################################
-
-
-
-########################
-##########################
-#metamodel training code
-##########################
-#######################
-
-
-
-
-
-
-#compile training data
-train_df = pd.DataFrame()
-for _, lake_id in enumerate(train_lakes):
-    new_df = pd.DataFrame()
-
-    #get performance results (metatargets), filter out target as source
-    lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results",header=None,names=['source_id','rmse'])
-    # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_noPre",header=None,names=['source_id','rmse'])
-    # lake_df_res = pd.read_csv("../../results/transfer_learning/target_"+lake_id+"/PGDL_transfer_results_noTran_wPre",header=None,names=['source_id','rmse'])
-    lake_df_res = lake_df_res[lake_df_res.source_id != 'source_id']
-
-    #get metadata differences between target and all the sources
-    lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
-    lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
-    lake_df_res = lake_df_res[np.isin(lake_df_res['source_id'], train_lakes)]
-    lake_df_res['source_id2'] = ['nhdhr_'+str(x) for x in lake_df_res['source_id'].values]
-    lake_df = pd.merge(left=lake_df, right=lake_df_res.astype('object'), left_on='site_id', right_on='source_id2')
-    new_df = lake_df
-    train_df = pd.concat([train_df, new_df], ignore_index=True)
-
-
-
-#train model
-X_trn = pd.DataFrame(train_df[feats])
-y_trn = np.array([float(x) for x in np.ravel(pd.DataFrame(train_df['rmse']))])
-# model = GradientBoostingRegressor(n_estimators=n_estimators, learning_rate=lr)
-# print("Model training in progress...")
-model = xgb.XGBRegressor(booster='gbtree',n_estimators=n_estimators,objective=objective,learning_rate=learning_rate,colsample_bytree=colsample_bytree,
-             max_depth=6,min_child_weight=min_child_weight,subsample=subsample)
-# model = RandomForestRegressor(n_estimators=n_estimators)
-print("Training metamodel...")
-model.fit(X_trn, y_trn)
-dump(model, save_file_path)
-print("Training Complete, saved to ", save_file_path)
