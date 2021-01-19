@@ -59,7 +59,7 @@ for site_ct, site_id in enumerate(test_lakes):
         y = y[lookback:]
     y_pred = model.predict(X)
     y_act = y
-
+    pdb.set_trace()
     rmse = rmse(y_pred,y_act)
     print("rmse: ", rmse)
     result_df.append(pd.DataFrame(['nhdhr_'+site_id, rmse]))
