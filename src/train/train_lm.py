@@ -39,7 +39,7 @@ columns = ['ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeed_t-30',
 feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
-param_search = True
+param_search = False
 
 lookback = 4
 farthest_lookback = 30
@@ -111,7 +111,6 @@ if param_search:
   print("------------------------------------------------------------------------")
 
 
-pdb.set_trace()
 #create and fit model
 model = linear_model.LinearRegression()
 
@@ -121,7 +120,7 @@ model = linear_model.LinearRegression()
 # print(np.mean(cv))
 # sys.exit()
 # pdb.set_trace()
-print("Training XGB regression model...")
+print("Training LM...")
 model.fit(X, y)
 dump(model, save_file_path)
 print("model trained and saved to ", save_file_path)
