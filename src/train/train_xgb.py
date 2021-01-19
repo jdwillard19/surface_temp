@@ -110,6 +110,9 @@ if param_search:
 #4 lookback params
 # parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 8000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
+#1-4+14+30 lookback
+#parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 4000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+
 
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
