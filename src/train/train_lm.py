@@ -65,13 +65,13 @@ for ct, lake_id in enumerate(train_lakes):
 
 X = train_df[columns[:-1]].values
 y = np.ravel(train_df[columns[-1]].values)
-
+pdb.set_trace()
 
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
 if param_search:
   lm = linear_model.LinearRegression()
-  rfecv = RFECV(estimator=lm, cv=24, step=2, scoring='neg_mean_squared_error', verbose=1, n_jobs=29)
+  rfecv = RFECV(estimator=lm, cv=24, step=2, scoring='neg_mean_squared_error', verbose=1, n_jobs=24)
 
   # selection = SelectFromModel(gbm, threshold=0.03, prefit=False)
   # selection.fit(X_trn,y_trn)
