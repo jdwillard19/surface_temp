@@ -52,7 +52,7 @@ for site_ct, site_id in enumerate(test_lakes):
     #remove days without obs
     data = data[np.where(np.isfinite(data[:,-1]))]
     pdb.set_trace()
-    y_pred = model.predict(data[:,:-1])
+    y_pred = model.predict(np.array(data[:,:-1]))
     y_act = data[:,-1]
     rmse = rmse(y_pred,y_act)
     print("rmse: ", rmse)
