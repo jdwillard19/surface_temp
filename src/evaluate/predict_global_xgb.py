@@ -20,8 +20,8 @@ save_file_path = '../../results/global_xgb.csv'
 result_df = pd.DataFrame(columns=['site_id','XGB_rmse'])
 
 def rmse(predictions,targets):
-	n = len(predictions)
-	return np.linalg.norm(predictions - targets) / np.sqrt(n)
+    n = len(predictions)
+    return np.linalg.norm(predictions - targets) / np.sqrt(n)
 #############################
 #load data
 
@@ -42,7 +42,7 @@ param_search = False
 
 #build training set
 for site_ct, site_id in test_lakes:
-	print("predicting site ",site_ct,"/",len(test_lakes))
+    print("predicting site ",site_ct,"/",len(test_lakes))
     #load data
     feats = np.load("../../data/processed/"+lake_id+"/features_ea.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
