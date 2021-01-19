@@ -37,7 +37,7 @@ train_df = pd.DataFrame(columns=columns)
 
 param_search = True
 
-lookback = 2
+lookback = 3
 
 #build training set
 for ct, lake_id in enumerate(train_lakes):
@@ -73,7 +73,7 @@ if param_search:
                   'min_child_weight': [11],
                   'subsample': [0.8],
                   'colsample_bytree': [0.7],
-                  'n_estimators': [1000,2000,4000,6000], #number of trees, change it to 1000 for better results
+                  'n_estimators': [2000,4000,6000,8000], #number of trees, change it to 1000 for better results
                   }
     def gb_param_selection(X, y, nfolds):
         # ests = np.arange(1000,6000,600)
@@ -97,7 +97,8 @@ if param_search:
 #parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 4000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
 #2 lookback params
-#parmaeters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 4000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+#parmaeters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 6000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+
 
 #3 lookback params
 # parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 4000, 'objective': 'reg:squarederror', 'subsample': 0.8}
