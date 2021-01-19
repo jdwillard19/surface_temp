@@ -38,7 +38,7 @@ columns = ['ShortWave_t-14','LongWave_t-14','AirTemp_t-14','WindSpeed_t-14',\
 feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
-param_search = False
+param_search = True
 
 lookback = 4
 farthest_lookback = 14
@@ -76,7 +76,7 @@ if param_search:
                   'min_child_weight': [11],
                   'subsample': [0.8],
                   'colsample_bytree': [0.7],
-                  'n_estimators': [4000,8000,12000], #number of trees, change it to 1000 for better results
+                  'n_estimators': [4000,7000,10000], #number of trees, change it to 1000 for better results
                   }
     def gb_param_selection(X, y, nfolds):
         # ests = np.arange(1000,6000,600)
@@ -107,17 +107,17 @@ if param_search:
 # parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 8000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
 #4 lookback params
-parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 8000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+# parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 8000, 'objective': 'reg:squarederror', 'subsample': 0.8}
 
 
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
 
-# cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
-# print("cv scores ", cv)
-# print(np.mean(cv))
+cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
+print("cv scores ", cv)
+print(np.mean(cv))
 # sys.exit()
-# pdb.set_trace()
+pdb.set_trace()
 print("Training XGB regression model...")
 model.fit(X, y)
 dump(model, save_file_path)
