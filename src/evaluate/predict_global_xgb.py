@@ -38,7 +38,7 @@ feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
 lookback = 4
-farthest_lookback = 14
+farthest_lookback = 30
 #build training set
 for site_ct, site_id in enumerate(test_lakes):
     # if site_ct < 58:
@@ -54,7 +54,7 @@ for site_ct, site_id in enumerate(test_lakes):
     y = data[:,-1]
 
     if lookback > 0:
-        X = np.array([np.append(np.append(X[i,:],X[i-lookback:i,:4].flatten()),X[i-14,:4]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
+        X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,:4].flatten()),X[i-14,:4]),X[i-30,:4]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
         y = y[farthest_lookback:]
     #remove days without obs
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
