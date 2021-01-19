@@ -44,8 +44,8 @@ param_search = False
 for site_ct, site_id in enumerate(test_lakes):
     print("predicting site ",site_ct,"/",len(test_lakes))
     #load data
-    feats = np.load("../../data/processed/"+lake_id+"/features_ea.npy")
-    labs = np.load("../../data/processed/"+lake_id+"/full.npy")
+    feats = np.load("../../data/processed/"+site_id+"/features_ea.npy")
+    labs = np.load("../../data/processed/"+site_id+"/full.npy")
     # dates = np.load("../../data/processed/"+name+"/dates.npy")
     data = np.concatenate((feats[:,feat_inds],labs.reshape(labs.shape[0],1)),axis=1)
 
