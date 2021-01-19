@@ -28,12 +28,16 @@ save_file_path = '../../models/xgb_surface_temp.joblib'
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
-columns = ['ShortWave','LongWave','AirTemp','WindSpeed','Surface_Area','Surface_Temp']
+columns = ['ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeed_t-2',\
+           'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeed_t-1',\
+           'ShortWave','LongWave','AirTemp','WindSpeed',\
+           'Surface_Area','Surface_Temp']
 feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
 param_search = False
 
+lookback = 2
 
 #build training set
 for ct, lake_id in enumerate(train_lakes):
@@ -42,19 +46,21 @@ for ct, lake_id in enumerate(train_lakes):
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
     # dates = np.load("../../data/processed/"+name+"/dates.npy")
     data = np.concatenate((feats[:,feat_inds],labs.reshape(labs.shape[0],1)),axis=1)
-
+    X = data[:,:-1]
+    y = data[:,-1]
+    if lookback > 0:
+        X = np.array([np.append(X[i,:],X[i-lookback:i,:4].flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
+        y = y[lookback:]
     #remove days without obs
-    data = data[np.where(np.isfinite(data[:,-1]))]
+    X = X[np.where(np.isfinite(y)),:]
+    y = y[np.where(np.isfinite(y))]
     new_df = pd.DataFrame(columns=columns,data=data)
     train_df = pd.concat([train_df, new_df], ignore_index=True)
-
+pdb.set_trace()
 
 X = train_df[columns[:-1]].values
 y = np.ravel(train_df[columns[-1]].values)
-lookback = 3
-if lookback > 0:
-    X = np.array([np.append(X[i,:],X[i-lookback:i,:4].flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
-    y = y[lookback:]
+
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
 if param_search:
