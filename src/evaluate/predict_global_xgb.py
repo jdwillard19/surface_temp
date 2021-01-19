@@ -19,7 +19,7 @@ print("script start: ",str(currentDT))
 save_file_path = '../../results/global_xgb.csv'
 result_df = pd.DataFrame(columns=['site_id','XGB_rmse'])
 
-def rmse(predictions,targets):
+def calc_rmse(predictions,targets):
     n = len(predictions)
     return np.linalg.norm(predictions - targets) / np.sqrt(n)
 #############################
@@ -59,8 +59,7 @@ for site_ct, site_id in enumerate(test_lakes):
         y = y[lookback:]
     y_pred = model.predict(X)
     y_act = y
-    pdb.set_trace()
-    rmse = rmse(y_pred,y_act)
+    rmse = calc_rmse(y_pred,y_act)
     print("rmse: ", rmse)
     result_df.append(pd.DataFrame(['nhdhr_'+site_id, rmse]))
 
