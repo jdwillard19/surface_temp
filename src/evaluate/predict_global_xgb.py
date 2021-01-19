@@ -69,3 +69,4 @@ for site_ct, site_id in enumerate(test_lakes):
 pirnt("median rmse ", np.median(result_df['rmse']))
 pirnt("q1 rmse ", np.quantile(result_df['rmse'],.25))
 pirnt("q3 rmse ", np.quantile(result_df['rmse'],.75))
+pdb.set_trace()
