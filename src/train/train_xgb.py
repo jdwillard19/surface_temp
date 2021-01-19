@@ -105,10 +105,10 @@ parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, '
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
 
-# cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
-# print("cv scores ", cv)
-# print(np.mean(cv))
-# sys.exit()
+cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
+print("cv scores ", cv)
+print(np.mean(cv))
+sys.exit()
 pdb.set_trace()
 print("Training XGB regression model...")
 model.fit(X, y)
