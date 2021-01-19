@@ -28,7 +28,8 @@ save_file_path = '../../models/xgb_surface_temp.joblib'
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
-columns = ['ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeed_t-3',\
+columns = ['ShortWave_t-4','LongWave_t-4','AirTemp_t-4','WindSpeed_t-4',\
+           'ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeed_t-3',\
            'ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeed_t-2',\
            'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeed_t-1',\
            'ShortWave','LongWave','AirTemp','WindSpeed',\
@@ -102,7 +103,8 @@ if param_search:
 
 
 #3 lookback params
-# parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 4000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+# parameters = {'colsample_bytree': 0.7, 'learning_rate': 0.025, 'max_depth': 6, 'min_child_weight': 11, 'n_estimators': 8000, 'objective': 'reg:squarederror', 'subsample': 0.8}
+
 
 #create and fit model
 model = xgb.XGBRegressor(booster='gbtree', **parameters)
