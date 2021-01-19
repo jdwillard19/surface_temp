@@ -51,9 +51,15 @@ for site_ct, site_id in enumerate(test_lakes):
 
     #remove days without obs
     data = data[np.where(np.isfinite(data[:,-1]))]
-    pdb.set_trace()
-    y_pred = model.predict(np.array(data[:,:-1]))
-    y_act = data[:,-1]
+    X = data[:,:-1]
+    y = data[:,-1]
+    lookback = 3
+    if lookback > 0:
+        X = np.array([np.append(X[i,:],X[i-lookback:i,:4].flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
+        y = y[lookback:]
+    y_pred = model.predict(X)
+    y_act = y
+
     rmse = rmse(y_pred,y_act)
     print("rmse: ", rmse)
     results_df.append(pd.DataFrame(['nhdhr_'+site_id, rmse]))
