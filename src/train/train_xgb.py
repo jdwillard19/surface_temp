@@ -49,8 +49,8 @@ for ct, lake_id in enumerate(train_lakes):
     train_df = pd.concat([train_df, new_df], ignore_index=True)
 
 
-X = train_df[columns[:-1]]
-y = np.ravel(train_df[columns[-1]])
+X = train_df[columns[:-1]].values
+y = np.ravel(train_df[columns[-1]].values)
 lookback = 3
 if lookback > 0:
     X = np.array([np.append(X.iloc[i,:],X.iloc[i-lookback:i,:4].values.flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
