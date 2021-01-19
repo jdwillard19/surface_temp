@@ -35,7 +35,7 @@ columns = ['ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeed_t-2',\
 feat_inds = [0,1,2,4,8]
 train_df = pd.DataFrame(columns=columns)
 
-param_search = False
+param_search = True
 
 lookback = 2
 
