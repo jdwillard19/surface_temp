@@ -41,7 +41,7 @@ param_search = False
 
 
 #build training set
-for site_ct, site_id in test_lakes:
+for site_ct, site_id in enumerate(test_lakes):
     print("predicting site ",site_ct,"/",len(test_lakes))
     #load data
     feats = np.load("../../data/processed/"+lake_id+"/features_ea.npy")
