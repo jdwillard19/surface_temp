@@ -62,5 +62,5 @@ for site_ct, site_id in enumerate(test_lakes):
 
     rmse = rmse(y_pred,y_act)
     print("rmse: ", rmse)
-    results_df.append(pd.DataFrame(['nhdhr_'+site_id, rmse]))
+    result_df.append(pd.DataFrame(['nhdhr_'+site_id, rmse]))
 
