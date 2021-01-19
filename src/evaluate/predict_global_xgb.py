@@ -42,6 +42,8 @@ param_search = False
 
 #build training set
 for site_ct, site_id in enumerate(test_lakes):
+    if site_ct < 58:
+        continue
     print("predicting site ",site_ct,"/",len(test_lakes))
     #load data
     feats = np.load("../../data/processed/"+site_id+"/features_ea.npy")
@@ -57,6 +59,7 @@ for site_ct, site_id in enumerate(test_lakes):
     if lookback > 0:
         X = np.array([np.append(X[i,:],X[i-lookback:i,:4].flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
         y = y[lookback:]
+    pdb.set_trace()
     y_pred = model.predict(X)
     y_act = y
     rmse = calc_rmse(y_pred,y_act)
