@@ -38,7 +38,7 @@ train_df = pd.DataFrame(columns=columns)
 
 param_search = True
 
-lookback = 3
+lookback = 4
 
 #build training set
 for ct, lake_id in enumerate(train_lakes):
@@ -74,7 +74,7 @@ if param_search:
                   'min_child_weight': [11],
                   'subsample': [0.8],
                   'colsample_bytree': [0.7],
-                  'n_estimators': [2000,4000,6000,8000], #number of trees, change it to 1000 for better results
+                  'n_estimators': [4000,8000,12000], #number of trees, change it to 1000 for better results
                   }
     def gb_param_selection(X, y, nfolds):
         # ests = np.arange(1000,6000,600)
