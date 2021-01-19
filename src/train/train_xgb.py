@@ -52,11 +52,12 @@ for ct, lake_id in enumerate(train_lakes):
         X = np.array([np.append(X[i,:],X[i-lookback:i,:4].flatten()) for i in np.arange(lookback,X.shape[0])],dtype = np.half)
         y = y[lookback:]
     #remove days without obs
-    X = X[np.where(np.isfinite(y)),:]
-    y = y[np.where(np.isfinite(y))]
+    data = np.concatenate((X,y),axis=1)
+
+    data = data[np.where(np.isfinite(data[:,-1]))]
     new_df = pd.DataFrame(columns=columns,data=data)
     train_df = pd.concat([train_df, new_df], ignore_index=True)
-pdb.set_trace()
+
 
 X = train_df[columns[:-1]].values
 y = np.ravel(train_df[columns[-1]].values)
