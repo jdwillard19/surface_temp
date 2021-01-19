@@ -53,7 +53,6 @@ for ct, lake_id in enumerate(train_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     if lookback > 0:
-        pdb.set_trace()
         X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,:4].flatten()),X[i-14,:4]),X[i-30,:4]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.float)
         y = y[farthest_lookback:]
     #remove days without obs
