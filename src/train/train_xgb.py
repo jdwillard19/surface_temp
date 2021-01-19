@@ -28,7 +28,7 @@ save_file_path = '../../models/xgb_surface_temp.joblib'
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
-columns = ['ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeed_t-3',,
+columns = ['ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeed_t-3',\
            'ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeed_t-2',\
            'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeed_t-1',\
            'ShortWave','LongWave','AirTemp','WindSpeed',\
