@@ -54,7 +54,7 @@ for lake_ind, name in enumerate(site_ids):
     sw_vals = sw_da[:,y,x].values
     lw_vals = lw_da[:,y,x].values
     at_vals = sw_da[:,y,x].values
-    np.save("../../data/raw/feats/"str(x)+"x_"+str(y)+"y_sw",sw_vals)
-    np.save("../../data/raw/feats/"str(x)+"x_"+str(y)+"y_lw",lw_vals)
-    np.save("../../data/raw/feats/"str(x)+"x_"+str(y)+"y_at",at_vals)
+    np.save("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y",sw_vals)
+    np.save("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y",lw_vals)
+    np.save("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y",at_vals)
 
