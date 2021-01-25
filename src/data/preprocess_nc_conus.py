@@ -57,8 +57,13 @@ if not hardcode:
         x = metadata[metadata['site_id'] == name]['x'].values[0]
         y = metadata[metadata['site_id'] == name]['y'].values[0]
         pdb.set_trace()
-        means_per_lake[lake_ind,0] = 0
-        var_per_lake[lake_ind,0] = 0
+        means_per_lake[lake_ind,0] = sw_da[:,y,x].values.mean()
+        means_per_lake[lake_ind,1] = lw_da[:,y,x].values.mean()
+        means_per_lake[lake_ind,2] = at_da[:,y,x].values.mean()
+        var_per_lake[lake_ind,0] = sw_da[:,y,x].values.std()
+        var_per_lake[lake_ind,1] = lw_da[:,y,x].values.std()
+        var_per_lake[lake_ind,2] = at_da[:,y,x].values.std()
+        pdb.set_trace()
 
 
 
