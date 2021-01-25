@@ -33,8 +33,11 @@ sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" 
 lw_ds = xr.open_dataset(lw_ds_path)
 at_ds = xr.open_dataset(at_ds_path)
 sw_ds = xr.open_dataset(sw_ds_path)
+sw_da = sw_ds['DSWRFsfc']
+lw_da = lw_ds['DLWRFsfc']
+at_da = at_ds['TMP2m']
 
-dates = sw_ds['Time'].values
+dates = sw_da['Time'].values
 n_dyn_feats = 3 #AT,LW,SW
 n_stc_feats = 3 #AREA,LAT,LON
 means_per_lake = np.zeros((n_lakes,n_dyn_feats), dtype=np.float_)
@@ -50,7 +53,9 @@ if not hardcode:
 
         print("(",lake_ind,"/",str(len(site_ids)),") ","pre ", name)
 
-
+        #get NLDAS coords
+        x = metadata[metadata['site_id'] == name]['x'].values[0]
+        y = metadata[metadata['site_id'] == name]['y'].values[0]
         pdb.set_trace()
         means_per_lake[lake_ind,0] = 0
         var_per_lake[lake_ind,0] = 0
