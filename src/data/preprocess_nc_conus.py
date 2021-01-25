@@ -15,7 +15,6 @@ import datetime
 
 #load metadata, get ids
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
-pdb.set_trace()
 
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
@@ -56,7 +55,6 @@ if not hardcode:
         #get NLDAS coords
         x = metadata[metadata['site_id'] == name]['x'].values[0]
         y = metadata[metadata['site_id'] == name]['y'].values[0]
-        pdb.set_trace()
         means_per_lake[lake_ind,0] = sw_da[:,y,x].values.mean()
         means_per_lake[lake_ind,1] = lw_da[:,y,x].values.mean()
         means_per_lake[lake_ind,2] = at_da[:,y,x].values.mean()
