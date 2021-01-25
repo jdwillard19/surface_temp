@@ -29,12 +29,12 @@ at_ds_path = "../../data/globus/NLDAS_TMP2m_19790102-20210102_train_test.nc" #ai
 sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
 #wsu_ds_path=
 
-lw_ds = xr.open_dataset(lw_ds_path)
-at_ds = xr.open_dataset(at_ds_path)
-sw_ds = xr.open_dataset(sw_ds_path)
-sw_da = sw_ds['DSWRFsfc']
-lw_da = lw_ds['DLWRFsfc']
-at_da = at_ds['TMP2m']
+# lw_ds = xr.open_dataset(lw_ds_path)
+# at_ds = xr.open_dataset(at_ds_path)
+# sw_ds = xr.open_dataset(sw_ds_path)
+sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
+lw_da = xr.open_dataset(lw_ds_path)['DLWRFsfc']
+at_da = xr.open_dataset(at_ds_path)['TMP2m']
 
 dates = sw_da['Time'].values
 n_dyn_feats = 3 #AT,LW,SW
