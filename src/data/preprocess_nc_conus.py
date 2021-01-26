@@ -34,9 +34,9 @@ wsv_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc"
 # lw_ds = xr.open_dataset(lw_ds_path)
 # at_ds = xr.open_dataset(at_ds_path)
 # sw_ds = xr.open_dataset(sw_ds_path)
-# print("loading sw nc file....")
-# sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
-# print("sw file loaded")
+print("loading sw nc file....")
+sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
+print("sw file loaded")
 # print("loading lw nc file....")
 # lw_da = xr.open_dataset(lw_ds_path)['DLWRFsfc']
 # print("lw file loaded")
