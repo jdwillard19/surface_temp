@@ -34,18 +34,18 @@ wsv_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc"
 # lw_ds = xr.open_dataset(lw_ds_path)
 # at_ds = xr.open_dataset(at_ds_path)
 # sw_ds = xr.open_dataset(sw_ds_path)
-print("loading sw nc file....")
-sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
-print("sw file loaded")
-print("loading lw nc file....")
-lw_da = xr.open_dataset(lw_ds_path)['DLWRFsfc']
-print("lw file loaded")
-print("loading at nc file....")
-at_da = xr.open_dataset(at_ds_path)['TMP2m']
-print("at file loaded")
+# print("loading sw nc file....")
+# sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
+# print("sw file loaded")
+# print("loading lw nc file....")
+# lw_da = xr.open_dataset(lw_ds_path)['DLWRFsfc']
+# print("lw file loaded")
+# print("loading at nc file....")
+# at_da = xr.open_dataset(at_ds_path)['TMP2m']
+# print("at file loaded")
 
 dates = sw_da['Time'].values
-n_dyn_feats = 3 #AT,LW,SW
+n_dyn_feats = 5 #AT,LW,SW,WSU,WSV
 n_stc_feats = 3 #AREA,LAT,LON
 means_per_lake = np.zeros((n_lakes,n_dyn_feats), dtype=np.float_)
 means_per_lake[:] = np.nan
@@ -66,13 +66,19 @@ if not hardcode:
         sw_vals = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y.npy")
         lw_vals = np.load("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y.npy")
         at_vals = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy")
+        wsu_vals = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y.npy")
+        wsv_vals = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
 
         means_per_lake[lake_ind,0] = sw_vals.mean()
         means_per_lake[lake_ind,1] = lw_vals.mean()
         means_per_lake[lake_ind,2] = at_vals.mean()
+        means_per_lake[lake_ind,3] = wsu_vals.mean()
+        means_per_lake[lake_ind,4] = wsv_vals.mean()
         var_per_lake[lake_ind,0] = sw_vals.std()
         var_per_lake[lake_ind,1] = lw_vals.std()
         var_per_lake[lake_ind,2] = at_vals.std()
+        var_per_lake[lake_ind,3] = wsu_vals.std()
+        var_per_lake[lake_ind,4] = wsv_vals.std()
         pdb.set_trace()
 
 

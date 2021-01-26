@@ -23,6 +23,16 @@ n_clusters = 16
 kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(metadata[['lat','lon','log_area']].values)
 print("clustering done!")
 metadata['cluster'] = kmeans.labels_
+
+cluster_label_vals = np.unique(kmeans.labels_)
+
+metadata['train'] = False
+pdb.set_trace()
+for i in cluster_label_vals:
+	metadata
+
+#declare train/test
+
 # fig = px.scatter_3d(metadata, x='lon', y='lat', z='log_area',color='cluster')
 fig = px.scatter(metadata, x='lon', y='lat',color='cluster')
                     #color='petal_length', symbol='species')
