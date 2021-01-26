@@ -47,10 +47,11 @@ wsv_da = xr.open_dataset(wsv_ds_path)['VGRD10m']
 print("wsv file loaded")
 
 
-site_ids = np.flipud(site_ids)
+# site_ids = np.flipud(site_ids)
 for lake_ind, name in enumerate(site_ids):
 
-    print("(",len(site_ids)-lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
+    # print("(",len(site_ids)-lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
+    print("(",lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
 
     #get NLDAS coords
     x = metadata[metadata['site_id'] == name]['x'].values[0]
