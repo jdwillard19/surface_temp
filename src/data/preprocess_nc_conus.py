@@ -61,9 +61,9 @@ if not hardcode:
         #get NLDAS coords
         x = metadata[metadata['site_id'] == name]['x'].values[0]
         y = metadata[metadata['site_id'] == name]['y'].values[0]
-        sw_vals = sw_da[:,y,x].values
-        lw_vals = lw_da[:,y,x].values
-        at_vals = sw_da[:,y,x].values
+        sw_vals = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y")
+        lw_vals = np.load("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y")
+        at_vals = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y")
 
         means_per_lake[lake_ind,0] = sw_vals.mean()
         means_per_lake[lake_ind,1] = lw_vals.mean()
