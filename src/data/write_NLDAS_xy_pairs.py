@@ -49,7 +49,8 @@ print("at file loaded")
 
 # site_ids = np.flipud(site_ids)
 for lake_ind, name in enumerate(site_ids):
-
+    if lake_ind < 565:
+        continue
     # print("(",len(site_ids)-lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
     print("(",lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
 
