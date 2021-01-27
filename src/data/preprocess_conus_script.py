@@ -78,10 +78,9 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
         continue
 
     pdb.set_trace()
-    site_obs.sort_values(by='date', axis=0, ascending=True, inplace=True, kind='quicksort', na_position='last', ignore_index=False)
-    
+    site_obs = site_obs.sort_values("Date")    
     #sort observations
-    obs_start_date = obs.values[0,1]
+    obs_start_date = site_obs.values[0,1]
     meteo_start_date = dates[0]
 
     pdb.set_trace()
@@ -92,7 +91,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
         start_date = start_date_pt
 
     assert start_date_pt == ice_flags_pt[0,0]
-    end_date = obs.values[-1,1]
+    end_date = site_obs.values[-1,1]
     end_date_pt = "{:%Y-%m-%d}".format(pd.Timestamp(glm_temps[-1,-1]))
 
 
