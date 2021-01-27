@@ -14,14 +14,15 @@ import datetime
 
 
 #load metadata, get ids
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
+# metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
+site_ids = np.unique(metadata['site_id'].values)
+
 metadata.set_index("site_id",inplace=True)
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
 
 #get site ids
-site_ids = np.unique(obs['site_id'].values)
 n_lakes = site_ids.shape[0]
 
 #load NLDAS data
