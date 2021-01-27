@@ -68,7 +68,7 @@ if not hardcode:
         at_vals = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy")
         wsu_vals = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y.npy")
         wsv_vals = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
-
+        pdb.set_trace()
         means_per_lake[lake_ind,0] = sw_vals.mean()
         means_per_lake[lake_ind,1] = lw_vals.mean()
         means_per_lake[lake_ind,2] = at_vals.mean()
