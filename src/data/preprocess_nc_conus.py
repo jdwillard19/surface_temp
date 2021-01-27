@@ -57,7 +57,7 @@ stat_vals_per_lake[:] = np.nan
 hardcode = False
 if not hardcode:
     for lake_ind, name in enumerate(site_ids):
-
+    	
         print("(",lake_ind,"/",str(len(site_ids)),") ","pre ", name)
 
         #get NLDAS coords
@@ -79,7 +79,6 @@ if not hardcode:
         var_per_lake[lake_ind,2] = at_vals.std()
         var_per_lake[lake_ind,3] = wsu_vals.std()
         var_per_lake[lake_ind,4] = wsv_vals.std()
-        pdb.set_trace()
 
 
 
