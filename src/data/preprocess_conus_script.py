@@ -61,13 +61,13 @@ end = len(site_ids)
 
 
 for site_ct, site_id in enumerate(site_ids[start:end]):
-	nid = site_id
+    nid = site_id
 
     print(it_ct," starting ", name)
 
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
- 	print(site_obs.shape[0], " obs")
+    print(site_obs.shape[0], " obs")
 
     #lower/uppur cutoff indices (to match observations)
     if site_obs.shape[0] == 0:
