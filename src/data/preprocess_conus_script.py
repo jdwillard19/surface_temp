@@ -76,6 +76,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
         no_obs_ct +=1 
         continue
 
+    pdb.set_trace()
     site_obs.sort_values(by='date', axis=0, ascending=True, inplace=True, kind='quicksort', na_position='last', ignore_index=False)
     
     #sort observations
