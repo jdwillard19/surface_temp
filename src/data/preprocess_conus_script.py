@@ -47,7 +47,7 @@ n_stc_feats = 3 #AREA,LAT,LON
 
 mean_feats = np.array([8669184.835544042, 4.09564144e+01, -9.01653002e+01,1.66308346e02, 2.91540662e02, 6.68199233e00, 7.37268070e01, 4.79260805e00, 1.81936454e-03, 2.30189504e-03])
 std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
-
+n_features = mean_feats.shape[0]
 #load dates
 sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
 print("loading sw nc file....")
@@ -65,6 +65,10 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
     print(site_ct," starting ", site_id)
 
+    #get NLDAS coords
+    x = metadata[metadata['site_id'] == name]['x'].values[0]-1
+    y = metadata[metadata['site_id'] == name]['y'].values[0]-1
+    
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
     print(site_obs.shape[0], " obs")
@@ -82,38 +86,42 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     #sort observations
     obs_start_date = site_obs.values[0,1]
     meteo_start_date = dates[0]
-
+    start_date = None
     pdb.set_trace()
     #do date offset for pre-pend meteo
-    if pd.Timestamp(start_date) - pd.DateOffset(days=90) < pd.Timestamp(start_date_pt):
-        start_date = str(pd.Timestamp(start_date) - pd.DateOffset(days=90))[:10]
+    if pd.Timestamp(obs_start_date) - pd.DateOffset(days=90) < pd.Timestamp(meteo_start_date):
+        start_date = str(pd.Timestamp(obs_start_date) - pd.DateOffset(days=90))[:10]
     else:
-        start_date = start_date_pt
+        start_date = meteo_start_date
 
-    assert start_date_pt == ice_flags_pt[0,0]
-    end_date = site_obs.values[-1,1]
-    end_date_pt = "{:%Y-%m-%d}".format(pd.Timestamp(glm_temps[-1,-1]))
+    obs_end_date = site_obs.values[-1,0]
+    # meteo_end_date = dates[-1]
 
+    print("start date: ",start_date)
+    print("end date: ", end_date)
 
     #cut files to between first and last observation
-    lower_cutoff = np.where(meteo_dates == start_date)[0][0] #457
-    if len(np.where(meteo_dates == end_date)[0]) < 1: 
+    lower_cutoff = np.where(dates == start_date)[0][0] #457
+    print("lower cutoff: ", lower_cutoff)
+    if len(np.where(dates == end_date)[0]) < 1: 
         print("observation beyond meteorological data! data will only be used up to the end of meteorological data")
-        upper_cutoff = meteo_dates.shape[0]
+        upper_cutoff = dates.shape[0]
     else:
-        upper_cutoff = np.where(meteo_dates == end_date)[0][0]+1 #14233
-    meteo_dates = meteo_dates[lower_cutoff:upper_cutoff]
-
-   #cut files to between first and last GLM simulated date for pre-train data
-    if len(np.where(meteo_dates_pt == start_date_pt)[0]) < 1: 
-        print("observation beyond meteorological data! PRE-TRAIN data will only be starting at the start of meteorological data")
-        start_date_pt = meteo_dates_pt[0]
-    if len(np.where(meteo_dates_pt == end_date_pt)[0]) < 1: 
-        print("observation beyond meteorological data! PRE-TRAIN data will only be used up to the end of meteorological data")
-        end_date_pt = meteo_dates_pt[-1]
-    lower_cutoff_pt = np.where(meteo_dates_pt == start_date_pt)[0][0] #457
-    upper_cutoff_pt = np.where(meteo_dates_pt == end_date_pt)[0][0] #457
-    meteo_dates_pt = meteo_dates_pt[lower_cutoff_pt:upper_cutoff_pt]
+        upper_cutoff = np.where(dates == end_date)[0][0]+1 #14233
+    print("upper cutoff: ", upper_cutoff)
+    dates = dates[lower_cutoff:upper_cutoff]
+    n_dates = len(dates)
+    print("n dates after cutoff: ", n_dates)
+   # #cut files to between first and last GLM simulated date for pre-train data
+   #  if len(np.where(meteo_dates_pt == start_date_pt)[0]) < 1: 
+   #      print("observation beyond meteorological data! PRE-TRAIN data will only be starting at the start of meteorological data")
+   #      start_date_pt = meteo_dates_pt[0]
+   #  if len(np.where(meteo_dates_pt == end_date_pt)[0]) < 1: 
+   #      print("observation beyond meteorological data! PRE-TRAIN data will only be used up to the end of meteorological data")
+   #      end_date_pt = meteo_dates_pt[-1]
+   #  lower_cutoff_pt = np.where(meteo_dates_pt == start_date_pt)[0][0] #457
+   #  upper_cutoff_pt = np.where(meteo_dates_pt == end_date_pt)[0][0] #457
+   #  meteo_dates_pt = meteo_dates_pt[lower_cutoff_pt:upper_cutoff_pt]
     
 
 
@@ -127,15 +135,15 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     meteo = meteo[lower_cutoff:upper_cutoff,:]
     meteo_pt = meteo_pt[lower_cutoff_pt:upper_cutoff_pt,:]
 
+    site_feats = np.empty((n_dates,n_features))
+    sw = 
     #normalize data
     meteo_norm = (meteo - mean_feats[:]) / std_feats[:]
-    meteo_norm_pt = (meteo_pt - mean_feats[:]) / std_feats[:]
 
     ################################################################################
     # read/format GLM temperatures and observation data for numpy
     ###################################################################################
-    n_total_dates = glm_temps.shape[0]
-    n_total_dates_pt = glm_temps_pt.shape[0]
+    n_total_dates = dates.shape[0]
 
 
     #cut glm temps to meteo dates for observation data PRETRAIN
