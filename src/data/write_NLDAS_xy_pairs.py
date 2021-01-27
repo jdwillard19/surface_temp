@@ -14,8 +14,9 @@ import datetime
 
 
 #load metadata, get ids
-# metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
+metadata2 = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
+pdb.set_trace()
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
 
