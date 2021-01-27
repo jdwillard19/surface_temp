@@ -61,9 +61,8 @@ end = len(site_ids)
 
 
 for site_ct, site_id in enumerate(site_ids[start:end]):
-    nid = site_id
 
-    print(site_ct," starting ", name)
+    print(site_ct," starting ", site_id)
 
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
@@ -73,7 +72,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     if site_obs.shape[0] == 0:
         print("|\n|\nNO SURFACE OBSERVATIONS\n|\n|\n|")
         pdb.set_trace()
-        no_obs_ids.append(name)
+        no_obs_ids.append(site_id)
         no_obs_ct +=1 
         continue
 
@@ -122,8 +121,8 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
 
     #read from file and filter dates
-    meteo = np.genfromtxt(base_path+'meteo/nhdhr_'+name+'_meteo.csv', delimiter=',', usecols=(3,4,5,6,7,8,9), skip_header=1)
-    meteo_pt = np.genfromtxt(base_path+'meteo/nhdhr_'+name+'_meteo.csv', delimiter=',', usecols=(3,4,5,6,7,8,9), skip_header=1)
+    meteo = np.genfromtxt(base_path+'meteo/nhdhr_'+site_id+'_meteo.csv', delimiter=',', usecols=(3,4,5,6,7,8,9), skip_header=1)
+    meteo_pt = np.genfromtxt(base_path+'meteo/nhdhr_'+site_id+'_meteo.csv', delimiter=',', usecols=(3,4,5,6,7,8,9), skip_header=1)
     meteo = meteo[lower_cutoff:upper_cutoff,:]
     meteo_pt = meteo_pt[lower_cutoff_pt:upper_cutoff_pt,:]
 
@@ -299,8 +298,8 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     static_feat_means = metadata[static_feats].mean(axis=0)
     static_feat_std = metadata[static_feats].std(axis=0)
     # for feat in static_feats:
-    feat_mat[:,-n_static_feats:] = metadata[metadata['site_id']==nid][static_feats]
-    feat_norm_mat[:,-n_static_feats:] = (metadata[metadata['site_id']==nid][static_feats] - static_feat_means) / static_feat_std
+    feat_mat[:,-n_static_feats:] = metadata[metadata['site_id']==site_id][static_feats]
+    feat_norm_mat[:,-n_static_feats:] = (metadata[metadata['site_id']==site_id][static_feats] - static_feat_means) / static_feat_std
     # pdb.set_trace()
 
 
@@ -319,21 +318,21 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     # print("pre-training: ", first_pretrain_date, "->", last_pretrain_date, "(", n_pretrain, ")")
     # print("training: ", first_train_date, "->", last_train_date, "(", n_trn, ")")
     # print("testing: ", first_tst_date, "->", last_tst_date, "(", n_tst, ")")
-    # if not os.path.exists("../../data/processed/"+name): 
-        # os.mkdir("../../data/processed/"+name)
-    # if not os.path.exists("../../models/"+name):
-        # os.mkdir("../../models/"+name)
-    # feat_path_pt = "../../data/processed/"+name+"/features_pt"
-    feat_path = "../../data/processed/"+name+"/features_ea"
-    # norm_feat_path_pt = "../../data/processed/"+name+"/processed_features_pt"
-    norm_feat_path = "../../data/processed/"+name+"/processed_features_ea"
-    # glm_path_pt = "../../data/processed/"+name+"/glm_pt"
-    # glm_path = "../../data/processed/"+name+"/glm"
-    # trn_path = "../../data/processed/"+name+"/train"
-    # tst_path = "../../data/processed/"+name+"/test"
-    # full_path = "../../data/processed/"+name+"/full"
-    # dates_path = "../../data/processed/"+name+"/dates"
-    # dates_path_pt = "../../data/processed/"+name+"/dates_pt"
+    # if not os.path.exists("../../data/processed/"+site_id): 
+        # os.mkdir("../../data/processed/"+site_id)
+    # if not os.path.exists("../../models/"+site_id):
+        # os.mkdir("../../models/"+site_id)
+    # feat_path_pt = "../../data/processed/"+site_id+"/features_pt"
+    feat_path = "../../data/processed/"+site_id+"/features_ea"
+    # norm_feat_path_pt = "../../data/processed/"+site_id+"/processed_features_pt"
+    norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea"
+    # glm_path_pt = "../../data/processed/"+site_id+"/glm_pt"
+    # glm_path = "../../data/processed/"+site_id+"/glm"
+    # trn_path = "../../data/processed/"+site_id+"/train"
+    # tst_path = "../../data/processed/"+site_id+"/test"
+    # full_path = "../../data/processed/"+site_id+"/full"
+    # dates_path = "../../data/processed/"+site_id+"/dates"
+    # dates_path_pt = "../../data/processed/"+site_id+"/dates_pt"
 
 
 
