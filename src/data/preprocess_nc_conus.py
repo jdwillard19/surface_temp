@@ -69,7 +69,8 @@ if not hardcode:
         var_per_lake[lake_ind,2] = at_vals.std()
         var_per_lake[lake_ind,3] = wsu_vals.std()
         var_per_lake[lake_ind,4] = wsv_vals.std()
-        stat_vals_per_lake[lake_ind,0] = 
+        pdb.set_trace()
+        # stat_vals_per_lake[lake_ind,0] = 
 
 
     mean_feats = np.average(means_per_lake, axis=0)   
