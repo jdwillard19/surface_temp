@@ -63,7 +63,7 @@ end = len(site_ids)
 for site_ct, site_id in enumerate(site_ids[start:end]):
     nid = site_id
 
-    print(it_ct," starting ", name)
+    print(site_ct," starting ", name)
 
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
