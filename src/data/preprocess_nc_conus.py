@@ -69,8 +69,12 @@ if not hardcode:
         var_per_lake[lake_ind,2] = at_vals.std()
         var_per_lake[lake_ind,3] = wsu_vals.std()
         var_per_lake[lake_ind,4] = wsv_vals.std()
-        assert np.isfinite(means_per_lake[lake_ind,:]).all()
-        assert np.isfinite(var_per_lake[lake_ind,:]).all()
+        if not np.isfinite(means_per_lake[lake_ind,:]).all():
+        	pdb.set_trace()
+        	assert np.isfinite(means_per_lake[lake_ind,:]).all()
+        if not np.isfinite(var_per_lake[lake_ind,:]).all():
+        	pdb.set_trace()
+        	assert np.isfinite(var_per_lake[lake_ind,:]).all()
         stat_vals_per_lake[lake_ind,0] = metadata.loc[name].area_m2
         stat_vals_per_lake[lake_ind,1] = metadata.loc[name].lat
         stat_vals_per_lake[lake_ind,2] = metadata.loc[name].lon
