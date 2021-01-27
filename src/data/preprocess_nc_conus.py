@@ -86,8 +86,8 @@ if not hardcode:
     std_feats = np.average(var_per_lake ** (.5), axis=0)   
     print("mean feats: ", repr(mean_feats))
     print("std feats: ", repr(std_feats))
-    assert mean_feats.shape[0] == 8
-    assert std_feats.shape[0] == 8
+    # assert mean_feats.shape[0] == 8
+    # assert std_feats.shape[0] == 8
     assert not np.isnan(np.sum(mean_feats))
     assert not np.isnan(np.sum(std_feats))
 else:
