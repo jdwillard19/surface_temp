@@ -46,8 +46,11 @@ print("loading at nc file....")
 wsv_da = xr.open_dataset(wsv_ds_path)['VGRD10m']
 print("wsv file loaded")
 
-
+start = sys.argv[1]
+end = sys.argv[2]
 # site_ids = np.flipud(site_ids)
+print("running site id's ",start,"->",end)
+site_ids = site_ids[start:end]
 for lake_ind, name in enumerate(site_ids):
     # if lake_ind < 565:
     #     continue
@@ -66,14 +69,20 @@ for lake_ind, name in enumerate(site_ids):
     wsv_vals = wsv_da[:,y,x].values
     if np.isnan(sw_vals).any():
         print("nan sw?")
+        raise Exception("CANT CONTINUE") 
     if np.isnan(lw_vals).any():
         print("nan lw?")
+        raise Exception("CANT CONTINUE") 
     if np.isnan(at_vals).any():
         print("nan at?")
+        raise Exception("CANT CONTINUE") 
     if np.isnan(wsu_vals).any():
         print("nan wsu?")
+        raise Exception("CANT CONTINUE") 
     if np.isnan(wsv_vals).any():
         print("nan wsv?") 
+        raise Exception("CANT CONTINUE") 
+
     np.save("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y",sw_vals)
     np.save("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y",lw_vals)
     np.save("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y",at_vals)
@@ -81,3 +90,4 @@ for lake_ind, name in enumerate(site_ids):
     np.save("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y",wsv_vals)
     print("x/y: ",x,"/",y,":\nSW: ", sw_vals, "\nLW: ",lw_vals,"\nAT: ",at_vals,"\nWSU: ", wsu_vals, "\nWSV: ", wsv_vals)
 
+print("DATA COMPLETE")
