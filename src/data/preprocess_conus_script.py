@@ -68,7 +68,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     #get NLDAS coords
     x = metadata[metadata['site_id'] == name]['x'].values[0]-1
     y = metadata[metadata['site_id'] == name]['y'].values[0]-1
-    
+
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
     print(site_obs.shape[0], " obs")
@@ -136,7 +136,12 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     meteo_pt = meteo_pt[lower_cutoff_pt:upper_cutoff_pt,:]
 
     site_feats = np.empty((n_dates,n_features))
-    sw = 
+    sw = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y")
+    lw = np.load("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y")
+    at = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y")
+    wsu = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y")
+    wsv = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y")
+    pdb.set_trace()
     #normalize data
     meteo_norm = (meteo - mean_feats[:]) / std_feats[:]
 
