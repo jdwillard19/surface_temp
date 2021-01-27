@@ -64,6 +64,16 @@ for lake_ind, name in enumerate(site_ids):
     at_vals = at_da[:,y,x].values
     wsu_vals = wsu_da[:,y,x].values
     wsv_vals = wsv_da[:,y,x].values
+    if np.isnan(sw_vals).any():
+        print("nan sw?")
+    if np.isnan(lw_vals).any():
+        print("nan lw?")
+    if np.isnan(at_vals).any():
+        print("nan at?")
+    if np.isnan(wsu_vals).any():
+        print("nan wsu?")
+    if np.isnan(wsv_vals).any():
+        print("nan wsv?") 
     np.save("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y",sw_vals)
     np.save("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y",lw_vals)
     np.save("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y",at_vals)
