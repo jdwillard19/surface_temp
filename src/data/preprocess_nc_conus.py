@@ -15,6 +15,7 @@ import datetime
 
 #load metadata, get ids
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
 
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
@@ -24,27 +25,17 @@ site_ids = np.unique(obs['site_id'].values)
 n_lakes = site_ids.shape[0]
 
 #load NLDAS data
-lw_ds_path = "../../data/globus/NLDAS_DLWRFsfc_19790102-20210102_train_test.nc" #longwave
-at_ds_path = "../../data/globus/NLDAS_TMP2m_19790102-20210102_train_test.nc" #airtemp
-sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
-wsu_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
-wsv_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
+# lw_ds_path = "../../data/globus/NLDAS_DLWRFsfc_19790102-20210102_train_test.nc" #longwave
+# at_ds_path = "../../data/globus/NLDAS_TMP2m_19790102-20210102_train_test.nc" #airtemp
+# sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
+# wsu_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
+# wsv_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
 #wsu_ds_path=
 
 # lw_ds = xr.open_dataset(lw_ds_path)
 # at_ds = xr.open_dataset(at_ds_path)
 # sw_ds = xr.open_dataset(sw_ds_path)
-print("loading sw nc file....")
-sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
-print("sw file loaded")
-# print("loading lw nc file....")
-# lw_da = xr.open_dataset(lw_ds_path)['DLWRFsfc']
-# print("lw file loaded")
-# print("loading at nc file....")
-# at_da = xr.open_dataset(at_ds_path)['TMP2m']
-# print("at file loaded")
 
-dates = sw_da['Time'].values
 n_dyn_feats = 5 #AT,LW,SW,WSU,WSV
 n_stc_feats = 3 #AREA,LAT,LON
 means_per_lake = np.zeros((n_lakes,n_dyn_feats), dtype=np.float_)
@@ -78,6 +69,7 @@ if not hardcode:
         var_per_lake[lake_ind,2] = at_vals.std()
         var_per_lake[lake_ind,3] = wsu_vals.std()
         var_per_lake[lake_ind,4] = wsv_vals.std()
+        stat_vals_per_lake[lake_ind,0] = 
 
 
     mean_feats = np.average(means_per_lake, axis=0)   
@@ -92,3 +84,12 @@ else:
 	#can uncomment and hard code here 
 	mean_feats = np.array([1.66308346e02, 2.91540662e02, 6.68199233e00, 7.37268070e01, 4.79260805e00, 1.81936454e-03, 2.30189504e-03])
 	std_feats = np.array([8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
+
+
+sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
+
+print("loading sw nc file....")
+sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
+print("sw file loaded")
+
+dates = sw_da['Time'].values
