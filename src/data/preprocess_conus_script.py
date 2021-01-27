@@ -66,8 +66,8 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     print(site_ct," starting ", site_id)
 
     #get NLDAS coords
-    x = metadata[metadata['site_id'] == name]['x'].values[0]-1
-    y = metadata[metadata['site_id'] == name]['y'].values[0]-1
+    x = metadata.loc[name]['x'].values[0]-1
+    y = metadata.loc[name]['y'].values[0]-1
 
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
