@@ -68,7 +68,6 @@ if not hardcode:
         at_vals = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy")
         wsu_vals = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y.npy")
         wsv_vals = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
-        pdb.set_trace()
         means_per_lake[lake_ind,0] = sw_vals.mean()
         means_per_lake[lake_ind,1] = lw_vals.mean()
         means_per_lake[lake_ind,2] = at_vals.mean()
@@ -81,7 +80,6 @@ if not hardcode:
         var_per_lake[lake_ind,4] = wsv_vals.std()
 
 
-    pdb.set_trace()
     mean_feats = np.average(means_per_lake, axis=0)   
     std_feats = np.average(var_per_lake ** (.5), axis=0)   
     print("mean feats: ", repr(mean_feats))
