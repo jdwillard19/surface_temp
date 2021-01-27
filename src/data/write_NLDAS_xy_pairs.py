@@ -55,11 +55,11 @@ for lake_ind, name in enumerate(site_ids):
     print("(",lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
 
     #get NLDAS coords
-    x = metadata[metadata['site_id'] == name]['x'].values[0]
-    y = metadata[metadata['site_id'] == name]['y'].values[0]
+    x = metadata[metadata['site_id'] == name]['x'].values[0]-1
+    y = metadata[metadata['site_id'] == name]['y'].values[0]-1
     # if os.path.exists("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y"):
     #     continue
-    sw_vals = sw_da[:,x,y].values
+    sw_vals = sw_da[:,y,x].values
     lw_vals = lw_da[:,y,x].values
     at_vals = at_da[:,y,x].values
     wsu_vals = wsu_da[:,y,x].values
