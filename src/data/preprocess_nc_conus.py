@@ -53,8 +53,8 @@ if not hardcode:
         print("(",lake_ind,"/",str(len(site_ids)),") ","pre ", name)
 
         #get NLDAS coords
-        x = int(metadata.loc[name]['x'])
-        y = int(metadata.loc[name]['y'])
+        x = int(metadata.loc[name]['x'])-1
+        y = int(metadata.loc[name]['y'])-1
         sw_vals = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y.npy")
         lw_vals = np.load("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y.npy")
         at_vals = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy")
