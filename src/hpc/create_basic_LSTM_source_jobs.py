@@ -22,6 +22,8 @@ train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 n_lakes = 0
 sbatch = ""
 ct = 0
+start = [0,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000]
+end = [1000,2000,3000,4000,5000,6000,7000,8000,9000,10671]
 for name in train_lakes:
     ct += 1
     #for each unique lake
