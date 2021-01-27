@@ -21,6 +21,7 @@ site_ids = np.unique(metadata['site_id'].values)
 metadata.set_index("site_id",inplace=True)
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
+obs = obs[:-1] #delete error obs
 
 #get site ids
 n_lakes = site_ids.shape[0]
