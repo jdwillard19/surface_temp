@@ -46,8 +46,8 @@ print("loading at nc file....")
 wsv_da = xr.open_dataset(wsv_ds_path)['VGRD10m']
 print("wsv file loaded")
 
-start = sys.argv[1]
-end = sys.argv[2]
+start = int(sys.argv[1])
+end = int(sys.argv[2])
 # site_ids = np.flipud(site_ids)
 print("running site id's ",start,"->",end)
 site_ids = site_ids[start:end]
