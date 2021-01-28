@@ -34,6 +34,7 @@ for i, lake in enumerate(test_lakes):
         pdb.set_trace()
     if obs.shape[0] < 350:
         to_remove.append(lake)
+pdb.set_trace()
 test_lakes = np.delete(test_lakes,np.where(np.isin(to_remove,test_lakes)))
 print("test lake n:  ",test_lakes.shape[0])
 # test_lakes = train_lakes
