@@ -30,6 +30,8 @@ to_remove = []
 for i, lake in enumerate(test_lakes):
     print("lake ",i)
     obs = np.load("../../data/processed/"+lake+"/full.npy")
+    if lake == 'nhdhr_86003700':   
+        pdb.set_trace()
     if obs.shape[0] < 350:
         to_remove.append(lake)
 test_lakes = np.delete(test_lakes,np.where(np.isin(to_remove,test_lakes)))
