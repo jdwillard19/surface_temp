@@ -58,7 +58,7 @@ dates = sw_da['Time'].values
 
 start = 0
 end = len(site_ids)
-
+date_offset = 350
 
 
 for site_ct, site_id in enumerate(site_ids[start:end]):
@@ -87,10 +87,10 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     meteo_start_date = dates[0]
     start_date = None
     #do date offset for pre-pend meteo
-    if pd.Timestamp(obs_start_date) - pd.DateOffset(days=90) < pd.Timestamp(meteo_start_date):
+    if pd.Timestamp(obs_start_date) - pd.DateOffset(days=date_offset) < pd.Timestamp(meteo_start_date):
         start_date = meteo_start_date
     else:
-        start_date = str(pd.Timestamp(obs_start_date) - pd.DateOffset(days=90))[:10]
+        start_date = str(pd.Timestamp(obs_start_date) - pd.DateOffset(days=date_offset))[:10]
 
     obs_end_date = site_obs.values[-1,0]
     # meteo_end_date = dates[-1]
