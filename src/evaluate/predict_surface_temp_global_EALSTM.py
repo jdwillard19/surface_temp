@@ -30,8 +30,8 @@ obs_per_lake = np.empty_like(test_lakes)
 for i, lake in enumerate(test_lakes):
     print("lake ",i)
     obs = np.load("../../data/processed/"+lake+"/full.npy")
-    if lake == 'nhdhr_86003700':   
-        pdb.set_trace()
+    # if lake == 'nhdhr_86003700':   
+        # pdb.set_trace()
     if obs.shape[0] < 350:
         to_remove.append(lake)
     obs_per_lake[i] = np.count_nonzero(np.isfinite(obs))
