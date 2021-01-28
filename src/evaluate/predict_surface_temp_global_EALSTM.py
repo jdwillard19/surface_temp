@@ -25,6 +25,13 @@ import re
 # test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 test_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
 
+to_remove = []
+
+for i, lake in enumerate(test_lakes):
+    print("lake ",i)
+    obs = np.load("../../data/processed/"+lake+"/full.npy")
+    if np.isnan(obs).all()
+        pdb.set_trace()
 # test_lakes = train_lakes
 # test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
