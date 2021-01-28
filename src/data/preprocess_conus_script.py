@@ -128,10 +128,10 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
 
     #read from file and filter dates
-    meteo = np.genfromtxt(base_path+'meteo/nhdhr_'+site_id+'_meteo.csv', delimiter=',', usecols=(3,4,5,6,7,8,9), skip_header=1)
-    meteo_pt = np.genfromtxt(base_path+'meteo/nhdhr_'+site_id+'_meteo.csv', delimiter=',', usecols=(3,4,5,6,7,8,9), skip_header=1)
-    meteo = meteo[lower_cutoff:upper_cutoff,:]
-    meteo_pt = meteo_pt[lower_cutoff_pt:upper_cutoff_pt,:]
+    # meteo = np.genfromtxt(base_path+'meteo/nhdhr_'+site_id+'_meteo.csv', delimiter=',', usecols=(3,4,5,6,7,8,9), skip_header=1)
+    # meteo_pt = np.genfromtxt(base_path+'meteo/nhdhr_'+site_id+'_meteo.csv', delimiter=',', usecols=(3,4,5,6,7,8,9), skip_header=1)
+    # meteo = meteo[lower_cutoff:upper_cutoff,:]
+    # meteo_pt = meteo_pt[lower_cutoff_pt:upper_cutoff_pt,:]
 
     site_feats = np.empty((n_dates,n_features))
     sw = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y")
