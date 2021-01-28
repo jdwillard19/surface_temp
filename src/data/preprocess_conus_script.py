@@ -83,10 +83,9 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
     site_obs = site_obs.sort_values("Date")    
     #sort observations
-    obs_start_date = site_obs.values[0,1]
+    obs_start_date = site_obs.values[0,0]
     meteo_start_date = dates[0]
     start_date = None
-    pdb.set_trace()
     #do date offset for pre-pend meteo
     if pd.Timestamp(obs_start_date) - pd.DateOffset(days=90) < pd.Timestamp(meteo_start_date):
         start_date = str(pd.Timestamp(obs_start_date) - pd.DateOffset(days=90))[:10]
