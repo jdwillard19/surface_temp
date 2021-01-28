@@ -156,6 +156,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
     obs_trn_mat = np.empty((n_dates))
     site_obs_mat = np.empty((n_dates))
+    site_obs_mat[:] = np.nan
     obs_trn_mat[:] = np.nan
     obs_tst_mat = np.empty((n_dates))
     obs_tst_mat[:] = np.nan
