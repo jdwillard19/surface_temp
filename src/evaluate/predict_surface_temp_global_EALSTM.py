@@ -110,7 +110,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     begin_loss_ind = 0
     (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                       outputFullTestMatrix=True, allTestSeq=True, static_feats=True,n_static_feats=n_static_feats)
+                                       outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
     unique_tst_dates_target = np.unique(tst_dates)
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
