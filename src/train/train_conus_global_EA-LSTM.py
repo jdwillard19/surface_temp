@@ -113,14 +113,14 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-(trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
-                                                seq_length, n_total_feats,\
-                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                ) 
-np.save("conus_trn_data_wStatic.npy",trn_data)
+# (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
+#                                                 seq_length, n_total_feats,\
+#                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                # ) 
+# np.save("conus_trn_data_wStatic.npy",trn_data)
 # np.save("_tst_data_wStatic.npy",tst_data)
 # sys.exit()
-# trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
+trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
 # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
 # tst_data = tst_data[:,:,[0,1,2,4,7,-1]]
 
@@ -132,7 +132,7 @@ print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
 # batch_size = trn_data.size()[0]
-batch_size = int(math.floor(trn_data.size()[0])/5)
+batch_size = int(math.floor(trn_data.size()[0])/10)
 
 
 
@@ -535,7 +535,7 @@ for epoch in range(n_eps):
         # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         # lstm_net.reset_parameters()
         # h_state = None
-        outputs, h_state, _ = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+        outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
