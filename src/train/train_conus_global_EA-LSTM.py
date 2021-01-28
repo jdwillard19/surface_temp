@@ -25,7 +25,7 @@ import pytorch_data_operations
 import datetime
 import pdb
 from torch.utils.data import DataLoader
-from pytorch_data_operations import buildLakeDataForRNN_multilakemodel, parseMatricesFromSeqs
+from pytorch_data_operations import buildLakeDataForRNN_multilakemodel_conus, parseMatricesFromSeqs
 
 
 
