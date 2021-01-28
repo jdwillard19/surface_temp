@@ -203,7 +203,10 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
         n_obs_placed += 1
 
 
-
+    if not os.path.exists("../../data/processed/"+site_id): 
+        os.mkdir("../../data/processed/"+site_id)
+    if not os.path.exists("../../models/"+site_id):
+        os.mkdir("../../models/"+site_id)
 
     feat_path = "../../data/processed/"+site_id+"/features_ea_conus"
     norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea_conus"
