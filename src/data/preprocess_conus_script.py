@@ -107,8 +107,8 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     else:
         upper_cutoff = np.where(dates == pd.Timestamp(obs_end_date).to_datetime64())[0][0]+1 #14233
     print("upper cutoff: ", upper_cutoff)
-    dates = dates[lower_cutoff:upper_cutoff]
-    n_dates = len(dates)
+    site_dates = dates[lower_cutoff:upper_cutoff]
+    n_dates = len(site_dates)
     print("n dates after cutoff: ", n_dates)
    # #cut files to between first and last GLM simulated date for pre-train data
    #  if len(np.where(meteo_dates_pt == start_date_pt)[0]) < 1: 
@@ -194,12 +194,12 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     n_obs_placed = 0
     # n_trn_obs_placed = 0
     for o in range(0,n_obs):
-        if len(np.where(dates == pd.Timestamp(site_obs.values[o,0]).to_datetime64())[0]) < 1:
+        if len(np.where(site_dates == pd.Timestamp(site_obs.values[o,0]).to_datetime64())[0]) < 1:
             print("not within meteo dates")
             pdb.set_trace()
             obs_d += 1
             continue
-        date_ind = np.where(dates == pd.Timestamp(site_obs.values[o,0]).to_datetime64())[0][0]
+        date_ind = np.where(site_dates == pd.Timestamp(site_obs.values[o,0]).to_datetime64())[0][0]
         site_obs_mat[date_ind] = site_obs.values[o,2]
         n_obs_placed += 1
 
@@ -218,6 +218,6 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
     np.save(feat_path, site_feats)
     np.save(norm_feat_path, feats_norm)
-    np.save(dates_path, dates)
+    np.save(dates_path, site_dates)
     np.save(full_path, site_obs_mat)
 
