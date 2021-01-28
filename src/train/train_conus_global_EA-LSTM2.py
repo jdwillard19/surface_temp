@@ -674,7 +674,7 @@ for epoch in range(n_eps):
     #         ep_list64.append(epoch)
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
-save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_2feat_wStaticEA_0"
+save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_conus_no_window"
 
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
