@@ -920,7 +920,7 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
                                             outputFullTestMatrix=False, sparseCustom=None, \
                                             allTestSeq=False,n_static_feats=0,\
-                                            oldFeat = False, =False, postProcessSplits=True, randomSeed=0):
+                                            postProcessSplits=True, randomSeed=0):
 
     #NONAN
     #PARAMETERS
