@@ -29,7 +29,7 @@ cluster_label_vals = np.unique(kmeans.labels_)
 metadata['train'] = True
 for i in cluster_label_vals:
 	test_inds = np.random.choice(np.where(metadata['cluster'] ==0)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/3)))
-	metadata.iloc[test_inds,8] = False
+	metadata.iloc[test_inds, metadata.columns.get_loc('train')] = False
 
 pdb.set_trace()
 
