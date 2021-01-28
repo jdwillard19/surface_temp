@@ -35,9 +35,8 @@ for i, lake in enumerate(test_lakes):
     if obs.shape[0] < 350:
         to_remove.append(lake)
     obs_per_lake[i] = np.count_nonzero(np.isfinite(obs))
-
-test_lakes = test_lakes[~np.isin(test_lakes,to_remove)]
 obs_per_lake = obs_per_lake[~np.isin(test_lakes,to_remove)]
+test_lakes = test_lakes[~np.isin(test_lakes,to_remove)]
 # test_lakes = train_lakes
 # test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
