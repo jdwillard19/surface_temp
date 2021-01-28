@@ -7,6 +7,7 @@ import os
 from sklearn.cluster import KMeans
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
 
 site_ids = np.unique(obs['site_id'].values)
@@ -44,3 +45,5 @@ pdb.set_trace()
 # fig.write_html("clustered_lakes_2d_conus_"+str(n_clusters)+".html")
 # fig.show()
 
+np.save("../../data/static/lists/source_lakes_conus.npy",metadata[metadata['train']]['site_id'].values)
+np.save("../../data/static/lists/test_lakes_conus.npy",metadata[metadata['train']==False]['site_id'].values)
