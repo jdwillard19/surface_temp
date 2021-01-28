@@ -140,6 +140,15 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     at = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy")
     wsu = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y.npy")
     wsv = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
+
+    site_feats[:,0] = sw[lower_cutoff:upper_cutoff]
+    site_feats[:,1] = lw[lower_cutoff:upper_cutoff]
+    site_feats[:,2] = at[lower_cutoff:upper_cutoff]
+    site_feats[:,3] = wsu[lower_cutoff:upper_cutoff]
+    site_feats[:,4] = wsv[lower_cutoff:upper_cutoff]
+    site_feats[:,5] = metadata.loc[site_id].area_m2
+    site_feats[:,6] = metadata.loc[site_id].lat
+    site_feats[:,7] = metadata.loc[site_id].lon
     pdb.set_trace()
     #normalize data
     meteo_norm = (meteo - mean_feats[:]) / std_feats[:]
