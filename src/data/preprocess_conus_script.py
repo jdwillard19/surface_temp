@@ -81,7 +81,6 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
         no_obs_ct +=1 
         continue
 
-    pdb.set_trace()
     site_obs = site_obs.sort_values("Date")    
     #sort observations
     obs_start_date = site_obs.values[0,1]
