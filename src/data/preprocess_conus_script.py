@@ -99,6 +99,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     print("end date: ", obs_end_date)
 
     #cut files to between first and last observation
+    pdb.set_trace()
     lower_cutoff = np.where(dates == start_date)[0][0] #457
     print("lower cutoff: ", lower_cutoff)
     if len(np.where(dates == obs_end_date)[0]) < 1: 
