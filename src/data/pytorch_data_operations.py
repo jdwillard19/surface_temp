@@ -584,7 +584,7 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
         # tst_dates_comp = torch.cat([tst_dates_comp,torch.from_numpy(tst_dates)],dim=0)
     print(repr(lakes_early_obs))
     print(len(lakes_early_obs))
-    return (X_trn_comp, _)
+    return (X_trn_comp, None)
 
 def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
