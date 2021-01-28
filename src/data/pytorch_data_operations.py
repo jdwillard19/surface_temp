@@ -362,6 +362,8 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
 
     for lake_ct, lakename in enumerate(lakenames):
         print("loading data for lake ",lake_ct,"/",len(lakenames))
+        if lake_ct < 217:
+            continue
         #load data created in preprocess.py based on lakename
         debug = False
         verbose = True
@@ -494,6 +496,7 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
         #final seq starts at end and goes inward [seq_length]
         # print("n dates: ", n_dates, ", seq len: ", seq_length)
         if n_dates % seq_length > 0:
+            pdb.set_trace()
             end_ind = n_dates
             start_ind = end_ind - seq_length
             X_trn[tr_seq_ind, :, :-1] = feat_mat[start_ind:end_ind,:]
