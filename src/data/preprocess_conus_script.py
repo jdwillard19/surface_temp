@@ -220,5 +220,4 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     np.save(norm_feat_path, feats_norm)
     np.save(dates_path, dates)
     np.save(full_path, site_obs_mat)
-    pdb.set_trace()
 
