@@ -134,11 +134,11 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     # meteo_pt = meteo_pt[lower_cutoff_pt:upper_cutoff_pt,:]
 
     site_feats = np.empty((n_dates,n_features))
-    sw = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y")
-    lw = np.load("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y")
-    at = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y")
-    wsu = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y")
-    wsv = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y")
+    sw = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y.npy")
+    lw = np.load("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y.npy")
+    at = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy")
+    wsu = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y.npy")
+    wsv = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
     pdb.set_trace()
     #normalize data
     meteo_norm = (meteo - mean_feats[:]) / std_feats[:]
