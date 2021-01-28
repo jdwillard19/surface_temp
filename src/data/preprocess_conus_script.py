@@ -152,100 +152,14 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
     pdb.set_trace()
     #normalize data
-    meteo_norm = (meteo - mean_feats[:]) / std_feats[:]
-
-    ################################################################################
-    # read/format GLM temperatures and observation data for numpy
-    ###################################################################################
-    n_total_dates = dates.shape[0]
+    feats_norm = (site_feats - mean_feats[:]) / std_feats[:]
 
 
-    #cut glm temps to meteo dates for observation data PRETRAIN
-    if len(np.where(glm_temps_pt[:,-1] == start_date_pt[0])) < 1:
-        print("pretrain glm outputs begin at " + start_date_pt + "which is before GLM data which begins at " + glm_temps_pt[0,0])
-        lower_cutoff_pt = 0
-        new_meteo_lower_cutoff_pt = np.where(meteo_dates_pt == glm_temps_pt[0,-1])[0][0]
-        meteo_pt = meteo_pt[new_meteo_lower_cutoff_pt:,:]
-        meteo_norm_pt = meteo_norm_pt[new_meteo_lower_cutoff_pt:,:]
-        meteo_dates_pt = meteo_dates_pt[new_meteo_lower_cutoff_pt:]
-    else:
-        lower_cutoff_pt = np.where(glm_temps_pt[:,-1] == start_date_pt)[0][0] 
-
-    if len(np.where(glm_temps_pt[:,-1] == end_date_pt)[0]) < 1: 
-        print("pretrain glm outputs extend to " + end_date_pt + "which is beyond GLM data which extends to " + glm_temps_pt[-1,-1])
-        upper_cutoff_pt = glm_temps_pt[:,-1].shape[0]
-        new_meteo_upper_cutoff_pt = np.where(meteo_dates_pt == glm_temps_pt[-1,-1])[0][0]
-        meteo_pt = meteo_pt[:new_meteo_upper_cutoff_pt,:]
-        meteo_norm_pt = meteo_norm_pt[:new_meteo_upper_cutoff_pt,:]
-        meteo_dates_pt = meteo_dates_pt[:new_meteo_upper_cutoff_pt]
-    else:
-        upper_cutoff_pt = np.where(glm_temps_pt[:,-1] == end_date_pt)[0][0] 
-
-    glm_temps_pt = glm_temps_pt[lower_cutoff_pt:upper_cutoff_pt,:]
-    ice_flags_pt = ice_flags_pt[lower_cutoff_pt:upper_cutoff_pt,:]
-
-    #cut glm temps to meteo dates for observation data
-    if len(np.where(glm_temps[:,-1] == start_date)[0]) < 1:
-        print("observations begin at " + start_date + "which is before GLM data which begins at " + glm_temps[0,-1])
-        lower_cutoff = 0
-        new_meteo_lower_cutoff = np.where(meteo_dates == glm_temps[0,-1])[0][0]
-        meteo = meteo[new_meteo_lower_cutoff:,:]
-        meteo_norm = meteo_norm[new_meteo_lower_cutoff:,:]
-        meteo_dates = meteo_dates[new_meteo_lower_cutoff:]
-    else:
-        lower_cutoff = np.where(glm_temps[:,-1] == start_date)[0][0] 
-
-    if len(np.where(glm_temps[:,-1] == end_date)[0]) < 1: 
-        print("observations extend to " + end_date + "which is beyond GLM data which extends to " + glm_temps[-1,-1])
-        upper_cutoff = glm_temps[:,-1].shape[0]
-        new_meteo_upper_cutoff = np.where(meteo_dates == glm_temps[-1,-1])[0][0] + 1
-        meteo = meteo[:new_meteo_upper_cutoff,:]
-        meteo_norm = meteo_norm[:new_meteo_upper_cutoff,:]
-        meteo_dates = meteo_dates[:new_meteo_upper_cutoff]
-    else:
-        upper_cutoff = np.where(glm_temps[:,-1] == end_date)[0][0] +1
-
-    glm_temps = glm_temps[lower_cutoff:upper_cutoff,:]
-    ice_flags = ice_flags[lower_cutoff:upper_cutoff,:]
-    # n_dates_pt = glm_temps_pt.shape[0]
-    n_dates = glm_temps.shape[0]
-    # print("dates: ", n_dates, " , pretrain dates: ", n_dates_pt)
-
-
-
-    # print("pretrain dates: ", start_date_pt, "->", end_date_pt)
-    print("train dates: ", start_date, "->", end_date)
-    ############################################################
-    #fill numpy matrices
-    ##################################################################
-
-    #list static feats fo EA-LSTM
-    static_feats = ['surface_area','SDF','K_d','longitude','latitude',\
-                    'lw_std',\
-                    'sw_mean', 'sw_std_sp','sw_mean_au',
-                    'at_std_au','at_mean_au',\
-                    'rh_mean_su','rh_mean_au',\
-                    'rain_mean_au',\
-                    'snow_mean_au']
-    n_static_feats = len(static_feats)
-    # feat_mat_pt = np.empty((n_dates_pt, n_features+1+n_static_feats)) #[7 meteo features-> ice flag]
-    # feat_mat_pt[:] = np.nan
-    # feat_norm_mat_pt = np.empty((n_dates_pt, n_features+n_static_feats)) #[7 std meteo features]
-    # feat_norm_mat_pt[:] = np.nan
-    # glm_mat_pt = np.empty((n_dates_pt))
-    # glm_mat_pt[:] = np.nan
-
-
-    feat_mat = np.empty((n_dates, n_features+1+n_static_feats)) #[7 meteo features-> ice flag]
-    feat_mat[:] = np.nan
-    feat_norm_mat = np.empty((n_dates, n_features+n_static_feats)) #[7 std meteo features]
-    feat_norm_mat[:] = np.nan
-    # glm_mat = np.empty((n_dates))
-    # glm_mat[:] = np.nan
-    # obs_trn_mat = np.empty((n_dates))
-    # obs_trn_mat[:] = np.nan
-    # obs_tst_mat = np.empty((n_dates))
-    # obs_tst_mat[:] = np.nan
+    obs_trn_mat = np.empty((n_dates))
+    site_obs_mat = np.empty((n_dates))
+    obs_trn_mat[:] = np.nan
+    obs_tst_mat = np.empty((n_dates))
+    obs_tst_mat[:] = np.nan
 
     # feat_mat_pt[:,:-1] = meteo_pt[:]
     # feat_mat_pt[:,-1] = ice_flags_pt[:,1]        
@@ -253,128 +167,55 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     # glm_mat_pt[:] = glm_temps_pt[:]
 
     #fill train data
-    feat_mat[:,:-n_static_feats-1] = meteo[:]
-    feat_mat[:,-n_static_feats-1] = ice_flags[:,1]        
-    feat_norm_mat[:,:n_features] = meteo_norm[:]
+    # feat_mat[:,:-n_static_feats-1] = meteo[:]
+    # feat_mat[:,-n_static_feats-1] = ice_flags[:,1]        
+    # feat_norm_mat[:,:n_features] = meteo_norm[:]
     # glm_mat[:] = glm_temps[:]
 
     #verify all mats filled
 
-    # if np.isnan(np.sum(feat_norm_mat)):
-    #     raise Exception("ERROR: Preprocessing failed, there is missing data feat norm")
-    #     sys.exit() 
-
-
-    # obs_g = 0
-    # obs_d = 0
-
-    #get unique observation days
-    # unq_obs_dates = np.unique(obs[:,0])
-    # n_unq_obs_dates = unq_obs_dates.shape
-    # first_tst_date = obs[0,0]
-    # last_tst_date = obs[math.floor(obs.shape[0]/3),0]
-    # last_tst_obs_ind = np.where(obs[:,0] == last_tst_date)[0][-1]
-    # n_pretrain = meteo_dates_pt.shape[0]
-    # n_tst = last_tst_obs_ind + 1
-    # n_trn = obs.shape[0] - n_tst
-
-    # last_train_date = obs[-1,0]
-    # if last_tst_obs_ind + 1 >= obs.shape[0]:
-    #     last_tst_obs_ind -= 1
-    # first_train_date = obs[last_tst_obs_ind + 1,0]
-    # first_pretrain_date = meteo_dates_pt[0]
-    # last_pretrain_date = meteo_dates_pt[-1]
-   
-    #test data
-    # n_tst_obs_placed = 0
-    # n_trn_obs_placed = 0
-    # for o in range(0,last_tst_obs_ind+1):
-    #     if len(np.where(meteo_dates == obs[o,0])[0]) < 1:
-    #         # print("not within meteo dates")
-    #         obs_d += 1
-    #         continue
-    #     date_ind = np.where(meteo_dates == obs[o,0])[0][0]
-    #     obs_tst_mat[date_ind] = obs[o,2]
-    #     n_tst_obs_placed += 1
-
-    # #train data
-    # for o in range(last_tst_obs_ind+1, n_obs):
-    #     if len(np.where(meteo_dates == obs[o,0])[0]) < 1:
-    #         obs_d += 1
-    #         continue
-
-    #     date_ind = np.where(meteo_dates == obs[o,0])[0][0]
-
-    #     obs_trn_mat[date_ind] = obs[o,2]
-    #     n_trn_obs_placed += 1
-
-
-    # d_str = ""
-    # if obs_d > 0:
-    #     d_str = ", and "+str(obs_d) + " observations outside of combined date range of meteorological and GLM output"
-    # # if obs_g > 0 or obs_d > 0:
-    #     # continue
-
-
-
-    #add static features
-    static_feat_means = metadata[static_feats].mean(axis=0)
-    static_feat_std = metadata[static_feats].std(axis=0)
-    # for feat in static_feats:
-    feat_mat[:,-n_static_feats:] = metadata[metadata['site_id']==site_id][static_feats]
-    feat_norm_mat[:,-n_static_feats:] = (metadata[metadata['site_id']==site_id][static_feats] - static_feat_means) / static_feat_std
-    # pdb.set_trace()
-
-
-
-    if np.isnan(np.sum(feat_mat)):
-        raise Exception("ERROR: Preprocessing failed, there is missing data: features for training")
-        sys.exit()
-    # if np.isnan(np.sum(feat_mat_pt)):
-    #     raise Exception("ERROR: Preprocessing failed, there is missing data: features for pretraining ")
-    #     sys.exit()
-    if np.isnan(np.sum(feat_norm_mat)):
+    if np.isnan(np.sum(feats_norm)):
         raise Exception("ERROR: Preprocessing failed, there is missing data feat norm")
         sys.exit() 
-    #remember add sqrt surfarea
-    #write features and labels to processed data
-    # print("pre-training: ", first_pretrain_date, "->", last_pretrain_date, "(", n_pretrain, ")")
-    # print("training: ", first_train_date, "->", last_train_date, "(", n_trn, ")")
-    # print("testing: ", first_tst_date, "->", last_tst_date, "(", n_tst, ")")
-    # if not os.path.exists("../../data/processed/"+site_id): 
-        # os.mkdir("../../data/processed/"+site_id)
-    # if not os.path.exists("../../models/"+site_id):
-        # os.mkdir("../../models/"+site_id)
-    # feat_path_pt = "../../data/processed/"+site_id+"/features_pt"
-    feat_path = "../../data/processed/"+site_id+"/features_ea"
-    # norm_feat_path_pt = "../../data/processed/"+site_id+"/processed_features_pt"
-    norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea"
-    # glm_path_pt = "../../data/processed/"+site_id+"/glm_pt"
-    # glm_path = "../../data/processed/"+site_id+"/glm"
-    # trn_path = "../../data/processed/"+site_id+"/train"
-    # tst_path = "../../data/processed/"+site_id+"/test"
-    # full_path = "../../data/processed/"+site_id+"/full"
-    # dates_path = "../../data/processed/"+site_id+"/dates"
-    # dates_path_pt = "../../data/processed/"+site_id+"/dates_pt"
+    if np.isnan(np.sum(site_feats)):
+        raise Exception("ERROR: Preprocessing failed, there is missing data feat ")
+        sys.exit() 
+
+
+    obs_g = 0
+    obs_d = 0
+
+    #get unique observation days
+    unq_obs_dates = np.unique(site_obs[:,0])
+    n_unq_obs_dates = unq_obs_dates.shape[0]
+    n_obs = n_unq_obs_dates
+
+    #place obs data
+    n_obs_placed = 0
+    # n_trn_obs_placed = 0
+    for o in range(0,n_obs):
+        if len(np.where(dates == site_obs[o,0])[0]) < 1:
+            print("not within meteo dates")
+            pdb.set_trace()
+            obs_d += 1
+            continue
+        date_ind = np.where(dates == site_obs[o,0])[0][0]
+        site_obs_mat[date_ind] = site_obs[o,2]
+        n_obs_placed += 1
 
 
 
-    np.save(feat_path, feat_mat)
-    # np.save(feat_path_pt, feat_mat_pt)
-    np.save(norm_feat_path, feat_norm_mat)
-    # np.save(norm_feat_path_pt, feat_norm_mat_pt)
-    # np.save(glm_path, glm_mat)
-    # np.save(glm_path_pt, glm_mat_pt)
-    # np.save(dates_path, meteo_dates)
-    # np.save(dates_path_pt, meteo_dates_pt)
-    # np.save(trn_path, obs_trn_mat)
-    # np.save(tst_path, obs_tst_mat)
-    # full = obs_trn_mat
-    # full[np.nonzero(np.isfinite(obs_tst_mat))] = obs_tst_mat[np.isfinite(obs_tst_mat)]
-    # np.save(full_path, full)
-    # n_obs_per.append(np.count_nonzero(np.isfinite(full)))
-    # print("completed!")
 
-# print(no_obs_ids)
-# print(repr(n_obs_per))
+    feat_path = "../../data/processed/"+site_id+"/features_ea_conus"
+    norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea_conus"
+    full_path = "../../data/processed/"+site_id+"/full"
+    dates_path = "../../data/processed/"+site_id+"/dates"
+
+
+
+    np.save(feat_path, site_feats)
+    np.save(norm_feat_path, feats_norm)
+    np.save(dates_path, dates)
+    np.save(full_path, site_obs_mat)
+    pdb.set_trace()
 
