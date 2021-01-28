@@ -20,9 +20,11 @@ import re
 
 # base_path = "../../data/raw/sb_mtl_data_release/"
 # obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
-train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
-train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
-test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
+# train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
+# train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
+# test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
+test_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
+
 # test_lakes = train_lakes
 # test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
@@ -45,58 +47,21 @@ output_to_file = True
 # n_hidden = 128
 
 # save_file_path = "../../results/pgmtl_results_simpleGlobalLSTM.csv"
-save_file_path = "../../results/pgmtl_results_GlobalEALSTM.csv"
-n_features = 7
-n_static_feats = 15
+save_file_path = "../../results/pgmtl_results_GlobalEALSTM_conus.csv"
+n_features = 5
+n_static_feats = 3
 n_total_features = n_features+n_static_feats
 # feats = ['SW','LW','AT','RH','WS','Rain','Snow','surface_area','SDF','K_d','longitude','latitude',\
 #                     'lw_std',\
 #                     'sw_mean', 'sw_std_sp','sw_mean_au',
 #                     'at_std_au','at_mean_au',\
-#                     'rh_mean_su','rh_mean_au',\
-#                     'rain_mean_au',\
-#                     'snow_mean_au']
-# #########################################################################################
-#paste features found in "pbmtl_feature_selection.py" here
-# feats = ['n_obs', 'n_obs_sp', 'n_obs_su', 'n_obs_au', 'obs_temp_mean',
-#        'obs_temp_std', 'obs_temp_skew', 'obs_temp_kurt', 'ad_zero_temp_doy',
-#        'ad_at_amp', 'ad_ws_sp_mix', 'obs_temp_mean_airdif', 'dif_SDF',
-#        'dif_k_d', 'dif_lat', 'dif_long', 'dif_surface_area', 'dif_sw_mean',
-#        'dif_sw_std', 'dif_lw_mean', 'dif_lw_std', 'dif_at_std', 'dif_rh_mean',
-#        'dif_rh_std', 'dif_ws_mean', 'dif_ws_std', 'dif_rain_mean',
-#        'dif_rain_std', 'dif_snow_std', 'dif_sw_mean_sp', 'dif_sw_std_sp',
-#        'dif_lw_mean_sp', 'dif_lw_std_sp', 'dif_at_mean_sp', 'dif_at_std_sp',
-#        'dif_rh_mean_sp', 'dif_rh_std_sp', 'dif_ws_mean_sp', 'dif_ws_std_sp',
-#        'dif_rain_mean_sp', 'dif_rain_std_sp', 'dif_snow_std_sp',
-#        'dif_sw_mean_su', 'dif_sw_std_su', 'dif_lw_mean_su', 'dif_lw_std_su',
-#        'dif_at_mean_su', 'dif_at_std_su', 'dif_rh_mean_su', 'dif_rh_std_su',
-#        'dif_ws_mean_su', 'dif_ws_std_su', 'dif_rain_mean_su',
-#        'dif_rain_std_su', 'dif_snow_mean_su', 'dif_snow_std_su',
-#        'dif_sw_mean_au', 'dif_sw_std_au', 'dif_lw_mean_au', 'dif_lw_std_au',
-#        'dif_at_mean_au', 'dif_at_std_au', 'dif_rh_mean_au', 'dif_rh_std_au',
-#        'dif_ws_mean_au', 'dif_ws_std_au', 'dif_rain_mean_au',
-#        'dif_rain_std_au', 'dif_snow_std_au', 'dif_sw_mean_wi', 'dif_sw_std_wi',
-#        'dif_lw_mean_wi', 'dif_lw_std_wi', 'dif_at_mean_wi', 'dif_at_std_wi',
-#        'dif_rh_std_wi', 'dif_ws_mean_wi', 'dif_ws_std_wi', 'dif_rain_mean_wi',
-#        'dif_rain_std_wi', 'dif_snow_mean_wi', 'dif_snow_std_wi',
-#        'dif_zero_temp_doy', 'dif_at_amp', 'dif_ws_sp_mix',
-#        'perc_dif_surface_area', 'dif_sqrt_surface_area',
-#        'perc_dif_sqrt_surface_area']
-###################################################################################
-
-
-#load metamodel
-# model_path = '../../models/metamodel_pgdl_RMSE_GBR.joblib'
-# model = load(model_path)
-
-
 
 #data structures to fill
 
 # glm_rmse_per_lake[:] = np.nan
 # meta_rmse_per_lake[:] = np.nan
 num_layers = 1
-feat_inds = [0,1,2,4,7,-1]
+# feat_inds = [0,1,2,4,7,-1]
 select_feats = True
 #where to output files
 # output_path = "../../results/outputs/"
@@ -115,8 +80,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     lake_df = pd.DataFrame()
     lake_id = target_id
 
-    n_features = 7
-    n_static_feats = 15
+    n_features = 5
+    n_static_feats = 3
     n_total_features = n_features+n_static_feats
     # lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
     # lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
@@ -143,19 +108,12 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
-    (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target,\
-    all_data_target, all_phys_data_target, all_dates_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
+    (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, static_feats=True,n_static_feats=n_static_feats)
-        
-    tst_data_target = tst_data_target[:,:,feat_inds]
-    n_features = 4
-    n_static_feats = 1
-    n_total_features = n_features+n_static_feats
+    unique_tst_dates_target = np.unique(tst_dates)
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
-    u_depths_target = np.unique(all_data_target[:,0,0])
-    n_depths = torch.unique(all_data_target[:,:,0]).size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
 
 
@@ -415,8 +373,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     # load_path = "../../models/global_model_128hid_1layer_final2_wStaticEA" #1.44 more norm
     # load_path = "../../models/global_model_128hid_1layer_final3_wStaticEA" #1.33?
-    load_path = '../../models/global_model_128hid_1layer_final_wLatLong_wStaticEA_1' #1.32
-    load_path = '../../models/global_model_64hid_1layer_final_2feat_wStaticEA_0' #1.33
+    # load_path = '../../models/global_model_128hid_1layer_final_wLatLong_wStaticEA_1' #1.32
+    # load_path = '../../models/global_model_64hid_1layer_final_2feat_wStaticEA_0' #1.33
+    load_path = '../../models/global_model_128hid_1layer_layer_final_2feat_conus_intermediate'
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
     if use_gpu:
@@ -454,7 +413,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # h_state = None
             # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
             # pred, h_state = lstm_net(inputs, h_state)
-            pred, h_state, _ = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+            pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
 
