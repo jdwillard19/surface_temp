@@ -99,8 +99,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     print("end date: ", obs_end_date)
 
     #cut files to between first and last observation
-    pdb.set_trace()
-    lower_cutoff = np.where(dates == start_date)[0][0] #457
+    lower_cutoff = np.where(dates == pd.Timestamp(start_date).to_datetime64())[0][0] #457
     print("lower cutoff: ", lower_cutoff)
     if len(np.where(dates == obs_end_date)[0]) < 1: 
         print("observation beyond meteorological data! data will only be used up to the end of meteorological data")
