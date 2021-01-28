@@ -84,7 +84,7 @@ ep_list32 = []
 ep_list64 = [] 
 ep_list128 = [] 
 
-lakenames = np.load("../../data/static/lists/source_lakes_conus.npy")
+lakenames = np.load("../../data/static/lists/source_lakes_conus.npy",allow_pickle=True)
 
 
 ###############################
