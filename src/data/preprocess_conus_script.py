@@ -150,7 +150,6 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     site_feats[:,6] = wsu[lower_cutoff:upper_cutoff]
     site_feats[:,7] = wsv[lower_cutoff:upper_cutoff]
 
-    pdb.set_trace()
     #normalize data
     feats_norm = (site_feats - mean_feats[:]) / std_feats[:]
 
