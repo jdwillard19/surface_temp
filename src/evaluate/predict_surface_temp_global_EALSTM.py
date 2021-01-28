@@ -30,6 +30,8 @@ to_remove = []
 for i, lake in enumerate(test_lakes):
     print("lake ",i)
     obs = np.load("../../data/processed/"+lake+"/full.npy")
+    if i==90:
+        pdb.set_trace()
     if np.isnan(obs).all():
         pdb.set_trace()
 # test_lakes = train_lakes
