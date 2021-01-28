@@ -466,7 +466,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             site_id_repeat[:] = ''
             site_id_repeat[:] = target_id
             sites.append(site_id_repeat)
-            pdb.set_trace()
 
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
             print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
@@ -520,4 +519,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 print("median test RMSE: ",np.median(rmse_per_lake))
 print("q1 test RMSE: ",np.quantile(rmse_per_lake,.25))
 print("q3 test RMSE: ",np.quantile(rmse_per_lake,.75))
+labels = np.concatenate(labels).reshape(-1)
+outputs = np.concatenate(outputs).reshape(-1)
+dates = np.concatenate(dates).reshape(-1)
+sites = np.concatenate(sites).reshape(-1)
+
 pdb.set_trace()
