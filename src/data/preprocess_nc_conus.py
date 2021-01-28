@@ -71,11 +71,11 @@ if not hardcode:
         var_per_lake[lake_ind,3] = wsu_vals.std()
         var_per_lake[lake_ind,4] = wsv_vals.std()
         if not np.isfinite(means_per_lake[lake_ind,:]).all():
-        	pdb.set_trace()
-        	assert np.isfinite(means_per_lake[lake_ind,:]).all()
+            pdb.set_trace()
+            assert np.isfinite(means_per_lake[lake_ind,:]).all()
         if not np.isfinite(var_per_lake[lake_ind,:]).all():
-        	pdb.set_trace()
-        	assert np.isfinite(var_per_lake[lake_ind,:]).all()
+            pdb.set_trace()
+            assert np.isfinite(var_per_lake[lake_ind,:]).all()
         # stat_vals_per_lake[lake_ind,0] = metadata.loc[name].area_m2
         # stat_vals_per_lake[lake_ind,1] = metadata.loc[name].lat
         # stat_vals_per_lake[lake_ind,2] = metadata.loc[name].lon
@@ -90,9 +90,9 @@ if not hardcode:
     # assert not np.isnan(np.sum(mean_feats))
     # assert not np.isnan(np.sum(std_feats))
 else:
-	#can uncomment and hard code here 
-	# mean_feats = np.array([8669184.835544042, 4.09564144e+01, -9.01653002e+01,1.66308346e02, 2.91540662e02, 6.68199233e00, 7.37268070e01, 4.79260805e00, 1.81936454e-03, 2.30189504e-03])
-	# std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
+    #can uncomment and hard code here 
+    # mean_feats = np.array([8669184.835544042, 4.09564144e+01, -9.01653002e+01,1.66308346e02, 2.91540662e02, 6.68199233e00, 7.37268070e01, 4.79260805e00, 1.81936454e-03, 2.30189504e-03])
+    # std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
 
 pdb.set_trace()
 sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
