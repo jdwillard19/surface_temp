@@ -185,7 +185,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     obs_d = 0
 
     #get unique observation days
-    unq_obs_dates = np.unique(site_obs[:,0])
+    unq_obs_dates = np.unique(site_obs.values[:,0])
     n_unq_obs_dates = unq_obs_dates.shape[0]
     n_obs = n_unq_obs_dates
 
