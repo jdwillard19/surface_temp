@@ -462,7 +462,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             outputs.append(loss_output)
             labels.append(loss_label)
             dates.append(loss_days)
-            site_id_repeat = np.empty_like(loss_days)
+            site_id_repeat = np.empty_like(loss_label)
             site_id_repeat[:] = target_id
             sites.append(site_id_repeat)
             pdb.set_trace()
