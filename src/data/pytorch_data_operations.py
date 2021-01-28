@@ -573,11 +573,11 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
         assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
         # assert np.isfinite(all_dates).any(), "all_dates has nan"
         X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-        trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
+        # trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
         # X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
         # tst_dates_comp = torch.cat([tst_dates_comp,torch.from_numpy(tst_dates)],dim=0)
         
-    return (X_trn_comp, trn_dates_comp)
+    return (X_trn_comp, _)
 
 def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
