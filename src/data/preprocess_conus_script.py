@@ -88,9 +88,9 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     start_date = None
     #do date offset for pre-pend meteo
     if pd.Timestamp(obs_start_date) - pd.DateOffset(days=90) < pd.Timestamp(meteo_start_date):
-        start_date = str(pd.Timestamp(obs_start_date) - pd.DateOffset(days=90))[:10]
-    else:
         start_date = meteo_start_date
+    else:
+        start_date = str(pd.Timestamp(obs_start_date) - pd.DateOffset(days=90))[:10]
 
     obs_end_date = site_obs.values[-1,0]
     # meteo_end_date = dates[-1]
@@ -134,6 +134,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     # meteo_pt = meteo_pt[lower_cutoff_pt:upper_cutoff_pt,:]
 
     site_feats = np.empty((n_dates,n_features))
+    site_feats[:] = np.nan
     sw = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y.npy")
     lw = np.load("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y.npy")
     at = np.load("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy")
