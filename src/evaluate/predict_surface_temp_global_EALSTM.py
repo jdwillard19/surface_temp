@@ -402,7 +402,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             inputs = data[:,:,:n_total_features].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
-            tmp_dates = tst_dates_target[:, begin_loss_ind:]
+            tmp_dates = tst_dates[:, begin_loss_ind:]
             depths = inputs[:,:,0]
 
             if use_gpu:
