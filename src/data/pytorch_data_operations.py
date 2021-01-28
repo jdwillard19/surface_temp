@@ -501,6 +501,7 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
             if start_ind < 0:
                 print("too early obs")
                 pdb.set_trace()
+                continue
             X_trn[tr_seq_ind, :, :-1] = feat_mat[start_ind:end_ind,:]
             X_trn[tr_seq_ind,:,-1] = trn[start_ind:end_ind]
             trn_dates[tr_seq_ind,:] = dates[start_ind:end_ind]
