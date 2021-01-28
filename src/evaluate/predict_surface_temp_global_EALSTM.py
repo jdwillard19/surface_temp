@@ -375,7 +375,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     # load_path = "../../models/global_model_128hid_1layer_final3_wStaticEA" #1.33?
     # load_path = '../../models/global_model_128hid_1layer_final_wLatLong_wStaticEA_1' #1.32
     # load_path = '../../models/global_model_64hid_1layer_final_2feat_wStaticEA_0' #1.33
-    load_path = '../../models/global_model_128hid_1layer_layer_final_2feat_conus_intermediate'
+    load_path = '../../models/global_model_128hid_1layer_final_2feat_conus_intermediate'
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
     if use_gpu:
