@@ -27,9 +27,10 @@ metadata['cluster'] = kmeans.labels_
 cluster_label_vals = np.unique(kmeans.labels_)
 
 metadata['train'] = False
-pdb.set_trace()
 for i in cluster_label_vals:
-	metadata
+	clust_size = metadata[metadata['cluster']==i].shape[0]
+	pdb.set_trace()
+
 
 #declare train/test
 
