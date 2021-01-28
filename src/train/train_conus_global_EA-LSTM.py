@@ -132,7 +132,7 @@ print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
 # batch_size = trn_data.size()[0]
-batch_size = int(math.floor(trn_data.size()[0])/10)
+batch_size = int(math.floor(trn_data.size()[0])/15)
 
 
 
