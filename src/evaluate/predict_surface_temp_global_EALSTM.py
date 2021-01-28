@@ -39,6 +39,8 @@ obs_per_lake = obs_per_lake[~np.isin(test_lakes,to_remove)]
 test_lakes = test_lakes[~np.isin(test_lakes,to_remove)]
 outputs = []
 labels = []
+dates = []
+sites = []
 # test_lakes = train_lakes
 # test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
@@ -456,8 +458,14 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # output_mats[i,:,:] = outputm_npy
             loss_output = outputm_npy[~np.isnan(labelm_npy)]
             loss_label = labelm_npy[~np.isnan(labelm_npy)]
+            loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
             outputs.append(loss_output)
             labels.append(loss_label)
+            dates.append(loss_days)
+            site_id_repeat = np.empty_like(loss_days)
+            site_id_repeat[:] = target_id
+            sites.append(site_id_repeat)
+            pdb.set_trace()
 
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
             print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
