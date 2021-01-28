@@ -3,7 +3,7 @@ import numpy as np
 import pdb
 import sys
 import os
-import plotly.express as px
+# import plotly.express as px
 from sklearn.cluster import KMeans
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
@@ -35,11 +35,11 @@ for i in cluster_label_vals:
 #declare train/test
 
 # fig = px.scatter_3d(metadata, x='lon', y='lat', z='log_area',color='cluster')
-fig = px.scatter(metadata, x='lon', y='lat',color='cluster')
-                    #color='petal_length', symbol='species')
+# fig = px.scatter(metadata, x='lon', y='lat',color='cluster')
+#                     #color='petal_length', symbol='species')
 
-fig.update_traces(marker=dict(size=2),
-                  selector=dict(mode='markers'))
-fig.write_html("clustered_lakes_2d_conus_"+str(n_clusters)+".html")
-fig.show()
+# fig.update_traces(marker=dict(size=2),
+#                   selector=dict(mode='markers'))
+# fig.write_html("clustered_lakes_2d_conus_"+str(n_clusters)+".html")
+# fig.show()
 
