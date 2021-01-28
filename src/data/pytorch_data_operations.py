@@ -359,7 +359,7 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
     # X_all_comp = torch.Tensor(0, seq_length, n_features+1)
     # X_phys_comp = torch.Tensor(0, seq_length, n_features+1)
     # all_dates_comp = torch.Tensor(0, seq_length)
-
+    lakes_early_obs = []
     for lake_ct, lakename in enumerate(lakenames):
         print("loading data for lake ",lake_ct,"/",len(lakenames))
         # if lake_ct < 217:
@@ -500,7 +500,7 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
             start_ind = end_ind - seq_length
             if start_ind < 0:
                 print("too early obs")
-                pdb.set_trace()
+                lakes_early_obs.append(lakename)
                 continue
             X_trn[tr_seq_ind, :, :-1] = feat_mat[start_ind:end_ind,:]
             X_trn[tr_seq_ind,:,-1] = trn[start_ind:end_ind]
@@ -582,7 +582,7 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
         # trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
         # X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
         # tst_dates_comp = torch.cat([tst_dates_comp,torch.from_numpy(tst_dates)],dim=0)
-        
+    print(repr(lakes_early_obs))
     return (X_trn_comp, _)
 
 def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_features, \
