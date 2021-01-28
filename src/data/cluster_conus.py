@@ -26,11 +26,12 @@ metadata['cluster'] = kmeans.labels_
 
 cluster_label_vals = np.unique(kmeans.labels_)
 
-metadata['train'] = False
+metadata['train'] = True
 for i in cluster_label_vals:
-	clust_size = metadata[metadata['cluster']==i].shape[0]
-	pdb.set_trace()
+	test_inds = np.random.choice(np.where(metadata['cluster'] ==0)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/3)))
+	metadata.iloc[test_inds,8] = True
 
+pdb.set_trace()
 
 #declare train/test
 
