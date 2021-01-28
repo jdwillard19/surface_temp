@@ -113,14 +113,14 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-# (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
-#                                                 seq_length, n_total_feats,\
-#                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                # ) 
-# np.save("conus_trn_data_wStatic.npy",trn_data)
+(trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
+                                                seq_length, n_total_feats,\
+                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                ) 
+np.save("conus_trn_data_wStatic_noOverlapWindow.npy",trn_data)
 # np.save("_tst_data_wStatic.npy",tst_data)
 # sys.exit()
-trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
+# trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
 # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
 # tst_data = tst_data[:,:,[0,1,2,4,7,-1]]
 
