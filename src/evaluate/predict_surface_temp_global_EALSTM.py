@@ -402,7 +402,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             inputs = data[:,:,:n_total_features].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
-            tmp_dates = tst_dates_target[:, begin_loss_ind:]
+            tmp_dates = tst_dates[:, begin_loss_ind:]
             depths = inputs[:,:,0]
 
             if use_gpu:
@@ -495,3 +495,4 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 print("median test RMSE: ",np.median(rmse_per_lake))
 print("q1 test RMSE: ",np.quantile(rmse_per_lake,.25))
 print("q3 test RMSE: ",np.quantile(rmse_per_lake,.75))
+pdb.set_trace()
