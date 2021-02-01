@@ -61,6 +61,7 @@ for ct, lake_id in enumerate(train_lakes):
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
 
     data = data[np.where(np.isfinite(data[:,-1]))]
+    pdb.set_trace()
     new_df = pd.DataFrame(columns=columns,data=data)
     train_df = pd.concat([train_df, new_df], ignore_index=True)
 
