@@ -1,4 +1,3 @@
-                    save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
 import os
 import re
 import pandas as pd
