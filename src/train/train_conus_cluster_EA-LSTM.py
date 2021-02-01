@@ -86,8 +86,7 @@ ep_list128 = []
 
 cluster = sys.argv[1]
 metadata = pd.read_csv("../../metadata/conus_source_metadata.csv")
-lakenames = metadata[metadata['cluster']==cluster]
-pdb.set_trace()
+lakenames = metadata[metadata['cluster']==int(cluster)]['site_id'].values
 # lakenames = np.load("../../data/static/lists/source_lakes_conus.npy",allow_pickle=True)
 
 
