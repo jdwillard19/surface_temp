@@ -29,14 +29,15 @@ train_lakes = metadata['site_id'].values
 # train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
-columns = ['ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeed_t-30',
-           'ShortWave_t-14','LongWave_t-14','AirTemp_t-14','WindSpeed_t-14',\
-           'ShortWave_t-4','LongWave_t-4','AirTemp_t-4','WindSpeed_t-4',\
-           'ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeed_t-3',\
-           'ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeed_t-2',\
-           'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeed_t-1',\
+columns = ['Surface_Area','Latitude','Longitude',
+           'ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeedU_t-30','WindSpeedV_t-30'
+           'ShortWave_t-14','LongWave_t-14','AirTemp_t-14','WindSpeedU_t-14','WindSpeedV_t-14',\
+           'ShortWave_t-4','LongWave_t-4','AirTemp_t-4','WindSpeedU_t-4','WindSpeedV_t-4'\
+           'ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeedU_t-3','WindSpeedV_t-3'\
+           'ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeedU_t-2','WindSpeedV_t-2',\
+           'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeedU_t-1','WindSpeedV_t-1',\
            'ShortWave','LongWave','AirTemp','WindSpeed',\
-           'Surface_Area','Surface_Temp']
+           'Surface_Temp']
 
 train_df = pd.DataFrame(columns=columns)
 
