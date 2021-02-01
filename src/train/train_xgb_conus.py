@@ -37,7 +37,7 @@ columns = ['ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeed_t-30',
            'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeed_t-1',\
            'ShortWave','LongWave','AirTemp','WindSpeed',\
            'Surface_Area','Surface_Temp']
-feat_inds = [0,1,2,4,8]
+
 train_df = pd.DataFrame(columns=columns)
 
 param_search = True
@@ -50,10 +50,11 @@ for ct, lake_id in enumerate(train_lakes):
     feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
     # dates = np.load("../../data/processed/"+name+"/dates.npy")
-    data = np.concatenate((feats[:,feat_inds],labs.reshape(labs.shape[0],1)),axis=1)
+    data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
     X = data[:,:-1]
     y = data[:,-1]
     if lookback > 0:
+        pdb.set_trace()
         X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,:4].flatten()),X[i-14,:4]),X[i-30,:4]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
         y = y[farthest_lookback:]
     #remove days without obs
