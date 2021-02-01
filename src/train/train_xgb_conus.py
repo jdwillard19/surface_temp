@@ -55,7 +55,6 @@ for ct, lake_id in enumerate(train_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     if lookback > 0:
-        pdb.set_trace()
         X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,3:].flatten()),X[i-14,3:]),X[i-30,3:]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
         y = y[farthest_lookback:]
     #remove days without obs
@@ -124,7 +123,6 @@ cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
 print("cv scores ", cv)
 print(np.mean(cv))
 # sys.exit()
-pdb.set_trace()
 print("Training XGB regression model...")
 model.fit(X, y)
 dump(model, save_file_path)
