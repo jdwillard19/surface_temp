@@ -32,8 +32,8 @@ train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 columns = ['Surface_Area','Latitude','Longitude',
            'ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeedU_t-30','WindSpeedV_t-30'
            'ShortWave_t-14','LongWave_t-14','AirTemp_t-14','WindSpeedU_t-14','WindSpeedV_t-14',\
-           'ShortWave_t-4','LongWave_t-4','AirTemp_t-4','WindSpeedU_t-4','WindSpeedV_t-4'\
-           'ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeedU_t-3','WindSpeedV_t-3'\
+           'ShortWave_t-4','LongWave_t-4','AirTemp_t-4','WindSpeedU_t-4','WindSpeedV_t-4',\
+           'ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeedU_t-3','WindSpeedV_t-3',z\
            'ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeedU_t-2','WindSpeedV_t-2',\
            'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeedU_t-1','WindSpeedV_t-1',\
            'ShortWave','LongWave','AirTemp','WindSpeedU','WindspeedV',\
@@ -62,7 +62,6 @@ for ct, lake_id in enumerate(train_lakes):
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
 
     data = data[np.where(np.isfinite(data[:,-1]))]
-    pdb.set_trace()
     new_df = pd.DataFrame(columns=columns,data=data)
     train_df = pd.concat([train_df, new_df], ignore_index=True)
 
