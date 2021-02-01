@@ -552,12 +552,11 @@ for epoch in range(n_eps):
 
 
         #get indices to calculate loss
-        loss_indices = np.array(np.isfinite(loss_targets.cpu()), dtype='bool_')
+        loss_indices = torch.from_numpy(np.array(np.isfinite(loss_targets.cpu()), dtype='bool_'))
 
         if use_gpu:
             loss_outputs = loss_outputs.cuda()
             loss_targets = loss_targets.cuda()
-        pdb.set_trace()    
         loss = mse_criterion(loss_outputs[loss_indices], loss_targets[loss_indices]) + lambda1*reg1_loss 
         #backward
 
