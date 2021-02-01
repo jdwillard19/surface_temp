@@ -47,7 +47,7 @@ farthest_lookback = 30
 #build training set
 for ct, lake_id in enumerate(train_lakes):
     #load data
-    feats = np.load("../../data/processed/"+lake_id+"/features_ea.npy")
+    feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
     # dates = np.load("../../data/processed/"+name+"/dates.npy")
     data = np.concatenate((feats[:,feat_inds],labs.reshape(labs.shape[0],1)),axis=1)
