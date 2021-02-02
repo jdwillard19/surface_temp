@@ -48,7 +48,7 @@ err_per_clust = pd.DataFrame()
 err_per_clust['cluster'] = cluster_label_vals
 err_per_clust['Median RMSE'] = rmse_per_cluster
 target_meta.to_csv("../../metadata/conus_target_meta.csv")
-souce_meta.to_csv("../../metadata/conus_source_meta.csv")
+source_meta.to_csv("../../metadata/conus_source_meta.csv")
 sys.exit()
 #declare train/test
 pdb.set_trace()
