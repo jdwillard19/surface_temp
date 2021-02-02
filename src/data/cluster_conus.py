@@ -3,7 +3,7 @@ import numpy as np
 import pdb
 import sys
 import os
-import plotly.express as px
+# import plotly.express as px
 from sklearn.cluster import KMeans
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
@@ -53,20 +53,20 @@ sys.exit()
 #declare train/test
 pdb.set_trace()
 # fig = px.scatter_3d(metadata, x='lon', y='lat', z='log_area',color='cluster')
-fig = px.scatter_3d(target_meta, x='lon', y='lat', z='rmse',color='cluster')
-for i in cluster_label_vals:
-	target_meta['isCluster'+str(i)] = (target_meta['cluster'] == i)
-	fig = px.scatter(target_meta, x='lon', y='lat',color='isCluster'+str(i))
-	# fig = px.scatter(metadata[metadata['cluster']==i], x='lon', y='lat',color='cluster')
-	# fig = px.scatter(metadata[metadata['cluster'] != i], x='lon', y='lat')
-	fig.update_traces(marker=dict(size=5),
-                  selector=dict(mode='markers'))
-	fig.write_html("clustered_lakes-conus_cluster_"+str(i)+".html")
+# fig = px.scatter_3d(target_meta, x='lon', y='lat', z='rmse',color='cluster')
+# for i in cluster_label_vals:
+# 	target_meta['isCluster'+str(i)] = (target_meta['cluster'] == i)
+# 	fig = px.scatter(target_meta, x='lon', y='lat',color='isCluster'+str(i))
+# 	# fig = px.scatter(metadata[metadata['cluster']==i], x='lon', y='lat',color='cluster')
+# 	# fig = px.scatter(metadata[metadata['cluster'] != i], x='lon', y='lat')
+# 	fig.update_traces(marker=dict(size=5),
+#                   selector=dict(mode='markers'))
+# 	fig.write_html("clustered_lakes-conus_cluster_"+str(i)+".html")
 
-                    #color='petal_length', symbol='species')
+#                     #color='petal_length', symbol='species')
 
-sys.exit()
-fig.write_html("clustered_lakes-conus_"+str(n_clusters)+"clusters_rmse_z_axis.html")
-fig.show()
+# sys.exit()
+# fig.write_html("clustered_lakes-conus_"+str(n_clusters)+"clusters_rmse_z_axis.html")
+# fig.show()
 
 
