@@ -25,7 +25,7 @@ import pytorch_data_operations
 import datetime
 import pdb
 from torch.utils.data import DataLoader
-from pytorch_data_operations import buildLakeDataForRNN_multilakemodel_conus, parseMatricesFromSeqs
+from pytorch_data_operations import buildLakeDataForRNN_multilakemodel, parseMatricesFromSeqs
 
 
 
@@ -33,7 +33,7 @@ from pytorch_data_operations import buildLakeDataForRNN_multilakemodel_conus, pa
 currentDT = datetime.datetime.now()
 print(str(currentDT))
 
-#../../metadata/conus_source_metadata.csv
+
 ####################################################3
 # (Nov 2020 - Jared) source model script, takes lakename as required command line argument
 ###################################################33
@@ -63,28 +63,28 @@ patience = 100
 #ow
 seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
-n_features = 5  #number of physical drivers
-n_static_feats = 3
+n_features = 7  #number of physical drivers
+n_static_feats = 15
 n_total_feats =n_static_feats+n_features
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 128
+n_hidden = 64
 # lambda1 = 1e-
 lambda1 = 0
 
 n_eps = 10000
 # n_ep/rmse = (1013/1.52)(957/1.51?
-targ_ep = 0
+targ_ep = 70
 targ_rmse = 1.46
 ep_list16 = [] #list of epochs at which models were saved for * hidden units
 ep_list32 = [] 
 ep_list64 = [] 
 ep_list128 = [] 
 
-lakenames = np.load("../../data/static/lists/source_lakes_conus.npy",allow_pickle=True)
+lakenames = np.load("../../data/static/lists/source_lakes_wrr.npy")
 
 
 ###############################
@@ -113,26 +113,26 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-# (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
-#                                                 seq_length, n_total_feats,\
-#                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                # ) 
-# np.save("conus_trn_data_wStatic.npy",trn_data)
-# np.save("_tst_data_wStatic.npy",tst_data)
+(trn_data, _, tst_data, _) = buildLakeDataForRNN_multilakemodel(lakenames,\
+                                                seq_length, n_features,\
+                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                allTestSeq=True,static_feats=True,n_static_feats=n_static_feats) 
+# np.save("global_trn_data_wStatic.npy",trn_data)
+# np.save("global_tst_data_wStatic.npy",tst_data)
 # sys.exit()
-trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
+# trn_data = torch.from_numpy(np.load("global_trn_data_wStatic.npy"))
 # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
-# tst_data = tst_data[:,:,[0,1,2,4,7,-1]]
+tst_data = tst_data[:,:,[0,1,2,4,7,-1]]
 
-# trn_data = tst_data
-# n_features = 4
-# n_static_feats = 1
-# n_total_feats = n_features + n_static_feats
+trn_data = tst_data
+n_features = 4
+n_static_feats = 1
+n_total_feats = n_features + n_static_feats
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
 # batch_size = trn_data.size()[0]
-batch_size = int(math.floor(trn_data.size()[0])/20)
+batch_size = int(math.floor(trn_data.size()[0])/5)
 
 
 
@@ -185,7 +185,7 @@ batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_bat
 
 
 #load val/test data into enumerator based on batch size
-# testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
+testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
 
 
 #define EA-LSTM class
@@ -465,8 +465,17 @@ class Model(nn.Module):
 
 
 
-# lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
+load_path = '../../models/global_model_128hid_1layer_final_2feat_conus_intermediate'
+n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
 lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
+if use_gpu:
+    lstm_net = lstm_net.cuda(0)
+pretrain_dict = torch.load(load_path)['state_dict']
+model_dict = lstm_net.state_dict()
+pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
+model_dict.update(pretrain_dict)
+lstm_net.load_state_dict(pretrain_dict)
+
 #tell model to use GPU if needed
 if use_gpu:
     lstm_net = lstm_net.cuda()
@@ -535,7 +544,7 @@ for epoch in range(n_eps):
         # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         # lstm_net.reset_parameters()
         # h_state = None
-        outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+        outputs, h_state, _ = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
