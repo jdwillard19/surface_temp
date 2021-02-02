@@ -396,9 +396,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     # load_path = '../../models/global_model_128hid_1layer_final_wLatLong_wStaticEA_1' #1.32
     # load_path = '../../models/global_model_64hid_1layer_final_2feat_wStaticEA_0' #1.33
     # load_path = '../../models/global_model_128hid_1layer_final_2feat_conus_intermediate'
-    pdb.set_trace()
 
-    cluster=None
+    cluster= target_meta[target_meta['site_id']==lake_id]['cluster'].values[0]
+
     load_path = "../../models/conus_cluster_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_"+str(cluster)
 
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
