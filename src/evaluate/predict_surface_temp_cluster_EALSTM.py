@@ -24,8 +24,9 @@ import re
 # train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 # test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 test_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
-target_meta = metadata[np.isin(metadata,test_lakes)]
+# metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
+# target_meta = metadata[np.isin(metadata,test_lakes)]
+pd.read_csv("../../metadata/conus_target_meta.csv")
 
 to_remove = []
 obs_per_lake = np.empty_like(test_lakes)
