@@ -21,7 +21,8 @@ print("script start: ",str(currentDT))
 save_file_path = '../../models/xgb_surface_temp.joblib'
 
 
-
+#metadata = pd.read_csv("../../metadata/conus_source_metadata.csv")
+# lakenames = metadata[metadata['cluster']==int(cluster)]['site_id']
 
 #############################
 #load data
