@@ -35,8 +35,8 @@ n_lakes = site_ids.shape[0]
 # NLDAS_step[daily]_var[ugrd10m]_date[19790101.20201212].nc
 # NLDAS_step[daily]_var[vgrd10m]_date[19790101.20201212].nc
 lw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dlwrfsfc]_date[19790101.20201212].nc" #longwave
-at_ds_path = "../../data/globus/NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20201212].nc" #shortwav
-sw_ds_path = "../../data/globus/NLDAS_step[daily]_var[tmp2m]_date[19790101.20201212].nc" #airtemp
+sw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20201212].nc" #shortwav
+at_ds_path = "../../data/globus/NLDAS_step[daily]_var[tmp2m]_date[19790101.20201212].nc" #airtemp
 wsu_ds_path = "../../data/globus/NLDAS_step[daily]_var[ugrd10m]_date[19790101.20201212].nc" #windspeed u
 wsv_ds_path = "../../data/globus/NLDAS_step[daily]_var[vgrd10m]_date[19790101.20201212].nc"
 print("loading sw nc file....")
