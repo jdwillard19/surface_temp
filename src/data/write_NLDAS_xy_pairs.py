@@ -14,23 +14,31 @@ import datetime
 
 
 #load metadata, get ids
-# metadata2 = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
-# pdb.set_trace()
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_020421.csv")
+
 #load wst obs
-obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 
 #get site ids
 site_ids = np.unique(metadata['site_id'].values)
 n_lakes = site_ids.shape[0]
 
 #load NLDAS data
-lw_ds_path = "../../data/globus/NLDAS_DLWRFsfc_19790102-20210102_train_test.nc" #longwave
-at_ds_path = "../../data/globus/NLDAS_TMP2m_19790102-20210102_train_test.nc" #airtemp
-sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
-wsu_ds_path = "../../data/globus/NLDAS_UGRD10m_19790102-20210102_train_test.nc" #windspeed u
-wsv_ds_path = "../../data/globus/NLDAS_VGRD10m_19790102-20210102_train_test.nc" #windspeed v
-
+# lw_ds_path = "../../data/globus/NLDAS_DLWRFsfc_19790102-20210102_train_test.nc" #longwave
+# at_ds_path = "../../data/globus/NLDAS_TMP2m_19790102-20210102_train_test.nc" #airtemp
+# sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
+# wsu_ds_path = "../../data/globus/NLDAS_UGRD10m_19790102-20210102_train_test.nc" #windspeed u
+# wsv_ds_path = "../../data/globus/NLDAS_VGRD10m_19790102-20210102_train_test.nc" #windspeed v
+# NLDAS_step[daily]_var[dlwrfsfc]_date[19790101.20201212].nc
+# NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20201212].nc
+# NLDAS_step[daily]_var[tmp2m]_date[19790101.20201212].nc
+# NLDAS_step[daily]_var[ugrd10m]_date[19790101.20201212].nc
+# NLDAS_step[daily]_var[vgrd10m]_date[19790101.20201212].nc
+lw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dlwrfsfc]_date[19790101.20201212].nc" #longwave
+at_ds_path = "../../data/globus/NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20201212].nc" #shortwav
+sw_ds_path = "../../data/globus/NLDAS_step[daily]_var[tmp2m]_date[19790101.20201212].nc" #airtemp
+wsu_ds_path = "../../data/globus/NLDAS_step[daily]_var[ugrd10m]_date[19790101.20201212].nc" #windspeed u
+wsv_ds_path = "../../data/globus/NLDAS_step[daily]_var[vgrd10m]_date[19790101.20201212].nc"
 print("loading sw nc file....")
 sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
 print("sw file loaded")
@@ -58,6 +66,7 @@ for lake_ind, name in enumerate(site_ids):
     # print("(",len(site_ids)-lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
     print("(",lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
 
+    pdb.set_trace()
     #get NLDAS coords
     x = metadata[metadata['site_id'] == name]['x'].values[0]-1
     y = metadata[metadata['site_id'] == name]['y'].values[0]-1
