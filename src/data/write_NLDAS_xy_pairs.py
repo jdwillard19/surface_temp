@@ -40,20 +40,19 @@ at_ds_path = "../../data/globus/NLDAS_step[daily]_var[tmp2m]_date[19790101.20201
 wsu_ds_path = "../../data/globus/NLDAS_step[daily]_var[ugrd10m]_date[19790101.20201212].nc" #windspeed u
 wsv_ds_path = "../../data/globus/NLDAS_step[daily]_var[vgrd10m]_date[19790101.20201212].nc"
 print("loading sw nc file....")
-pdb.set_trace()
 sw_da = xr.open_dataset(sw_ds_path)['dswrfsfc']
 print("sw file loaded")
 print("loading lw nc file....")
 lw_da = xr.open_dataset(lw_ds_path)['dlwrfsfc']
 print("lw file loaded")
 print("loading at nc file....")
-at_da = xr.open_dataset(at_ds_path)['TMP2m']
+at_da = xr.open_dataset(at_ds_path)['tmp2m']
 print("at file loaded")
 print("loading at wsu file....")
-wsu_da = xr.open_dataset(wsu_ds_path)['UGRD10m']
+wsu_da = xr.open_dataset(wsu_ds_path)['ugrd10m']
 print("wsu file loaded")
 print("loading at nc file....")
-wsv_da = xr.open_dataset(wsv_ds_path)['VGRD10m']
+wsv_da = xr.open_dataset(wsv_ds_path)['vgrd10m']
 print("wsv file loaded")
 
 start = int(sys.argv[1])
