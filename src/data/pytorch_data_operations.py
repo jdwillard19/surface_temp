@@ -938,6 +938,8 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
     feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea_conus.npy"))
     feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea_conus.npy"))
 
+    if feat_mat.shape[0] < seq_length:
+        return (None,None)
     full = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy"))
 
     trn = full
