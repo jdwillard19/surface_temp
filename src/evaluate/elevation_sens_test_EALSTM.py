@@ -148,7 +148,7 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
         begin_loss_ind = 0
         n_static_feats = 4
         n_total_features = n_features+n_static_feats
-        (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_total_features,
+        (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
                                            win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                            outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
         
