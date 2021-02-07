@@ -18,7 +18,7 @@ import datetime
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
 site_ids = np.unique(metadata['site_id'].values)
 
-metadata.set_index("site_id",inplace=True)
+# metadata.set_index("site_id",inplace=True)
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
 obs = obs[:-1] #delete error obs
@@ -45,8 +45,13 @@ n_stc_feats = 3 #AREA,LAT,LON
 # mean_feats = np.array([1.66308346e02, 2.91540662e02, 6.68199233e00, 7.37268070e01, 4.79260805e00, 1.81936454e-03, 2.30189504e-03])
 # std_feats = np.array([8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
 
-mean_feats = np.array([8669184.835544042, 4.09564144e+01, -9.01653002e+01,1.78920854e+02, 3.10114323e+02, 1.04963419e+01, 7.65040625e-01, 3.06756386e-01])
-std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 9.06977398, 7.51899974, 3.20886119, 1.61188199, 1.69147159])
+# mean_feats = np.array([8669184.835544042, 4.09564144e+01, -9.01653002e+01,1.78920854e+02, 3.10114323e+02, 1.04963419e+01, 7.65040625e-01, 3.06756386e-01])
+# std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 9.06977398, 7.51899974, 3.20886119, 1.61188199, 1.69147159])
+
+#full conus
+mean_feats = np.array([22764867.86668189,41.67704180895113,-90.42553834994683,570.7116328304598,1.76938519e+02, 3.07244103e+02, 2.82966424e+02, 7.85578980e-01, 2.86128260e-01])
+std_feats = np.array([813872728.8619916,6.448248574774095,9.870393000769734,1029.6817691460385,9.10541828, 7.54501692, 3.32520898, 1.6204411 , 1.70625239])
+
 n_features = mean_feats.shape[0]
 #load dates
 sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
@@ -66,9 +71,10 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     print(site_ct," starting ", site_id)
 
     #get NLDAS coords
-    x = int(metadata.loc[site_id]['x'])-1
-    y = int(metadata.loc[site_id]['y'])-1
-
+    # x = int(metadata.loc[site_id]['x'])-1
+    # y = int(metadata.loc[site_id]['y'])-1
+    x = str(metadata[metadata['site_id'] == name]['x'].values[0])+".0"
+    y = str(metadata[metadata['site_id'] == name]['y'].values[0])+".0"
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
     print(site_obs.shape[0], " obs")
@@ -143,11 +149,12 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     site_feats[:,0] = metadata.loc[site_id].area_m2
     site_feats[:,1] = metadata.loc[site_id].lat
     site_feats[:,2] = metadata.loc[site_id].lon
-    site_feats[:,3] = sw[lower_cutoff:upper_cutoff]
-    site_feats[:,4] = lw[lower_cutoff:upper_cutoff]
-    site_feats[:,5] = at[lower_cutoff:upper_cutoff]
-    site_feats[:,6] = wsu[lower_cutoff:upper_cutoff]
-    site_feats[:,7] = wsv[lower_cutoff:upper_cutoff]
+    site_feats[:,3] = metadata.loc[site_id].Elevation
+    site_feats[:,4] = sw[lower_cutoff:upper_cutoff]
+    site_feats[:,5] = lw[lower_cutoff:upper_cutoff]
+    site_feats[:,6] = at[lower_cutoff:upper_cutoff]
+    site_feats[:,7] = wsu[lower_cutoff:upper_cutoff]
+    site_feats[:,8] = wsv[lower_cutoff:upper_cutoff]
 
     #normalize data
     feats_norm = (site_feats - mean_feats[:]) / std_feats[:]
@@ -173,12 +180,12 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
     #verify all mats filled
 
-    if np.isnan(np.sum(feats_norm)):
-        raise Exception("ERROR: Preprocessing failed, there is missing data feat norm")
-        sys.exit() 
-    if np.isnan(np.sum(site_feats)):
-        raise Exception("ERROR: Preprocessing failed, there is missing data feat ")
-        sys.exit() 
+    # if np.isnan(np.sum(feats_norm)):
+    #     raise Exception("ERROR: Preprocessing failed, there is missing data feat norm")
+    #     sys.exit() 
+    # if np.isnan(np.sum(site_feats)):
+    #     raise Exception("ERROR: Preprocessing failed, there is missing data feat ")
+    #     sys.exit() 
 
 
     obs_g = 0
@@ -214,7 +221,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     dates_path = "../../data/processed/"+site_id+"/dates"
 
 
-
+    pdb.set_trace()
     np.save(feat_path, site_feats)
     np.save(norm_feat_path, feats_norm)
     np.save(dates_path, site_dates)
