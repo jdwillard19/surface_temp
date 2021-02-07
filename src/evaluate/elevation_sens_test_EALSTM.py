@@ -417,7 +417,7 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
         # load_path = "../../models/global_model_128hid_1layer_final3_wStaticEA" #1.33?
         load_path = '../../models/elevation_test_model_128hid_1layer' #1.32
         n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-        lstm_net = Model(input_size_dyn=7,input_size_stat=n_static_feats,hidden_size=n_hidden)
+        lstm_net = Model(input_size_dyn=5,input_size_stat=n_static_feats,hidden_size=n_hidden)
         # lstm_net = LSTM(n_total_features, n_hidden, batch_size)
         if use_gpu:
             lstm_net = lstm_net.cuda(0)
