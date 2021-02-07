@@ -16,29 +16,18 @@ import datetime
 #load metadata, get ids
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_020421.csv")
-site_ids = np.unique(metadata['site_id'].values)
 
-# metadata.set_index("site_id",inplace=True)
+#get site ids
+site_ids = np.unique(metadata['site_id'].values)
+n_lakes = site_ids.shape[0]
+
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
 
-#get site ids
-n_lakes = site_ids.shape[0]
 
-#load NLDAS data
-# lw_ds_path = "../../data/globus/NLDAS_DLWRFsfc_19790102-20210102_train_test.nc" #longwave
-# at_ds_path = "../../data/globus/NLDAS_TMP2m_19790102-20210102_train_test.nc" #airtemp
-# sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
-# wsu_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
-# wsv_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
-#wsu_ds_path=
-
-# lw_ds = xr.open_dataset(lw_ds_path)
-# at_ds = xr.open_dataset(at_ds_path)
-# sw_ds = xr.open_dataset(sw_ds_path)
 
 n_dyn_feats = 5 #AT,LW,SW,WSU,WSV
-n_stc_feats = 3 #AREA,LAT,LON
+n_stc_feats = 4 #AREA,LAT,LON,ELEV
 means_per_lake = np.zeros((n_lakes,n_dyn_feats), dtype=np.float_)
 means_per_lake[:] = np.nan
 var_per_lake = np.zeros((n_lakes,n_dyn_feats),dtype=np.float_)
@@ -79,6 +68,7 @@ if not hardcode:
         stat_vals_per_lake[lake_ind,0] = metadata[metadata['site_id'] == name]['area_m2'].values[0]
         stat_vals_per_lake[lake_ind,1] = metadata[metadata['site_id'] == name]['lat'].values[0]
         stat_vals_per_lake[lake_ind,2] = metadata[metadata['site_id'] == name]['lon'].values[0]
+        stat_vals_per_lake[lake_ind,3] = metadata[metadata['site_id'] == name]['Elevation'].values[0]
 
 
     mean_feats = np.average(means_per_lake, axis=0)   
