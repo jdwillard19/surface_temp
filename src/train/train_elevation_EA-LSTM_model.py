@@ -86,7 +86,7 @@ ep_list128 = []
 
 # lakenames = np.load("../../data/static/lists/source_lakes_conus.npy",allow_pickle=True)
 # lakenames = np.load("../../data/static/lists/source_lakes_wrr.npy")
-lakenames = np.load("../../data/static/lists/elevation_ids.npy")
+lakenames = np.load("../../data/static/lists/elevation_ids.npy",allow_pickle=True)
 np.random.shuffle(lakenames)
 train_lakes = lakenames[int(np.round(len(lakenames)/3)):]
 test_lakes = lakenames[:int(np.round(len(lakenames)/3))]
