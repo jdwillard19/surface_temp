@@ -457,7 +457,7 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
                 # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
                 # pred, h_state = lstm_net(inputs, h_state)
 
-                pred, h_state, _ = lstm_net(inputs[:,:,n_static_features:], inputs[:,0,:n_static_features])
+                pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
                 pred = pred.view(pred.size()[0],-1)
                 pred = pred[:, begin_loss_ind:]
 
