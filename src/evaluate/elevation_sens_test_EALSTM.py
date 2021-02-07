@@ -39,7 +39,7 @@ test_lakes = np.load("../../data/static/lists/elevation_test_ids.npy",allow_pick
 #         test_lakes = np.delete(test_lakes,np.where(test_lakes == lake))
 #         remove_ct += 1
 
-print(remove_ct, "removed")
+# print(remove_ct, "removed")
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
 # sys.exit()
 # assert len(test_lakes) == 305
