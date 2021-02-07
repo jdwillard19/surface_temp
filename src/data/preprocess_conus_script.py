@@ -222,7 +222,6 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     dates_path = "../../data/processed/"+site_id+"/dates"
 
 
-    pdb.set_trace()
     np.save(feat_path, site_feats)
     np.save(norm_feat_path, feats_norm)
     np.save(dates_path, site_dates)
