@@ -50,8 +50,8 @@ n_stc_feats = 4 #AREA,LAT,LON,ELEV
 # std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 9.06977398, 7.51899974, 3.20886119, 1.61188199, 1.69147159])
 
 #full conus
-mean_feats = np.array([22764867.86668189,41.67704180895113,-90.42553834994683,570.7116328304598,1.76938519e+02, 3.07244103e+02, 2.82966424e+02, 7.85578980e-01, 2.86128260e-01])
-std_feats = np.array([813872728.8619916,6.448248574774095,9.870393000769734,1029.6817691460385,9.10541828, 7.54501692, 3.32520898, 1.6204411 , 1.70625239])
+mean_feats = np.array([13.17839631,41.67704180895113,-90.42553834994683,570.7116328304598,1.76938519e+02, 3.07244103e+02, 2.82966424e+02, 7.85578980e-01, 2.86128260e-01])
+std_feats = np.array([1.65596633,6.448248574774095,9.870393000769734,1029.6817691460385,9.10541828, 7.54501692, 3.32520898, 1.6204411 , 1.70625239])
 
 n_features = mean_feats.shape[0]
 #load dates
@@ -147,7 +147,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     wsu = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y.npy")
     wsv = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
 
-    site_feats[:,0] = metadata[metadata['site_id']==site_id].area_m2
+    site_feats[:,0] = np.log(metadata[metadata['site_id']==site_id].area_m2)
     site_feats[:,1] = metadata[metadata['site_id']==site_id].lat
     site_feats[:,2] = metadata[metadata['site_id']==site_id].lon
     site_feats[:,3] = metadata[metadata['site_id']==site_id].Elevation
