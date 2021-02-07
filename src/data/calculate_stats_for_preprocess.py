@@ -18,7 +18,7 @@ import datetime
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_020421.csv")
 site_ids = np.unique(metadata['site_id'].values)
 
-metadata.set_index("site_id",inplace=True)
+# metadata.set_index("site_id",inplace=True)
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
 
@@ -53,6 +53,7 @@ if not hardcode:
         print("(",lake_ind,"/",str(len(site_ids)),") ","pre ", name)
 
             #get NLDAS coords
+        
         x = str(metadata[metadata['site_id'] == name]['x'].values[0])+".0"
         y = str(metadata[metadata['site_id'] == name]['y'].values[0])+".0"
         sw_vals = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y.npy")
