@@ -20,6 +20,8 @@ import re
 
 # base_path = "../../data/raw/sb_mtl_data_release/"
 # obs_df = pd.read_csv(base_path+"obs/temperature_observations.csv")
+obs_df = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
+
 # train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 # train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 # test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
@@ -30,14 +32,14 @@ test_lakes = np.load("../../data/static/lists/elevation_test_ids.npy",allow_pick
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
 # print(len(test_lakes), "test lakes")
 # remove_ct = 0
-# for lake in test_lakes:
-#     filter_df = obs_df[obs_df['site_id'] == "nhdhr_"+lake]
-#     filter_df = filter_df[filter_df['depth'] <= .25]
-#     if filter_df.shape[0] < 2:
-#         test_lakes = np.delete(test_lakes,np.where(test_lakes == lake))
-#         remove_ct += 1
+for lake in test_lakes:
+    filter_df = obs_df[obs_df['site_id'] == "nhdhr_"+lake]
+    filter_df = filter_df[filter_df['depth'] <= .25]
+    if filter_df.shape[0] < 2:
+        test_lakes = np.delete(test_lakes,np.where(test_lakes == lake))
+        remove_ct += 1
 
-# print(remove_ct, "removed")
+print(remove_ct, "removed")
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
 # sys.exit()
 # assert len(test_lakes) == 305
@@ -116,7 +118,7 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
     # med_meta_rmse_per_lake = np.empty(test_lakes.shape[0])
     rmse_per_lake[:] = np.nan
     for targ_ct, target_id in enumerate(test_lakes): #for each target lake
-        # print(str(targ_ct),'/',len(test_lakes),':',target_id)
+        print(str(targ_ct),'/',len(test_lakes),':',target_id)
         lake_df = pd.DataFrame()
         lake_id = target_id
 
