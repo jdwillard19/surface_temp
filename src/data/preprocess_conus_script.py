@@ -68,14 +68,14 @@ date_offset = 350
 
 
 for site_ct, site_id in enumerate(site_ids[start:end]):
-
+    if site_ct < 2918:
+        continue
     print(site_ct," starting ", site_id)
 
     #get NLDAS coords
-    # x = int(metadata.loc[site_id]['x'])-1
-    # y = int(metadata.loc[site_id]['y'])-1
     x = str(metadata[metadata['site_id'] == site_id]['x'].values[0])+".0"
     y = str(metadata[metadata['site_id'] == site_id]['y'].values[0])+".0"
+
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
     print(site_obs.shape[0], " obs")
@@ -151,6 +151,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     site_feats[:,1] = metadata[metadata['site_id']==site_id].lat
     site_feats[:,2] = metadata[metadata['site_id']==site_id].lon
     site_feats[:,3] = metadata[metadata['site_id']==site_id].Elevation
+    pdb.set_trace()
     site_feats[:,4] = sw[lower_cutoff:upper_cutoff]
     site_feats[:,5] = lw[lower_cutoff:upper_cutoff]
     site_feats[:,6] = at[lower_cutoff:upper_cutoff]
