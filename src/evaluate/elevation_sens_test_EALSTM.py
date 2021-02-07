@@ -156,7 +156,7 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
         unique_tst_dates = np.unique(tst_dates)
         #useful values, LSTM params
         batch_size = tst_data_target.size()[0]
-        n_test_dates = unique_tst_dates_target.shape[0]
+        n_test_dates = unique_tst_dates.shape[0]
 
 
         #define LSTM model class
