@@ -68,8 +68,8 @@ date_offset = 350
 
 
 for site_ct, site_id in enumerate(site_ids[start:end]):
-    if site_ct < 2918:
-        continue
+    # if site_ct < 2918:
+    #     continue
     print(site_ct," starting ", site_id)
 
     #get NLDAS coords
