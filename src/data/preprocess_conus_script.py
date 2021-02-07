@@ -21,8 +21,8 @@ site_ids = np.unique(metadata['site_id'].values)
 # metadata.set_index("site_id",inplace=True)
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
-pdb.set_trace()
-obs = obs[:-1] #delete error obs
+obs.sort_values('Date',inplace=True)
+obs = obs[:-2] #delete error obs year 2805, and 2021
 
 #get site ids
 n_lakes = site_ids.shape[0]
@@ -40,7 +40,7 @@ n_lakes = site_ids.shape[0]
 # sw_ds = xr.open_dataset(sw_ds_path)
 
 n_dyn_feats = 5 #AT,LW,SW,WSU,WSV
-n_stc_feats = 3 #AREA,LAT,LON
+n_stc_feats = 4 #AREA,LAT,LON,ELEV
 
 #can uncomment and hard code here 
 # mean_feats = np.array([1.66308346e02, 2.91540662e02, 6.68199233e00, 7.37268070e01, 4.79260805e00, 1.81936454e-03, 2.30189504e-03])
