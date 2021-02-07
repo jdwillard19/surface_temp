@@ -15,7 +15,7 @@ import datetime
 
 #load metadata, get ids
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_020421.csv")
 site_ids = np.unique(metadata['site_id'].values)
 
 metadata.set_index("site_id",inplace=True)
@@ -76,9 +76,9 @@ if not hardcode:
         if not np.isfinite(var_per_lake[lake_ind,:]).all():
             pdb.set_trace()
             assert np.isfinite(var_per_lake[lake_ind,:]).all()
-        # stat_vals_per_lake[lake_ind,0] = metadata.loc[name].area_m2
-        # stat_vals_per_lake[lake_ind,1] = metadata.loc[name].lat
-        # stat_vals_per_lake[lake_ind,2] = metadata.loc[name].lon
+        stat_vals_per_lake[lake_ind,0] = metadata.loc[name].area_m2
+        stat_vals_per_lake[lake_ind,1] = metadata.loc[name].lat
+        stat_vals_per_lake[lake_ind,2] = metadata.loc[name].lon
 
 
     mean_feats = np.average(means_per_lake, axis=0)   
