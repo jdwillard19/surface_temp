@@ -55,7 +55,7 @@ std_feats = np.array([813872728.8619916,6.448248574774095,9.870393000769734,1029
 
 n_features = mean_feats.shape[0]
 #load dates
-sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
+sw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20201212].nc" #shortwave
 print("loading sw nc file....")
 sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
 print("sw file loaded")
@@ -107,7 +107,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     #cut files to between first and last observation
     lower_cutoff = np.where(dates == pd.Timestamp(start_date).to_datetime64())[0][0] #457
     print("lower cutoff: ", lower_cutoff)
-    if len(np.where(dates == pd.Timestamp(obs_end_date).to_datetime64())[0]) < 1: 
+    if z: 
         print("observation beyond meteorological data! data will only be used up to the end of meteorological data")
         upper_cutoff = dates.shape[0]
     else:
@@ -151,7 +151,6 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     site_feats[:,1] = metadata[metadata['site_id']==site_id].lat
     site_feats[:,2] = metadata[metadata['site_id']==site_id].lon
     site_feats[:,3] = metadata[metadata['site_id']==site_id].Elevation
-    pdb.set_trace()
     site_feats[:,4] = sw[lower_cutoff:upper_cutoff]
     site_feats[:,5] = lw[lower_cutoff:upper_cutoff]
     site_feats[:,6] = at[lower_cutoff:upper_cutoff]
