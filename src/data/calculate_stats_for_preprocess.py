@@ -53,7 +53,7 @@ if not hardcode:
         print("(",lake_ind,"/",str(len(site_ids)),") ","pre ", name)
 
             #get NLDAS coords
-        
+        pdb.set_trace()
         x = str(metadata[metadata['site_id'] == name]['x'].values[0])+".0"
         y = str(metadata[metadata['site_id'] == name]['y'].values[0])+".0"
         sw_vals = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y.npy")
@@ -96,10 +96,10 @@ else:
     std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
 
 pdb.set_trace()
-sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
+# sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
 
-print("loading sw nc file....")
-sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
-print("sw file loaded")
+# print("loading sw nc file....")
+# sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
+# print("sw file loaded")
 
-dates = sw_da['Time'].values
+# dates = sw_da['Time'].values
