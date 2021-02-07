@@ -20,7 +20,8 @@ site_ids = np.unique(metadata['site_id'].values)
 
 # metadata.set_index("site_id",inplace=True)
 #load wst obs
-obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
+pdb.set_trace()
 obs = obs[:-1] #delete error obs
 
 #get site ids
@@ -73,8 +74,8 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     #get NLDAS coords
     # x = int(metadata.loc[site_id]['x'])-1
     # y = int(metadata.loc[site_id]['y'])-1
-    x = str(metadata[metadata['site_id'] == name]['x'].values[0])+".0"
-    y = str(metadata[metadata['site_id'] == name]['y'].values[0])+".0"
+    x = str(metadata[metadata['site_id'] == site_id]['x'].values[0])+".0"
+    y = str(metadata[metadata['site_id'] == site_id]['y'].values[0])+".0"
     #read/format meteorological data for numpy
     site_obs = obs[obs['site_id'] == site_id]
     print(site_obs.shape[0], " obs")
