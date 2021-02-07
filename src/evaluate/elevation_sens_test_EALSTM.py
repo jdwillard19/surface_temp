@@ -153,10 +153,10 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
                                            outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
         
 
-        unique_tst_dates_target = np.unique(tst_dates)
+        unique_tst_dates = np.unique(tst_dates)
         #useful values, LSTM params
         batch_size = tst_data_target.size()[0]
-        n_test_dates_target = unique_tst_dates_target.shape[0]
+        n_test_dates = unique_tst_dates_target.shape[0]
 
 
         #define LSTM model class
@@ -444,7 +444,7 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
                 inputs[:,:,feat_ind_to_add_noise] = AddGaussianNoise(inputs[:,:,feat_ind_to_add_noise], gauss_std)
                 targets = data[:,:,-1].float()
                 targets = targets[:, begin_loss_ind:]
-                tmp_dates = tst_dates_target[:, begin_loss_ind:]
+                tmp_dates = tst_dates[:, begin_loss_ind:]
                 depths = inputs[:,:,0]
 
                 if use_gpu:
@@ -479,8 +479,8 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
 
                 #save model 
                 (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
-                                                                n_test_dates_target,
-                                                                unique_tst_dates_target) 
+                                                                n_test_dates,
+                                                                unique_tst_dates) 
                 #to store output
                 # output_mats[i,:,:] = outputm_npy
                 loss_output = outputm_npy[~np.isnan(labelm_npy)]
