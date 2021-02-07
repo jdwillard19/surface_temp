@@ -65,7 +65,7 @@ if not hardcode:
         if not np.isfinite(var_per_lake[lake_ind,:]).all():
             pdb.set_trace()
             assert np.isfinite(var_per_lake[lake_ind,:]).all()
-        stat_vals_per_lake[lake_ind,0] = metadata[metadata['site_id'] == name]['area_m2'].values[0]
+        stat_vals_per_lake[lake_ind,0] = np.log(metadata[metadata['site_id'] == name]['area_m2'].values[0])
         stat_vals_per_lake[lake_ind,1] = metadata[metadata['site_id'] == name]['lat'].values[0]
         stat_vals_per_lake[lake_ind,2] = metadata[metadata['site_id'] == name]['lon'].values[0]
         stat_vals_per_lake[lake_ind,3] = metadata[metadata['site_id'] == name]['Elevation'].values[0]
