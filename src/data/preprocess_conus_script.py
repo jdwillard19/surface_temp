@@ -57,7 +57,7 @@ n_features = mean_feats.shape[0]
 #load dates
 sw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20201212].nc" #shortwave
 print("loading sw nc file....")
-sw_da = xr.open_dataset(sw_ds_path)['DSWRFsfc']
+sw_da = xr.open_dataset(sw_ds_path)['dswrfsfc']
 print("sw file loaded")
 dates = sw_da['Time'].values
 
