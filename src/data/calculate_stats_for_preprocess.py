@@ -53,7 +53,6 @@ if not hardcode:
         print("(",lake_ind,"/",str(len(site_ids)),") ","pre ", name)
 
             #get NLDAS coords
-        pdb.set_trace()
         x = str(metadata[metadata['site_id'] == name]['x'].values[0])+".0"
         y = str(metadata[metadata['site_id'] == name]['y'].values[0])+".0"
         sw_vals = np.load("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y.npy")
@@ -77,9 +76,9 @@ if not hardcode:
         if not np.isfinite(var_per_lake[lake_ind,:]).all():
             pdb.set_trace()
             assert np.isfinite(var_per_lake[lake_ind,:]).all()
-        stat_vals_per_lake[lake_ind,0] = metadata.loc[name].area_m2
-        stat_vals_per_lake[lake_ind,1] = metadata.loc[name].lat
-        stat_vals_per_lake[lake_ind,2] = metadata.loc[name].lon
+        stat_vals_per_lake[lake_ind,0] = metadata[metadata['site_id'] == name]['area_m2'].values[0]
+        stat_vals_per_lake[lake_ind,1] = metadata[metadata['site_id'] == name]['lat'].values[0]
+        stat_vals_per_lake[lake_ind,2] = metadata[metadata['site_id'] == name]['lon'].values[0]
 
 
     mean_feats = np.average(means_per_lake, axis=0)   
