@@ -6,7 +6,7 @@ import pdb
 import sys
 import os
 sys.path.append('../data')
-from pytorch_data_operations import buildLakeDataForRNN_manylakes_finetune2, parseMatricesFromSeqs
+from pytorch_data_operations import buildLakeDataForRNN_conus, parseMatricesFromSeqs
 import torch
 import torch.nn as nn
 import torch.utils.data
