@@ -147,10 +147,10 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     wsu = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y.npy")
     wsv = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
 
-    site_feats[:,0] = metadata.loc[site_id].area_m2
-    site_feats[:,1] = metadata.loc[site_id].lat
-    site_feats[:,2] = metadata.loc[site_id].lon
-    site_feats[:,3] = metadata.loc[site_id].Elevation
+    site_feats[:,0] = metadata[metadata['site_id']==site_id].area_m2
+    site_feats[:,1] = metadata[metadata['site_id']==site_id].lat
+    site_feats[:,2] = metadata[metadata['site_id']==site_id].lon
+    site_feats[:,3] = metadata[metadata['site_id']==site_id].Elevation
     site_feats[:,4] = sw[lower_cutoff:upper_cutoff]
     site_feats[:,5] = lw[lower_cutoff:upper_cutoff]
     site_feats[:,6] = at[lower_cutoff:upper_cutoff]
