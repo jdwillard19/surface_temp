@@ -108,6 +108,8 @@ gauss_std = .6
 
 
 #initial no-noise 
+rmse_per_lake = np.empty(test_lakes.shape[0])
+
 rmse_per_lake[:] = np.nan
 print("NO NOISE RUN: ")
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
