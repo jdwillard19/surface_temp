@@ -27,6 +27,7 @@ def calc_rmse(predictions,targets):
 
 #create and fit model
 model_path = '../../models/xgb_surface_temp.joblib'
+
 model = load(model_path)
 test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
 
