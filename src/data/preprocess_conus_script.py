@@ -107,7 +107,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     #cut files to between first and last observation
     lower_cutoff = np.where(dates == pd.Timestamp(start_date).to_datetime64())[0][0] #457
     print("lower cutoff: ", lower_cutoff)
-    if z: 
+    if len(np.where(dates == pd.Timestamp(obs_end_date).to_datetime64())[0]) < 1: 
         print("observation beyond meteorological data! data will only be used up to the end of meteorological data")
         upper_cutoff = dates.shape[0]
     else:
