@@ -141,23 +141,21 @@ for feat_ct, feat_ind_to_add_noise in enumerate(feat_inds):
         data_dir_target = "../../data/processed/"+target_id+"/" 
         #target agnostic model and data params
         use_gpu = True
-        n_features = 7
+        n_features = 5
         # n_hidden = 20
         seq_length = 350
         win_shift = 175
         begin_loss_ind = 0
-        n_static_feats = 15
+        n_static_feats = 4
         n_total_features = n_features+n_static_feats
-        (_, _, tst_data_target, tst_dates_target, unique_tst_dates_target,\
-        all_data_target, all_phys_data_target, all_dates_target) = buildLakeDataForRNN_manylakes_finetune2(target_id, data_dir_target, seq_length, n_features,
+        (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_total_features,
                                            win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                           outputFullTestMatrix=True, allTestSeq=True, static_feats=True,n_static_feats=n_static_feats)
+                                           outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
         
 
+        unique_tst_dates_target = np.unique(tst_dates)
         #useful values, LSTM params
         batch_size = tst_data_target.size()[0]
-        u_depths_target = np.unique(all_data_target[:,0,0])
-        n_depths = torch.unique(all_data_target[:,:,0]).size()[0]
         n_test_dates_target = unique_tst_dates_target.shape[0]
 
 
