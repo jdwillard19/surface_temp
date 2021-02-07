@@ -49,7 +49,7 @@ output_to_file = True
 
 # save_file_path = "../../results/pgmtl_results_simpleGlobalLSTM.csv"
 # save_file_path = "../../results/pgmtl_results_GlobalEALSTM.csv"
-n_total_features = 10
+n_total_features = 9
 feats = ['surface_area','lat','long','elevation','SW','LW','AT','WSU','WSV']
 #########################################################################################
 #paste features found in "pbmtl_feature_selection.py" here
