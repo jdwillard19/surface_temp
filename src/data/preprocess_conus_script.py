@@ -54,11 +54,22 @@ mean_feats = np.array([13.17839631,41.67704180895113,-90.42553834994683,570.7116
 std_feats = np.array([1.65596633,6.448248574774095,9.870393000769734,1029.6817691460385,9.10541828, 7.54501692, 3.32520898, 1.6204411 , 1.70625239])
 
 
+
+#add ftype and fcodes
 Ftypes = np.unique(metadata['FType'])
 Fcodes = np.unique(metadata['FCode'])
-pdb.set_trace()
+ftype_arrs = [[1 if metadata.iloc[i]['FType']==int(j) else 0 for i in range(metadata.shape[0])] for j in Ftypes]
+fcode_arrs = [[1 if metadata.iloc[i]['FCode']==int(j) else 0 for i in range(metadata.shape[0])] for j in Fcodes]
+ftype_means = [np.mean(ftype_arr) for ftype_arr in ftype_arrs]
+ftype_std = [np.std(ftype_arr) for ftype_arr in ftype_arrs]
+fcode_means = [np.mean(fcode_arr) for fcode_arr in fcode_arrs]
+fcode_std = [np.std(fcode_arr) for fcode_arr in fcode_arrs]
 
-ftype_means = [metadata[metadata['FType']==int(i)].shape[0]/metadata.shape[0] for i in Ftypes]
+mean_feats = np.insert(mean_feats,0,fcode_means)
+mean_feats = np.insert(mean_feats,0,ftype_means)
+std_feats = np.insert(std_feats,0,fcode_std)
+std_feats = np.insert(std_feats,0,ftype_std)
+
 
 n_features = mean_feats.shape[0]
 #load dates
@@ -154,16 +165,21 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     wsu = np.load("../../data/raw/feats/WSU_"+str(x)+"x_"+str(y)+"y.npy")
     wsv = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
 
-    site_feats[:,0] = np.log(metadata[metadata['site_id']==site_id].area_m2)
-    site_feats[:,1] = metadata[metadata['site_id']==site_id].lat
-    site_feats[:,2] = metadata[metadata['site_id']==site_id].lon
-    site_feats[:,3] = metadata[metadata['site_id']==site_id].Elevation
+
+    n_sites_and_codes = 26
+    n_sites = 3
+    n_codes = 23
     pdb.set_trace()
-    site_feats[:,4] = sw[lower_cutoff:upper_cutoff]
-    site_feats[:,5] = lw[lower_cutoff:upper_cutoff]
-    site_feats[:,6] = at[lower_cutoff:upper_cutoff]
-    site_feats[:,7] = wsu[lower_cutoff:upper_cutoff]
-    site_feats[:,8] = wsv[lower_cutoff:upper_cutoff]
+    # site_feats[:,:n_sites] =  
+    site_feats[:,0+n_sites_and_codes] = np.log(metadata[metadata['site_id']==site_id].area_m2)
+    site_feats[:,1+n_sites_and_codes] = metadata[metadata['site_id']==site_id].lat
+    site_feats[:,2+n_sites_and_codes] = metadata[metadata['site_id']==site_id].lon
+    site_feats[:,3+n_sites_and_codes] = metadata[metadata['site_id']==site_id].Elevation
+    site_feats[:,4+n_sites_and_codes] = sw[lower_cutoff:upper_cutoff]
+    site_feats[:,5+n_sites_and_codes] = lw[lower_cutoff:upper_cutoff]
+    site_feats[:,6+n_sites_and_codes] = at[lower_cutoff:upper_cutoff]
+    site_feats[:,7+n_sites_and_codes] = wsu[lower_cutoff:upper_cutoff]
+    site_feats[:,8+n_sites_and_codes] = wsv[lower_cutoff:upper_cutoff]
 
     #normalize data
     feats_norm = (site_feats - mean_feats[:]) / std_feats[:]
