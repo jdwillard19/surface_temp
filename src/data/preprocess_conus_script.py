@@ -169,8 +169,8 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     n_sites_and_codes = 26
     n_sites = 3
     n_codes = 23
-    pdb.set_trace()
-    # site_feats[:,:n_sites] =  
+    site_feats[:,:n_sites] = [1 if metadata[metadata['site_id']==site_id]['FType'].values[0] == int(i) else 0 for i in Ftypes]
+    site_feats[:,n_sites:n_sites_and_codes] = [1 if metadata[metadata['site_id']==site_id]['FCode'].values[0] == int(i) else 0 for i in Fcodes]
     site_feats[:,0+n_sites_and_codes] = np.log(metadata[metadata['site_id']==site_id].area_m2)
     site_feats[:,1+n_sites_and_codes] = metadata[metadata['site_id']==site_id].lat
     site_feats[:,2+n_sites_and_codes] = metadata[metadata['site_id']==site_id].lon
