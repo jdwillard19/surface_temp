@@ -53,6 +53,7 @@ n_stc_feats = 4 #AREA,LAT,LON,ELEV
 mean_feats = np.array([13.17839631,41.67704180895113,-90.42553834994683,570.7116328304598,1.76938519e+02, 3.07244103e+02, 2.82966424e+02, 7.85578980e-01, 2.86128260e-01])
 std_feats = np.array([1.65596633,6.448248574774095,9.870393000769734,1029.6817691460385,9.10541828, 7.54501692, 3.32520898, 1.6204411 , 1.70625239])
 
+pdb.set_trace()
 n_features = mean_feats.shape[0]
 #load dates
 sw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20201212].nc" #shortwave
@@ -151,6 +152,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     site_feats[:,1] = metadata[metadata['site_id']==site_id].lat
     site_feats[:,2] = metadata[metadata['site_id']==site_id].lon
     site_feats[:,3] = metadata[metadata['site_id']==site_id].Elevation
+    pdb.set_trace()
     site_feats[:,4] = sw[lower_cutoff:upper_cutoff]
     site_feats[:,5] = lw[lower_cutoff:upper_cutoff]
     site_feats[:,6] = at[lower_cutoff:upper_cutoff]
