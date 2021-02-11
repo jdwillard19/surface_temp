@@ -351,7 +351,7 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
         #@begin_loss_ind = index in sequence to begin calculating loss function (to avoid poor accuracy in early parts of the sequence)
 
     #composite data structures
-    n_features = n_features+n_static_feats
+    # n_features = n_features+n_static_feats
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
     trn_dates_comp = torch.Tensor(0, seq_length)
     X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
