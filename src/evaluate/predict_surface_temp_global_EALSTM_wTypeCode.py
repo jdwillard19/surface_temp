@@ -66,7 +66,7 @@ output_to_file = True
 # save_file_path = "../../results/pgmtl_results_simpleGlobalLSTM.csv"
 save_file_path = "../../results/pgmtl_results_GlobalEALSTM_conus.csv"
 n_features = 5
-n_static_feats = 3
+n_static_feats = 26
 n_total_features = n_features+n_static_feats
 # feats = ['SW','LW','AT','RH','WS','Rain','Snow','surface_area','SDF','K_d','longitude','latitude',\
 #                     'lw_std',\
