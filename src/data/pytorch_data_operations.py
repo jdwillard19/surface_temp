@@ -922,7 +922,7 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
 def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
                                             outputFullTestMatrix=False, sparseCustom=None, \
-                                            allTestSeq=False,n_static_feats=0,\
+                                            allTestSeq=False,n_static_feats=0,removeElevation=False,\
                                             postProcessSplits=True, randomSeed=0):
 
     #NONAN
@@ -940,7 +940,9 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
 
     feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea_conus.npy"))
     feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea_conus.npy"))
-
+    if removeElevation:
+        feat_mat = np.delete(feat_mat,29,axis=1)
+        feat_mat_raw = np.delete(feat_mat_raw,29,axis=1)
     if feat_mat.shape[0] < seq_length:
         return (None,None)
     full = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy"))
