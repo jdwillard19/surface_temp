@@ -575,6 +575,9 @@ for epoch in range(n_eps):
     # if verbose and epoch %100 is 0:
     if verbose:
         print("rmse loss=", avg_loss)
+    if epoch % 10 is 0:
+        save_path = "../../models/EALSTM_global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wElevTypeCodes_partial"
+        saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
     if avg_loss < targ_rmse and epoch > targ_ep:
         break
 
@@ -674,7 +677,7 @@ for epoch in range(n_eps):
     #         ep_list64.append(epoch)
     #     elif n_hidden is n_hidden_list[3]:
     #         ep_list128.append(epoch)
-save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_final_2feat_wStaticEA_0"
+save_path = "../../models/EALSTM_global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wElevTypeCodes"
 
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
