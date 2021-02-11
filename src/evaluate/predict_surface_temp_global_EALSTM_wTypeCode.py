@@ -98,7 +98,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     lake_id = target_id
 
     n_features = 5
-    n_static_feats = 3
+    n_static_feats = 26
     n_total_features = n_features+n_static_feats
     # lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
     # lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
