@@ -114,7 +114,7 @@ yhat_batch_size = 1
 #create train and test sets
 
 (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
-                                                seq_length, n_total_feats,\
+                                                seq_length, n_features,\
                                                 win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                 removeElevation=True,static_feats=True,n_static_feats = 26) 
 np.save("conus_trn_data_wTypeCodeElev.npy",trn_data)
