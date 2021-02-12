@@ -469,14 +469,14 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # output_mats[i,:,:] = outputm_npy
             loss_output = outputm_npy[~np.isnan(labelm_npy)]
             loss_label = labelm_npy[~np.isnan(labelm_npy)]
-            loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
-            outputs.append(loss_output)
-            labels.append(loss_label)
-            dates.append(loss_days)
-            site_id_repeat = np.empty((loss_label.shape[0]),dtype=np.object)
-            site_id_repeat[:] = ''
-            site_id_repeat[:] = target_id
-            sites.append(site_id_repeat)
+            # loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
+            # outputs.append(loss_output)
+            # labels.append(loss_label)
+            # dates.append(loss_days)
+            # site_id_repeat = np.empty((loss_label.shape[0]),dtype=np.object)
+            # site_id_repeat[:] = ''
+            # site_id_repeat[:] = target_id
+            # sites.append(site_id_repeat)
 
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
             print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
