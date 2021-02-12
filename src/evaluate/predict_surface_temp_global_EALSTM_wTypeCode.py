@@ -28,25 +28,25 @@ import re
 
 
 
-test_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
+# test_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
 load_path = "../../models/EALSTM_global_model_128hid_1layer_wElevTypeCodes_partial"
 
-to_remove = []
-obs_per_lake = np.empty_like(test_lakes)
-for i, lake in enumerate(test_lakes):
-    print("lake ",i)
-    obs = np.load("../../data/processed/"+lake+"/full.npy")
-    # if lake == 'nhdhr_86003700':   
-        # pdb.set_trace()
-    if obs.shape[0] < 350:
-        to_remove.append(lake)
-    obs_per_lake[i] = np.count_nonzero(np.isfinite(obs))
-obs_per_lake = obs_per_lake[~np.isin(test_lakes,to_remove)]
-test_lakes = test_lakes[~np.isin(test_lakes,to_remove)]
-outputs = []
-labels = []
-dates = []
-sites = []
+# to_remove = []
+# obs_per_lake = np.empty_like(test_lakes)
+# for i, lake in enumerate(test_lakes):
+#     print("lake ",i)
+#     obs = np.load("../../data/processed/"+lake+"/full.npy")
+#     # if lake == 'nhdhr_86003700':   
+#         # pdb.set_trace()
+#     if obs.shape[0] < 350:
+#         to_remove.append(lake)
+#     obs_per_lake[i] = np.count_nonzero(np.isfinite(obs))
+# obs_per_lake = obs_per_lake[~np.isin(test_lakes,to_remove)]
+# test_lakes = test_lakes[~np.isin(test_lakes,to_remove)]
+# outputs = []
+# labels = []
+# dates = []
+# sites = []
 
 
 test_lakes = np.array(['nhdhr_143249470','nhdhr_69886284'])
