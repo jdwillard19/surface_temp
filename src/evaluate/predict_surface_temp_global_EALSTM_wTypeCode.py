@@ -23,6 +23,11 @@ import re
 # train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 # train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 # test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
+
+
+
+
+
 test_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
 load_path = "../../models/EALSTM_global_model_128hid_1layer_wElevTypeCodes_partial"
 
@@ -42,6 +47,11 @@ outputs = []
 labels = []
 dates = []
 sites = []
+
+
+test_lakes = np.array(['nhdhr_143249470','nhdhr_69886284'])
+
+
 # test_lakes = train_lakes
 # test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
@@ -481,19 +491,20 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     # #save model 
     # total_output_npy = np.average(output_mats, axis=0)
 
-    # if output_to_file:
-    #     outputm_npy = np.transpose(total_output_npy)
-    #     label_mat= np.transpose(label_mats)
-    #     output_df = pd.DataFrame(data=outputm_npy, columns=[str(float(x/2)) for x in range(outputm_npy.shape[1])], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
-    #     label_df = pd.DataFrame(data=label_mat, columns=[str(float(x/2)) for x in range(label_mat.shape[1])], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
-    #     output_df.rename(columns={'index': 'depth'})
-    #     label_df.rename(columns={'index': 'depth'})
+    if output_to_file:
+        pdb.set_trace()
+        outputm_npy = np.transpose(outputm_npy)
+        label_mat= np.transpose(labelm_npy)
+        output_df = pd.DataFrame(data=outputm_npy, columns=['surface_temp'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
+        label_df = pd.DataFrame(data=label_mat, columns=['surface_temp'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
+        output_df.rename(columns={'index': 'depth'})
+        label_df.rename(columns={'index': 'depth'})
 
-    #     assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
-    #     lake_output_path = output_path+target_id
-    #     if not os.path.exists(lake_output_path):
-    #         os.mkdir(lake_output_path)
-    #     output_df.to_feather(lake_output_path+"/PGMTL_outputs.feather")
+        assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
+        lake_output_path = '../../results/outputs_'+target_id+'.feather'
+        # if not os.path.exists(lake_output_path):
+        #     os.mkdir(lake_output_path)
+        output_df.to_feather(lake_output_path)
         
     # loss_output = total_output_npy[~np.isnan(label_mats)]
     # loss_label = label_mats[~np.isnan(label_mats)]
@@ -524,5 +535,10 @@ labels = np.concatenate(labels).reshape(-1)
 outputs = np.concatenate(outputs).reshape(-1)
 dates = np.concatenate(dates).reshape(-1)
 sites = np.concatenate(sites).reshape(-1)
+
+results = pd.DataFrame()
+results['site_id'] = test_lakes
+results['rmse'] = rmse_per_lake
+
 
 pdb.set_trace()
