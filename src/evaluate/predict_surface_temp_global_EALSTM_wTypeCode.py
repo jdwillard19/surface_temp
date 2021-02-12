@@ -495,10 +495,10 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         pdb.set_trace()
         outputm_npy = np.transpose(outputm_npy)
         label_mat= np.transpose(labelm_npy)
-        output_df = pd.DataFrame(data=outputm_npy, columns=['surface_temp'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
-        label_df = pd.DataFrame(data=label_mat, columns=['surface_temp'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
-        output_df.rename(columns={'index': 'depth'})
-        label_df.rename(columns={'index': 'depth'})
+        output_df = pd.DataFrame(data=outputm_npy, columns=['temp_pred'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
+        label_df = pd.DataFrame(data=label_mat, columns=['temp_actual'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
+        output_df.rename(columns={'Date': 'temp_pred'})
+        label_df.rename(columns={'Date': 'temp_actual'})
 
         assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
         lake_output_path = '../../results/outputs_'+target_id+'.feather'
