@@ -501,6 +501,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         label_df.rename(columns={'Date': 'temp_actual'})
 
         assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
+        output_df['temp_actual'] = label_df['temp_actual']
+
         lake_output_path = '../../results/outputs_'+target_id+'.feather'
         # if not os.path.exists(lake_output_path):
         #     os.mkdir(lake_output_path)
