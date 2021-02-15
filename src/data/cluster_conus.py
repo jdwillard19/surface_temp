@@ -38,8 +38,10 @@ for i in cluster_label_vals:
 	labels = np.empty((k,fold_size))
 	for fold in range(k):
 		labels[fold,:] = fold
+
+	assert np.isfinite(labels).all()
 	np.random.shuffle(labels)
-	inds = metadata[metadata['cluster']==i].index
+	inds = metadata.index[metadata['cluster']==i]
 	metadata.iloc[inds, metadata.columns.get_loc('3fold_fold')] = labels.flatten()
 	pdb.set_trace()
 	# split_inds = [int(np.round((np.where(metadata['cluster']==i)[0].shape[0]*i)/k)) for i in range(k)]
