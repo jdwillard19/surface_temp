@@ -116,8 +116,9 @@ yhat_batch_size = 1
 
 n_folds = 3
 for k in range(n_folds):
-    lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values     
-    test_lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values 
+    # lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
+    lakenames = metadata['site_id'].values
+    # test_lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
     trn_rmse_per_ep = []
     tst_rmse_per_ep = []
     ep_arr = []   
@@ -125,14 +126,18 @@ for k in range(n_folds):
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                     removeElevation=True,static_feats=True,n_static_feats = 4) 
-    # np.save("conus_trn_data_wTypeCodeElev.npy",trn_data)
+    # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
+    #                                             seq_length, n_total_feats,\
+    #                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+    #                                             removeElevation=True,static_feats=True,n_static_feats = 4) 
+    np.save("conus_trn_data_final.npy",trn_data)
     # np.save("_tst_data_wStatic.npy",tst_data)
     # sys.exit()
     # trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
     # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
     # tst_data = tst_data[:,:,[0,1,2,4,7,-1]]
 
-    # trn_data = tst_data
+    # trn_data = np.load("conus_trn_data_final.npy",allow_pickle=True)
     # n_features = 4
     # n_static_feats = 1
     # n_total_feats = n_features + n_static_feats
@@ -141,7 +146,8 @@ for k in range(n_folds):
     # trn_data = tst_data
     # batch_size = trn_data.size()[0]
     pdb.set_trace()
-    batch_size = int(math.floor(trn_data.size()[0])/20)
+    # batch_size = int(math.floor(trn_data.size()[0])/20)
+    batch_size = 1000
 
 
 
