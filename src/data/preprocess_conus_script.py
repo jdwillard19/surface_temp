@@ -50,25 +50,27 @@ n_stc_feats = 4 #AREA,LAT,LON,ELEV
 # std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 9.06977398, 7.51899974, 3.20886119, 1.61188199, 1.69147159])
 
 #full conus
-mean_feats = np.array([13.17839631,41.67704180895113,-90.42553834994683,570.7116328304598,1.76938519e+02, 3.07244103e+02, 2.82966424e+02, 7.85578980e-01, 2.86128260e-01])
-std_feats = np.array([1.65596633,6.448248574774095,9.870393000769734,1029.6817691460385,9.10541828, 7.54501692, 3.32520898, 1.6204411 , 1.70625239])
+# mean_feats = np.array([13.17839631,41.67704180895113,-90.42553834994683,570.7116328304598,1.76938519e+02, 3.07244103e+02, 2.82966424e+02, 7.85578980e-01, 2.86128260e-01])
+# std_feats = np.array([1.65596633,6.448248574774095,9.870393000769734,1029.6817691460385,9.10541828, 7.54501692, 3.32520898, 1.6204411 , 1.70625239])
 
-
+mean_feats = np.array([13.1700613, 41.67473611, -90.43172611, 397.97342139, 1.76944297e+02, 3.07248340e+02, 2.82968074e+02, 7.85104236e-01, 2.86081133e-01])
+std_feats = np.array([1.630222, 6.45012084, 9.8714776, 474.08400329,9.10455152, 7.54579132, 3.32533227, 1.62018831, 1.70615275])
+   
 
 #add ftype and fcodes
-Ftypes = np.unique(metadata['FType'])
-Fcodes = np.unique(metadata['FCode'])
-ftype_arrs = [[1 if metadata.iloc[i]['FType']==int(j) else 0 for i in range(metadata.shape[0])] for j in Ftypes]
-fcode_arrs = [[1 if metadata.iloc[i]['FCode']==int(j) else 0 for i in range(metadata.shape[0])] for j in Fcodes]
-ftype_means = [np.mean(ftype_arr) for ftype_arr in ftype_arrs]
-ftype_std = [np.std(ftype_arr) for ftype_arr in ftype_arrs]
-fcode_means = [np.mean(fcode_arr) for fcode_arr in fcode_arrs]
-fcode_std = [np.std(fcode_arr) for fcode_arr in fcode_arrs]
+# Ftypes = np.unique(metadata['FType'])
+# Fcodes = np.unique(metadata['FCode'])
+# ftype_arrs = [[1 if metadata.iloc[i]['FType']==int(j) else 0 for i in range(metadata.shape[0])] for j in Ftypes]
+# fcode_arrs = [[1 if metadata.iloc[i]['FCode']==int(j) else 0 for i in range(metadata.shape[0])] for j in Fcodes]
+# ftype_means = [np.mean(ftype_arr) for ftype_arr in ftype_arrs]
+# ftype_std = [np.std(ftype_arr) for ftype_arr in ftype_arrs]
+# fcode_means = [np.mean(fcode_arr) for fcode_arr in fcode_arrs]
+# fcode_std = [np.std(fcode_arr) for fcode_arr in fcode_arrs]
 
-mean_feats = np.insert(mean_feats,0,fcode_means)
-mean_feats = np.insert(mean_feats,0,ftype_means)
-std_feats = np.insert(std_feats,0,fcode_std)
-std_feats = np.insert(std_feats,0,ftype_std)
+# mean_feats = np.insert(mean_feats,0,fcode_means)
+# mean_feats = np.insert(mean_feats,0,ftype_means)
+# std_feats = np.insert(std_feats,0,fcode_std)
+# std_feats = np.insert(std_feats,0,ftype_std)
 
 
 n_features = mean_feats.shape[0]
@@ -86,8 +88,8 @@ date_offset = 350
 
 
 for site_ct, site_id in enumerate(site_ids[start:end]):
-    if site_ct < 5383:
-        continue
+    # if site_ct < 5383:
+    #     continue
     print(site_ct," starting ", site_id)
 
     #get NLDAS coords
@@ -239,8 +241,8 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     if not os.path.exists("../../models/"+site_id):
         os.mkdir("../../models/"+site_id)
 
-    feat_path = "../../data/processed/"+site_id+"/features_ea_conus"
-    norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea_conus"
+    feat_path = "../../data/processed/"+site_id+"/features_ea_conus_021521"
+    norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea_conus_021521"
     full_path = "../../data/processed/"+site_id+"/full"
     dates_path = "../../data/processed/"+site_id+"/dates"
 
