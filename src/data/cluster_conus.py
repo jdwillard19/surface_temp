@@ -6,9 +6,9 @@ import os
 import plotly.express as px
 from sklearn.cluster import KMeans
 
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
-data2 = pd.read_csv("../../results/err_and_obs_per_test_site.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521.csv")
+# metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_temp.csv")
+# data2 = pd.read_csv("../../results/err_and_obs_per_test_site.csv")
 
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
 
@@ -29,10 +29,11 @@ metadata['cluster'] = kmeans.labels_
 
 cluster_label_vals = np.unique(kmeans.labels_)
 
-# metadata['train'] = True
-# for i in cluster_label_vals:
-# 	test_inds = np.random.choice(np.where(metadata['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/3)))
-# 	metadata.iloc[test_inds, metadata.columns.get_loc('train')] = False
+metadata['train'] = True
+for i in cluster_label_vals:
+	test_inds = np.random.choice(np.where(metadata['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/3)))
+	metadata.iloc[test_inds, metadata.columns.get_loc('train')] = False
+	pdb.set_trace()
 
 
 #lad train/test
