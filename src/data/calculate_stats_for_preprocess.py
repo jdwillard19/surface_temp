@@ -18,7 +18,7 @@ import datetime
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521.csv")
 
 #get site ids
-site_ids = np.unique(metadata['site_id'].values)[:3]
+site_ids = np.unique(metadata['site_id'].values)
 n_lakes = site_ids.shape[0]
 
 #load wst obs
