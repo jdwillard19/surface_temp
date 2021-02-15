@@ -31,9 +31,8 @@ cluster_label_vals = np.unique(kmeans.labels_)
 
 metadata['train'] = True
 for i in cluster_label_vals:
-	test_inds = np.random.choice(np.where(metadata['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/3)))
+	test_inds = np.random.choice(np.where(metadata['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/3)),replace=False)
 	metadata.iloc[test_inds, metadata.columns.get_loc('train')] = False
-	pdb.set_trace()
 
 
 #lad train/test
@@ -51,6 +50,7 @@ source_meta.reset_index(inplace=True)
 # err_per_clust['Median RMSE'] = rmse_per_cluster
 target_meta.to_csv("../../metadata/conus_target_meta.csv")
 source_meta.to_csv("../../metadata/conus_source_meta.csv")
+metadata.to_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 #declare train/test
 # pdb.set_trace()
 # fig = px.scatter_3d(metadata, x='lon', y='lat', z='log_area',color='cluster')
