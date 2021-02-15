@@ -15,7 +15,7 @@ import datetime
 
 #load metadata, get ids
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_021521.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521.csv")
 site_ids = np.unique(metadata['site_id'].values)
 
 # metadata.set_index("site_id",inplace=True)
