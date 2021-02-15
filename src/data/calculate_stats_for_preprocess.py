@@ -37,7 +37,7 @@ stat_vals_per_lake[:] = np.nan
 
 hardcode = False
 if not hardcode:
-    for lake_ind, name in enumerate(site_ids):
+    for lake_ind, name in enumerate(site_ids[:3]):
 
         print("(",lake_ind,"/",str(len(site_ids)),") ","pre ", name)
 
@@ -75,6 +75,8 @@ if not hardcode:
     std_feats = np.average(var_per_lake ** (.5), axis=0)   
     print("mean feats: ", repr(mean_feats))
     print("std feats: ", repr(std_feats))
+    print("stat_means: ",repr(stat_vals_per_lake.mean(axis=0)))
+    print("stat_std: ",repr(stat_vals_per_lake.std(axis=0)))
     # assert mean_feats.shape[0] == 8
     # assert std_feats.shape[0] == 8
     # assert not np.isnan(np.sum(mean_feats))
@@ -85,11 +87,11 @@ else:
     std_feats = np.array([517506195.05362266, 6.51122458e+00, 1.04199758e+01, 8.52790273e+01, 6.10175316e+01, 1.28183124e+01, 1.29724391e+01, 1.69513213e+00, 5.54588726e-03, 1.27910016e-02])
 
     #full conus
-    mean_feats = np.array([1.76938519e+02, 3.07244103e+02, 2.82966424e+02, 7.85578980e-01, 2.86128260e-01,22764867.86668189,41.67704180895113,-90.42553834994683,570.7116328304598])
-    std_feats = np.array([9.10541828, 7.54501692, 3.32520898, 1.6204411 , 1.70625239, 813872728.8619916,6.448248574774095,9.870393000769734,1029.6817691460385])
+    mean_feats = np.array([1.76938519e+02, 3.07244103e+02, 2.82966424e+02, 7.85578980e-01, 2.86128260e-01,13.17839631,41.67704180895113,-90.42553834994683,570.7116328304598])
+    std_feats = np.array([9.10541828,      7.54501692,     3.32520898,     1.6204411 ,     1.70625239,    1.65596633,6.448248574774095,9.870393000769734,1029.6817691460385])
 pdb.set_trace()
-elev_ids = site_ids[np.where(np.isfinite(stat_vals_per_lake[:,3]))]
-np.save("../../data/raw/static/lists/elevation_ids",elev_ids)
+# elev_ids = site_ids[np.where(np.isfinite(stat_vals_per_lake[:,3]))]
+# np.save("../../data/raw/static/lists/elevation_ids",elev_ids)
 # sw_ds_path = "../../data/globus/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc" #shortwave
 
 # print("loading sw nc file....")
