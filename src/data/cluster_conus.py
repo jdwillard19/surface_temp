@@ -35,7 +35,7 @@ for i in cluster_label_vals:
 	#3fold
 	k = 3
 	for fold in range(k):
-		fold_inds = np.random.choice(np.where(metadata[metadata['3fold_fold'] != -1]['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/k)),replace=False)
+		fold_inds = np.random.choice(np.where(metadata[metadata['3fold_fold'] == -1]['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/k)),replace=False)
 		metadata.iloc[fold_inds, metadata.columns.get_loc('3fold_fold')] = fold
 	pdb.set_trace()
 	# split_inds = [int(np.round((np.where(metadata['cluster']==i)[0].shape[0]*i)/k)) for i in range(k)]
