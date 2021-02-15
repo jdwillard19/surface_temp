@@ -34,19 +34,19 @@ metadata['5fold_fold'] = -1
 for i in cluster_label_vals:
 	#3fold
 	n_sites = metadata[metadata['cluster']==i].shape[0]
-	k = 3
-	fold_size = int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/k))
-	labels = np.empty((n_sites))
-	pdb.set_trace()
-	for fold in range(k):
-		labels[(fold_size*fold):] = fold
+	k_arr = [3,5]
+	for k in k_arr:
+		fold_size = int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/k))
+		labels = np.empty((n_sites))
+		for fold in range(k):
+			labels[(fold_size*fold):] = int(fold)
 
-	assert np.isfinite(labels).all()
-	np.random.shuffle(labels)
-	inds = metadata[metadata['cluster']==i].index
-	# metadata.loc[inds, metadata.columns.get_loc('3fold_fold')] = labels.flatten()
-	metadata.loc[inds, '3fold_fold'] = labels.flatten()
-	pdb.set_trace()
+		assert np.isfinite(labels).all()
+		np.random.shuffle(labels)
+		inds = metadata[metadata['cluster']==i].index
+		metadata.loc[inds, str(k)+'fold_fold'] = labels.flatten()
+
+pdb.set_trace()
 	# split_inds = [int(np.round((np.where(metadata['cluster']==i)[0].shape[0]*i)/k)) for i in range(k)]
 	# split_vals = np.empty(())
 	# fold_vals = np.split(x, three_split_inds)
@@ -57,18 +57,18 @@ for i in cluster_label_vals:
 #lad train/test
 # source_lakes = np.load("../../data/static/lists/source_lakes_conus.npy",allow_pickle=True)
 # target_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
-source_meta = metadata[np.isin(metadata,source_lakes)]
-target_meta = metadata[np.isin(metadata,target_lakes)]
+# source_meta = metadata[np.isin(metadata,source_lakes)]
+# target_meta = metadata[np.isin(metadata,target_lakes)]
 # target_meta = target_meta[np.isin(target_meta['site_id'],data2['site_id'])]
-target_meta.reset_index(inplace=True)
-source_meta.reset_index(inplace=True)
+# target_meta.reset_index(inplace=True)
+# source_meta.reset_index(inplace=True)
 # target_meta['rmse'] = data2['rmse']
 # rmse_per_cluster = [np.median(target_meta[target_meta['cluster']==i]['rmse']) for i in cluster_label_vals]
 # err_pnp.split(x, [3, 5, 6, 10])er_clust = pd.DataFrame()
 # err_per_clust['cluster'] = cluster_label_vals
 # err_per_clust['Median RMSE'] = rmse_per_cluster
-target_meta.to_csv("../../metadata/conus_target_meta.csv")
-source_meta.to_csv("../../metadata/conus_source_meta.csv")
+# target_meta.to_csv("../../metadata/conus_target_meta.csv")
+# source_meta.to_csv("../../metadata/conus_source_meta.csv")
 metadata.to_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 #declare train/test
 # pdb.set_trace()
