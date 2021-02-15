@@ -22,7 +22,7 @@ site_ids = np.unique(metadata['site_id'].values)[:3]
 n_lakes = site_ids.shape[0]
 
 #load wst obs
-obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 
 
 
@@ -68,6 +68,7 @@ if not hardcode:
         stat_vals_per_lake[lake_ind,0] = np.log(metadata[metadata['site_id'] == name]['area_m2'].values[0])
         stat_vals_per_lake[lake_ind,1] = metadata[metadata['site_id'] == name]['lat'].values[0]
         stat_vals_per_lake[lake_ind,2] = metadata[metadata['site_id'] == name]['lon'].values[0]
+        pdb.set_trace()
         stat_vals_per_lake[lake_ind,3] = metadata[metadata['site_id'] == name]['Elevation'].values[0]
 
 
