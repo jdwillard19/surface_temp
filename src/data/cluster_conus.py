@@ -37,6 +37,7 @@ for i in cluster_label_vals:
 	k = 3
 	fold_size = int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/k))
 	labels = np.empty((n_sites))
+	pdb.set_trace()
 	for fold in range(k):
 		labels[(fold_size*k):] = fold
 
