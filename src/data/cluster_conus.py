@@ -37,7 +37,7 @@ for i in cluster_label_vals:
 	k_arr = [3,5]
 	for k in k_arr:
 		fold_size = int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/k))
-		labels = np.empty((n_sites))
+		labels = np.empty((n_sites),dtype=np.int32)
 		for fold in range(k):
 			labels[(fold_size*fold):] = int(fold)
 
