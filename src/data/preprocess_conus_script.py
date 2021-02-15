@@ -167,20 +167,20 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     wsv = np.load("../../data/raw/feats/WSV_"+str(x)+"x_"+str(y)+"y.npy")
 
 
-    n_sites_and_codes = 26
-    n_sites = 3
-    n_codes = 23
-    site_feats[:,:n_sites] = [1 if metadata[metadata['site_id']==site_id]['FType'].values[0] == int(i) else 0 for i in Ftypes]
-    site_feats[:,n_sites:n_sites_and_codes] = [1 if metadata[metadata['site_id']==site_id]['FCode'].values[0] == int(i) else 0 for i in Fcodes]
-    site_feats[:,0+n_sites_and_codes] = np.log(metadata[metadata['site_id']==site_id].area_m2)
-    site_feats[:,1+n_sites_and_codes] = metadata[metadata['site_id']==site_id].lat
-    site_feats[:,2+n_sites_and_codes] = metadata[metadata['site_id']==site_id].lon
-    site_feats[:,3+n_sites_and_codes] = metadata[metadata['site_id']==site_id].Elevation
-    site_feats[:,4+n_sites_and_codes] = sw[lower_cutoff:upper_cutoff]
-    site_feats[:,5+n_sites_and_codes] = lw[lower_cutoff:upper_cutoff]
-    site_feats[:,6+n_sites_and_codes] = at[lower_cutoff:upper_cutoff]
-    site_feats[:,7+n_sites_and_codes] = wsu[lower_cutoff:upper_cutoff]
-    site_feats[:,8+n_sites_and_codes] = wsv[lower_cutoff:upper_cutoff]
+    # n_sites_and_codes = 26
+    # n_sites = 3
+    # n_codes = 23
+    # site_feats[:,:n_sites] = [1 if metadata[metadata['site_id']==site_id]['FType'].values[0] == int(i) else 0 for i in Ftypes]
+    # site_feats[:,n_sites:n_sites_and_codes] = [1 if metadata[metadata['site_id']==site_id]['FCode'].values[0] == int(i) else 0 for i in Fcodes]
+    site_feats[:,0] = np.log(metadata[metadata['site_id']==site_id].area_m2)
+    site_feats[:,1] = metadata[metadata['site_id']==site_id].lat
+    site_feats[:,2] = metadata[metadata['site_id']==site_id].lon
+    site_feats[:,3] = metadata[metadata['site_id']==site_id].Elevation
+    site_feats[:,4] = sw[lower_cutoff:upper_cutoff]
+    site_feats[:,5] = lw[lower_cutoff:upper_cutoff]
+    site_feats[:,6] = at[lower_cutoff:upper_cutoff]
+    site_feats[:,7] = wsu[lower_cutoff:upper_cutoff]
+    site_feats[:,8] = wsv[lower_cutoff:upper_cutoff]
 
     #normalize data
     feats_norm = (site_feats - mean_feats[:]) / std_feats[:]
