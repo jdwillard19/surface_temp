@@ -125,7 +125,7 @@ for k in range(n_folds):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                    removeElevation=True,static_feats=True,n_static_feats = 4) 
+                                                    static_feats=True,n_static_feats = 4) 
     # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
     #                                             seq_length, n_total_feats,\
     #                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
