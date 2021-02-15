@@ -44,7 +44,8 @@ for i in cluster_label_vals:
 	assert np.isfinite(labels).all()
 	np.random.shuffle(labels)
 	inds = metadata[metadata['cluster']==i].index
-	metadata.loc[inds, metadata.columns.get_loc('3fold_fold')] = labels.flatten()
+	# metadata.loc[inds, metadata.columns.get_loc('3fold_fold')] = labels.flatten()
+	metadata.loc[inds, '3fold_fold'] = labels.flatten()
 	pdb.set_trace()
 	# split_inds = [int(np.round((np.where(metadata['cluster']==i)[0].shape[0]*i)/k)) for i in range(k)]
 	# split_vals = np.empty(())
