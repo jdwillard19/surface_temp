@@ -29,10 +29,20 @@ metadata['cluster'] = kmeans.labels_
 
 cluster_label_vals = np.unique(kmeans.labels_)
 
-metadata['train'] = True
+metadata['3fold_fold'] = -1
+metadata['5fold_fold'] = -1
 for i in cluster_label_vals:
-	test_inds = np.random.choice(np.where(metadata['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/3)),replace=False)
-	metadata.iloc[test_inds, metadata.columns.get_loc('train')] = False
+	#3fold
+	k = 3
+	for fold in range(k):
+		fold_inds = np.random.choice(np.where(metadata[metadata['3fold_fold'] != -1]['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/k)),replace=False)
+		metadata.iloc[fold_inds, metadata.columns.get_loc('3fold_fold')] = fold
+	pdb.set_trace()
+	# split_inds = [int(np.round((np.where(metadata['cluster']==i)[0].shape[0]*i)/k)) for i in range(k)]
+	# split_vals = np.empty(())
+	# fold_vals = np.split(x, three_split_inds)
+	# test_inds = np.random.choice(np.where(metadata['cluster'] ==i)[0],size=int(np.round(np.where(metadata['cluster']==i)[0].shape[0]/3)),replace=False)
+	# metadata.iloc[test_inds, metadata.columns.get_loc('train')] = False
 
 
 #lad train/test
@@ -45,7 +55,7 @@ target_meta.reset_index(inplace=True)
 source_meta.reset_index(inplace=True)
 # target_meta['rmse'] = data2['rmse']
 # rmse_per_cluster = [np.median(target_meta[target_meta['cluster']==i]['rmse']) for i in cluster_label_vals]
-# err_per_clust = pd.DataFrame()
+# err_pnp.split(x, [3, 5, 6, 10])er_clust = pd.DataFrame()
 # err_per_clust['cluster'] = cluster_label_vals
 # err_per_clust['Median RMSE'] = rmse_per_cluster
 target_meta.to_csv("../../metadata/conus_target_meta.csv")
