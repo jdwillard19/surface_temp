@@ -39,11 +39,10 @@ for i in cluster_label_vals:
 	labels = np.empty((n_sites))
 	pdb.set_trace()
 	for fold in range(k):
-		labels[(fold_size*k):] = fold
+		labels[(fold_size*fold):] = fold
 
 	assert np.isfinite(labels).all()
 	np.random.shuffle(labels)
-	pdb.set_trace()
 	inds = metadata[metadata['cluster']==i].index
 	metadata.loc[inds, metadata.columns.get_loc('3fold_fold')] = labels.flatten()
 	pdb.set_trace()
