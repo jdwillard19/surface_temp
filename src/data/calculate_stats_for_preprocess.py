@@ -18,7 +18,7 @@ import datetime
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_020421.csv")
 
 #get site ids
-site_ids = np.unique(metadata['site_id'].values)
+site_ids = np.unique(metadata['site_id'].values)[:3]
 n_lakes = site_ids.shape[0]
 
 #load wst obs
@@ -37,7 +37,7 @@ stat_vals_per_lake[:] = np.nan
 
 hardcode = False
 if not hardcode:
-    for lake_ind, name in enumerate(site_ids[:3]):
+    for lake_ind, name in enumerate(site_ids):
 
         print("(",lake_ind,"/",str(len(site_ids)),") ","pre ", name)
 
