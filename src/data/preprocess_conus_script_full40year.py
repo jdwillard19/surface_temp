@@ -122,7 +122,7 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     # meteo_end_date = dates[-1]
 
     print("start date: ",start_date)
-    print("end date: ", obs_end_date)
+    print("end date: ", dates[-1])
     #cut files to between first and last observation
     lower_cutoff = np.where(dates == pd.Timestamp(start_date).to_datetime64())[0][0] #457
     print("lower cutoff: ", lower_cutoff)
