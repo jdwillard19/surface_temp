@@ -694,7 +694,7 @@ for k in range(n_folds):
         #         ep_list64.append(epoch)
         #     elif n_hidden is n_hidden_list[3]:
         #         ep_list128.append(epoch)
-    save_path = "../../models/EALSTM_k"+str(k)+"_"+str(epoch)+ep
+    save_path = "../../models/EALSTM_k"+str(k)+"_"+str(epoch)+"ep"
 
     saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
