@@ -116,8 +116,8 @@ yhat_batch_size = 1
 #create train and test sets
 
 n_folds = 3
-trn_rmse_per_ep = np.empty((n_folds,int(n_ep/10)+1))
-tst_rmse_per_ep = np.empty((n_folds,int(n_ep/10)+1))
+trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
+tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
 # tst_rmse_per_ep = []
 for k in range(n_folds):
     lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
