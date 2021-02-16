@@ -137,7 +137,7 @@ for k in range(n_folds):
     # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
     # tst_data = tst_data[:,:,[0,1,2,4,7,-1]]
 
-    trn_data = np.load("conus_trn_data_final.npy",allow_pickle=True)
+    trn_data = torch.from_numpy(np.load("conus_trn_data_final.npy",allow_pickle=True))
     # n_features = 4
     # n_static_feats = 1
     # n_total_feats = n_features + n_static_feats
