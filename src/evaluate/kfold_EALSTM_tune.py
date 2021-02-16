@@ -147,7 +147,7 @@ for k in range(n_folds):
     # batch_size = trn_data.size()[0]
     pdb.set_trace()
     # batch_size = int(math.floor(trn_data.size()[0])/20)
-    batch_size = 5000
+    batch_size = 3000
 
 
 
