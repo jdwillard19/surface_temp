@@ -75,7 +75,8 @@ n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0
 
-n_eps = 10000
+# n_eps = 10000
+n_eps = 500
 # n_ep/rmse = (1013/1.52)(957/1.51?
 targ_ep = 0
 targ_rmse = 1.46
