@@ -116,8 +116,8 @@ yhat_batch_size = 1
 
 n_folds = 3
 n_ep = 500
-trn_rmse_per_ep = np.empty((n_folds,int(n_ep/10)))
-tst_rmse_per_ep = np.empty((n_folds,int(n_ep/10)))
+trn_rmse_per_ep = np.empty((n_folds,int(n_ep/10)+1))
+tst_rmse_per_ep = np.empty((n_folds,int(n_ep/10)+1))
 # tst_rmse_per_ep = []
 for k in range(n_folds):
     lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
@@ -664,6 +664,7 @@ for k in range(n_folds):
                     #         break
 
                     # print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min*10)
+                    print("Test RMSE: ", avg_mse)
             # save_path = "../../models/EALSTM_global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wElevTypeCodes_partial"
             # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
         # if avg_loss < targ_rmse and epoch > targ_ep:
