@@ -611,7 +611,7 @@ for k in range(n_folds):
                     h_state = None
                     # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
                     # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-                    pred, h_state, _ = lstm_net(inputs[:,:,n_features:], inputs[:,0,:n_features])
+                    pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
                     pred = pred.view(pred.size()[0],-1)
                     pred = pred[:, begin_loss_ind:]
 
