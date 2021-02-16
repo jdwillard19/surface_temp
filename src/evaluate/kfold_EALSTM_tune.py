@@ -118,7 +118,7 @@ n_folds = 3
 for k in range(n_folds):
     lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
     # lakenames = metadata['site_id'].values
-    test_lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
+    test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values
     trn_rmse_per_ep = []
     tst_rmse_per_ep = []
     ep_arr = []   
