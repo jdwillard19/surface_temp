@@ -76,10 +76,10 @@ n_hidden = 128
 lambda1 = 0
 
 # n_eps = 10000
-n_eps = 500
+n_eps = 800
 # n_ep/rmse = (1013/1.52)(957/1.51?
-targ_ep = 0
-targ_rmse = 1.46
+# targ_ep = 0
+# targ_rmse = 1.46
 # ep_list16 = [] #list of epochs at which models were saved for * hidden units
 # ep_list32 = [] 
 # ep_list64 = [] 
@@ -87,7 +87,7 @@ targ_rmse = 1.46
 
 # lakenames = np.load("../../data/static/lists/source_lakes_conus.npy",allow_pickle=True)
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-metadata = metadata.iloc[150:350]
+# metadata = metadata.iloc[150:350]
 
 ###############################
 # data preprocess
@@ -116,7 +116,6 @@ yhat_batch_size = 1
 #create train and test sets
 
 n_folds = 3
-n_ep = 500
 trn_rmse_per_ep = np.empty((n_folds,int(n_ep/10)+1))
 tst_rmse_per_ep = np.empty((n_folds,int(n_ep/10)+1))
 # tst_rmse_per_ep = []
@@ -148,9 +147,9 @@ for k in range(n_folds):
     print("train_data size: ",trn_data.size())
     print(len(lakenames), " lakes of data")
     # trn_data = tst_data
-    batch_size = trn_data.size()[0]
+    # batch_size = trn_data.size()[0]
     # batch_size = int(math.floor(trn_data.size()[0])/20)
-    # batch_size = 3000
+    batch_size = 3000
 
 
 
@@ -203,7 +202,7 @@ for k in range(n_folds):
 
 
     #load val/test data into enumerator based on batch size
-    testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
+    testloader = torch.utils.data.DataLoader(tst_data, batch_size=500, shuffle=False, pin_memory=True)
 
 
     #define EA-LSTM class
@@ -627,10 +626,10 @@ for k in range(n_folds):
                     mse = mse_criterion(pred[loss_indices], targets[loss_indices])
                     # print("test loss = ",mse)
                     avg_mse += mse
-
+                    ct += 1
                     # if mse > 0: #obsolete i think
                     #     ct += 1
-                    # avg_mse = avg_mse / ct
+                avg_mse = avg_mse / ct
 
 
                     # #save model 
@@ -647,7 +646,7 @@ for k in range(n_folds):
 
                     # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
                     # tst_rmse_per_ep.append(avg_mse)
-                    tst_rmse_per_ep[k,int(epoch/10)]=avg_mse
+                tst_rmse_per_ep[k,int(epoch/10)]=avg_mse
 
                     # if avg_mse < min_mse:
                     #     # save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
@@ -665,7 +664,7 @@ for k in range(n_folds):
                     #         break
 
                     # print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min*10)
-                    print("Test RMSE: ", avg_mse)
+                print("Test RMSE: ", avg_mse)
             # save_path = "../../models/EALSTM_global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wElevTypeCodes_partial"
             # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
         # if avg_loss < targ_rmse and epoch > targ_ep:
@@ -707,6 +706,7 @@ for k in range(n_folds):
 
 
 pdb.set_trace()
+print(np.argmin(tst_rmse_per_ep.mean(axis=0)[:-1])*10)
 
 # print("|\n|\nTraining Candidate Models Complete\n|\n|")
 # ##################################################################
