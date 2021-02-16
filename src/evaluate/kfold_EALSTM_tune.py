@@ -115,12 +115,15 @@ yhat_batch_size = 1
 #create train and test sets
 
 n_folds = 3
+n_ep = 500
+trn_rmse_per_ep = np.empty((n_folds,int(n_ep/10)))
+tst_rmse_per_ep = np.empty((n_folds,int(n_ep/10)))
+# tst_rmse_per_ep = []
 for k in range(n_folds):
     lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
     # lakenames = metadata['site_id'].values
     test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values
-    trn_rmse_per_ep = []
-    tst_rmse_per_ep = []
+
     ep_arr = []   
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
@@ -589,8 +592,7 @@ for k in range(n_folds):
         if verbose:
             print("train rmse loss=", avg_loss)
         if epoch % 10 is 0:
-            trn_rmse_per_ep.append(avg_loss)
-            ep_arr.append(epoch)
+            trn_rmse_per_ep[k,int(epoch/10)]=avg_loss
             with torch.no_grad():
                 avg_mse = 0
                 ct = 0
@@ -643,27 +645,29 @@ for k in range(n_folds):
                     # loss_label = labelm_npy[~np.isnan(labelm_npy)]
 
                     # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-                    tst_rmse_per_ep.append(avg_mse)
-                    if avg_mse < min_mse:
-                        # save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
-                        # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-                        min_train_ep = epoch
-                        min_train_rmse = train_avg_loss
-                        min_mse = avg_mse
-                        ep_since_min = 0
-                    else:
-                        ep_since_min += 1
-                        if ep_since_min == patience:
-                            print("patience met")
-                            print("min test ep/rmse: ",min_train_ep,"\n",min_train_rmse)
-                            done = True
-                            break
+                    # tst_rmse_per_ep.append(avg_mse)
+                    tst_rmse_per_ep[k,int(epoch/10)]=avg_mse
 
-                    print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min*10)
+                    # if avg_mse < min_mse:
+                    #     # save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
+                    #     # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+                    #     min_train_ep = epoch
+                    #     min_train_rmse = train_avg_loss
+                    #     min_mse = avg_mse
+                    #     ep_since_min = 0
+                    # else:
+                    #     ep_since_min += 1
+                    #     if ep_since_min == patience:
+                    #         print("patience met")
+                    #         print("min test ep/rmse: ",min_train_ep,"\n",min_train_rmse)
+                    #         done = True
+                    #         break
+
+                    # print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min*10)
             # save_path = "../../models/EALSTM_global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wElevTypeCodes_partial"
             # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-        if avg_loss < targ_rmse and epoch > targ_ep:
-            break
+        # if avg_loss < targ_rmse and epoch > targ_ep:
+        #     break
 
         # if avg_loss < min_mse:
         #     min_mse = avg_loss
@@ -694,13 +698,13 @@ for k in range(n_folds):
         #         ep_list64.append(epoch)
         #     elif n_hidden is n_hidden_list[3]:
         #         ep_list128.append(epoch)
-    save_path = "../../models/EALSTM_k"+str(k)+"_"+str(epoch)+"ep"
+                save_path = "../../models/EALSTM_k"+str(k)+"_"+str(epoch)+"ep"
 
-    saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+                saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+                print("saved at ",save_path)
 
-    print("saved at ",save_path)
 
-
+pdb.set_trace()
 
 # print("|\n|\nTraining Candidate Models Complete\n|\n|")
 # ##################################################################
