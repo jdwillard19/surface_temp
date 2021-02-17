@@ -23,24 +23,31 @@ import re
 # train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 # train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 # test_lakes = np.load("../../data/static/lists/target_lakes_wrr.npy",allow_pickle=True)
-test_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
 
-to_remove = []
-obs_per_lake = np.empty_like(test_lakes)
-for i, lake in enumerate(test_lakes):
-    print("lake ",i)
-    obs = np.load("../../data/processed/"+lake+"/full.npy")
-    # if lake == 'nhdhr_86003700':   
-        # pdb.set_trace()
-    if obs.shape[0] < 350:
-        to_remove.append(lake)
-    obs_per_lake[i] = np.count_nonzero(np.isfinite(obs))
-obs_per_lake = obs_per_lake[~np.isin(test_lakes,to_remove)]
-test_lakes = test_lakes[~np.isin(test_lakes,to_remove)]
-outputs = []
-labels = []
-dates = []
-sites = []
+
+
+# test_lakes = np.load("../../data/static/lists/test_lakes_conus.npy",allow_pickle=True)
+
+# to_remove = []
+# obs_per_lake = np.empty_like(test_lakes)
+# for i, lake in enumerate(test_lakes):
+#     print("lake ",i)
+#     obs = np.load("../../data/processed/"+lake+"/full.npy")
+#     # if lake == 'nhdhr_86003700':   
+#         # pdb.set_trace()
+#     if obs.shape[0] < 350:
+#         to_remove.append(lake)
+#     obs_per_lake[i] = np.count_nonzero(np.isfinite(obs))
+# obs_per_lake = obs_per_lake[~np.isin(test_lakes,to_remove)]
+# test_lakes = test_lakes[~np.isin(test_lakes,to_remove)]
+# outputs = []
+# labels = []
+# dates = []
+# sites = []
+test_lakes = ['nhdhr_143249470']
+
+
+
 # test_lakes = train_lakes
 # test_lakes = test_lakes[~np.isin(test_lakes, train_lakes)]
 # np.save("../../data/static/lists/target_lakes_wrr.npy",test_lakes)
@@ -476,6 +483,21 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # csv.append(",".join(["nhdhr_"+target_id,str(mat_rmse)]))
             rmse_per_lake[targ_ct] = mat_rmse
 
+            outputm_npy = np.transpose(outputm_npy)
+            label_mat= np.transpose(labelm_npy)
+            output_df = pd.DataFrame(data=outputm_npy, columns=['temp_pred'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
+            label_df = pd.DataFrame(data=label_mat, columns=['temp_actual'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
+            output_df.rename(columns={'Date': 'temp_pred'})
+            label_df.rename(columns={'Date': 'temp_actual'})
+
+            assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
+            output_df['temp_actual'] = label_df['temp_actual']
+
+            lake_output_path = '../../results/outputs_'+target_id+'.feather'
+            # if not os.path.exists(lake_output_path):
+            #     os.mkdir(lake_output_path)
+            pdb.set_trace()
+            output_df.to_feather(lake_output_path)
 
     # #save model 
     # total_output_npy = np.average(output_mats, axis=0)
