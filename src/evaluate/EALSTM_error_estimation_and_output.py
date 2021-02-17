@@ -640,6 +640,7 @@ for k in range(n_folds):
                 inputs = data[:,:,:n_total_feats].float()
                 targets = data[:,:,-1].float()
                 targets = targets[:, begin_loss_ind:]
+                tmp_dates = tst_dates[:, begin_loss_ind:]
 
                 if use_gpu:
                     inputs = inputs.cuda()
