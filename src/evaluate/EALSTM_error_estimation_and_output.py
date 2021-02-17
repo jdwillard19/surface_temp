@@ -676,7 +676,7 @@ for k in range(n_folds):
             loss_output = outputm_npy[~np.isnan(labelm_npy)]
             loss_label = labelm_npy[~np.isnan(labelm_npy)]
             loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
-            print(unique_tst_dates_target)
+            # print(unique_tst_dates_target)
             output_df = pd.DataFrame()
             output_df['Date'] = loss_days
             output_df['site_id'] = target_id
@@ -691,5 +691,5 @@ for k in range(n_folds):
             if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
                 print("missed obs?")
                 pdb.set_trace()
-
+            pdb.set_trace()
 final_output_df.to_feather("../../results/err_est_outputs.feather")
