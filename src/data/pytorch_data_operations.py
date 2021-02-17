@@ -938,8 +938,8 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
     verbose = False
     my_path = os.path.abspath(os.path.dirname(__file__))
 
-    feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea_conus.npy"))
-    feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea_conus.npy"))
+    feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea_conus_021621.npy"))
+    feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea_conus_021621.npy"))
     if removeElevation:
         feat_mat = np.delete(feat_mat,29,axis=1)
         feat_mat_raw = np.delete(feat_mat_raw,29,axis=1)
