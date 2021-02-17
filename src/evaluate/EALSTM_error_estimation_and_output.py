@@ -116,7 +116,7 @@ tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
 for k in range(n_folds):
     lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
     # lakenames = metadata['site_id'].values
-    test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values
+    test_lakes = metadata[metadata['3fold_fold']==k]['site_id'].values
 
     ep_arr = []   
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
