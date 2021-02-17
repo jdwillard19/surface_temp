@@ -112,7 +112,7 @@ yhat_batch_size = 1
 n_folds = 5
 trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
 tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
-
+final_output_df = pd.DataFrame()
 for k in range(n_folds):
     lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
     # lakenames = metadata['site_id'].values
@@ -588,7 +588,6 @@ for k in range(n_folds):
             print("training complete")
             break
 
-    final_output_df = pd.DataFrame()
     #after training, do test predictions / error estimation
     for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         print(str(targ_ct),'/',len(test_lakes),':',target_id)
@@ -683,12 +682,14 @@ for k in range(n_folds):
             output_df['site_id'] = target_id
             output_df['wtemp_predicted'] = loss_output
             output_df['wtemp_actual'] =loss_label
+            output_df['fold'] = k
 
-            if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
-                print("missed obs?")
-                pdb.set_trace()
+
             final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
             print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
-            pdb.set_trace()
-            output_df.to_feather("../../results/err_est_outputs/",target_id,"_outputs.feather")
+            if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
+                print("missed obs?")
+                pdb.set_trace()
+
+final_output_df.to_feather("../../results/err_est_outputs.feather")
