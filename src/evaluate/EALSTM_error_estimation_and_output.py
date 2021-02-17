@@ -584,6 +584,10 @@ for k in range(n_folds):
             trn_rmse_per_ep[k,int(epoch/10)]=avg_loss
             if verbose:
                 print("train rmse loss=", avg_loss)
+        if avg_loss < targ_rmse and epoch > targ_ep:
+            print("training complete")
+            break
+
 
     #after training, do test predictions / error estimation
     for targ_ct, target_id in enumerate(test_lakes): #for each target lake
