@@ -81,6 +81,7 @@ targ_rmse = 3.5 #DEBUG VALUE
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 metadata = metadata.iloc[150:350] #DEBUG VALUE
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 
 ###############################
 # data preprocess
@@ -587,7 +588,7 @@ for k in range(n_folds):
             print("training complete")
             break
 
-
+    final_output_df = pd.DataFrame()
     #after training, do test predictions / error estimation
     for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         print(str(targ_ct),'/',len(test_lakes),':',target_id)
@@ -679,9 +680,14 @@ for k in range(n_folds):
             print(unique_tst_dates_target)
             output_df = pd.DataFrame()
             output_df['Date'] = loss_days
-            output_df['Predicted Temp'] = loss_output
-            output_df['Actual Temp'] =loss_label
+            output_df['site_id'] = target_id
+            output_df['wtemp_predicted'] = loss_output
+            output_df['wtemp_actual'] =loss_label
 
+            if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
+                print("missed obs?")
+                pdb.set_trace()
+            final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
             mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
             print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
             pdb.set_trace()
