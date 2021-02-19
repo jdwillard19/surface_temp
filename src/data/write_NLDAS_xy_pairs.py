@@ -15,7 +15,7 @@ import datetime
 
 #load metadata, get ids
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_020421.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 
 
 #load wst obs
@@ -36,11 +36,11 @@ n_lakes = site_ids.shape[0]
 # NLDAS_step[daily]_var[tmp2m]_date[19790101.20201212].nc
 # NLDAS_step[daily]_var[ugrd10m]_date[19790101.20201212].nc
 # NLDAS_step[daily]_var[vgrd10m]_date[19790101.20201212].nc
-lw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dlwrfsfc]_date[19790101.20201212].nc" #longwave
-sw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20201212].nc" #shortwav
-at_ds_path = "../../data/globus/NLDAS_step[daily]_var[tmp2m]_date[19790101.20201212].nc" #airtemp
-wsu_ds_path = "../../data/globus/NLDAS_step[daily]_var[ugrd10m]_date[19790101.20201212].nc" #windspeed u
-wsv_ds_path = "../../data/globus/NLDAS_step[daily]_var[vgrd10m]_date[19790101.20201212].nc"
+lw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dlwrfsfc]_date[19790101.20210212].nc" #longwave
+sw_ds_path = "../../data/globus/NLDAS_step[daily]_var[dswrfsfc]_date[19790101.20210212].nc" #shortwav
+at_ds_path = "../../data/globus/NLDAS_step[daily]_var[tmp2m]_date[19790101.20210212].nc" #airtemp
+wsu_ds_path = "../../data/globus/NLDAS_step[daily]_var[ugrd10m]_date[19790101.20210212].nc" #windspeed u
+wsv_ds_path = "../../data/globus/NLDAS_step[daily]_var[vgrd10m]_date[19790101.20210212].nc"
 print("loading sw nc file....")
 sw_da = xr.open_dataset(sw_ds_path)['dswrfsfc']
 print("sw file loaded")
