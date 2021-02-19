@@ -42,7 +42,6 @@ at_ds_path = "../../data/globus/NLDAS_step[daily]_var[tmp2m]_date[19790101.20210
 wsu_ds_path = "../../data/globus/NLDAS_step[daily]_var[ugrd10m]_date[19790101.20210212].nc" #windspeed u
 wsv_ds_path = "../../data/globus/NLDAS_step[daily]_var[vgrd10m]_date[19790101.20210212].nc"
 print("loading sw nc file....")
-pdb.set_trace()
 sw_da = xr.open_dataset(sw_ds_path)['dswrfsfc']
 print("sw file loaded")
 print("loading lw nc file....")
