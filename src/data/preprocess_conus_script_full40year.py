@@ -63,7 +63,7 @@ dates = sw_da['Time'].values
 
 
 start = 0
-end = len(site_ids)
+end = len(site_ids)Arvind Narayanan 
 date_offset = 350
 
 

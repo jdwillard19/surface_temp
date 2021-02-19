@@ -73,8 +73,8 @@ for lake_ind, name in enumerate(site_ids):
     x = str(metadata[metadata['site_id'] == name]['x'].values[0])+".0"
     y = str(metadata[metadata['site_id'] == name]['y'].values[0])+".0"
 
-    if os.path.exists("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy"):
-        continue
+    # if os.path.exists("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy"):
+    #     continue
     sw_vals = sw_da.loc[:,y,x].values
     lw_vals = lw_da.loc[:,y,x].values
     at_vals = at_da.loc[:,y,x].values
