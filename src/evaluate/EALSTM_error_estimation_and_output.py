@@ -691,5 +691,4 @@ for k in range(n_folds):
             if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
                 print("missed obs?")
                 pdb.set_trace()
-            pdb.set_trace()
 final_output_df.to_feather("../../results/err_est_outputs.feather")
