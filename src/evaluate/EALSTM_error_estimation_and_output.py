@@ -161,25 +161,6 @@ for k in range(n_folds):
         def __len__(self):
             return self.len
 
-    # class TotalModelOutputDataset(Dataset):
-    # #dataset for unsupervised input(in this case all the data)
-    #     def __init__(self, all_data, all_phys_data,all_dates):
-    #         #data of all model output, and corresponding unstandardized physical quantities
-    #         #needed to calculate physical loss
-    #         self.len = all_data.shape[0]
-    #         self.data = all_data[:,:,:-1].float()
-    #         self.label = all_data[:,:,-1].float() #DO NOT USE IN MODEL
-    #         self.phys = all_phys_data.float()
-    #         helper = np.vectorize(lambda x: date.toordinal(pd.Timestamp(x).to_pydatetime()))
-    #         dates = helper(all_dates)
-    #         self.dates = dates
-
-    #     def __getitem__(self, index):
-    #         return self.data[index], self.phys[index], self.dates[index], self.label[index]
-
-    #     def __len__(self):
-    #         return self.len
-
 
 
 
@@ -474,6 +455,7 @@ for k in range(n_folds):
 
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
+
     #tell model to use GPU if needed
     if use_gpu:
         lstm_net = lstm_net.cuda()
@@ -581,7 +563,6 @@ for k in range(n_folds):
         # if verbose and epoch %100 is 0:
 
         if epoch % 10 is 0:
-            trn_rmse_per_ep[k,int(epoch/10)]=avg_loss
             if verbose:
                 print("train rmse loss=", avg_loss)
         if avg_loss < targ_rmse and epoch > targ_ep:
