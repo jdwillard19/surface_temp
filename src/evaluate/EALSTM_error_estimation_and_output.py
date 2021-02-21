@@ -76,11 +76,11 @@ lambda1 = 0
 n_eps = 800
 targ_ep = 340
 targ_rmse = 2.36
-targ_ep = 0 #DEBUG VALUE
-targ_rmse = 3.5 #DEBUG VALUE
+# targ_ep = 0 #DEBUG VALUE
+# targ_rmse = 3.5 #DEBUG VALUE
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-metadata = metadata.iloc[150:350] #DEBUG VALUE
+# metadata = metadata.iloc[150:350] #DEBUG VALUE
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 
 ###############################
@@ -143,7 +143,7 @@ for k in range(n_folds):
     # trn_data = tst_data
     # batch_size = int(math.floor(trn_data.size()[0])/20)
     batch_size = 3000
-    batch_size = trn_data.size()[0] #DEBUG VALUE
+    # batch_size = trn_data.size()[0] #DEBUG VALUE
 
 
 
