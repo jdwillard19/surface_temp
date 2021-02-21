@@ -21,7 +21,9 @@ print("script start: ",str(currentDT))
 save_file_path = '../../models/xgb_surface_temp.joblib'
 
 
-metadata = pd.read_csv("../../metadata/conus_source_metadata.csv")
+# metadata = pd.read_csv("../../metadata/conus_source_metadata.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
+
 train_lakes = metadata['site_id'].values
 
 #############################
