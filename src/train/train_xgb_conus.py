@@ -120,16 +120,16 @@ if param_search:
 
 
 #create and fit model
-model = xgb.XGBRegressor(booster='gbtree', **parameters)
+# model = xgb.XGBRegressor(booster='gbtree', **parameters)
 
-cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
-print("cv scores ", cv)
-print(np.mean(cv))
-# sys.exit()
-print("Training XGB regression model...")
-model.fit(X, y)
-dump(model, save_file_path)
-print("model trained and saved to ", save_file_path)
+# cv = cross_val_score(model, X, y=y, cv=12, n_jobs=12, verbose=1)
+# print("cv scores ", cv)
+# print(np.mean(cv))
+# # sys.exit()
+# print("Training XGB regression model...")
+# model.fit(X, y)
+# dump(model, save_file_path)
+# print("model trained and saved to ", save_file_path)
 
 
 
