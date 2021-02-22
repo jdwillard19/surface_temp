@@ -24,7 +24,7 @@ save_file_path = '../../models/xgb_surface_temp.joblib'
 # metadata = pd.read_csv("../../metadata/conus_source_metadata.csv")
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 
-train_lakes = metadata['site_id'].values
+# train_lakes = metadata['site_id'].values
 
 #############################
 #load data
@@ -56,9 +56,9 @@ final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
 for k in range(n_folds):
-  train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values
+  train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:5]
   # lakenames = metadata['site_id'].values
-  test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
+  test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:5]
   train_df = pd.DataFrame(columns=columns)
   test_df = pd.DataFrame(columns=columns)
 
@@ -105,7 +105,7 @@ for k in range(n_folds):
       X = data[:,:-1]
       y = data[:,-1]
       inds = np.where(np.isfinite(y))[0]
-      inds = inds[np.where(inds > farthest_lookback)]
+      inds = inds[np.where(inds > farthest_lookback)[0]]
       if lookback > 0:
           X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.half)
           y = y[farthest_lookback:]
