@@ -8,6 +8,6 @@
 #SBATCH --error=train_xgb_conus.err
 #SBATCH --gres=gpu:k40:2
 #SBATCH -p k40
-source /home/kumarv/willa099/takeme_train.sh
+source /home/kumarv/willa099/takeme_evaluate.sh
 
-python train_xgb_conus.py
+python xgb_error_est.py
