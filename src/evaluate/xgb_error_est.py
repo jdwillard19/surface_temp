@@ -86,7 +86,7 @@ for k in range(n_folds):
 
   print("train set dimensions: ",X.shape)
   #construct lookback feature set??
-  gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=100,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
+  model = xgb.XGBRegressor(booster='gbtree',n_estimators=100,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 
   print("Training XGB regression model...fold ",k)
   model.fit(X, y)
