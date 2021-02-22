@@ -56,9 +56,9 @@ final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
 for k in range(n_folds):
-  train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:5]
+  train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values
   # lakenames = metadata['site_id'].values
-  test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:5]
+  test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
   train_df = pd.DataFrame(columns=columns)
   test_df = pd.DataFrame(columns=columns)
 
@@ -86,7 +86,7 @@ for k in range(n_folds):
 
   print("train set dimensions: ",X.shape)
   #construct lookback feature set??
-  model = xgb.XGBRegressor(booster='gbtree',n_estimators=100,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
+  model = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 
   print("Training XGB regression model...fold ",k)
   model.fit(X, y)
@@ -122,8 +122,7 @@ for k in range(n_folds):
       result_df = result_df.append(df)
 
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
-pdb.set_trace()
-
+result_df.to_feather("../../results/xgb_conus_022221.feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
