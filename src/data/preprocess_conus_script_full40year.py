@@ -23,7 +23,6 @@ site_ids = np.unique(metadata['site_id'].values)
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 obs.sort_values('Date',inplace=True)
 obs = obs[:-2] #delete error obs year 2805, and 2021
-pdb.set_trace()
 #get site ids
 n_lakes = site_ids.shape[0]
 

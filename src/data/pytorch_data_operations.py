@@ -1060,8 +1060,8 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
     if n_dates % seq_length > 0:
         end_ind = n_dates
         start_ind = end_ind - seq_length
-        if lakename == "nhdhr_57937006":
-            pdb.set_trace()
+        # if lakename == "nhdhr_57937006":
+        #     pdb.set_trace()
         X_trn[tr_seq_ind, :, :-1] = feat_mat[start_ind:end_ind,:]
         X_trn[tr_seq_ind,:,-1] = trn[start_ind:end_ind]
         trn_dates[tr_seq_ind,:] = dates[start_ind:end_ind]
