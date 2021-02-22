@@ -74,7 +74,7 @@ lambda1 = 0
 
 # n_eps = 10000
 n_eps = 800
-targ_ep = 340
+targ_ep = 290
 targ_rmse = 2.36
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
@@ -110,8 +110,6 @@ yhat_batch_size = 1
 #create train and test sets
 
 n_folds = 5
-trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
-tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
 final_output_df = pd.DataFrame()
 for k in range(n_folds):
     lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
@@ -671,4 +669,5 @@ for k in range(n_folds):
             print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
             if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
                 print("missed obs?")
+final_output_df.reset_index(inplace=True)
 final_output_df.to_feather("../../results/err_est_outputs2.feather")
