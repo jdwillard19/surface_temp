@@ -104,8 +104,10 @@ for k in range(n_folds):
       data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
       X = data[:,:-1]
       y = data[:,-1]
+      inds = np.where(np.isfinite(y))[0]
+      inds = inds[np.where(inds > farthest_lookback)]
       if lookback > 0:
-          X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
+          X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.half)
           y = y[farthest_lookback:]
       #remove days without obs
       data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
