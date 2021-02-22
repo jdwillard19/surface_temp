@@ -53,9 +53,9 @@ farthest_lookback = 30
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_lm','temp_actual'])
 
-train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:100]
+train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values
 # lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:100]
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
 
@@ -107,7 +107,7 @@ for ct, lake_id in enumerate(test_lakes):
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
     inds = inds[np.where(inds > farthest_lookback)[0]]
-    
+
     if lookback > 0:
         # X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
         X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
