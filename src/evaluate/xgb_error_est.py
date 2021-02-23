@@ -29,7 +29,6 @@ metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv
 #############################
 #load data
 # train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
-train_lakes_wp = ["nhdhr_"+x for x in train_lakes]
 
 columns = ['Surface_Area','Latitude','Longitude', 'Elevation',
            'ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeedU_t-30','WindSpeedV_t-30',\
