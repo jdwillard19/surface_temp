@@ -43,6 +43,7 @@ combined_df = pd.read_feather("../../results/all_outputs_and_obs.feather")
 per_site_df = pd.DataFrame()
 for i,site_id in enumerate(site_ids):
 	print(i)
+	pdb.set_trace()
 	per_site_res = combined_df[combined_df['site_id'] == site_id]
 	site_df = pd.DataFrame()
 	site_df['rmse_ealstm'] = np.sqrt(((per_site_res['wtemp_predicted-ealstm'] - per_site_res['wtemp_actual']) ** 2).mean())
