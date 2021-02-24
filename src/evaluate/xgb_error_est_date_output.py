@@ -79,7 +79,7 @@ for ct, lake_id in enumerate(test_lakes):
         # y = y[inds]
         dates = dates[inds]
     #remove days without obs
-    # data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
+    data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
     # data = data[np.where(np.isfinite(data[:,-1]))]
     dates = dates[np.where(np.isfinite(data[:,-1]))]
     # new_df = pd.DataFrame(columns=columns,data=data)
