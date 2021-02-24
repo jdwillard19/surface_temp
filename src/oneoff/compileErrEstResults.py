@@ -48,7 +48,7 @@ for i,site_id in enumerate(site_ids):
 	site_df['rmse_ealstm'] = [np.sqrt(((per_site_res['wtemp_predicted-ealstm'] - per_site_res['wtemp_actual']) ** 2).mean())]
 	site_df['rmse_xgboost'] = [np.sqrt(((per_site_res['wtemp_predicted-xgboost'] - per_site_res['wtemp_actual']) ** 2).mean())]
 	site_df['rmse_lm'] = [np.sqrt(((per_site_res['wtemp_predicted-linear_model'] - per_site_res['wtemp_actual']) ** 2).mean())]
-	if np.isnan(site_df['rmse_ealstm']):
+	if np.isnan(site_df['rmse_ealstm']).any():
 		pdb.set_trace()
 		continue
 	site_df['site_id'] = [site_id]
