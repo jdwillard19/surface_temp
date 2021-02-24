@@ -26,8 +26,8 @@ for k in range(n_folds):
 	gb_date_df = pd.read_feather("../../results/xgb_dates_conus_022221_fold"+str(k)+".feather")
 	ea_df = pd.read_feather("../../results/err_est_outputs_EALSTM_fold"+str(k)+".feather")
 
-	ind_to_remove = []
-	for i,date in enumerate(ea_df['Date'].values):
-		if gb_date_df.iloc[i,2] is not ea_df.iloc[i,0]:
-			ind_to_remove[]
+	# ind_to_remove = []
+	# for i,date in enumerate(ea_df['Date'].values):
+	# 	if gb_date_df.iloc[i,2] is not ea_df.iloc[i,0]:
+	# 		ind_to_remove.append
 	pdb.set_trace()
