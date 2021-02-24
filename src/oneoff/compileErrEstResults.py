@@ -52,4 +52,5 @@ for i,site_id in enumerate(site_ids):
 	site_df['n_obs'] = [per_site_res.shape[0]]
 	per_site_df = per_site_df.append(site_df)
 
-pdb.set_trace()
+per_site_df.to_csv("../../results/err_per_site.csv")
+per_site_df.to_feather("../../results/err_per_site.feather")
