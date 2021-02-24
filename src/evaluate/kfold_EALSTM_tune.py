@@ -705,7 +705,6 @@ for k in range(n_folds):
                 print("saved at ",save_path)
 
 
-pdb.set_trace()
 print("Optimal Epoch: ",np.argmin(tst_rmse_per_ep.mean(axis=0)[:-1])*10) #340
 print("Optimal Trn RMSE: ",np.argmin(trn_rmse_per_ep.mean(axis=0)[:-1])*10) #2.36
 
