@@ -43,14 +43,13 @@ combined_df = pd.read_feather("../../results/all_outputs_and_obs.feather")
 per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
 for i,site_id in enumerate(site_ids):
 	print(i)
-	pdb.set_trace()
 	per_site_res = combined_df[combined_df['site_id'] == site_id]
 	site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
-	site_df['rmse_ealstm'] = np.sqrt(((per_site_res['wtemp_predicted-ealstm'] - per_site_res['wtemp_actual']) ** 2).mean())
-	site_df['rmse_xgboost'] = np.sqrt(((per_site_res['wtemp_predicted-xgboost'] - per_site_res['wtemp_actual']) ** 2).mean())
-	site_df['rmse_lm'] = np.sqrt(((per_site_res['wtemp_predicted-linear_model'] - per_site_res['wtemp_actual']) ** 2).mean())
-	site_df['site_id'] = site_id
-	site_df['n_obs'] = per_site_res.shape[0]
+	site_df['rmse_ealstm'] = [np.sqrt(((per_site_res['wtemp_predicted-ealstm'] - per_site_res['wtemp_actual']) ** 2).mean())]
+	site_df['rmse_xgboost'] = [np.sqrt(((per_site_res['wtemp_predicted-xgboost'] - per_site_res['wtemp_actual']) ** 2).mean())]
+	site_df['rmse_lm'] = [np.sqrt(((per_site_res['wtemp_predicted-linear_model'] - per_site_res['wtemp_actual']) ** 2).mean())]
+	site_df['site_id'] = [site_id]
+	site_df['n_obs'] = [per_site_res.shape[0]]
 	per_site_df = per_site_df.append(site_df)
 
 pdb.set_trace()
