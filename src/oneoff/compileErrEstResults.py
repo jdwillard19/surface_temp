@@ -18,20 +18,16 @@ for k in range(n_folds):
 	gb_df = pd.read_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
 	gb_date_df = pd.read_feather("../../results/xgb_dates_conus_022221_fold"+str(k)+".feather")
 	ea_df = pd.read_feather("../../results/err_est_outputs_EALSTM_fold"+str(k)+".feather")
+	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
+	assert (ea_df['Date'].values == gb_date_df['Date'].values).all()
+	assert ea_df.shape[0] == lm_df.shape[0]
+	assert ea_df.shape[0] == gb_df.shape[0]
 
-	ind_to_remove = []
-	rm_ct = 0
-	skipped = False
-	for i,date in enumerate(ea_df['Date'].values):
-		while gb_date_df.iloc[i+rm_ct,2] != ea_df.iloc[i,0]:
-			pdb.set_trace()
-			rm_ct += 1
-			ind_to_remove.append(i)
-	lm_df.drop(ind_to_remove)
-	gb_df.drop(ind_to_remove)
-	gb_date_df.drop(ind_to_remove)
-	# ind_to_remove = []
-	# for i,date in enumerate(ea_df['Date'].values):
-	# 	if gb_date_df.iloc[i,2] is not ea_df.iloc[i,0]:
-	# 		ind_to_remove.append
-	pdb.set_trace()
+	combined_ea = combined_ea.append(ea_df)
+	combined_ea.reset_index(inplace=True)
+	combined_gb = combined_gb.append(gb_df)
+	combined_gb.reset_index(inplace=True)
+	combined_lm = combined_lm.append(lm_df)
+	combined_lm.reset_index(inplace=True)
+
+pdb.set_trace()
