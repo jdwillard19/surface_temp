@@ -21,7 +21,7 @@ for k in range(n_folds):
 
 	ind_to_remove = []
 	for i,date in enumerate(ea_df['Date'].values):
-		if gb_date_df.iloc[i,2] is not ea_df.iloc[i,0]:
+		if gb_date_df.iloc[i,2] != ea_df.iloc[i,0]:
 			pdb.set_trace()
 			ind_to_remove.append(i)
 		lm_df.drop(ind_to_remove)
