@@ -24,10 +24,10 @@ for k in range(n_folds):
 	assert ea_df.shape[0] == gb_df.shape[0]
 
 	combined_ea = combined_ea.append(ea_df)
-	combined_ea.reset_index(inplace=True)
+	combined_ea.reset_index(inplace=True,drop=True)
 	combined_gb = combined_gb.append(gb_df)
-	combined_gb.reset_index(inplace=True)
+	combined_gb.reset_index(inplace=True,drop=True)
 	combined_lm = combined_lm.append(lm_df)
-	combined_lm.reset_index(inplace=True)
+	combined_lm.reset_index(inplace=True,drop=True)
 
 pdb.set_trace()
