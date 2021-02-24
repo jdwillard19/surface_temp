@@ -466,9 +466,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             loss_output = outputm_npy[~np.isnan(labelm_npy)]
             loss_label = labelm_npy[~np.isnan(labelm_npy)]
             loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
-            outputs.append(loss_output)
-            labels.append(loss_label)
-            dates.append(loss_days)
+            # outputs.append(loss_output)
+            # labels.append(loss_label)
+            # dates.append(loss_days)
             site_id_repeat = np.empty((loss_label.shape[0]),dtype=np.object)
             site_id_repeat[:] = ''
             site_id_repeat[:] = target_id
