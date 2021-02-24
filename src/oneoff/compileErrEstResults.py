@@ -20,13 +20,16 @@ for k in range(n_folds):
 	ea_df = pd.read_feather("../../results/err_est_outputs_EALSTM_fold"+str(k)+".feather")
 
 	ind_to_remove = []
+	rm_ct = 0
+	skipped = False
 	for i,date in enumerate(ea_df['Date'].values):
-		if gb_date_df.iloc[i,2] != ea_df.iloc[i,0]:
+		while gb_date_df.iloc[i+rm_ct,2] != ea_df.iloc[i,0]:
 			pdb.set_trace()
+			rm_ct += 1
 			ind_to_remove.append(i)
-		lm_df.drop(ind_to_remove)
-		gb_df.drop(ind_to_remove)
-		gb_date_df.drop(ind_to_remove)
+	lm_df.drop(ind_to_remove)
+	gb_df.drop(ind_to_remove)
+	gb_date_df.drop(ind_to_remove)
 	# ind_to_remove = []
 	# for i,date in enumerate(ea_df['Date'].values):
 	# 	if gb_date_df.iloc[i,2] is not ea_df.iloc[i,0]:
