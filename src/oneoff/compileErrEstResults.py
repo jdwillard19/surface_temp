@@ -14,6 +14,7 @@ combined_ea = pd.DataFrame()
 for k in range(n_folds):
 	lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
 	gb_df = pd.read_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
+	gb_date_df = pd.read_feather("../../results/xgb_dates_conus_022221_fold"+str(k)+".feather")
 	ea_df = pd.read_feather("../../results/err_est_outputs_EALSTM_fold"+str(k)+".feather")
 
 	pdb.set_trace()
