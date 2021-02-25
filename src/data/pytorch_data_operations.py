@@ -368,7 +368,7 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
             # continue
         #load data created in preprocess.py based on lakename
         debug = False
-        verbose = True
+        # verbose = True
         my_path = os.path.abspath(os.path.dirname(__file__))
 
         feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea_conus_021621.npy"))
