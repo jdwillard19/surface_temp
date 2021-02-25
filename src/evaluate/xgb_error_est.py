@@ -52,9 +52,11 @@ save_file_path = '../../models/xgb_surface_temp_k'+str(k)+"_run2.joblib"
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
-train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:100]
+train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values
 # lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:50]
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
+assert(np.isin(train_lakes,test_lakes,invert=True).all())
+sys.exit()
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
 
