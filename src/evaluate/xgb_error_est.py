@@ -54,13 +54,13 @@ result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
 train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:100]
 # lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:100]
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:50]
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
 
 for ct, lake_id in enumerate(train_lakes):
-    if ct %100 == 0:
-      print("fold ",k," assembling training lake ",ct,"/",len(train_lakes),": ",lake_id)
+    # if ct %100 == 0:
+    print("fold ",k," assembling training lake ",ct,"/",len(train_lakes),": ",lake_id)
     #load data
     feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
@@ -93,8 +93,8 @@ print("model trained and saved to ", save_file_path)
 
 #test
 for ct, lake_id in enumerate(test_lakes):
-    if ct %100 == 0:
-      print("fold ",k,"  test lake ",ct,"/",len(test_lakes),": ",lake_id)
+    # if ct %100 == 0:
+    print("fold ",k,"  test lake ",ct,"/",len(test_lakes),": ",lake_id)
     #load data
     feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
