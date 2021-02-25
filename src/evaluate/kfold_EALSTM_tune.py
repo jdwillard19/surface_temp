@@ -121,14 +121,16 @@ tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
 # tst_rmse_per_ep = []
 n_hid_arr = np.array([32,64,128,256])
 best_ep_per_hid = np.empty_like(n_hid_arr)
+best_tstrmse_per_hid = np.empty_like(n_hid_arr)
+best_trnrmse_per_hid = np.empty_like(n_hid_arr)
 best_ep_per_hid[:] = np.nan
-best_ep_per_hid = np.empty_like(n_hid_arr)
-best_ep_per_hid[:] = np.nan
-best_ep_per_hid = np.empty_like(n_hid_arr)
-best_ep_per_hid[:] = np.nan
-for n_hidden in n_hid_arr:
+best_tstrmse_per_hid[:] = np.nan
+best_trnrmse_per_hid[:] = np.nan
+for hid_ct,n_hidden in enumerate(n_hid_arr):
     print("n hidden: ",n_hidden)
     n_hidden = int(n_hidden)
+    trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
+    tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
     for k in range(n_folds):
         print("fold ",k)
         lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values[:20]
@@ -716,9 +718,17 @@ for n_hidden in n_hid_arr:
                     # print("saved at ",save_path)
 
 
-        print("n_hid: ",n_hidden,": Optimal Epoch: ",np.argmin(tst_rmse_per_ep.mean(axis=0)[:-1])*10) #340
+        print("n_hid: ",n_hidden,": Optimal Epoch: ",np.argmin(tst_rmse_per_ep.mean(axis=0))*10) #340
         opt_ind = np.argmin(tst_rmse_per_ep.mean(axis=0)[:-1])
-        print("n_hid: ",n_hidden,": Optimal Epoch tst rmse: ",tst_rmse_per_ep.mean(axis=0)[:-1].min()) #340
-        print("n_hid: ",n_hidden,": Optimal Trn RMSE: ",trn_rmse_per_ep.mean(axis=0)[:-1][opt_ind]) #2.36
+        print("n_hid: ",n_hidden,": Optimal Epoch tst rmse: ",tst_rmse_per_ep.mean(axis=0).min()) #340
+        print("n_hid: ",n_hidden,": Optimal Trn RMSE: ",trn_rmse_per_ep.mean(axis=0)[opt_ind]) #2.36
 
         print("n_hid: ",n_hidden,": n batches: ")
+        best_ep_per_hid[hid_ct] = int(np.argmin(tst_rmse_per_ep.mean(axis=0))*10)
+        best_tstrmse_per_hid[hid_ct] = tst_rmse_per_ep.mean(axis=0).min()
+        best_trnrmse_per_hid[hid_ct] = trn_rmse_per_ep.mean(axis=0)[opt_ind]
+
+print("best hid: ",n_hid_arr[int(np.argmin(best_tstrmse_per_hid))])
+print("best ep: ",best_ep_per_hid[int(np.argmin(best_tstrmse_per_hid))])
+print("best tst_rmse: ",best_tstrmse_per_hid.min())
+print("best trn_rmse: ",best_trnrmse_per_hid[int(np.argmin(best_tstrmse_per_hid))])
