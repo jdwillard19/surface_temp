@@ -48,7 +48,7 @@ torch.set_printoptions(precision=10)
 ### debug tools
 debug_train = False
 debug_end = False
-verbose = True
+verbose = False
 save = True
 test = False
 
