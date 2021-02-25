@@ -76,7 +76,7 @@ num_layers = 1
 lambda1 = 0
 
 # n_eps = 10000
-n_eps = 200
+n_eps = 2000
 # n_ep/rmse = (1013/1.52)(957/1.51?
 # targ_ep = 0
 # targ_rmse = 1.46
@@ -512,6 +512,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         #training loop
 
         min_mse = 99999
+        avg_mse = 999
         min_mse_tsterr = None
         ep_min_mse = -1
         ep_since_min = 0
@@ -684,18 +685,18 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
             # if avg_loss < targ_rmse and epoch > targ_ep:
             #     break
 
-            # if avg_loss < min_mse:
-            #     min_mse = avg_loss
-            #     ep_min_mse = epoch
-            #     ep_since_min = 0
+            if avg_mse < min_mse:
+                min_mse = avg_mse
+                ep_min_mse = epoch
+                ep_since_min = 0
 
-            # else:
-            #     ep_since_min += 1
+            else:
+                ep_since_min += 1
 
-            # if ep_since_min == patience:
-            #     print("patience met")
-            #     done = True
-            #     break
+            if ep_since_min == patience:
+                print("patience met")
+                done = True
+                break
 
             # if test:
 
