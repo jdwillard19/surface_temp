@@ -136,6 +136,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     tst_rmse_per_ep = np.nan
     for k in range(n_folds):
         print("fold ",k)
+        k = int(k)
         lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values[:10]
         # lakenames = metadata['site_id'].values
         test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values[:10]
