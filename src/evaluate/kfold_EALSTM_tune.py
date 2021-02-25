@@ -71,12 +71,12 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 128
+# n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0
 
 # n_eps = 10000
-n_eps = 40
+n_eps = 800
 # n_ep/rmse = (1013/1.52)(957/1.51?
 # targ_ep = 0
 # targ_rmse = 1.46
@@ -119,7 +119,8 @@ n_folds = 3
 trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
 tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
 # tst_rmse_per_ep = []
-n_hid_arr = np.array([32,64,128,256])
+# n_hid_arr = np.array([32,64,128,256])
+n_hid_arr = np.array([sys.argv[1]])
 best_ep_per_hid = np.empty_like(n_hid_arr)
 best_tstrmse_per_hid = np.empty_like(n_hid_arr,dtype=np.float)
 best_trnrmse_per_hid = np.empty_like(n_hid_arr,dtype=np.float)
@@ -723,7 +724,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     print("n_hid: ",n_hidden,": Optimal Epoch tst rmse: ",tst_rmse_per_ep.mean(axis=0).min()) #340
     print("n_hid: ",n_hidden,": Optimal Trn RMSE: ",trn_rmse_per_ep.mean(axis=0)[opt_ind]) #2.36
 
-    print("n_hid: ",n_hidden,": n batches: ")
+    print("n_hid: ",n_hidden,": n batches: ",n_batches)
     best_ep_per_hid[hid_ct] = int(np.argmin(tst_rmse_per_ep.mean(axis=0))*10)
     best_tstrmse_per_hid[hid_ct] = tst_rmse_per_ep.mean(axis=0).min()
     best_trnrmse_per_hid[hid_ct] = trn_rmse_per_ep.mean(axis=0)[opt_ind]
