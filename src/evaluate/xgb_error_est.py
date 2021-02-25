@@ -86,13 +86,18 @@ y = np.ravel(train_df[columns[-1]].values)
 
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
-model = xgb.XGBRegressor(booster='gbtree',n_estimators=100,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
+# model = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
+model = xgb.XGBRegressor(booster='gbtree',n_estimators=100,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
 print("Training XGB regression model...fold ",k)
 model.fit(X, y)
 dump(model, save_file_path)
 print("model trained and saved to ", save_file_path)
-
+# X = new_df[columns[:-1]].values
+# y_act = np.ravel(new_df[columns[-1]].values)
+y_pred = model.predict(X)
+rmse  = np.sqrt(((y_pred-y)**2).mean())
+print("trn rmse: ",rmse)
 #test
 for ct, lake_id in enumerate(test_lakes):
     # if ct %100 == 0:
@@ -116,13 +121,14 @@ for ct, lake_id in enumerate(test_lakes):
     X = new_df[columns[:-1]].values
     y_act = np.ravel(new_df[columns[-1]].values)
     y_pred = model.predict(X)
-    pdb.set_trace()
 
     df = pd.DataFrame()
     df['temp_pred_xgb'] = y_pred
     df['temp_actual'] = y_act
     df['site_id'] = lake_id
     result_df = result_df.append(df)
+    rmse  = np.sqrt(((y_pred-y_act)**2).mean())
+    print("tst rmse: ",rmse)
 
 # for ct, lake_id2 in enumerate(test_lakes):
 #     if ct %100 == 0:
@@ -154,7 +160,7 @@ for ct, lake_id in enumerate(test_lakes):
 #     result_df = result_df.append(df2)
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 result_df.reset_index(inplace=True)
-print("rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))
+print("tst rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))
 pdb.set_trace()
 
 result_df.to_feather("../../results/xgb_conus_022221_fold"+str(k)+"_run2.feather")
