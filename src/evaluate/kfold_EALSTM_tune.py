@@ -707,7 +707,7 @@ for n_hidden in n_hid_arr:
                     save_path = "../../models/EALSTM_k"+str(k)+"_"+str(epoch)+"ep"
 
                     saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-                    print("saved at ",save_path)
+                    # print("saved at ",save_path)
 
 
         print("n_hid: ",n_hidden,": Optimal Epoch: ",np.argmin(tst_rmse_per_ep.mean(axis=0)[:-1])*10) #340
