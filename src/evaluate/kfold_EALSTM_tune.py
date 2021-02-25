@@ -134,9 +134,9 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
     for k in range(n_folds):
         print("fold ",k)
-        lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values[:20]
+        lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values[:10]
         # lakenames = metadata['site_id'].values
-        test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values[:20]
+        test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values[:10]
 
         ep_arr = []   
         (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
