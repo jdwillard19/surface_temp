@@ -339,7 +339,7 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
 def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
                                             test_seq_per_depth=1, sparseCustom=None, \
-                                            allTestSeq=False,\
+                                            allTestSeq=False,verbose=False,\
                                             oldFeat = False, normGE10=False, postProcessSplits=True, randomSeed=0,static_feats=False,n_static_feats = 0):
 
     #NONAN
@@ -361,7 +361,8 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
     # all_dates_comp = torch.Tensor(0, seq_length)
     lakes_early_obs = []
     for lake_ct, lakename in enumerate(lakenames):
-        print("loading data for lake ",lake_ct,"/",len(lakenames))
+        if verbose:
+            print("loading data for lake ",lake_ct,"/",len(lakenames))
         # if lake_ct < 217:
             # continue
         #load data created in preprocess.py based on lakename
