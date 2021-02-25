@@ -76,7 +76,7 @@ num_layers = 1
 lambda1 = 0
 
 # n_eps = 10000
-n_eps = 3000
+n_eps = 10000
 # n_ep/rmse = (1013/1.52)(957/1.51?
 # targ_ep = 0
 # targ_rmse = 1.46
@@ -137,9 +137,9 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     for k in range(n_folds):
         print("fold ",k)
         k = int(k)
-        lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values[:10]
+        lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
         # lakenames = metadata['site_id'].values
-        test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values[:10]
+        test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values
 
         ep_arr = []   
         (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
@@ -164,8 +164,8 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         print("train_data size: ",trn_data.size())
         print(len(lakenames), " lakes of data")
         # trn_data = tst_data
-        batch_size = trn_data.size()[0]
-        # batch_size = int(math.floor(trn_data.size()[0])/20)
+        # batch_size = trn_data.size()[0]
+        batch_size = int(math.floor(trn_data.size()[0])/80)
         # batch_size = 2000
 
 
@@ -736,6 +736,6 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     best_trnrmse_per_hid[hid_ct] = trn_rmse_per_ep.mean(axis=0)[opt_ind]
 
 print("best hid: ",n_hid_arr[int(np.argmin(best_tstrmse_per_hid))])
-print("best ep: ",best_ep_per_hid[int(np.argmin(best_tstrmse_per_hid))])
+print("best ep: ",best_ep_per_hid[int(np.argmin(best_tstrmse_per_hid))]*10)
 print("best tst_rmse: ",best_tstrmse_per_hid.min())
 print("best trn_rmse: ",best_trnrmse_per_hid[int(np.argmin(best_tstrmse_per_hid))])
