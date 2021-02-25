@@ -122,6 +122,7 @@ tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
 n_hid_arr = np.array([32,64,128,256])
 for n_hidden in n_hid_arr:
     print("n hidden: ",n_hidden)
+    n_hidden = int(n_hidden)
     for k in range(n_folds):
         print("fold ",k)
         lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values[:20]
