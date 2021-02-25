@@ -56,7 +56,6 @@ train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values
 # lakenames = metadata['site_id'].values
 test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 assert(np.isin(train_lakes,test_lakes,invert=True).all())
-sys.exit()
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
 
