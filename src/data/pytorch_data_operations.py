@@ -16,7 +16,7 @@ from scipy import interpolate
 def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
                                             test_seq_per_depth=1, sparseCustom=None, \
-                                            allTestSeq=False, \
+                                            allTestSeq=False, verbose=False,\
                                             oldFeat = False, normGE10=False, postProcessSplits=True, randomSeed=0,static_feats=False,n_static_feats = 0):
 
     #NONAN
@@ -38,10 +38,11 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
     # all_dates_comp = torch.Tensor(0, seq_length)
 
     for lake_ct, lakename in enumerate(lakenames):
-        print("loading data for lake ",lake_ct,"/",len(lakenames))
+        if verbose:
+            print("loading data for lake ",lake_ct,"/",len(lakenames))
         #load data created in preprocess.py based on lakename
         debug = False
-        verbose = True
+        # verbose = True
         my_path = os.path.abspath(os.path.dirname(__file__))
 
         if not static_feats:
