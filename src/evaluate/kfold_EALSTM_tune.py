@@ -76,7 +76,7 @@ num_layers = 1
 lambda1 = 0
 
 # n_eps = 10000
-n_eps = 2000
+n_eps = 3000
 # n_ep/rmse = (1013/1.52)(957/1.51?
 # targ_ep = 0
 # targ_rmse = 1.46
@@ -719,7 +719,9 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
             saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
                     # print("saved at ",save_path)
 
-
+    tst_rmse_per_ep = tst_rmse_per_ep[:,:int(epoch*10)]
+    trn_rmse_per_ep = trn_rmse_per_ep[:,:int(epoch*10)]
+    
     print("n_hid: ",n_hidden,": Optimal Epoch: ",np.argmin(tst_rmse_per_ep.mean(axis=0))*10) #340
     opt_ind = np.argmin(tst_rmse_per_ep.mean(axis=0)[:-1])
     print("n_hid: ",n_hidden,": Optimal Epoch tst rmse: ",tst_rmse_per_ep.mean(axis=0).min()) #340
