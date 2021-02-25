@@ -133,7 +133,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
     trn_rmse_per_ep[:] = np.nan
     tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
-    tst_rmse_per_ep = np.nan
+    tst_rmse_per_ep[:] = np.nan
     for k in range(n_folds):
         print("fold ",k)
         k = int(k)
@@ -664,7 +664,6 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
 
                         # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
                         # tst_rmse_per_ep.append(avg_mse)
-                    pdb.set_trace()
                     tst_rmse_per_ep[k,int(epoch/10)]=avg_mse
 
                         # if avg_mse < min_mse:
