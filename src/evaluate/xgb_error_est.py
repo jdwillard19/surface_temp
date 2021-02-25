@@ -18,7 +18,6 @@ currentDT = datetime.datetime.now()
 print("script start: ",str(currentDT))
 
 #file to save model  to
-save_file_path = '../../models/xgb_surface_temp.joblib'
 
 
 # metadata = pd.read_csv("../../metadata/conus_source_metadata.csv")
@@ -48,12 +47,14 @@ lookback = 4
 farthest_lookback = 30
 #build training set
 k = int(sys.argv[1])
+save_file_path = '../../models/xgb_surface_temp_k'+str(k)+"_run2.joblib"
+
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
-train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values
+train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:100]
 # lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:100]
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
 
@@ -83,7 +84,7 @@ y = np.ravel(train_df[columns[-1]].values)
 
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
-model = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
+model = xgb.XGBRegressor(booster='gbtree',n_estimators=100,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
 print("Training XGB regression model...fold ",k)
 model.fit(X, y)
@@ -122,7 +123,9 @@ for ct, lake_id in enumerate(test_lakes):
 
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 result_df.reset_index(inplace=True)
-result_df.to_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
+pdb.set_trace()
+
+result_df.to_feather("../../results/xgb_conus_022221_fold"+str(k)+"_run2.feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
