@@ -92,63 +92,63 @@ dump(model, save_file_path)
 print("model trained and saved to ", save_file_path)
 
 #test
-# for ct, lake_id in enumerate(test_lakes):
-#     if ct %100 == 0:
-#       print("fold ",k,"  test lake ",ct,"/",len(test_lakes),": ",lake_id)
-#     #load data
-#     feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
-#     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
-#     # dates = np.load("../../data/processed/"+name+"/dates.npy")
-#     data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
-#     X = data[:,:-1]
-#     y = data[:,-1]
-#     inds = np.where(np.isfinite(y))[0]
-#     inds = inds[np.where(inds > farthest_lookback)[0]]
-#     if lookback > 0:
-#         X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
-#         y = y[inds]
-#     #remove days without obs
-#     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
-#     data = data[np.where(np.isfinite(data[:,-1]))]
-#     new_df = pd.DataFrame(columns=columns,data=data)
-#     X = new_df[columns[:-1]].values
-#     y_act = np.ravel(new_df[columns[-1]].values)
-#     y_pred = model.predict(X)
-
-#     df = pd.DataFrame()
-#     df['temp_pred_xgb'] = y_pred
-#     df['temp_actual'] = y_act
-#     df['site_id'] = lake_id
-#     result_df = result_df.append(df)
-
-for ct, lake_id2 in enumerate(test_lakes):
+for ct, lake_id in enumerate(test_lakes):
     if ct %100 == 0:
-      print("fold ",k,"  test lake ",ct,"/",len(test_lakes),": ",lake_id2)
+      print("fold ",k,"  test lake ",ct,"/",len(test_lakes),": ",lake_id)
     #load data
-    feats2 = np.load("../../data/processed/"+lake_id2+"/features_ea_conus_021621.npy")
-    labs2 = np.load("../../data/processed/"+lake_id2+"/full.npy")
+    feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
+    labs = np.load("../../data/processed/"+lake_id+"/full.npy")
     # dates = np.load("../../data/processed/"+name+"/dates.npy")
-    data2 = np.concatenate((feats2[:,:],labs2.reshape(labs2.shape[0],1)),axis=1)
-    X2 = data2[:,:-1]
-    y2 = data2[:,-1]
-    inds2 = np.where(np.isfinite(y2))[0]
-    inds2 = inds2[np.where(inds2 > farthest_lookback)[0]]
+    data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
+    X = data[:,:-1]
+    y = data[:,-1]
+    inds = np.where(np.isfinite(y))[0]
+    inds = inds[np.where(inds > farthest_lookback)[0]]
     if lookback > 0:
-        X2 = np.array([np.append(np.append(np.append(X2[i2,:],X2[i2-lookback:i2,4:].flatten()),X2[i2-14,4:]),X2[i2-30,4:]) for i2 in inds2],dtype = np.float)
-        y2 = y2[inds2]
+        X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
+        y = y[inds]
     #remove days without obs
-    data2 = np.concatenate((X2,y2.reshape(len(y2),1)),axis=1)
-    data2 = data2[np.where(np.isfinite(data2[:,-1]))]
-    new_df2 = pd.DataFrame(columns=columns,data=data2)
-    X2 = new_df2[columns[:-1]].values
-    y_act2 = np.ravel(new_df2[columns[-1]].values)
-    y_pred2 = model.predict(X2)
+    data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
+    data = data[np.where(np.isfinite(data[:,-1]))]
+    new_df = pd.DataFrame(columns=columns,data=data)
+    X = new_df[columns[:-1]].values
+    y_act = np.ravel(new_df[columns[-1]].values)
+    y_pred = model.predict(X)
 
-    df2 = pd.DataFrame()
-    df2['temp_pred_xgb'] = y_pred2
-    df2['temp_actual'] = y_act2
-    df2['site_id'] = lake_id2
-    result_df = result_df.append(df2)
+    df = pd.DataFrame()
+    df['temp_pred_xgb'] = y_pred
+    df['temp_actual'] = y_act
+    df['site_id'] = lake_id
+    result_df = result_df.append(df)
+
+# for ct, lake_id2 in enumerate(test_lakes):
+#     if ct %100 == 0:
+#       print("fold ",k,"  test lake ",ct,"/",len(test_lakes),": ",lake_id2)
+#     #load data
+#     feats2 = np.load("../../data/processed/"+lake_id2+"/features_ea_conus_021621.npy")
+#     labs2 = np.load("../../data/processed/"+lake_id2+"/full.npy")
+#     # dates = np.load("../../data/processed/"+name+"/dates.npy")
+#     data2 = np.concatenate((feats2[:,:],labs2.reshape(labs2.shape[0],1)),axis=1)
+#     X2 = data2[:,:-1]
+#     y2 = data2[:,-1]
+#     inds2 = np.where(np.isfinite(y2))[0]
+#     inds2 = inds2[np.where(inds2 > farthest_lookback)[0]]
+#     if lookback > 0:
+#         X2 = np.array([np.append(np.append(np.append(X2[i2,:],X2[i2-lookback:i2,4:].flatten()),X2[i2-14,4:]),X2[i2-30,4:]) for i2 in inds2],dtype = np.float)
+#         y2 = y2[inds2]
+#     #remove days without obs
+#     data2 = np.concatenate((X2,y2.reshape(len(y2),1)),axis=1)
+#     data2 = data2[np.where(np.isfinite(data2[:,-1]))]
+#     new_df2 = pd.DataFrame(columns=columns,data=data2)
+#     X2 = new_df2[columns[:-1]].values
+#     y_act2 = np.ravel(new_df2[columns[-1]].values)
+#     y_pred2 = model.predict(X2)
+
+#     df2 = pd.DataFrame()
+#     df2['temp_pred_xgb'] = y_pred2
+#     df2['temp_actual'] = y_act2
+#     df2['site_id'] = lake_id2
+#     result_df = result_df.append(df2)
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 result_df.reset_index(inplace=True)
 print("rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))
