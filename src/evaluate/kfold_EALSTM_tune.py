@@ -76,7 +76,7 @@ n_hidden = 128
 lambda1 = 0
 
 # n_eps = 10000
-n_eps = 20
+n_eps = 40
 # n_ep/rmse = (1013/1.52)(957/1.51?
 # targ_ep = 0
 # targ_rmse = 1.46
@@ -121,7 +121,9 @@ tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
 # tst_rmse_per_ep = []
 n_hid_arr = np.array([32,64,128,256])
 for n_hidden in n_hid_arr:
+    print("n hidden: ",n_hidden)
     for k in range(n_folds):
+        print("fold ",k)
         lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values[:20]
         # lakenames = metadata['site_id'].values
         test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values[:20]
@@ -198,7 +200,6 @@ for n_hidden in n_hid_arr:
         #format total y-hat data for loading
         # total_data = TotalModelOutputDataset(all_data, all_phys_data, all_dates)
         n_batches = math.floor(trn_data.size()[0] / batch_size)
-        print("n batches: ")
 
         #batch samplers used to draw samples in dataloaders
         batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_batches)
@@ -667,7 +668,7 @@ for n_hidden in n_hid_arr:
                         #         break
 
                         # print("Test RMSE: ", avg_mse, "(min=",min_mse,")---ep since ",ep_since_min*10)
-                    print("Test RMSE: ", avg_mse)
+                    # print("Test RMSE: ", avg_mse)
                 # save_path = "../../models/EALSTM_global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wElevTypeCodes_partial"
                 # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
             # if avg_loss < targ_rmse and epoch > targ_ep:
