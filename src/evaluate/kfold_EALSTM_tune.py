@@ -116,8 +116,8 @@ yhat_batch_size = 1
 #create train and test sets
 
 n_folds = 3
-trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
-tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
+# trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
+# tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
 # tst_rmse_per_ep = []
 # n_hid_arr = np.array([32,64,128,256])
 n_hid_arr = np.array([sys.argv[1]])
