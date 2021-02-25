@@ -120,6 +120,12 @@ trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
 tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)+1))
 # tst_rmse_per_ep = []
 n_hid_arr = np.array([32,64,128,256])
+best_ep_per_hid = np.empty_like(n_hid_arr)
+best_ep_per_hid[:] = np.nan
+best_ep_per_hid = np.empty_like(n_hid_arr)
+best_ep_per_hid[:] = np.nan
+best_ep_per_hid = np.empty_like(n_hid_arr)
+best_ep_per_hid[:] = np.nan
 for n_hidden in n_hid_arr:
     print("n hidden: ",n_hidden)
     n_hidden = int(n_hidden)
