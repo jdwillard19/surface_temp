@@ -718,15 +718,15 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
                     # print("saved at ",save_path)
 
 
-        print("n_hid: ",n_hidden,": Optimal Epoch: ",np.argmin(tst_rmse_per_ep.mean(axis=0))*10) #340
-        opt_ind = np.argmin(tst_rmse_per_ep.mean(axis=0)[:-1])
-        print("n_hid: ",n_hidden,": Optimal Epoch tst rmse: ",tst_rmse_per_ep.mean(axis=0).min()) #340
-        print("n_hid: ",n_hidden,": Optimal Trn RMSE: ",trn_rmse_per_ep.mean(axis=0)[opt_ind]) #2.36
+    print("n_hid: ",n_hidden,": Optimal Epoch: ",np.argmin(tst_rmse_per_ep.mean(axis=0))*10) #340
+    opt_ind = np.argmin(tst_rmse_per_ep.mean(axis=0)[:-1])
+    print("n_hid: ",n_hidden,": Optimal Epoch tst rmse: ",tst_rmse_per_ep.mean(axis=0).min()) #340
+    print("n_hid: ",n_hidden,": Optimal Trn RMSE: ",trn_rmse_per_ep.mean(axis=0)[opt_ind]) #2.36
 
-        print("n_hid: ",n_hidden,": n batches: ")
-        best_ep_per_hid[hid_ct] = int(np.argmin(tst_rmse_per_ep.mean(axis=0))*10)
-        best_tstrmse_per_hid[hid_ct] = tst_rmse_per_ep.mean(axis=0).min()
-        best_trnrmse_per_hid[hid_ct] = trn_rmse_per_ep.mean(axis=0)[opt_ind]
+    print("n_hid: ",n_hidden,": n batches: ")
+    best_ep_per_hid[hid_ct] = int(np.argmin(tst_rmse_per_ep.mean(axis=0))*10)
+    best_tstrmse_per_hid[hid_ct] = tst_rmse_per_ep.mean(axis=0).min()
+    best_trnrmse_per_hid[hid_ct] = trn_rmse_per_ep.mean(axis=0)[opt_ind]
 
 print("best hid: ",n_hid_arr[int(np.argmin(best_tstrmse_per_hid))])
 print("best ep: ",best_ep_per_hid[int(np.argmin(best_tstrmse_per_hid))])
