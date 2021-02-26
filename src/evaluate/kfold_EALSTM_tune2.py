@@ -70,7 +70,7 @@ win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
-num_layers = 1
+num_layers = 2
 # n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0
@@ -142,23 +142,16 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values
 
         ep_arr = []   
-
-        if not os.path.exists("./ealstm_trn_data_fold"+str(k)+".npy"):
-            (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
-                                                            seq_length, n_total_feats,\
-                                                            win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                            static_feats=True,n_static_feats = 4) 
-            (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
+        (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                         seq_length, n_total_feats,\
                                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                         static_feats=True,n_static_feats = 4) 
-
-            np.save("ealstm_trn_data_fold"+str(k)+".npy",trn_data)
-            np.save("ealstm_tst_data_fold"+str(k)+".npy",tst_data)
-        else:
-            trn_data = torch.from_numpy(np.load("ealstm_trn_data_fold"+str(k)+".npy"))
-            tst_data = torch.from_numpy(np.load("ealstm_tst_data_fold"+str(k)+".npy"))
-
+        (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
+                                                    seq_length, n_total_feats,\
+                                                    win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                    static_feats=True,n_static_feats = 4) 
+        # np.save("conus_trn_data_final.npy",trn_data)
+        # np.save("_tst_data_wStatic.npy",tst_data)
         # sys.exit()
         # trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
         # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))

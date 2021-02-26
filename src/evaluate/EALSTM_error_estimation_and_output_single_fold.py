@@ -68,14 +68,14 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 128
+n_hidden = 225
 # lambda1 = 1e-
 lambda1 = 0
 
 # n_eps = 10000
-n_eps = 800
-targ_ep = 340
-targ_rmse = 2.36
+n_eps = 1000
+targ_ep = 120
+targ_rmse = 2.32
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
@@ -116,10 +116,16 @@ lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
 test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 
 ep_arr = []   
-(trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
-                                                seq_length, n_total_feats,\
-                                                win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                static_feats=True,n_static_feats = 4) 
+if not os.path.exists("./ealstm_trn_data_fold"+str(k)+".npy"):
+    (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
+                                                    seq_length, n_total_feats,\
+                                                    win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                    static_feats=True,n_static_feats = 4) 
+
+    np.save("ealstm_trn_data_5fold_k"+str(k)+".npy",trn_data)
+else:
+    trn_data = torch.from_numpy(np.load("ealstm_trn_data_5fold_k"+str(k)+".npy"))
+
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
 #                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
@@ -138,8 +144,9 @@ ep_arr = []
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
+batch_size = int(math.floor(trn_data.size()[0])/150)
 # batch_size = int(math.floor(trn_data.size()[0])/20)
-batch_size = 3000
+# batch_size = 3000
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
 
@@ -668,4 +675,4 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
         if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
             print("missed obs?")
-final_output_df.to_feather("../../results/err_est_outputs_EALSTM_fold"+str(k)+".feather")
+final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
