@@ -675,7 +675,8 @@ for epoch in range(n_eps):
 
                 final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
                 mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-                print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
+                # if targ_ct % 100
+                # print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
                 if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
                     print("missed obs?")
         print(np.median(rmse_per_test_lake))
