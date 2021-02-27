@@ -678,8 +678,8 @@ for epoch in range(n_eps):
                 rmse_per_test_lake[targ_ct] = mat_rmse
                 # if targ_ct % 100
                 # print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
-                if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
-                    print("missed obs?")
+                # if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
+                #     print("missed obs?")
         print(np.median(rmse_per_test_lake))
 
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
