@@ -58,7 +58,7 @@ test = False
 #params
 ###########################33
 first_save_epoch = 0
-patience = 200
+patience = 75
 
 #ow
 seq_length = 350 #how long of sequences to use in model
@@ -74,6 +74,8 @@ num_layers = 2
 # n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0
+k = int(sys.argv[2])
+folds_arr = np.array([k])
 
 # n_eps = 10000
 n_eps = 10000
@@ -115,9 +117,6 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-n_folds = 3
-# trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
-# tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
 # tst_rmse_per_ep = []
 # n_hid_arr = np.array([32,64,128,256])
 n_hid_arr = np.array([sys.argv[1]])
@@ -130,11 +129,11 @@ best_trnrmse_per_hid[:] = np.nan
 for hid_ct,n_hidden in enumerate(n_hid_arr):
     print("n hidden: ",n_hidden)
     n_hidden = int(n_hidden)
-    trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
+    trn_rmse_per_ep = np.empty((1,int(n_eps/10)))
     trn_rmse_per_ep[:] = np.nan
-    tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
+    tst_rmse_per_ep = np.empty((1,int(n_eps/10)))
     tst_rmse_per_ep[:] = np.nan
-    for k in range(n_folds):
+    for k in folds_arr:
         print("fold ",k)
         k = int(k)
         lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
@@ -142,16 +141,23 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values
 
         ep_arr = []   
-        (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
+
+        if not os.path.exists("./ealstm_trn_data_fold"+str(k)+".npy"):
+            (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
+                                                            seq_length, n_total_feats,\
+                                                            win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                            static_feats=True,n_static_feats = 4) 
+            (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
                                                         seq_length, n_total_feats,\
                                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                         static_feats=True,n_static_feats = 4) 
-        (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
-                                                    seq_length, n_total_feats,\
-                                                    win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                    static_feats=True,n_static_feats = 4) 
-        # np.save("conus_trn_data_final.npy",trn_data)
-        # np.save("_tst_data_wStatic.npy",tst_data)
+
+            np.save("ealstm_trn_data_fold"+str(k)+".npy",trn_data)
+            np.save("ealstm_tst_data_fold"+str(k)+".npy",tst_data)
+        else:
+            trn_data = torch.from_numpy(np.load("ealstm_trn_data_fold"+str(k)+".npy"))
+            tst_data = torch.from_numpy(np.load("ealstm_tst_data_fold"+str(k)+".npy"))
+
         # sys.exit()
         # trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
         # tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))

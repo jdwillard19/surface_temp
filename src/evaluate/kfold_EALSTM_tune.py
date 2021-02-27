@@ -74,6 +74,8 @@ num_layers = 1
 # n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0
+k = int(sys.argv[1])
+folds_arr = np.array([k])
 
 # n_eps = 10000
 n_eps = 10000
@@ -130,11 +132,11 @@ best_trnrmse_per_hid[:] = np.nan
 for hid_ct,n_hidden in enumerate(n_hid_arr):
     print("n hidden: ",n_hidden)
     n_hidden = int(n_hidden)
-    trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
+    trn_rmse_per_ep = np.empty((1,int(n_eps/10)))
     trn_rmse_per_ep[:] = np.nan
-    tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
+    tst_rmse_per_ep = np.empty((1,int(n_eps/10)))
     tst_rmse_per_ep[:] = np.nan
-    for k in range(n_folds):
+    for k in folds_arr:
         print("fold ",k)
         k = int(k)
         lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
