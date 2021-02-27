@@ -120,7 +120,7 @@ if not os.path.exists("./ealstm_trn_data_fold"+str(k)+".npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                    static_feats=True,n_static_feats = 4) 
+                                                    static_feats=True,n_static_feats = 4,verbose=True) 
 
     np.save("ealstm_trn_data_5fold_k"+str(k)+".npy",trn_data)
 else:
