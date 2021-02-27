@@ -665,16 +665,17 @@ for epoch in range(n_eps):
                 loss_label = labelm_npy[~np.isnan(labelm_npy)]
                 loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
                 # print(unique_tst_dates_target)
-                output_df = pd.DataFrame()
-                output_df['Date'] = loss_days
-                output_df['site_id'] = target_id
-                output_df['wtemp_predicted'] = loss_output
-                output_df['wtemp_actual'] =loss_label
-                output_df['fold'] = k
+                # output_df = pd.DataFrame()
+                # output_df['Date'] = loss_days
+                # output_df['site_id'] = target_id
+                # output_df['wtemp_predicted'] = loss_output
+                # output_df['wtemp_actual'] =loss_label
+                # output_df['fold'] = k
 
 
-                final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
+                # final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
                 mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+                rmse_per_test_lake[targ_ct] = mat_rmse
                 # if targ_ct % 100
                 # print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
                 if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
