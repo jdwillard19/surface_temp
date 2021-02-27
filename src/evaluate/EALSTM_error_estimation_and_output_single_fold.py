@@ -116,7 +116,7 @@ lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
 test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 
 ep_arr = []   
-if not os.path.exists("./ealstm_trn_data_fold"+str(k)+".npy"):
+if not os.path.exists("./ealstm_trn_data_5fold"+str(k)+".npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
