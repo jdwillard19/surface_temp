@@ -675,4 +675,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
         if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
             print("missed obs?")
-final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
+
+# final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
+final_output_df.to_feather("../../results/TEMP_err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
