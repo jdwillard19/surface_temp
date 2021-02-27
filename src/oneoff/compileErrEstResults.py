@@ -11,35 +11,37 @@ n_folds = 5
 # combined_lm = pd.DataFrame()
 # combined_gb = pd.DataFrame()
 # combined_ea = pd.DataFrame()
-# for k in range(n_folds):
+for k in range(n_folds):
 
+	print("fold ",k)
+	lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
+	gb_df = pd.read_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
+	gb_date_df = pd.read_feather("../../results/xgb_dates_conus_022221_fold"+str(k)+".feather")
+	ea_df = pd.read_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
+	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
+	assert (ea_df['Date'].values == gb_date_df['Date'].values).all()
+	assert ea_df.shape[0] == lm_df.shape[0]
+	assert ea_df.shape[0] == gb_df.shape[0]
 
-# 	lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
-# 	gb_df = pd.read_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
-# 	gb_date_df = pd.read_feather("../../results/xgb_dates_conus_022221_fold"+str(k)+".feather")
-# 	ea_df = pd.read_feather("../../results/err_est_outputs_EALSTM_fold"+str(k)+".feather")
-# 	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
-# 	assert (ea_df['Date'].values == gb_date_df['Date'].values).all()
-# 	assert ea_df.shape[0] == lm_df.shape[0]
-# 	assert ea_df.shape[0] == gb_df.shape[0]
+	combined_ea = combined_ea.append(ea_df)
+	combined_ea.reset_index(inplace=True,drop=True)
+	combined_gb = combined_gb.append(gb_df)
+	combined_gb.reset_index(inplace=True,drop=True)
+	combined_lm = combined_lm.append(lm_df)
+	combined_lm.reset_index(inplace=True,drop=True)
 
-# 	combined_ea = combined_ea.append(ea_df)
-# 	combined_ea.reset_index(inplace=True,drop=True)
-# 	combined_gb = combined_gb.append(gb_df)
-# 	combined_gb.reset_index(inplace=True,drop=True)
-# 	combined_lm = combined_lm.append(lm_df)
-# 	combined_lm.reset_index(inplace=True,drop=True)
-
-# combined_df['Date'] = combined_ea['Date']
-# combined_df['site_id'] = combined_gb['site_id']
-# combined_df['wtemp_predicted-ealstm'] = combined_ea['wtemp_predicted']
-# combined_df['wtemp_predicted-xgboost'] = combined_gb['temp_pred_xgb']
-# combined_df['wtemp_predicted-linear_model'] = combined_lm['temp_pred_lm']
-# combined_df['wtemp_actual'] = combined_gb['temp_actual']
-# combined_df.reset_index(inplace=True)
-# combined_df.to_feather("../../results/all_outputs_and_obs.feather")
+combined_df['Date'] = combined_ea['Date']
+combined_df['site_id'] = combined_gb['site_id']
+combined_df['wtemp_predicted-ealstm'] = combined_ea['wtemp_predicted']
+combined_df['wtemp_predicted-xgboost'] = combined_gb['temp_pred_xgb']
+combined_df['wtemp_predicted-linear_model'] = combined_lm['temp_pred_lm']
+combined_df['wtemp_actual'] = combined_gb['temp_actual']
+combined_df.reset_index(inplace=True)
+combined_df.to_feather("../../results/all_outputs_and_obs2.feather")
+combined_df.to_csv("../../results/all_outputs_and_obs2.csv")
 
 combined_df = pd.read_feather("../../results/all_outputs_and_obs.feather")
+
 per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
 for i,site_id in enumerate(site_ids):
 	print(i)
@@ -55,5 +57,5 @@ for i,site_id in enumerate(site_ids):
 	per_site_df = per_site_df.append(site_df)
 
 per_site_df.reset_index(inplace=True)
-per_site_df.to_csv("../../results/err_per_site.csv")
-per_site_df.to_feather("../../results/err_per_site.feather")
+per_site_df.to_csv("../../results/err_per_site2.csv")
+per_site_df.to_feather("../../results/err_per_site2.feather")
