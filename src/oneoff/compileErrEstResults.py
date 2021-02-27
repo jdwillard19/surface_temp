@@ -7,10 +7,10 @@ obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather
 site_ids = metadata['site_id'].values
 n_folds = 5
 
-# combined_df = pd.DataFrame()
-# combined_lm = pd.DataFrame()
-# combined_gb = pd.DataFrame()
-# combined_ea = pd.DataFrame()
+combined_df = pd.DataFrame()
+combined_lm = pd.DataFrame()
+combined_gb = pd.DataFrame()
+combined_ea = pd.DataFrame()
 for k in range(n_folds):
 
 	print("fold ",k)
