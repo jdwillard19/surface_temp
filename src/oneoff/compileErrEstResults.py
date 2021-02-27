@@ -40,7 +40,7 @@ combined_df.reset_index(inplace=True)
 combined_df.to_feather("../../results/all_outputs_and_obs2.feather")
 combined_df.to_csv("../../results/all_outputs_and_obs2.csv")
 
-combined_df = pd.read_feather("../../results/all_outputs_and_obs.feather")
+combined_df = pd.read_feather("../../results/all_outputs_and_obs2.feather")
 
 per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
 for i,site_id in enumerate(site_ids):
