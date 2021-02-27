@@ -619,7 +619,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
             if verbose:
                 print("train rmse loss=", avg_loss)
             if epoch % 10 is 0:
-                trn_rmse_per_ep[k,int(epoch/10)]=avg_loss
+                trn_rmse_per_ep[1,int(epoch/10)]=avg_loss
                 with torch.no_grad():
                     avg_mse = 0
                     ct = 0
