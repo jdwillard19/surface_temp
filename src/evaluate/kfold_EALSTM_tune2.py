@@ -670,7 +670,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
 
                         # avg_mse = np.sqrt(((loss_output - loss_label) ** 2).mean())
                         # tst_rmse_per_ep.append(avg_mse)
-                    tst_rmse_per_ep[k,int(epoch/10)]=avg_mse
+                    tst_rmse_per_ep[0,int(epoch/10)]=avg_mse
 
                         # if avg_mse < min_mse:
                         #     # save_path = "../../models/global_model_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_"+str(dropout)+"drop"
