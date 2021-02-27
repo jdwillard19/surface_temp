@@ -577,8 +577,8 @@ for epoch in range(n_eps):
         rmse_per_test_lake = np.empty((len(test_lakes)))
         rmse_per_test_lake[:] = np.nan
         for targ_ct, target_id in enumerate(test_lakes): #for each target lake
-            if targ_ct %100 == 0:
-                print(str(targ_ct),'/',len(test_lakes),':',target_id)
+            # if targ_ct %100 == 0:
+            #     print(str(targ_ct),'/',len(test_lakes),':',target_id)
             lake_df = pd.DataFrame()
             lake_id = target_id
 
