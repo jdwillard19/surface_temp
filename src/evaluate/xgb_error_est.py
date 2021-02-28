@@ -99,7 +99,7 @@ model = xgb.XGBRegressor(booster='gbtree',n_estimators=1000,learning_rate=.05,ma
 
 print("Training XGB regression model...fold ",k)
 model.fit(X, y)
-model = load(model_path)
+# model = load(model_path)
 importances = model.feature_importances_
 print(importances)
 sorted_feats = [x for _,x in sorted(zip(importances,columns[-1]))]
