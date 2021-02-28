@@ -152,7 +152,6 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
             np.save("ealstm_trn_data_fold"+str(k)+".npy",trn_data)
         else:
             trn_data = torch.from_numpy(np.load("ealstm_trn_data_fold"+str(k)+".npy"))
-        pdb.set_trace()
         if not os.path.exists("./ealstm_tst_data_fold"+str(k)+".npy"):
             (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
                                                         seq_length, n_total_feats,\
