@@ -158,6 +158,12 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
                                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                         static_feats=True,n_static_feats = 4) 
             np.save("ealstm_tst_data_fold"+str(k)+".npy",tst_data)
+        elif np.load("ealstm_tst_data_fold"+str(k)+".npy").shape[0] == 0:
+            (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
+                                            seq_length, n_total_feats,\
+                                            win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                            static_feats=True,n_static_feats = 4) 
+            np.save("ealstm_tst_data_fold"+str(k)+".npy",tst_data)
 
         else:
             tst_data = torch.from_numpy(np.load("ealstm_tst_data_fold"+str(k)+".npy"))
