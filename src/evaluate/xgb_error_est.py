@@ -40,14 +40,14 @@ columns = ['Surface_Area','Latitude','Longitude',
      'ShortWave_t-14','LongWave_t-14','AirTemp_t-14','WindSpeedU_t-14','WindSpeedV_t-14',\
      'ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeedU_t-30','WindSpeedV_t-30',\
      'Surface_Temp']
-X = np.array(c)
-new_c = np.append(
-                  np.append(
-                            np.append(
-                                      X[i,:],
-                                      X[i-lookback:i,4:].flatten()),
-                            X[i-14,4:])
-                  ,X[i-30,4:])
+# X = np.array(c)
+# new_c = np.append(
+#                   np.append(
+#                             np.append(
+#                                       X[i,:],
+#                                       X[i-lookback:i,4:].flatten()),
+#                             X[i-14,4:])
+#                   ,X[i-30,4:])
 train_df = pd.DataFrame(columns=columns)
 
 param_search = True
