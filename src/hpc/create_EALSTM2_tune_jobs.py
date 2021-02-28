@@ -29,7 +29,7 @@ for i in n_hid_arr:
             output.write(all)
 
 
-compile_job_path= './jobs/ealstm2_tune_jobs.sh'
+compile_job_path= './jobs/ealstm22_tune_jobs.sh'
 with open(compile_job_path, 'w') as output2:
     output2.write(sbatch)
 
