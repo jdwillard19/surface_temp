@@ -68,7 +68,7 @@ dropout = 0.
 num_layers = 1
 n_hidden = 256
 # lambda1 = 1e-
-# lambda1 = 0.0001
+lambda1 = 0.000
 
 # n_eps = 10000
 n_eps = 1000
