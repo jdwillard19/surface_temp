@@ -25,11 +25,10 @@ for name in range(n_folds):
     #for each unique lake
     print(name)
     l = name
-
     # if not os.path.exists("../../../models/single_lake_models/"+name+"/PGRNN_basic_normAll_pball"): 
-    header = "#!/bin/bash -l\n#SBATCH --time=23:59:00\n#SBATCH --ntasks=8\n#SBATCH --mem=20g\n#SBATCH --mail-type=ALL\n#SBATCH --mail-user=willa099@umn.edu\n#SBATCH --output=EALSTM_singlefold_2lay_128hid_24rmse_k%s.out\n#SBATCH --error=EALSTM_singlefold_2lay_128hid_24rmse_k%s.err\n#SBATCH --gres=gpu:k40:2\n#SBATCH -p k40"%(l,l)
+    header = "#!/bin/bash -l\n#SBATCH --time=23:59:00\n#SBATCH --ntasks=8\n#SBATCH --mem=20g\n#SBATCH --mail-type=ALL\n#SBATCH --mail-user=willa099@umn.edu\n#SBATCH --output=EALSTM_singlefold_1lay_256hid_24rmse_k%s.out\n#SBATCH --error=EALSTM_singlefold_1lay_256hid_24rmse_k%s.err\n#SBATCH --gres=gpu:k40:2\n#SBATCH -p k40"%(l,l)
     script = "source /home/kumarv/willa099/takeme_evaluate.sh\n" #cd to directory with training script
-    script2 = "python EALSTM_error_estimation_and_output_single_fold2.py %s"%(l)
+    script2 = "python EALSTM_error_estimation_and_output_single_fold.py %s"%(l)
     # script3 = "python singleModel_customSparse.py %s"%(l)
     all= "\n".join([header,script,script2])
     sbatch = "\n".join(["sbatch job_%s_foldEA.sh"%(l),sbatch])
