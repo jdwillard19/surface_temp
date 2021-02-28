@@ -29,16 +29,25 @@ metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv
 #load data
 # train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy")
 
-columns = ['Surface_Area','Latitude','Longitude', 'Elevation',
-           'ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeedU_t-30','WindSpeedV_t-30',\
-           'ShortWave_t-14','LongWave_t-14','AirTemp_t-14','WindSpeedU_t-14','WindSpeedV_t-14',\
-           'ShortWave_t-4','LongWave_t-4','AirTemp_t-4','WindSpeedU_t-4','WindSpeedV_t-4',\
-           'ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeedU_t-3','WindSpeedV_t-3',\
-           'ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeedU_t-2','WindSpeedV_t-2',\
-           'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeedU_t-1','WindSpeedV_t-1',\
-           'ShortWave','LongWave','AirTemp','WindSpeedU','WindspeedV',\
-           'Surface_Temp']
 
+
+columns = ['Surface_Area','Latitude','Longitude', 
+     'Elevation','ShortWave','LongWave','AirTemp','WindSpeedU','WindspeedV',
+     'ShortWave_t-4','LongWave_t-4','AirTemp_t-4','WindSpeedU_t-4','WindSpeedV_t-4',
+     'ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeedU_t-3','WindSpeedV_t-3',
+     'ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeedU_t-2','WindSpeedV_t-2',\
+     'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeedU_t-1','WindSpeedV_t-1',\
+     'ShortWave_t-14','LongWave_t-14','AirTemp_t-14','WindSpeedU_t-14','WindSpeedV_t-14',\
+     'ShortWave_t-30','LongWave_t-30','AirTemp_t-30','WindSpeedU_t-30','WindSpeedV_t-30',\
+     'Surface_Temp']
+X = np.array(c)
+new_c = np.append(
+                  np.append(
+                            np.append(
+                                      X[i,:],
+                                      X[i-lookback:i,4:].flatten()),
+                            X[i-14,4:])
+                  ,X[i-30,4:])
 train_df = pd.DataFrame(columns=columns)
 
 param_search = True
@@ -52,9 +61,9 @@ save_file_path = '../../models/xgb_surface_temp_k'+str(k)+"_run2.joblib"
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
-train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:50]
+train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:100]
 # lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:50]
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:100]
 assert(np.isin(train_lakes,test_lakes,invert=True).all())
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
@@ -86,10 +95,16 @@ y = np.ravel(train_df[columns[-1]].values)
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
 # model = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
-model = xgb.XGBRegressor(booster='gbtree',n_estimators=100,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
+model = xgb.XGBRegressor(booster='gbtree',n_estimators=1000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
 print("Training XGB regression model...fold ",k)
 model.fit(X, y)
+model = load(model_path)
+importances = model.feature_importances_
+print(importances)
+sorted_feats = [x for _,x in sorted(zip(importances,columns[-1]))]
+sorted_imps = [x for x,_ in sorted(zip(importances,columns[-1]))]
+pdb.set_trace()
 dump(model, save_file_path)
 print("model trained and saved to ", save_file_path)
 # X = new_df[columns[:-1]].values
