@@ -12,7 +12,7 @@ import numpy as np
 sbatch = ""
 ct = 0
 n_hid_arr = np.arange(25,400,25)
-n_folds = 5
+n_folds = 3
 for i in n_hid_arr:
     for k in range(n_folds):
     #for each unique lake
