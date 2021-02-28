@@ -225,7 +225,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
 
 
         #load val/test data into enumerator based on batch size
-        testloader = torch.utils.data.DataLoader(tst_data, batch_size=500, shuffle=False, pin_memory=True)
+        testloader = torch.utils.data.DataLoader(tst_data, batch_size=2000, shuffle=False, pin_memory=True)
 
 
         #define EA-LSTM class
