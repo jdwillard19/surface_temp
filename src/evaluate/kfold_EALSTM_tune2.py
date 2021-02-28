@@ -168,6 +168,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         # n_static_feats = 1
         # n_total_feats = n_features + n_static_feats
         print("train_data size: ",trn_data.size())
+        print("test_data size: ",tst_data.size())
         print(len(lakenames), " lakes of data")
         # trn_data = tst_data
         # batch_size = trn_data.size()[0]
@@ -225,7 +226,8 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
 
 
         #load val/test data into enumerator based on batch size
-        testloader = torch.utils.data.DataLoader(tst_data, batch_size=2000, shuffle=False, pin_memory=True)
+        tst_batch_size=2000
+        testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_batch_size, shuffle=False, pin_memory=True)
 
 
         #define EA-LSTM class
