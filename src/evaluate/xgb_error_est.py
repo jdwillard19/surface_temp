@@ -102,8 +102,8 @@ model.fit(X, y)
 # model = load(model_path)
 importances = model.feature_importances_
 print(importances)
-sorted_feats = [x for _,x in sorted(zip(importances,columns[-1]))]
-sorted_imps = [x for x,_ in sorted(zip(importances,columns[-1]))]
+sorted_feats = [x for _,x in sorted(zip(importances,columns[:-1]))]
+sorted_imps = [x for x,_ in sorted(zip(importances,columns[:-1]))]
 pdb.set_trace()
 dump(model, save_file_path)
 print("model trained and saved to ", save_file_path)
