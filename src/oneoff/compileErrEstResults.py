@@ -17,7 +17,8 @@ for k in range(n_folds):
 	lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
 	gb_df = pd.read_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
 	gb_date_df = pd.read_feather("../../results/xgb_dates_conus_022221_fold"+str(k)+".feather")
-	ea_df = pd.read_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
+	# ea_df = pd.read_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
+	ea_df = pd.read_feather("../../results/err_est_outputs_1layer256hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
 	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
 	assert (ea_df['Date'].values == gb_date_df['Date'].values).all()
 	assert ea_df.shape[0] == lm_df.shape[0]
@@ -57,6 +58,6 @@ for i,site_id in enumerate(site_ids):
 	per_site_df = per_site_df.append(site_df)
 
 per_site_df.reset_index(inplace=True)
-per_site_df.to_csv("../../results/err_per_site2.csv")
-per_site_df.to_feather("../../results/err_per_site2.feather")
+per_site_df.to_csv("../../results/err_per_site3.csv")
+per_site_df.to_feather("../../results/err_per_site3.feather")
 pdb.set_trace()
