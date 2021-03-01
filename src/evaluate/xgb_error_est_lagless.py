@@ -94,7 +94,7 @@ y = np.ravel(train_df[columns[-1]].values)
 
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
-model = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
+model = xgb.XGBRegressor(booster='gbtree',n_estimators=5000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 # model = xgb.XGBRegressor(booster='gbtree',n_estimators=1000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
 print("Training XGB regression model...fold ",k)
@@ -175,7 +175,7 @@ for ct, lake_id in enumerate(test_lakes):
 result_df.reset_index(inplace=True)
 print("tst rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))
 
-result_df.to_feather("../../results/xgb_conus_0301201_fold"+str(k)+".feather")
+result_df.to_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
