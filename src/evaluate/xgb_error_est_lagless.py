@@ -52,11 +52,11 @@ train_df = pd.DataFrame(columns=columns)
 
 param_search = True
 
-lookback = 4
-farthest_lookback = 30
+# lookback = 4
+# farthest_lookback = 30
 #build training set
 k = int(sys.argv[1])
-save_file_path = '../../models/xgb_surface_temp_fold'+str(k)+"_03012021.joblib"
+save_file_path = '../../models/xgb_lagless_surface_temp_fold'+str(k)+"_03012021.joblib"
 
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
@@ -79,22 +79,22 @@ for ct, lake_id in enumerate(train_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
-    inds = inds[np.where(inds > farthest_lookback)[0]]
-    if lookback > 0:
-        X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
-        y = y[inds]
+    # inds = inds[np.where(inds > farthest_lookback)[0]]
+    X = np.array([X[i,:] for i in inds],dtype = np.float)
+    y = y[inds]
     #remove days without obs
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
 
-    data = data[np.where(np.isfinite(data[:,-1]))]
+    # data = data[np.where(np.isfinite(data[:,-1]))]
     new_df = pd.DataFrame(columns=columns,data=data)
     train_df = pd.concat([train_df, new_df], ignore_index=True)
+
 X = train_df[columns[:-1]].values
 y = np.ravel(train_df[columns[-1]].values)
 
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
-model = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
+model = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 # model = xgb.XGBRegressor(booster='gbtree',n_estimators=1000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
 print("Training XGB regression model...fold ",k)
@@ -124,13 +124,12 @@ for ct, lake_id in enumerate(test_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
-    inds = inds[np.where(inds > farthest_lookback)[0]]
-    if lookback > 0:
-        X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
-        y = y[inds]
+    # inds = inds[np.where(inds > farthest_lookback)[0]]
+    X = np.array([X[i,:] for i in inds],dtype = np.float)
+    y = y[inds]
     #remove days without obs
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
-    data = data[np.where(np.isfinite(data[:,-1]))]
+    # data = data[np.where(np.isfinite(data[:,-1]))]
     new_df = pd.DataFrame(columns=columns,data=data)
     X = new_df[columns[:-1]].values
     y_act = np.ravel(new_df[columns[-1]].values)
