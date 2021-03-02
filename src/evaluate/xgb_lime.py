@@ -63,9 +63,9 @@ save_file_path = '../../models/xgb_lagless_surface_temp_fold'+str(k)+"_03012021_
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
-train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[300:]
+train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:400]
 # lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[300:]
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:400]
 assert(np.isin(train_lakes,test_lakes,invert=True).all())
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
