@@ -101,6 +101,7 @@ if train:
     # model = xgb.XGBRegressor(booster='gbtree',n_estimators=1000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
     if train:
+        train_df.to_feather("./xgb_lime_trn.feather")
         print("Training XGB regression model...fold ",k)
         model.fit(X, y)
         dump(model, save_file_path)
@@ -143,6 +144,10 @@ for ct, lake_id in enumerate(test_lakes):
     # data = data[np.where(np.isfinite(data[:,-1]))]
     new_df = pd.DataFrame(columns=columns,data=data)
     test_df = pd.concat([test_df, new_df], ignore_index=True)
+
+
+
+test_df.to_feather("./xgb_lime_tst.feather")
 
     # X = new_df[columns[:-1]].values
     # y_act = np.ravel(new_df[columns[-1]].values)
