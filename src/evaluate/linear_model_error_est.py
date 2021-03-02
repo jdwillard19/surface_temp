@@ -39,7 +39,7 @@ columns = ['Surface_Area','Latitude','Longitude', 'Elevation',
            # 'ShortWave_t-3','LongWave_t-3','AirTemp_t-3','WindSpeedU_t-3','WindSpeedV_t-3',\
            # 'ShortWave_t-2','LongWave_t-2','AirTemp_t-2','WindSpeedU_t-2','WindSpeedV_t-2',\
            # 'ShortWave_t-1','LongWave_t-1','AirTemp_t-1','WindSpeedU_t-1','WindSpeedV_t-1',\
-           # 'ShortWave','LongWave','AirTemp','WindSpeedU','WindspeedV',\
+           'ShortWave','LongWave','AirTemp','WindSpeedU','WindspeedV',\
            'Surface_Temp']
 
 train_df = pd.DataFrame(columns=columns)
