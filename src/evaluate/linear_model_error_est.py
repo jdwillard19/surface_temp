@@ -46,8 +46,8 @@ train_df = pd.DataFrame(columns=columns)
 
 param_search = True
 k = int(sys.argv[1])
-lookback = 4
-farthest_lookback = 30
+# lookback = 4
+# farthest_lookback = 30
 #build training set
 
 final_output_df = pd.DataFrame()
@@ -70,13 +70,13 @@ for ct, lake_id in enumerate(train_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
-    inds = inds[np.where(inds > farthest_lookback)]
+    # inds = inds[np.where(inds > farthest_lookback)]
 
-    if lookback > 0:
+    # if lookback > 0:
         # X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
-        X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
-        # y = y[farthest_lookback:]
-        y = y[inds]
+    X = np.array([X[i,:] for i in inds],dtype = np.float)
+    # y = y[farthest_lookback:]
+    y = y[inds]
     #remove days without obs
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
 
@@ -106,13 +106,12 @@ for ct, lake_id in enumerate(test_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
-    inds = inds[np.where(inds > farthest_lookback)[0]]
+    # inds = inds[np.where(inds > farthest_lookback)[0]]
 
-    if lookback > 0:
         # X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
-        X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
-        # y = y[farthest_lookback:]
-        y = y[inds]
+    X = np.array([X[i,:] for i in inds],dtype = np.float)
+    # y = y[farthest_lookback:]
+    y = y[inds]
     #remove days without obs
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
     data = data[np.where(np.isfinite(data[:,-1]))]
@@ -129,7 +128,7 @@ for ct, lake_id in enumerate(test_lakes):
 
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 result_df.reset_index(inplace=True)
-result_df.to_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
+result_df.to_feather("../../results/lm_lagless_030121_fold"+str(k)+".feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
