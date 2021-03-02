@@ -28,7 +28,7 @@ for k in range(n_folds):
 
 	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
 	assert (ea_df['Date'].values == gb_date_df['Date'].values).all()
-	assert ea_df.shape[0] == lm_df.shape[0]
+	# assert ea_df.shape[0] == lm_df.shape[0]
 	assert ea_df.shape[0] == gb_df.shape[0]
 
 	combined_ea = combined_ea.append(ea_df)
