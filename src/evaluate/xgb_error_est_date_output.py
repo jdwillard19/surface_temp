@@ -72,10 +72,9 @@ for ct, lake_id in enumerate(test_lakes):
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
     # inds = inds[np.where(inds > farthest_lookback)[0]]
-    if lookback > 0:
         # X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
         # y = y[inds]
-        dates = dates[inds]
+    dates = dates[inds]
     #remove days without obs
     # data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
     # data = data[np.where(np.isfinite(data[:,-1]))]
