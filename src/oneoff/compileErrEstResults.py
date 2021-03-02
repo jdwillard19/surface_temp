@@ -36,8 +36,8 @@ for k in range(n_folds):
 	combined_ea.reset_index(inplace=True,drop=True)
 	combined_gb = combined_gb.append(gb_df)
 	combined_gb.reset_index(inplace=True,drop=True)
-	# combined_lm = combined_lm.append(lm_df)
-	# combined_lm.reset_index(inplace=True,drop=True)
+	combined_lm = combined_lm.append(lm_df)
+	combined_lm.reset_index(inplace=True,drop=True)
 
 combined_df['Date'] = combined_ea['Date']
 combined_df['site_id'] = combined_gb['site_id']
