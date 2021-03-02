@@ -110,7 +110,7 @@ else:
     model = load(save_file_path)
 
 
-explainer = lime_tabular.LimeTabularExplainer(training_data=train_df.values,mode='regression')
+explainer = lime_tabular.LimeTabularExplainer(training_data=train_df.values[:,:-1],mode='regression')
 
 
 # importances = model.feature_importances_
@@ -186,11 +186,7 @@ for ct, lake_id in enumerate(test_lakes):
 #     result_df = result_df.append(df2)
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 
-pdb.set_trace()
-exp = explainer.explain_instance(
-    data_row=test_df.iloc[1], 
-    predict_fn=model.predict
-)
+exp = explainer.explain_instance(data_row=test_df.iloc[1,:-1], predict_fn=model.predict)
 
 exp.show_in_notebook(show_table=True)
 
