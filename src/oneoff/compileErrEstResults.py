@@ -15,6 +15,7 @@ for k in range(n_folds):
 
 	print("fold ",k)
 	# lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
+	lm_df = pd.read_feather("../../results/lm_lagless_030121_fold"+str(k)+".feather")
 	# gb_df = pd.read_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
 	gb_df = pd.read_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
 
@@ -28,7 +29,7 @@ for k in range(n_folds):
 
 	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
 	assert (ea_df['Date'].values == gb_date_df['Date'].values).all()
-	# assert ea_df.shape[0] == lm_df.shape[0]
+	assert ea_df.shape[0] == lm_df.shape[0]
 	assert ea_df.shape[0] == gb_df.shape[0]
 
 	combined_ea = combined_ea.append(ea_df)
@@ -42,7 +43,7 @@ combined_df['Date'] = combined_ea['Date']
 combined_df['site_id'] = combined_gb['site_id']
 combined_df['wtemp_predicted-ealstm'] = combined_ea['wtemp_predicted']
 combined_df['wtemp_predicted-xgboost'] = combined_gb['temp_pred_xgb']
-# combined_df['wtemp_predicted-linear_model'] = combined_lm['temp_pred_lm']
+combined_df['wtemp_predicted-linear_model'] = combined_lm['temp_pred_lm']
 # combined_df['wtemp_actual'] = combined_ea['wtemp_actual']
 combined_df['wtemp_actual'] = combined_gb['temp_actual']
 combined_df.reset_index(inplace=True)
@@ -51,16 +52,16 @@ combined_df.to_csv("../../results/all_outputs_and_obs2.csv")
 
 combined_df = pd.read_feather("../../results/all_outputs_and_obs2.feather")
 
-# per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
-per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost'])
+per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
+# per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost'])
 for i,site_id in enumerate(site_ids):
 	print(i)
 	per_site_res = combined_df[combined_df['site_id'] == site_id]
-	# site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
-	site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost'])
+	site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
+	# site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost'])
 	site_df['rmse_ealstm'] = [np.sqrt(((per_site_res['wtemp_predicted-ealstm'] - per_site_res['wtemp_actual']) ** 2).mean())]
 	site_df['rmse_xgboost'] = [np.sqrt(((per_site_res['wtemp_predicted-xgboost'] - per_site_res['wtemp_actual']) ** 2).mean())]
-	# site_df['rmse_lm'] = [np.sqrt(((per_site_res['wtemp_predicted-linear_model'] - per_site_res['wtemp_actual']) ** 2).mean())]
+	site_df['rmse_lm'] = [np.sqrt(((per_site_res['wtemp_predicted-linear_model'] - per_site_res['wtemp_actual']) ** 2).mean())]
 	if np.isnan(site_df['rmse_ealstm']).any():
 		continue
 	site_df['site_id'] = [site_id]
