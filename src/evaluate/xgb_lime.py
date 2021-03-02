@@ -110,11 +110,7 @@ else:
     model = load(save_file_path)
 
 
-pdb.set_trace()
-explainer = lime_tabular.LimeTabularExplainer(
-    training_data=train_df,
-    mode='regression'
-)
+explainer = lime_tabular.LimeTabularExplainer(training_data=train_df.values,mode='regression')
 
 
 # importances = model.feature_importances_
