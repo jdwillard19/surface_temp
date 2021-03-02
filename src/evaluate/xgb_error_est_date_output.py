@@ -44,8 +44,6 @@ metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv
 
 param_search = True
 
-lookback = 4
-farthest_lookback = 30
 #build training set
 k = int(sys.argv[1])
 final_output_df = pd.DataFrame()
@@ -73,7 +71,7 @@ for ct, lake_id in enumerate(test_lakes):
     # dates = dates[:]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
-    inds = inds[np.where(inds > farthest_lookback)[0]]
+    # inds = inds[np.where(inds > farthest_lookback)[0]]
     if lookback > 0:
         # X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in inds],dtype = np.float)
         # y = y[inds]
@@ -100,7 +98,7 @@ for ct, lake_id in enumerate(test_lakes):
 
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 result_df.reset_index(inplace=True)
-result_df.to_feather("../../results/xgb_dates_conus_022221_fold"+str(k)+".feather")
+result_df.to_feather("../../results/xgb_lagless_dates_fold"+str(k)+".feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
