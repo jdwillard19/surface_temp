@@ -19,7 +19,7 @@ for k in range(n_folds):
 	gb_df = pd.read_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
 
 	
-	gb_date_df = pd.read_feather("../../results/xgb_dates_conus_022221_fold"+str(k)+".feather")
+	gb_date_df = pd.read_feather("../../results/xgb_lagless_dates_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_1layer256hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_2layer128hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
