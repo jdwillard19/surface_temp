@@ -115,6 +115,8 @@ explainer = lime_tabular.LimeTabularExplainer(
     training_data=train_df,
     mode='regression'
 )
+
+
 # importances = model.feature_importances_
 # print(importances)
 # sorted_feats = [x for _,x in sorted(zip(importances,columns[:-1]))]
@@ -122,9 +124,9 @@ explainer = lime_tabular.LimeTabularExplainer(
 # pdb.set_trace()
 # X = new_df[columns[:-1]].values
 # y_act = np.ravel(new_df[columns[-1]].values)
-y_pred = model.predict(X)
-rmse  = np.sqrt(((y_pred-y)**2).mean())
-print("trn rmse: ",rmse)
+# y_pred = model.predict(X)
+# rmse  = np.sqrt(((y_pred-y)**2).mean())
+# print("trn rmse: ",rmse)
 #test
 for ct, lake_id in enumerate(test_lakes):
     # if ct %100 == 0:
@@ -144,17 +146,19 @@ for ct, lake_id in enumerate(test_lakes):
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
     # data = data[np.where(np.isfinite(data[:,-1]))]
     new_df = pd.DataFrame(columns=columns,data=data)
-    X = new_df[columns[:-1]].values
-    y_act = np.ravel(new_df[columns[-1]].values)
-    y_pred = model.predict(X)
+    test_df = pd.concat([test_df, new_df], ignore_index=True)
 
-    df = pd.DataFrame()
-    df['temp_pred_xgb'] = y_pred
-    df['temp_actual'] = y_act
-    df['site_id'] = lake_id
-    result_df = result_df.append(df)
-    rmse  = np.sqrt(((y_pred-y_act)**2).mean())
-    print("tst rmse: ",rmse)
+    # X = new_df[columns[:-1]].values
+    # y_act = np.ravel(new_df[columns[-1]].values)
+    # y_pred = model.predict(X)
+
+    # df = pd.DataFrame()
+    # df['temp_pred_xgb'] = y_pred
+    # df['temp_actual'] = y_act
+    # df['site_id'] = lake_id
+    # result_df = result_df.append(df)
+    # rmse  = np.sqrt(((y_pred-y_act)**2).mean())
+    # print("tst rmse: ",rmse)
 
 # for ct, lake_id2 in enumerate(test_lakes):
 #     if ct %100 == 0:
@@ -185,10 +189,18 @@ for ct, lake_id in enumerate(test_lakes):
 #     df2['site_id'] = lake_id2
 #     result_df = result_df.append(df2)
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
-result_df.reset_index(inplace=True)
-print("tst rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))
 
-result_df.to_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
+exp = explainer.explain_instance(
+    data_row=test_df.iloc[1], 
+    predict_fn=model.predict()
+)
+
+exp.show_in_notebook(show_table=True)
+
+# result_df.reset_index(inplace=True)
+# print("tst rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))
+
+# result_df.to_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
