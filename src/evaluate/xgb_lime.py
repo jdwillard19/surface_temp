@@ -186,9 +186,10 @@ for ct, lake_id in enumerate(test_lakes):
 #     result_df = result_df.append(df2)
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 
+pdb.set_trace()
 exp = explainer.explain_instance(
     data_row=test_df.iloc[1], 
-    predict_fn=model.predict()
+    predict_fn=model.predict
 )
 
 exp.show_in_notebook(show_table=True)
