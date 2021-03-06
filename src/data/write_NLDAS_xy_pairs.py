@@ -15,8 +15,8 @@ import datetime
 
 #load metadata, get ids
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_020421.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-
+# metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
+metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 
 #load wst obs
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
@@ -72,8 +72,9 @@ for lake_ind, name in enumerate(site_ids):
     x = str(metadata[metadata['site_id'] == name]['x'].values[0])+".0"
     y = str(metadata[metadata['site_id'] == name]['y'].values[0])+".0"
 
-    # if os.path.exists("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy"):
-    #     continue
+    if os.path.exists("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y.npy"):
+        print("ALREADY HAS")
+        continue
     sw_vals = sw_da.loc[:,y,x].values
     lw_vals = lw_da.loc[:,y,x].values
     at_vals = at_da.loc[:,y,x].values
