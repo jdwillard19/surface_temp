@@ -62,6 +62,7 @@ end = int(sys.argv[2])
 # site_ids = np.flipud(site_ids)
 print("running site id's ",start,"->",end)
 site_ids = site_ids[start:end]
+skipped = []
 for lake_ind, name in enumerate(site_ids):
     # if lake_ind < 565:
     #     continue
@@ -82,7 +83,9 @@ for lake_ind, name in enumerate(site_ids):
     wsv_vals = wsv_da.loc[:,y,x].values
     if np.isnan(sw_vals).any():
         print("nan sw?")
-        raise Exception("CANT CONTINUE") 
+        skipped.append(name)
+        continue
+        # raise Exception("CANT CONTINUE") 
     if np.isnan(lw_vals).any():
         print("nan lw?")
         raise Exception("CANT CONTINUE") 
@@ -104,3 +107,5 @@ for lake_ind, name in enumerate(site_ids):
     print("x/y: ",x,"/",y,":\nSW: ", sw_vals, "\nLW: ",lw_vals,"\nAT: ",at_vals,"\nWSU: ", wsu_vals, "\nWSV: ", wsv_vals)
 
 print("DATA COMPLETE")
+print("SKIPPED: ")
+print(repr(skipped))
