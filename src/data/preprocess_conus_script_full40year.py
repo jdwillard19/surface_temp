@@ -67,6 +67,8 @@ date_offset = 350
 
 
 for site_ct, site_id in enumerate(site_ids[start:end]):
+    if name == 'nhdhr_{ef5a02dc-f608-4740-ab0e-de374bf6471c}' or name == 'nhdhr_136665792' or name == 'nhdhr_136686179':
+        continue
     # if site_ct < 5383:
     #     continue
     print(site_ct," starting ", site_id)

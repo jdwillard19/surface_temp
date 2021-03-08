@@ -64,6 +64,9 @@ print("running site id's ",start,"->",end)
 site_ids = site_ids[start:end]
 skipped = []
 for lake_ind, name in enumerate(site_ids):
+
+    # if name == 'nhdhr_{ef5a02dc-f608-4740-ab0e-de374bf6471c}' or name == 'nhdhr_136665792' or name == 'nhdhr_136686179':
+    #     continue
     # if lake_ind < 565:
     #     continue
     # print("(",len(site_ids)-lake_ind,"/",str(len(site_ids)),") ","writing... ", name)
