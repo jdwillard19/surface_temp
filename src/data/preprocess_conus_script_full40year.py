@@ -83,23 +83,23 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     y = str(metadata[metadata['site_id'] == site_id]['y'].values[0])+".0"
 
     #read/format meteorological data for numpy
-    site_obs = obs[obs['site_id'] == site_id]
-    print(site_obs.shape[0], " obs")
+    # site_obs = obs[obs['site_id'] == site_id]
+    # print(site_obs.shape[0], " obs")
 
     #lower/uppur cutoff indices (to match observations)
-    if site_obs.shape[0] == 0:
-        print("|\n|\nNO SURFACE OBSERVATIONS\n|\n|\n|")
-        pdb.set_trace()
-        no_obs_ids.append(site_id)
-        no_obs_ct +=1 
-        continue
+    # if site_obs.shape[0] == 0:
+    #     print("|\n|\nNO SURFACE OBSERVATIONS\n|\n|\n|")
+    #     pdb.set_trace()w
+    #     no_obs_ids.append(site_id)
+    #     no_obs_ct +=1 
+    #     continue
 
-    site_obs = site_obs.sort_values("Date")    
+    # site_obs = site_obs.sort_values("Date")    
     #sort observations
-    obs_start_date = site_obs.values[0,0]
+    # obs_start_date = site_obs.values[0,0]
     meteo_start_date = dates[0]
     start_date = meteo_start_date
-    obs_end_date = site_obs.values[-1,0]
+    # obs_end_date = site_obs.values[-1,0]
 
     print("start date: ",start_date)
     print("end date: ", dates[-1])
@@ -135,34 +135,34 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
     feats_norm = (site_feats - mean_feats[:]) / std_feats[:]
 
 
-    obs_trn_mat = np.empty((n_dates))
-    site_obs_mat = np.empty((n_dates))
-    site_obs_mat[:] = np.nan
-    obs_trn_mat[:] = np.nan
-    obs_tst_mat = np.empty((n_dates))
-    obs_tst_mat[:] = np.nan
+    # obs_trn_mat = np.empty((n_dates))
+    # site_obs_mat = np.empty((n_dates))
+    # site_obs_mat[:] = np.nan
+    # obs_trn_mat[:] = np.nan
+    # obs_tst_mat = np.empty((n_dates))
+    # obs_tst_mat[:] = np.nan
 
 
 
-    obs_g = 0
-    obs_d = 0
+    # obs_g = 0
+    # obs_d = 0
 
     #get unique observation days
-    unq_obs_dates = np.unique(site_obs.values[:,0])
-    n_unq_obs_dates = unq_obs_dates.shape[0]
-    n_obs = n_unq_obs_dates
+    # unq_obs_dates = np.unique(site_obs.values[:,0])
+    # n_unq_obs_dates = unq_obs_dates.shape[0]
+    # n_obs = n_unq_obs_dates
 
     #place obs data
-    n_obs_placed = 0
-    # n_trn_obs_placed = 0
-    for o in range(0,n_obs):
-        if len(np.where(site_dates == pd.Timestamp(site_obs.values[o,0]).to_datetime64())[0]) < 1:
-            print("not within meteo dates")
-            obs_d += 1
-            continue
-        date_ind = np.where(site_dates == pd.Timestamp(site_obs.values[o,0]).to_datetime64())[0][0]
-        site_obs_mat[date_ind] = site_obs.values[o,2]
-        n_obs_placed += 1
+    # n_obs_placed = 0
+    # # n_trn_obs_placed = 0
+    # for o in range(0,n_obs):
+    #     if len(np.where(site_dates == pd.Timestamp(site_obs.values[o,0]).to_datetime64())[0]) < 1:
+    #         print("not within meteo dates")
+    #         obs_d += 1
+    #         continue
+    #     date_ind = np.where(site_dates == pd.Timestamp(site_obs.values[o,0]).to_datetime64())[0][0]
+    #     site_obs_mat[date_ind] = site_obs.values[o,2]
+    #     n_obs_placed += 1
 
 
     if not os.path.exists("../../data/processed/"+site_id): 
@@ -172,12 +172,12 @@ for site_ct, site_id in enumerate(site_ids[start:end]):
 
     feat_path = "../../data/processed/"+site_id+"/features_ea_conus_021621"
     norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea_conus_021621"
-    full_path = "../../data/processed/"+site_id+"/full"
+    # full_path = "../../data/processed/"+site_id+"/full"
     dates_path = "../../data/processed/"+site_id+"/dates"
 
 
     np.save(feat_path, site_feats)
     np.save(norm_feat_path, feats_norm)
     np.save(dates_path, site_dates)
-    np.save(full_path, site_obs_mat)
+    # np.save(full_path, site_obs_mat)
 
