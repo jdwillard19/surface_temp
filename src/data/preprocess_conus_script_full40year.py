@@ -15,8 +15,10 @@ import datetime
 
 #load metadata, get ids
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521.csv")
-site_ids = np.unique(metadata['site_id'].values)
+metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
+start = int(sys.argv[1])
+end = int(sys.argv[2])
+site_ids = np.unique(metadata['site_id'].values[start_end])
 
 # metadata.set_index("site_id",inplace=True)
 #load wst obs
