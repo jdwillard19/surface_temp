@@ -69,7 +69,6 @@ date_offset = 350
 for site_ct, site_id in enumerate(site_ids[start:end]):
     if site_id == 'nhdhr_{ef5a02dc-f608-4740-ab0e-de374bf6471c}' or site_id == 'nhdhr_136665792' or site_id == 'nhdhr_136686179':
         continue
-    pdb.set_trace()
     if os.path.exists("../../data/processed/"+site_id+"/features_ea_conus_021621.npy"):
         print("EXISTS")
         continue
