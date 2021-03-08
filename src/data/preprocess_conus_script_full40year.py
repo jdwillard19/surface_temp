@@ -18,7 +18,7 @@ import datetime
 metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 start = int(sys.argv[1])
 end = int(sys.argv[2])
-site_ids = np.unique(metadata['site_id'].values[start_end])
+site_ids = np.unique(metadata['site_id'].values[start:end])
 
 # metadata.set_index("site_id",inplace=True)
 #load wst obs
