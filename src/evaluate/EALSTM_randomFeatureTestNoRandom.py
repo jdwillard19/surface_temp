@@ -684,7 +684,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
-    (_, _, tst_data_target, tst_dates, unique_tst_dates_target) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
+    (_, _, tst_data_target, tst_dates, unique_tst_dates_target) = buildLakeDataForRNN_manylakes_gauged(lake_id, seq_length, n_features, \
                                                 win_shift= win_shift, begin_loss_ind = 0, \
                                                 outputFullTestMatrix=False, sparseCustom=None, \
                                                 allTestSeq=False, static_feats=True,n_static_feats=4,\
