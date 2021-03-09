@@ -79,7 +79,7 @@ targ_rmse = 2.32
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 err_per_site = pd.read_feather("../../results/err_per_site3.feather")
-lakenames = err_per_site[err_per_site['n_obs'] >= 100]
+lakenames = err_per_site[err_per_site['n_obs'] >= 100]['site_id'].values
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 ###############################
