@@ -133,15 +133,12 @@ ep_arr = []
 #                                                                                                     begin_loss_ind = begin_loss_ind,
 #
 
-lakenames = ['nhdhr_143249470']                                                                                                     outputFullTestMatrix=True, 
+lakenames = ['nhdhr_143249470']                                                                                                  
 (trn_data, trn_dates, tst_data, tst_dates, unique_tst_dates) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
-                                            win_shift= 1, begin_loss_ind = 100, \
+                                            win_shift= win_shift, begin_loss_ind = 0, \
                                             outputFullTestMatrix=False, sparseCustom=None, \
-                                            allTestSeq=False, static_feats=False,n_static_feats=0,\
-                                            postProcessSplits=True, randomSeed=0):                                                                                            allTestSeq=True, 
-                                                                                                    static_feats=True,
-                                                                                                    n_static_feats=n_static_feats,
-                                                                                                    postProcessSplits=True)
+                                            allTestSeq=False, static_feats=True,n_static_feats=4,\
+                                            postProcessSplits=True)                 
 pdb.set_trace()
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
