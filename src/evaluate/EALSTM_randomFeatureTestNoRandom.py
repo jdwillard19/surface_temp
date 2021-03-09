@@ -654,10 +654,9 @@ for epoch in range(n_eps):
                 print("VAL RMSE: ",avg_mse)
 
         #after training, do test predictions / error estimation
-for targ_ct, target_id in enumerate(test_lakes): #for each target lake
+for targ_ct, target_id in enumerate(lakenames): #for each target lake
     # if targ_ct %100 == 0:
     #     print(str(targ_ct),'/',len(test_lakes),':',target_id)
-    lake_df = pd.DataFrame()
     lake_id = target_id
 
     # lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
