@@ -649,7 +649,7 @@ for epoch in range(n_eps):
                     # if mse > 0: #obsolete i think
                     #     ct += 1
                 avg_mse = avg_mse / ct
-                print("VAL RMSE: ",avg_rmse)
+                print("VAL RMSE: ",avg_mse)
 
         #after training, do test predictions / error estimation
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
