@@ -73,11 +73,13 @@ lambda1 = 0.000
 # n_eps = 10000
 n_eps = 6000
 targ_ep = 30
-targ_ep = 0
+# targ_ep = 0
 targ_rmse = 2.36
-targ_rmse = 5.5
+# targ_rmse = 5.5
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
+
+final_output_df = pd.DataFrame()
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 err_per_site = pd.read_feather("../../results/err_per_site3.feather")
@@ -654,6 +656,8 @@ for epoch in range(n_eps):
                 print("VAL RMSE: ",avg_mse)
 
         #after training, do test predictions / error estimation
+rmse_per_lake = np.empty((len(lakenames)))
+rmse_per_lake[:] = np.nan
 for targ_ct, target_id in enumerate(lakenames): #for each target lake
     # if targ_ct %100 == 0:
     #     print(str(targ_ct),'/',len(test_lakes),':',target_id)
@@ -753,12 +757,17 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         # output_df['fold'] = k
 
 
-        # final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
         mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+        output_df = pd.DataFrame()
+        output_df['site_id'] = target_id
+        output_df['rmse'] = mat_rmse
+        final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
+
         # if targ_ct % 100
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
-        pdb.set_trace()
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
-final_output_df.to_feather("../../results/err_est_outputs_1layer256hid_2.32rmse_EALSTM_fold"+str(k)+".feather")
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_232rmse_fold"+str(k)
+final_output_df.reset_index(inplace=True)
+final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom.csv")
+
+save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
