@@ -625,6 +625,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
     # all_dates_comp = torch.Tensor(0, seq_length)
     lakes_early_obs = []
     for lake_ct, lakename in enumerate(lakenames):
+        print("preprocessing lake ",lake_ct,"/",len(lakenames),": ",lakename)
         feat_mat_raw = None
         feat_mat = None
         if static_feats:
