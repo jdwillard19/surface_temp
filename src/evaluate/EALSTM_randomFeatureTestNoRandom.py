@@ -72,8 +72,10 @@ lambda1 = 0.000
 
 # n_eps = 10000
 n_eps = 6000
-targ_ep = 6000
-targ_rmse = 2.32
+targ_ep = 30
+targ_ep = 0
+targ_rmse = 5.5
+targ_rmse = 2.36
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
@@ -149,7 +151,7 @@ else:
     np.save("randomFeatureTest_trn_dates",trn_dates)
 
 #ENABLE FOR HYPERTUNE
-hypertune = True
+hypertune = False
 if hypertune:
     val_data = trn_data[-4000:,:,:]
     trn_data = trn_data[:-4000,:,:]
@@ -683,10 +685,11 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
-    (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
-                                       win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                       outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
-    unique_tst_dates_target = np.unique(tst_dates)
+    (_, _, tst_data_target, tst_dates, unique_tst_dates_target) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
+                                                win_shift= win_shift, begin_loss_ind = 0, \
+                                                outputFullTestMatrix=False, sparseCustom=None, \
+                                                allTestSeq=False, static_feats=True,n_static_feats=4,\
+                                                postProcessSplits=True)  
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
@@ -735,27 +738,27 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
                                                         n_test_dates_target,
                                                         unique_tst_dates_target) 
+
+
         #to store output
         # output_mats[i,:,:] = outputm_npy
         loss_output = outputm_npy[~np.isnan(labelm_npy)]
         loss_label = labelm_npy[~np.isnan(labelm_npy)]
         loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
         # print(unique_tst_dates_target)
-        output_df = pd.DataFrame()
-        output_df['Date'] = loss_days
-        output_df['site_id'] = target_id
-        output_df['wtemp_predicted'] = loss_output
-        output_df['wtemp_actual'] =loss_label
-        output_df['fold'] = k
+        # output_df = pd.DataFrame()
+        # output_df['Date'] = loss_days
+        # output_df['site_id'] = target_id
+        # output_df['wtemp_predicted'] = loss_output
+        # output_df['wtemp_actual'] =loss_label
+        # output_df['fold'] = k
 
 
-        final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
+        # final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
         mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
         # if targ_ct % 100
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
-        if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
-            print("missed obs?")
-
+        pdb.set_trace()
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.to_feather("../../results/err_est_outputs_1layer256hid_2.32rmse_EALSTM_fold"+str(k)+".feather")
 save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_232rmse_fold"+str(k)
