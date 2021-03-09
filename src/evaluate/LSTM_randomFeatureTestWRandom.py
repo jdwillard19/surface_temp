@@ -153,6 +153,7 @@ else:
     np.save("randomFeatureTest_trn",trn_data)
     np.save("randomFeatureTest_trn_dates",trn_dates)
 
+trn_data[:,:,:4] =  np.random.normal()
 #ENABLE FOR HYPERTUNE
 if hypertune:
     val_data = trn_data[-4000:,:,:]
@@ -795,7 +796,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
     (_, _, tst_data_target, tst_dates, unique_tst_dates_target) = buildLakeDataForRNN_manylakes_gauged([lake_id], seq_length, n_features, \
                                                 win_shift= win_shift, begin_loss_ind = 0, \
                                                 outputFullTestMatrix=False, sparseCustom=None, \
-                                                allTestSeq=False, static_feats=True,n_static_feats=0,\
+                                                allTestSeq=False, static_feats=True,n_static_feats=4,\
                                                 postProcessSplits=True)  
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
@@ -871,7 +872,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/randomFeatureExperiment_LSTM_noRandom.csv")
+final_output_df.to_csv("../../results/randomFeatureExperiment_LSTM_wRandom.csv")
 
-save_path = "../../models/LSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom"
+save_path = "../../models/LSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wRandom"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
