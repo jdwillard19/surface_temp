@@ -48,7 +48,7 @@ verbose = True
 save = True
 test = True
 
-hypertune = True
+hypertune = False
 
 #####################3
 #params
@@ -565,7 +565,8 @@ for epoch in range(n_eps):
         # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
         # lstm_net.reset_parameters()
         # h_state = None
-        outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+        # outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+        outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:])
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
@@ -636,7 +637,8 @@ for epoch in range(n_eps):
                     h_state = None
                     # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
                     # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-                    pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+                    # pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+                    pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:])
                     pred = pred.view(pred.size()[0],-1)
                     pred = pred[:, begin_loss_ind:]
 
@@ -767,7 +769,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom.csv")
+final_output_df.to_csv("../../results/randomFeatureExperiment_LSTM_noRandom.csv")
 
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom"
+save_path = "../../models/LSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
