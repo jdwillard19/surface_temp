@@ -873,6 +873,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
                 tst_dates = np.delete(tst_dates, -1, axis=0)
                 X_tst = np.delete(X_tst, -1, axis=0)
         # full_data = 
+        pdb.set_trace()
         for i in range(X_trn.shape[0]):
 
             # print("seq ",i," nz-val-count:",np.count_nonzero(~np.isnan(X_trn[i,:,-1])))
