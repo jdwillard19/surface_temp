@@ -928,7 +928,11 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 
         assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
         # assert np.isfinite(all_dates).any(), "all_dates has nan"
-        pdb.set_trace()
+
+        #fix overlap bug
+        while tst_dates[-1,-1] >= trn_dates[0,-1]:
+            X_tst = X_tst[:-2,:,:]
+            tst_dates = tst_dates[:-2,:]
         X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
         trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
         X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
