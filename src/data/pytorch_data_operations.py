@@ -734,7 +734,8 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         X_all = np.empty(shape=(n_all_seq, seq_length, n_features+1))
         all_dates = np.empty(shape=(n_all_seq, seq_length), dtype='datetime64[s]')
         X_all = np.empty(shape=(n_all_seq, seq_length, n_features+1))
-        X_phys = np.empty(shape=(n_all_seq, seq_length, n_features+1)) #non-normalized features + ice cover flag
+        # X_phys = np.empty(shape=(n_all_seq, seq_length, n_features+1)) #non-normalized features + ice cover flag
+        X_phys = np.empty(shape=(n_all_seq, seq_length, n_features)) #non-normalized features + ice cover flag
 
         X_trn[:] = np.nan
         X_tst[:] = np.nan
