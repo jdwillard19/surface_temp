@@ -669,7 +669,6 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
             trn[unq_col[last_tst_col]:] = trn_tst[unq_col[last_tst_col]:]
             tst[:unq_col[last_tst_col]] = trn_tst[:unq_col[last_tst_col]]
 
-        pdb.set_trace()
         np.random.seed(seed=randomSeed)
         if sparseCustom is not None:
             n_profiles = np.nonzero(np.count_nonzero(~np.isnan(trn), axis=0))[0].shape[0] #n nonzero columns
@@ -1053,8 +1052,8 @@ def buildLakeDataForRNN_manylakes_finetune2(lakename, data_dir, seq_length, n_fe
         print("n train seq: ", n_train_seq)
 
     n_train_seq_no_window = train_seq_per_depth 
-    if lakename == '121623043':
-        pdb.set_trace()
+    # if lakename == '121623043':
+    #     pdb.set_trace()
     last_test_date_ind = np.where(np.isfinite(tst))[0][-1]
     n_test_seq = (test_seq_per_depth) * tst_win_per_seq
     if last_test_date_ind % seq_length > 0 and last_test_date_ind - seq_length > 0:
