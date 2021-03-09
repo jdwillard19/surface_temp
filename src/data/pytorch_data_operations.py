@@ -616,9 +616,10 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 
     #structs to fill as we loop through lakes
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
-    trn_dates_comp = torch.Tensor(0, seq_length)
+    trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
     X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
-    tst_dates_comp = torch.Tensor(0, seq_length)
+    tst_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
+
     # X_all_comp = torch.Tensor(0, seq_length, n_features+1)
     # X_phys_comp = torch.Tensor(0, seq_length, n_features+1)
     # all_dates_comp = torch.Tensor(0, seq_length)
