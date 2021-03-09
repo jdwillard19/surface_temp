@@ -929,7 +929,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
         # assert np.isfinite(all_dates).any(), "all_dates has nan"
 
-        #fix overlap bug
+        #fix overlap bug (ASSUMES HALF SEQ LENGTH WIN SHIFT)
         while tst_dates[-1,-1] >= trn_dates[0,-1]:
             X_tst = X_tst[:-2,:,:]
             tst_dates = tst_dates[:-2,:]
