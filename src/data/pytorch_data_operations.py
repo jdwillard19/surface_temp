@@ -713,8 +713,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
             print("n train seq: ", n_train_seq)
 
         n_train_seq_no_window = train_seq_per_depth 
-        if lakename == '121623043':
-            pdb.set_trace()
+
         last_test_date_ind = np.where(np.isfinite(tst))[0][-1]
         n_test_seq = (test_seq_per_depth) * tst_win_per_seq
         if last_test_date_ind % seq_length > 0 and last_test_date_ind - seq_length > 0:
@@ -929,6 +928,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 
         assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
         # assert np.isfinite(all_dates).any(), "all_dates has nan"
+        pdb.set_trace()
         X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
         trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
         X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
