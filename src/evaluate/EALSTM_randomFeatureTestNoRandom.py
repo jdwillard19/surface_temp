@@ -78,6 +78,8 @@ targ_rmse = 2.32
 # targ_rmse = 3.5 #DEBUG VALUE
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
+err_per_site = pd.read_feather("../../results/err_per_site3.feather")
+lakenames = err_per_site[err_per_site['n_obs'] >= 100]
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 ###############################
@@ -106,7 +108,6 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-lakenames = metadata['site_id'].values
 # lakenames = metadata['site_id'].values
 
 
@@ -129,7 +130,7 @@ lakenames = metadata['site_id'].values
 #                                                                                                     begin_loss_ind = begin_loss_ind,
 #
 
-lakenames = ['nhdhr_143249470']                                                                                                  
+print(len(lakenames), " lakes")
 (trn_data, trn_dates, tst_data, tst_dates, unique_tst_dates) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
                                             win_shift= win_shift, begin_loss_ind = 0, \
                                             outputFullTestMatrix=False, sparseCustom=None, \
@@ -154,9 +155,9 @@ pdb.set_trace()
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
-batch_size = int(math.floor(trn_data.size()[0])/150)
+# batch_size = int(math.floor(trn_data.size()[0])/150)
 # batch_size = int(math.floor(trn_data.size()[0])/20)
-# batch_size = 3000
+batch_size = 3000
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
 
