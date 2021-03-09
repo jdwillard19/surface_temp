@@ -131,6 +131,8 @@ yhat_batch_size = 1
 #
 
 print(len(lakenames), " lakes")
+
+lakenames = lakenames[:2]
 (trn_data, trn_dates, tst_data, tst_dates, unique_tst_dates) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
                                             win_shift= win_shift, begin_loss_ind = 0, \
                                             outputFullTestMatrix=False, sparseCustom=None, \
