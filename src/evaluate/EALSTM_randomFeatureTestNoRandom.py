@@ -134,12 +134,28 @@ print(len(lakenames), " lakes")
 
 # lakenames = lakenames[:2]
 
-(trn_data, trn_dates, tst_data, tst_dates, unique_tst_dates) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
-                                            win_shift= win_shift, begin_loss_ind = 0, \
-                                            outputFullTestMatrix=False, sparseCustom=None, \
-                                            allTestSeq=False, static_feats=True,n_static_feats=4,\
-                                            postProcessSplits=True)                 
-pdb.set_trace()
+trn_data = None
+trn_dates = None
+if os.path.exists("randomFeatureTest_trn.npy"):
+    trn_data = np.load("randomFeatureTest_trn.npy",allow_pickle=True)
+    trn_dates = np.load("randomFeatureTest_trn_dates.npy",allow_pickle=True)
+    continue
+else:
+    (trn_data, trn_dates, _, _, _) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
+                                                win_shift= win_shift, begin_loss_ind = 0, \
+                                                outputFullTestMatrix=False, sparseCustom=None, \
+                                                allTestSeq=False, static_feats=True,n_static_feats=4,\
+                                                postProcessSplits=True)   
+    np.save("randomFeatureTest_trn",trn_data)
+    np.save("randomFeatureTest_trn_dates",trn_dates)
+
+
+# (_, _, tst_data, tst_dates, unique_tst_dates) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
+#                                             win_shift= win_shift, begin_loss_ind = 0, \
+#                                             outputFullTestMatrix=False, sparseCustom=None, \
+#                                             allTestSeq=False, static_feats=True,n_static_feats=4,\
+#                                             postProcessSplits=True)                 
+   
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
 #                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
