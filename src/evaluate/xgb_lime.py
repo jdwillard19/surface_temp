@@ -56,62 +56,62 @@ param_search = True
 # lookback = 4
 # farthest_lookback = 30
 #build training set
-k = int(sys.argv[1])
+# k = int(sys.argv[1])
 train = True
-save_file_path = '../../models/xgb_lagless_surface_temp_fold'+str(k)+"_03012021_lime.joblib"
+save_file_path = '../../models/xgb_lagless_surface_temp_fold0_03012021_lime.joblib'
 
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
-train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:400]
-# lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:400]
-assert(np.isin(train_lakes,test_lakes,invert=True).all())
+# train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[:400]
+# # lakenames = metadata['site_id'].values
+# test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[:400]
+# assert(np.isin(train_lakes,test_lakes,invert=True).all())
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
 
-if train:
-    for ct, lake_id in enumerate(train_lakes):
-        # if ct %100 == 0:
-        print("fold ",k," assembling training lake ",ct,"/",len(train_lakes),": ",lake_id)
-        #load data
-        feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
-        labs = np.load("../../data/processed/"+lake_id+"/full.npy")
-        # dates = np.load("../../data/processed/"+name+"/dates.npy")
-        data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
-        X = data[:,:-1]
-        y = data[:,-1]
-        inds = np.where(np.isfinite(y))[0]
-        # inds = inds[np.where(inds > farthest_lookback)[0]]
-        X = np.array([X[i,:] for i in inds],dtype = np.float)
-        y = y[inds]
-        #remove days without obs
-        data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
+# if train:
+#     for ct, lake_id in enumerate(train_lakes):
+#         # if ct %100 == 0:
+#         print("fold ",k," assembling training lake ",ct,"/",len(train_lakes),": ",lake_id)
+#         #load data
+#         feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
+#         labs = np.load("../../data/processed/"+lake_id+"/full.npy")
+#         # dates = np.load("../../data/processed/"+name+"/dates.npy")
+#         data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
+#         X = data[:,:-1]
+#         y = data[:,-1]
+#         inds = np.where(np.isfinite(y))[0]
+#         # inds = inds[np.where(inds > farthest_lookback)[0]]
+#         X = np.array([X[i,:] for i in inds],dtype = np.float)
+#         y = y[inds]
+#         #remove days without obs
+#         data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
 
-        # data = data[np.where(np.isfinite(data[:,-1]))]
-        new_df = pd.DataFrame(columns=columns,data=data)
-        train_df = pd.concat([train_df, new_df], ignore_index=True)
+#         # data = data[np.where(np.isfinite(data[:,-1]))]
+#         new_df = pd.DataFrame(columns=columns,data=data)
+#         train_df = pd.concat([train_df, new_df], ignore_index=True)
 
-    X = train_df[columns[:-1]].values
-    y = np.ravel(train_df[columns[-1]].values)
+#     X = train_df[columns[:-1]].values
+#     y = np.ravel(train_df[columns[-1]].values)
 
-    print("train set dimensions: ",X.shape)
-    #construct lookback feature set??
-    model = xgb.XGBRegressor(booster='gbtree',n_estimators=5000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
-    # model = xgb.XGBRegressor(booster='gbtree',n_estimators=1000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
+#     print("train set dimensions: ",X.shape)
+#     #construct lookback feature set??
+#     model = xgb.XGBRegressor(booster='gbtree',n_estimators=5000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
+#     # model = xgb.XGBRegressor(booster='gbtree',n_estimators=1000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
-    if train:
-        train_df.to_feather("./xgb_lime_trn.feather")
-        print("Training XGB regression model...fold ",k)
-        model.fit(X, y)
-        dump(model, save_file_path)
-        print("model trained and saved to ", save_file_path)
+#     if train:
+#         train_df.to_feather("./xgb_lime_trn.feather")
+#         print("Training XGB regression model...fold ",k)
+#         model.fit(X, y)
+#         dump(model, save_file_path)
+#         print("model trained and saved to ", save_file_path)
 
-else:
-    model = load(save_file_path)
+# else:
+model = load(save_file_path)
 
+train_df = pd.read_feather("xgb_lime_trn.feather")
 
-explainer = lime_tabular.LimeTabularExplainer(training_data=train_df.values[:,:-1],mode='regression')
 
 
 # importances = model.feature_importances_
@@ -125,29 +125,30 @@ explainer = lime_tabular.LimeTabularExplainer(training_data=train_df.values[:,:-
 # rmse  = np.sqrt(((y_pred-y)**2).mean())
 # print("trn rmse: ",rmse)
 #test
-for ct, lake_id in enumerate(test_lakes):
-    # if ct %100 == 0:
-    print("fold ",k,"  test lake ",ct,"/",len(test_lakes),": ",lake_id)
-    #load data
-    feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
-    labs = np.load("../../data/processed/"+lake_id+"/full.npy")
-    # dates = np.load("../../data/processed/"+name+"/dates.npy")
-    data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
-    X = data[:,:-1]
-    y = data[:,-1]
-    inds = np.where(np.isfinite(y))[0]
-    # inds = inds[np.where(inds > farthest_lookback)[0]]
-    X = np.array([X[i,:] for i in inds],dtype = np.float)
-    y = y[inds]
-    #remove days without obs
-    data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
-    # data = data[np.where(np.isfinite(data[:,-1]))]
-    new_df = pd.DataFrame(columns=columns,data=data)
-    test_df = pd.concat([test_df, new_df], ignore_index=True)
+# for ct, lake_id in enumerate(test_lakes):
+#     # if ct %100 == 0:
+#     print("fold ",k,"  test lake ",ct,"/",len(test_lakes),": ",lake_id)
+#     #load data
+#     feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
+#     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
+#     # dates = np.load("../../data/processed/"+name+"/dates.npy")
+#     data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
+#     X = data[:,:-1]
+#     y = data[:,-1]
+#     inds = np.where(np.isfinite(y))[0]
+#     # inds = inds[np.where(inds > farthest_lookback)[0]]
+#     X = np.array([X[i,:] for i in inds],dtype = np.float)
+#     y = y[inds]
+#     #remove days without obs
+#     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
+#     # data = data[np.where(np.isfinite(data[:,-1]))]
+#     new_df = pd.DataFrame(columns=columns,data=data)
+#     test_df = pd.concat([test_df, new_df], ignore_index=True)
 
 
 
-test_df.to_feather("./xgb_lime_tst.feather")
+# test_df.to_feather("./xgb_lime_tst.feather")
+test_df = pd.read_feather("./xgb_lime_tst.feather")
 
     # X = new_df[columns[:-1]].values
     # y_act = np.ravel(new_df[columns[-1]].values)
@@ -191,9 +192,20 @@ test_df.to_feather("./xgb_lime_tst.feather")
 #     result_df = result_df.append(df2)
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 
-exp = explainer.explain_instance(data_row=test_df.iloc[1,:-1], predict_fn=model.predict)
+# import lime
+# from lime import lime_tabular
+# explainer = lime_tabular.LimeTabularExplainer(training_data=train_df.values[:,:-1],mode='regression',feature_names='columns')
+# exp = explainer.explain_instance(data_row=test_df.iloc[1,:-1], predict_fn=model.predict)
+# exp.show_in_notebook(show_table=True)
 
-exp.show_in_notebook(show_table=True)
+
+
+import shap
+explainerXGB = shap.TreeExplainer(model)
+shap_values_XGB_test = explainerXGB.shap_values(test_df)
+shap.force_plot(explainerXGB.expected_value, shap_values_XGB_test[j], X_test.iloc[[j]])
+
+
 
 # result_df.reset_index(inplace=True)
 # print("tst rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))

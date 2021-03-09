@@ -97,7 +97,7 @@ if param_search:
     gbm = xgb.XGBRegressor(booster='gbtree')
     nfolds = 3
     parameters = {'objective':['reg:squarederror'],
-                  'learning_rate': [.025, 0.05], #so called `eta` value
+                  'learning_rate': [.025, 0.05,.10], #so called `eta` value
                   'max_depth': [6],
                   'min_child_weight': [11],
                   'subsample': [0.8],

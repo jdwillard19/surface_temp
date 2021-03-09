@@ -97,8 +97,8 @@ if train:
 
     print("train set dimensions: ",X.shape)
     #construct lookback feature set??
-    model = xgb.XGBRegressor(booster='gbtree',n_estimators=5000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
-    # model = xgb.XGBRegressor(booster='gbtree',n_estimators=1000,learning_rate=.05,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
+    model = xgb.XGBRegressor(booster='gbtree',n_estimators=5000,learning_rate=.025)
+    # model = xgb.XGBRegressor(booster='gbtree',n_estimators=5000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
     if train:
         print("Training XGB regression model...fold ",k)
