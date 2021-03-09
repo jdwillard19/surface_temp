@@ -1499,7 +1499,6 @@ def buildLakeDataForRNN_conus_NoLabel(lakename, data_dir, seq_length, n_features
     # assert np.isfinite(Y_mat).any(), "Y_mat has nan at" + str(np.argwhere(np.isfinite(Y_mat)))
 
     assert feat_mat.shape[0] == feat_mat_raw.shape[0]
-    assert feat_mat.shape[0] == trn.shape[0]
     udates = dates
     n_dates = feat_mat.shape[0]
     if verbose:
