@@ -1486,7 +1486,7 @@ def buildLakeDataForRNN_conus_NoLabel(lakename, data_dir, seq_length, n_features
     # if debug:
     #     print("initial trn: ", trn)
     #     print("observations: ",np.count_nonzero(~np.isnan(trn)))
-    dates = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/dates.npy"))
+    dates = np.load(os.path.join(my_path, "../../data/processed/nhdhr_143249470/dates.npy"))
 
     #convert dates to numpy datetime64
     # dates = [date.decode() for date in dates]
