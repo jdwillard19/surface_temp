@@ -170,6 +170,7 @@ else:
 # n_features = 4
 # n_static_feats = 1
 # n_total_feats = n_features + n_static_feats
+pdb.set_trace()
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
