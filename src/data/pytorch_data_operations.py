@@ -664,8 +664,8 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
             trn[:] = np.nan
             tst = np.empty_like(trn_tst)
             tst[:] = np.nan
-            trn[:,unq_col[last_tst_col]:] = trn_tst[:,unq_col[last_tst_col]:]
-            tst[:,:unq_col[last_tst_col]] = trn_tst[:,:unq_col[last_tst_col]]
+            trn[unq_col[last_tst_col]:] = trn_tst[unq_col[last_tst_col]:]
+            tst[:unq_col[last_tst_col]] = trn_tst[:unq_col[last_tst_col]]
 
         np.random.seed(seed=randomSeed)
         if sparseCustom is not None:
