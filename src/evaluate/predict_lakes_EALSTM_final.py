@@ -421,6 +421,11 @@ mse_criterion = nn.MSELoss()
 
 #after training, do test predictions / error estimation
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
+    if target_id == "nhdhr_{ef5a02dc-f608-4740-ab0e-de374bf6471c}" or target_id == 'nhdhr_136665792' or target_id == 'nhdhr_136686179':
+        continue
+
+
+
     print(str(targ_ct),'/',len(test_lakes),':',target_id)
     lake_df = pd.DataFrame()
     lake_id = target_id
@@ -520,10 +525,11 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
         output_df['temp_actual'] = label_df['temp_actual']
 
-        lake_output_path = '../../results/outputs_'+target_id+'.feather'
+        lake_output_path = '../../results/SWT_results/outputs_'+target_id+'.feather'
         # if not os.path.exists(lake_output_path):
         #     os.mkdir(lake_output_path)
-        pdb.set_trace()
+        output_df = output_df[~output_df['index'].str.contains("1979")]
+        output_df = output_df[~output_df['index'].str.contains("2021")]
         output_df.to_feather(lake_output_path)
         #to store output
         # output_mats[i,:,:] = outputm_npy
