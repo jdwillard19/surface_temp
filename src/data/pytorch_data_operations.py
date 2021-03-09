@@ -875,17 +875,17 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         for i in range(X_trn.shape[0]):
 
             # print("seq ",i," nz-val-count:",np.count_nonzero(~np.isnan(X_trn[i,:,-1])))
-            print("seq ",i)
+            # print("seq ",i)
             if not np.isfinite(X_trn[i,:,:-1]).all():
-                print("MISSING FEAT REMOVE")
+                # print("MISSING FEAT REMOVE")
                 tr_seq_removed += 1
                 trn_del_ind = np.append(trn_del_ind, i)
             if np.isfinite(X_trn[i,begin_loss_ind:,-1]).any():
-                print("HAS OBSERVE, CONTINUE")
+                # print("HAS OBSERVE, CONTINUE")
                 continue
             else:
                 # print(X_trn[i,:,-1])
-                print("NO OBSERVE, REMOVE")
+                # print("NO OBSERVE, REMOVE")
                 tr_seq_removed += 1
                 trn_del_ind = np.append(trn_del_ind, i)
         if not allTestSeq: #if we don't want to output ALL the data as test
