@@ -63,7 +63,7 @@ end = int(sys.argv[2])
 print("running site id's ",start,"->",end)
 site_ids = site_ids[start:end]
 skipped = []
-site_ids = ['nhdhr_139474232']
+# site_ids = ['nhdhr_139474232']
 for lake_ind, name in enumerate(site_ids):
 
     # if name == 'nhdhr_{ef5a02dc-f608-4740-ab0e-de374bf6471c}' or name == 'nhdhr_136665792' or name == 'nhdhr_136686179':
@@ -102,7 +102,7 @@ for lake_ind, name in enumerate(site_ids):
     if np.isnan(wsv_vals).any():
         print("nan wsv?") 
         raise Exception("CANT CONTINUE") 
-    pdb.set_trace()
+    # pdb.set_trace()
     np.save("../../data/raw/feats/SW_"+str(x)+"x_"+str(y)+"y",sw_vals)
     np.save("../../data/raw/feats/LW_"+str(x)+"x_"+str(y)+"y",lw_vals)
     np.save("../../data/raw/feats/AT_"+str(x)+"x_"+str(y)+"y",at_vals)
