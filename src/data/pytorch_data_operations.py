@@ -610,8 +610,8 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         #@begin_loss_ind = index in sequence to begin calculating loss function (to avoid poor accuracy in early parts of the sequence)
     #load data created in preprocess.py based on lakename
     n_features = n_features+n_static_feats
-    debug = True
-    verbose = True
+    debug = False
+    verbose = False
     my_path = os.path.abspath(os.path.dirname(__file__))
 
     #structs to fill as we loop through lakes
@@ -793,7 +793,6 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 
         if debug:
             print("x_trn shape after populating ", X_trn.shape)
-        pdb.set_trace()
         #assert data was constructed correctly
         if tr_seq_ind != n_train_seq:
             # print("incorrect number of trn seq estimated {} vs actual{}".format(n_train_seq, tr_seq_ind))
@@ -872,7 +871,6 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
                 tst_dates = np.delete(tst_dates, -1, axis=0)
                 X_tst = np.delete(X_tst, -1, axis=0)
         # full_data = 
-        pdb.set_trace()
         for i in range(X_trn.shape[0]):
 
             # print("seq ",i," nz-val-count:",np.count_nonzero(~np.isnan(X_trn[i,:,-1])))
@@ -910,7 +908,6 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
                     ts_seq_removed += 1
                     tst_del_ind = np.append(tst_del_ind, i)
         #remove denoted values from trn and tst
-        pdb.set_trace()
         X_trn_tmp = np.delete(X_trn, trn_del_ind, axis=0)
         trn_dates_tmp = np.delete(trn_dates, trn_del_ind, axis=0)
         X_tst_tmp = np.delete(X_tst, tst_del_ind, axis=0)
@@ -927,24 +924,10 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 
 
 
-        X_trn_tmp = np.delete(X_trn, trn_del_ind, axis=0)
-        trn_dates_tmp = np.delete(trn_dates, trn_del_ind, axis=0)
-        # X_tst_tmp = np.delete(X_tst, tst_del_ind, axis=0)
-        # tst_dates_tmp = np.delete(tst_dates, tst_del_ind, axis=0)
-        X_trn = X_trn_tmp
-        trn_dates = trn_dates_tmp
-        # X_tst = X_tst_tmp
-        # tst_dates = tst_dates_tmp
-        #gather unique test dates
-        # tst_date_lower_bound = np.where(dates == tst_dates[0][0])[0][0]
-        # tst_date_upper_bound = np.where(dates == tst_dates[-1][-1])[0][0]
-
-
 
         assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
         # assert np.isfinite(all_dates).any(), "all_dates has nan"
         X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-        pdb.set_trace()
         trn_dates_comp = np.stack([trn_dates_comp,trn_dates.float()],dim=0)
         X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
         tst_dates_comp = torch.cat([tst_dates_comp,tst_dates.float()],dim=0)
