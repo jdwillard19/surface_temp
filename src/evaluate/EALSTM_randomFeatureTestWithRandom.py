@@ -74,11 +74,12 @@ lambda1 = 0.000
 # n_eps = 10000
 n_eps = 6000
 targ_ep = 30
+targ_ep = 0
 if hypertune:
     targe_ep = n_eps
 # targ_ep = 0
 targ_rmse = 2.36
-# targ_rmse = 5.5
+targ_rmse = 5.5
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
@@ -762,10 +763,10 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
 
         mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
         output_df = pd.DataFrame()
-        output_df['site_id'] = target_id
-        output_df['rmse'] = mat_rmse
+        output_df['site_id'] = [target_id]
+        output_df['rmse'] = [mat_rmse]
         final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
-
+        pdb.set_trace()
         # if targ_ct % 100
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
