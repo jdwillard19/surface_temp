@@ -936,6 +936,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
         trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
         X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
+        X_tst
         tst_dates_comp = np.vstack([tst_dates_comp,tst_dates])
 
 
@@ -1306,20 +1307,6 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
 
     #post process train/test splits
 
-    # if postProcessSplits:
-    #     shape0 = trn.shape[0]
-    #     trn_flt = trn.flatten()
-    #     tst_flt = tst.flatten()
-    #     np.put(trn_flt, np.where(np.isfinite(tst_flt))[0], tst_flt[np.isfinite(tst_flt)])
-    #     trn_tst = trn_flt.reshape((shape0))
-    #     last_tst_col = int(np.round(np.unique(np.where(np.isfinite(trn_tst))).shape[0]/3))
-    #     unq_col = np.unique(np.where(np.isfinite(trn_tst))[1])
-    #     trn = np.empty_like(trn_tst)
-    #     trn[:] = np.nan
-    #     tst = np.empty_like(trn_tst)
-    #     tst[:] = np.nan
-    #     trn[:,unq_col[last_tst_col]:] = trn_tst[:,unq_col[last_tst_col]:]
-    #     tst[:,:unq_col[last_tst_col]] = trn_tst[:,:unq_col[last_tst_col]]
 
     np.random.seed(seed=randomSeed)
     if sparseCustom is not None:
@@ -1471,6 +1458,172 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
     return (torch.from_numpy(X_trn), trn_dates)
 
 
+def buildLakeDataForRNN_conus_NoLabel(lakename, data_dir, seq_length, n_features, \
+                                            win_shift= 1, begin_loss_ind = 100, \
+                                            outputFullTestMatrix=False, sparseCustom=None, \
+                                            allTestSeq=False,n_static_feats=0,removeElevation=False,\
+                                            postProcessSplits=True, randomSeed=0):
+
+    #NONAN
+    #PARAMETERS
+        #@lakename = string of lake name as the folder of /data/processed/{lakename}
+        #@seq_length = sequence length of LSTM inputs
+        #@n_features = number of physical drivers
+        #@win_shift = days to move in the sliding window for the training set
+        #@begin_loss_ind = index in sequence to begin calculating loss function (to avoid poor accuracy in early parts of the sequence)
+    #load data created in preprocess.py based on lakename
+    n_features = n_features+n_static_feats
+    debug = False
+    verbose = False
+    my_path = os.path.abspath(os.path.dirname(__file__))
+
+    feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea_conus_021621.npy"))
+    feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea_conus_021621.npy"))
+
+    if feat_mat.shape[0] < seq_length:
+        return (None,None)
+
+    # if debug:
+    #     print("initial trn: ", trn)
+    #     print("observations: ",np.count_nonzero(~np.isnan(trn)))
+    dates = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/dates.npy"))
+
+    #convert dates to numpy datetime64
+    # dates = [date.decode() for date in dates]
+    dates = pd.to_datetime(dates, format='%Y-%m-%d')
+    dates = np.array(dates,dtype=np.datetime64)
+
+    years = dates.astype('datetime64[Y]').astype(int) + 1970
+    assert np.isfinite(feat_mat).all(), "feat_mat has nan at" + str(np.argwhere(np.isfinite(feat_mat)))
+    assert np.isfinite(feat_mat_raw).all(), "feat_mat_raw has nan at" + str(np.argwhere(np.isfinite(feat_mat_raw)))
+    # assert np.isfinite(Y_mat).any(), "Y_mat has nan at" + str(np.argwhere(np.isfinite(Y_mat)))
+
+    assert feat_mat.shape[0] == feat_mat_raw.shape[0]
+    assert feat_mat.shape[0] == trn.shape[0]
+    udates = dates
+    n_dates = feat_mat.shape[0]
+    if verbose:
+        print("n dates: ", n_dates)
+    seq_per_depth = math.floor(n_dates / seq_length)
+    train_seq_per_depth = seq_per_depth
+    win_per_seq = math.floor(seq_length / win_shift) - 1 #windows per sequence (only training)
+    win_per_seq = 2#windows per sequence (only training)
+    tst_win_per_seq = 2 #windows per sequence (only training)
+    n_train_seq = train_seq_per_depth * win_per_seq
+    if n_dates % seq_length > 0 and n_dates - seq_length > 0:
+        n_train_seq += 1
+
+    if debug:
+        print("n train seq: ", n_train_seq)
+
+    n_train_seq_no_window = train_seq_per_depth 
+
+
+
+    #build train and test sets, add all data for physical loss
+
+    X_trn = np.empty(shape=(n_train_seq, seq_length, n_features+1)) #features + label
+    trn_dates = np.empty(shape=(n_train_seq, seq_length), dtype='datetime64[s]')
+
+    X_trn[:] = np.nan
+
+    #seq index for data to be returned
+    tr_seq_ind = 0 
+    #build datasets
+    del_all_seq = 0
+    if debug:
+        print("x_trn shape prior to populating ", X_trn.shape)
+    # print("obs index: ", np.where(np.isfinite(trn)))
+    for s in range(0,train_seq_per_depth):
+        start_index = s*seq_length
+        end_index = (s+1)*seq_length
+        if end_index > n_dates:
+            n_train_seq -= win_per_seq*n_depths
+            n_all_seq -= n_depths
+            del_all_seq += 1
+            X_all = np.delete(X_all, np.arange(X_all.shape[0],X_all.shape[0]-n_depths,-1), axis=0)
+            X_trn = np.delete(X_trn, np.arange(X_trn.shape[0],X_trn.shape[0]-win_per_seq*n_depths,-1), axis=0)
+            trn_dates = np.delete(trn_dates, np.arange(trn_dates.shape[0], trn_dates.shape[0] - n_depths*win_per_seq,-1), axis=0)
+            continue
+
+        #now do sliding windows for training data 
+        for w in range(0, win_per_seq):
+            win_start_ind = start_index + w*win_shift
+            win_end_ind = win_start_ind + seq_length
+
+
+            if win_end_ind > n_dates:
+                n_train_seq -= 1
+                X_trn = np.delete(X_trn, -1, axis=0)
+                trn_dates = np.delete(trn_dates, -1, axis=0)
+                continue
+            X_trn[tr_seq_ind, :, :-1] = feat_mat[win_start_ind:win_end_ind,:]
+            trn_dates[tr_seq_ind,:] = dates[win_start_ind:win_end_ind]
+            tr_seq_ind += 1
+    #final seq starts at end and goes inward [seq_length]
+    # print("n dates: ", n_dates, ", seq len: ", seq_length)
+    if n_dates % seq_length > 0:
+        end_ind = n_dates
+        start_ind = end_ind - seq_length
+        # if lakename == "nhdhr_57937006":
+        #     pdb.set_trace()
+        X_trn[tr_seq_ind, :, :-1] = feat_mat[start_ind:end_ind,:]
+        trn_dates[tr_seq_ind,:] = dates[start_ind:end_ind]
+        tr_seq_ind += 1
+
+    if debug:
+        print("x_trn shape after populating ", X_trn.shape)
+    #assert data was constructed correctly
+    if tr_seq_ind != n_train_seq:
+        # print("incorrect number of trn seq estimated {} vs actual{}".format(n_train_seq, tr_seq_ind))
+        extra = n_train_seq - tr_seq_ind
+        n_train_seq -= extra
+        X_trn = np.delete(X_trn, np.arange(X_trn.shape[0],X_trn.shape[0]-extra,-1), axis=0)
+        trn_dates = np.delete(trn_dates, np.arange(X_trn.shape[0],X_trn.shape[0]-extra,-1), axis=0)
+    assert tr_seq_ind == n_train_seq, \
+     "incorrect number of trn seq estimated {} vs actual{}".format(n_train_seq, tr_seq_ind)
+
+    while trn_dates[-1,0] == np.datetime64("NaT"):
+        trn_dates = np.delete(trn_dates, -1, axis=0)
+        X_trn = np.delete(X_trn, -1, axis=0)
+
+ 
+
+
+
+
+    #remove sequences with no labels
+    tr_seq_removed = 0
+    trn_del_ind = np.array([], dtype=np.int32)
+
+    #if allTestSeq, combine trn and test unfiltered
+    if not allTestSeq:
+        for i in range(X_trn.shape[0]):
+            # print("seq ",i," nz-val-count:",np.count_nonzero(~np.isnan(X_trn[i,:,-1])))
+            if not np.isfinite(X_trn[i,:,:-1]).all():
+                # print("MISSING FEAT REMOVE")
+                tr_seq_removed += 1
+                trn_del_ind = np.append(trn_del_ind, i)
+            if np.isfinite(X_trn[i,begin_loss_ind:,-1]).any():
+                # print("HAS OBSERVE, CONTINUE")
+                continue
+            else:
+                # print(X_trn[i,:,-1])
+                # print("NO OBSERVE, REMOVE")
+                tr_seq_removed += 1
+                trn_del_ind = np.append(trn_del_ind, i)
+
+    #remove denoted values from trn and tst
+    X_trn_tmp = np.delete(X_trn, trn_del_ind, axis=0)
+    trn_dates_tmp = np.delete(trn_dates, trn_del_ind, axis=0)
+    X_trn = X_trn_tmp
+    trn_dates = trn_dates_tmp
+    #gather unique test dates
+
+
+    assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
+    # assert np.isfinite(all_dates).any(), "all_dates has nan"
+    return (torch.from_numpy(X_trn), trn_dates)
 
 
 def buildLakeDataForRNNPretrain(lakename, data_dir, seq_length, n_features, win_shift= 1, begin_loss_ind = 102, excludeTest=False, targetLake = None, normAll=False, normGE10=False):
