@@ -139,7 +139,6 @@ trn_dates = None
 if os.path.exists("randomFeatureTest_trn.npy"):
     trn_data = np.load("randomFeatureTest_trn.npy",allow_pickle=True)
     trn_dates = np.load("randomFeatureTest_trn_dates.npy",allow_pickle=True)
-    continue
 else:
     (trn_data, trn_dates, _, _, _) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
                                                 win_shift= win_shift, begin_loss_ind = 0, \
