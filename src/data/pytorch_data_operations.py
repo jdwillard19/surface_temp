@@ -667,6 +667,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
             trn[unq_col[last_tst_col]:] = trn_tst[unq_col[last_tst_col]:]
             tst[:unq_col[last_tst_col]] = trn_tst[:unq_col[last_tst_col]]
 
+        pdb.set_trace()
         np.random.seed(seed=randomSeed)
         if sparseCustom is not None:
             n_profiles = np.nonzero(np.count_nonzero(~np.isnan(trn), axis=0))[0].shape[0] #n nonzero columns
