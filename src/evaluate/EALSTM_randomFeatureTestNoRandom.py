@@ -137,7 +137,7 @@ print(len(lakenames), " lakes")
 trn_data = None
 trn_dates = None
 if os.path.exists("randomFeatureTest_trn.npy"):
-    trn_data = np.load("randomFeatureTest_trn.npy",allow_pickle=True)
+    trn_data = torch.from_numpy(np.load("randomFeatureTest_trn.npy",allow_pickle=True))
     trn_dates = np.load("randomFeatureTest_trn_dates.npy",allow_pickle=True)
 else:
     (trn_data, trn_dates, _, _, _) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
@@ -170,7 +170,6 @@ else:
 # n_features = 4
 # n_static_feats = 1
 # n_total_feats = n_features + n_static_feats
-pdb.set_trace()
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
