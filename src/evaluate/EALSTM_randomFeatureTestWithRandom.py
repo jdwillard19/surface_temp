@@ -42,7 +42,7 @@ torch.backends.cudnn.benchmark = True
 torch.set_printoptions(precision=10)
 
 
-hypertune = True
+hypertune = False
 
 ### debug tools
 verbose = True
@@ -78,7 +78,7 @@ if hypertune:
     targ_ep = n_eps
 # targ_ep = 0
 targ_rmse = 2.36
-targ_rmse = 5.5
+# targ_rmse = 5.5
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
@@ -696,6 +696,8 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
                                                 outputFullTestMatrix=False, sparseCustom=None, \
                                                 allTestSeq=False, static_feats=True,n_static_feats=4,\
                                                 postProcessSplits=True)  
+
+    tst_data_target[:,:,:4] = np.random.normal()
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
@@ -765,12 +767,11 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         output_df['site_id'] = [target_id]
         output_df['rmse'] = [mat_rmse]
         final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
-        pdb.set_trace()
         # if targ_ct % 100
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom.csv")
+final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_wRandom.csv")
 
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom"
+save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wRandom"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
