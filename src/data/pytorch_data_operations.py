@@ -627,8 +627,8 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         feat_mat_raw = None
         feat_mat = None
         if static_feats:
-            feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea.npy"))
-            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea.npy"))
+            feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea_conus_021621.npy"))
+            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea_conus_021621.npy"))
         else:
             feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features.npy"))
             feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features.npy"))
