@@ -772,8 +772,6 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
             for w in range(0, win_per_seq):
                 win_start_ind = start_index + w*win_shift
                 win_end_ind = win_start_ind + seq_length
-
-
                 if win_end_ind > n_dates:
                     n_train_seq -= 1
                     X_trn = np.delete(X_trn, -1, axis=0)
@@ -795,6 +793,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 
         if debug:
             print("x_trn shape after populating ", X_trn.shape)
+        pdb.set_trace()
         #assert data was constructed correctly
         if tr_seq_ind != n_train_seq:
             # print("incorrect number of trn seq estimated {} vs actual{}".format(n_train_seq, tr_seq_ind))
