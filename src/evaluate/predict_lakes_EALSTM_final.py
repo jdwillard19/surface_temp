@@ -51,6 +51,10 @@ test = True
 
 
 
+start = int(sys.argv[1])
+end = int(sys.argv[2])
+
+
 #####################3
 #params
 ###########################33
@@ -111,9 +115,6 @@ yhat_batch_size = 1
 # data preprocess
 ##################################
 #create train and test sets
-
-start = int(sys.argv[1])
-end = int(sys.argv[2])
 
 
 
