@@ -74,7 +74,6 @@ lambda1 = 0.000
 # n_eps = 10000
 n_eps = 6000
 targ_ep = 30
-targ_ep = 0
 if hypertune:
     targe_ep = n_eps
 # targ_ep = 0
