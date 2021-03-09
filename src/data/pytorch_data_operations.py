@@ -659,7 +659,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
             trn_tst = full.flatten()
             # trn_tst = trn_flt.reshape((shape0))
             last_tst_col = int(np.round(np.unique(np.where(np.isfinite(trn_tst))).shape[0]/3))
-            unq_col = np.unique(np.where(np.isfinite(trn_tst))[1])
+            unq_col = np.where(np.isfinite(trn_tst))[0]
             trn = np.empty_like(trn_tst)
             trn[:] = np.nan
             tst = np.empty_like(trn_tst)
