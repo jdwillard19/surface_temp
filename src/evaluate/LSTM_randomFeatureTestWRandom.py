@@ -798,6 +798,8 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
                                                 outputFullTestMatrix=False, sparseCustom=None, \
                                                 allTestSeq=False, static_feats=True,n_static_feats=0,\
                                                 postProcessSplits=True)  
+
+    tst_data_target[:,:,:4] = np.random.normal()
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
