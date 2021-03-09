@@ -67,7 +67,7 @@ start = 0
 end = len(site_ids)
 date_offset = 350
 
-site_ids = np.array(['nhdhr_114539787'])
+# site_ids = np.array(['nhdhr_114539787'])
 
 # for site_ct, site_id in enumerate(site_ids[start:end]):
 for site_ct, site_id in enumerate(site_ids):
