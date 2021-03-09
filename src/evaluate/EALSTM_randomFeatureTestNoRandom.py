@@ -66,13 +66,13 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 256
+n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0.000
 
 # n_eps = 10000
-n_eps = 1000
-targ_ep = 60
+n_eps = 6000
+targ_ep = 6000
 targ_rmse = 2.32
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
@@ -148,6 +148,11 @@ else:
     np.save("randomFeatureTest_trn",trn_data)
     np.save("randomFeatureTest_trn_dates",trn_dates)
 
+#ENABLE FOR HYPERTUNE
+hypertune = True
+if hypertune:
+    val_data = trn_data[-4000:,:,:]
+    trn_data = trn_data[:-4000,:,:]
 
 # (_, _, tst_data, tst_dates, unique_tst_dates) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 #                                             win_shift= win_shift, begin_loss_ind = 0, \
@@ -603,6 +608,48 @@ for epoch in range(n_eps):
     if avg_loss < targ_rmse and epoch > targ_ep:
         print("training complete")
         break
+
+    if hypertune:
+        valloader = torch.utils.data.DataLoader(val_data, batch_size=1000, shuffle=False, pin_memory=True)
+        with torch.no_grad():
+                avg_mse = 0
+                ct = 0
+                for m, data in enumerate(valloader, 0):
+                    #now for mendota data
+                    #this loop is dated, there is now only one item in testloader
+
+                    #parse data into inputs and targets
+                    inputs = data[:,:,:n_total_feats].float()
+                    targets = data[:,:,-1].float()
+                    targets = targets[:, begin_loss_ind:]
+                    tmp_dates = tst_dates[:, begin_loss_ind:]
+
+                    if use_gpu:
+                        inputs = inputs.cuda()
+                        targets = targets.cuda()
+
+                    #run model
+                    h_state = None
+                    # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+                    # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+                    pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+                    pred = pred.view(pred.size()[0],-1)
+                    pred = pred[:, begin_loss_ind:]
+
+                    #calculate error
+                    targets = targets.cpu()
+                    loss_indices = np.where(np.isfinite(targets))
+                    if use_gpu:
+                        targets = targets.cuda()
+                    inputs = inputs[:, begin_loss_ind:, :]
+                    mse = mse_criterion(pred[loss_indices], targets[loss_indices])
+                    # print("test loss = ",mse)
+                    avg_mse += mse
+                    ct += 1
+                    # if mse > 0: #obsolete i think
+                    #     ct += 1
+                avg_mse = avg_mse / ct
+                print("VAL RMSE: ",avg_rmse)
 
         #after training, do test predictions / error estimation
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
