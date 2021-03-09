@@ -654,6 +654,7 @@ for epoch in range(n_eps):
                 print("VAL RMSE: ",avg_mse)
 
         #after training, do test predictions / error estimation
+pdb.set_trace()
 for targ_ct, target_id in enumerate(lakenames): #for each target lake
     # if targ_ct %100 == 0:
     #     print(str(targ_ct),'/',len(test_lakes),':',target_id)
