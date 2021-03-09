@@ -804,11 +804,13 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
             trn_dates = np.delete(trn_dates, np.arange(X_trn.shape[0],X_trn.shape[0]-extra,-1), axis=0)
         assert tr_seq_ind == n_train_seq, \
          "incorrect number of trn seq estimated {} vs actual{}".format(n_train_seq, tr_seq_ind)
-
+        if debug:
+            print("x_trn shape after removing extra seqs", X_trn.shape)
         while trn_dates[-1,0] == np.datetime64("NaT"):
             trn_dates = np.delete(trn_dates, -1, axis=0)
             X_trn = np.delete(X_trn, -1, axis=0)
-
+        if debug:
+            print("x_trn shape after removing NaT", X_trn.shape)
         if n_test_seq != 0:
             #now test data(maybe bug in this specification of end of range?)
             for s in range(test_seq_per_depth):
@@ -874,15 +876,15 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         for i in range(X_trn.shape[0]):
             # print("seq ",i," nz-val-count:",np.count_nonzero(~np.isnan(X_trn[i,:,-1])))
             if not np.isfinite(X_trn[i,:,:-1]).all():
-                # print("MISSING FEAT REMOVE")
+                print("MISSING FEAT REMOVE")
                 tr_seq_removed += 1
                 trn_del_ind = np.append(trn_del_ind, i)
             if np.isfinite(X_trn[i,begin_loss_ind:,-1]).any():
-                # print("HAS OBSERVE, CONTINUE")
+                print("HAS OBSERVE, CONTINUE")
                 continue
             else:
-                # print(X_trn[i,:,-1])
-                # print("NO OBSERVE, REMOVE")
+                print(X_trn[i,:,-1])
+                print("NO OBSERVE, REMOVE")
                 tr_seq_removed += 1
                 trn_del_ind = np.append(trn_del_ind, i)
         if not allTestSeq: #if we don't want to output ALL the data as test
