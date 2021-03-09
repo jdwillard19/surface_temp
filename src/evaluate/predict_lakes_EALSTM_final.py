@@ -81,6 +81,7 @@ targ_rmse = 2.36
 
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
+test_lakes = metadata['site_id'].values[start:end]
 
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
@@ -412,7 +413,6 @@ model_dict = lstm_net.state_dict()
 pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
 model_dict.update(pretrain_dict)
 lstm_net.load_state_dict(pretrain_dict)
-
 
 
 
