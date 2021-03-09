@@ -80,7 +80,6 @@ targ_rmse = 2.32
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
-fold = int(sys.argv[1])
 ###############################
 # data preprocess
 ##################################
@@ -107,13 +106,10 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
-final_output_df = pd.DataFrame()
-k = fold
-lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
+lakenames = metadata['site_id'].values
 # lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 
-ep_arr = []   
+
 # if not os.path.exists("./ealstm_trn_data_5fold_k"+str(k)+".npy"):
 #     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
 #                                                     seq_length, n_total_feats,\
