@@ -668,7 +668,7 @@ for epoch in range(n_eps):
         # lstm_net.reset_parameters()
         # h_state = None
         # outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
-        outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:])
+        outputs, h_state, _ = lstm_net(inputs[:,:,:])
         outputs = outputs.view(outputs.size()[0],-1)
 
         #calculate losses
@@ -740,7 +740,7 @@ for epoch in range(n_eps):
                     # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
                     # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
                     # pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
-                    pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:])
+                    pred, h_state, _ = lstm_net(inputs[:,:,:])
                     pred = pred.view(pred.size()[0],-1)
                     pred = pred[:, begin_loss_ind:]
 
@@ -822,9 +822,9 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
 
             #run model
             h_state = None
-            lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+            # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
             # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-            pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+            pred, h_state, _ = lstm_net(inputs[:,:,:])
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
 
