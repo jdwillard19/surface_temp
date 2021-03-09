@@ -610,8 +610,8 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         #@begin_loss_ind = index in sequence to begin calculating loss function (to avoid poor accuracy in early parts of the sequence)
     #load data created in preprocess.py based on lakename
     n_features = n_features+n_static_feats
-    debug = False
-    verbose = False
+    debug = True
+    verbose = True
     my_path = os.path.abspath(os.path.dirname(__file__))
 
     #structs to fill as we loop through lakes
@@ -667,7 +667,6 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
             trn[unq_col[last_tst_col]:] = trn_tst[unq_col[last_tst_col]:]
             tst[:unq_col[last_tst_col]] = trn_tst[:unq_col[last_tst_col]]
 
-        pdb.set_trace()
         np.random.seed(seed=randomSeed)
         if sparseCustom is not None:
             n_profiles = np.nonzero(np.count_nonzero(~np.isnan(trn), axis=0))[0].shape[0] #n nonzero columns
