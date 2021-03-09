@@ -654,7 +654,6 @@ for epoch in range(n_eps):
                 print("VAL RMSE: ",avg_mse)
 
         #after training, do test predictions / error estimation
-pdb.set_trace()
 for targ_ct, target_id in enumerate(lakenames): #for each target lake
     # if targ_ct %100 == 0:
     #     print(str(targ_ct),'/',len(test_lakes),':',target_id)
@@ -685,7 +684,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
-    (_, _, tst_data_target, tst_dates, unique_tst_dates_target) = buildLakeDataForRNN_manylakes_gauged(lake_id, seq_length, n_features, \
+    (_, _, tst_data_target, tst_dates, unique_tst_dates_target) = buildLakeDataForRNN_manylakes_gauged([lake_id], seq_length, n_features, \
                                                 win_shift= win_shift, begin_loss_ind = 0, \
                                                 outputFullTestMatrix=False, sparseCustom=None, \
                                                 allTestSeq=False, static_feats=True,n_static_feats=4,\
