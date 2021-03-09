@@ -530,6 +530,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         #     os.mkdir(lake_output_path)
         output_df = output_df[~output_df['index'].str.contains("1979")]
         output_df = output_df[~output_df['index'].str.contains("2021")]
+        output_df.reset_index(inplace=True)
         output_df.to_feather(lake_output_path)
         #to store output
         # output_mats[i,:,:] = outputm_npy
