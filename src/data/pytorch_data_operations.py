@@ -910,6 +910,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
                     ts_seq_removed += 1
                     tst_del_ind = np.append(tst_del_ind, i)
         #remove denoted values from trn and tst
+        pdb.set_trace()
         X_trn_tmp = np.delete(X_trn, trn_del_ind, axis=0)
         trn_dates_tmp = np.delete(trn_dates, trn_del_ind, axis=0)
         X_tst_tmp = np.delete(X_tst, tst_del_ind, axis=0)
