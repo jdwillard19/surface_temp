@@ -688,7 +688,7 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         assert np.isfinite(feat_mat_raw).all(), "feat_mat_raw has nan at" + str(np.argwhere(np.isfinite(feat_mat_raw)))
         # assert np.isfinite(Y_mat).any(), "Y_mat has nan at" + str(np.argwhere(np.isfinite(Y_mat)))
 
-        n_depths = feat_mat.shape[0]
+        n_depths = 1
         assert feat_mat.shape[0] == feat_mat_raw.shape[0]
         assert feat_mat.shape[0] == tst.shape[0]
         assert feat_mat.shape[0] == trn.shape[0]
