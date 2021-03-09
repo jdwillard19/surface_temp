@@ -42,14 +42,13 @@ torch.backends.cudnn.benchmark = True
 torch.set_printoptions(precision=10)
 
 
-hypertune = True
 
 ### debug tools
 verbose = True
 save = True
 test = True
 
-
+hypertune = True
 
 #####################3
 #params
@@ -59,9 +58,9 @@ first_save_epoch = 0
 #ow
 seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
-n_features = 5  #number of physical drivers
-n_static_feats = 4
-n_total_feats =n_static_feats+n_features
+n_features = 9  #number of physical drivers
+# n_static_feats = 4
+n_total_feats =9
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
@@ -73,12 +72,11 @@ lambda1 = 0.000
 
 # n_eps = 10000
 n_eps = 6000
+
 targ_ep = 30
-if hypertune:
-    targ_ep = n_eps
 # targ_ep = 0
 targ_rmse = 2.36
-targ_rmse = 5.5
+# targ_rmse = 5.5
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
@@ -155,7 +153,6 @@ else:
     np.save("randomFeatureTest_trn",trn_data)
     np.save("randomFeatureTest_trn_dates",trn_dates)
 
-trn_data[:,:,:4] = np.random.normal()
 #ENABLE FOR HYPERTUNE
 if hypertune:
     val_data = trn_data[-4000:,:,:]
@@ -499,7 +496,7 @@ class Model(nn.Module):
 
 
 # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
+lstm_net = Model(input_size_dyn=n_features,input_size_stat=0,hidden_size=n_hidden)
 
 #tell model to use GPU if needed
 if use_gpu:
@@ -721,7 +718,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
 
             #run model
             h_state = None
-            # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+            lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
             # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
             pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
             pred = pred.view(pred.size()[0],-1)
@@ -765,7 +762,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         output_df['site_id'] = [target_id]
         output_df['rmse'] = [mat_rmse]
         final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
-        pdb.set_trace()
+
         # if targ_ct % 100
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
