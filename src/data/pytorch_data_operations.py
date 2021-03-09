@@ -929,10 +929,9 @@ def buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
         assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
         # assert np.isfinite(all_dates).any(), "all_dates has nan"
         X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-        pdb.set_trace()
-        trn_dates_comp = np.stack([trn_dates_comp,trn_dates],dim=0)
+        trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
         X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
-        tst_dates_comp = torch.cat([tst_dates_comp,tst_dates.float()],dim=0)
+        tst_dates_comp = np.vstack([tst_dates_comp,tst_dates])
 
 
         assert np.isfinite(X_all[:,:,:-1]).all(), "X_all has nan"
