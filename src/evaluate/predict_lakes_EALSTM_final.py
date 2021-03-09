@@ -416,6 +416,7 @@ model_dict.update(pretrain_dict)
 lstm_net.load_state_dict(pretrain_dict)
 
 
+mse_criterion = nn.MSELoss()
 
 
 #after training, do test predictions / error estimation
