@@ -20,6 +20,7 @@ for site_ct,site_id in enumerate(site_ids):
         loss_outputs = df['temp_pred'].values[np.isfinite(df['temp_actual'].values)]
         loss_actual = df['temp_pred'].values[np.isfinite(df['temp_actual'].values)]
         sites.append(site_id)
+        pdb.set_trace()
         rmse = calc_rmse(loss_outputs, loss_actual)
         print("rmse: ",rmse)
         rmses.append(rmse)
