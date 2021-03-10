@@ -8,7 +8,7 @@ site_ids = metadata['site_id'].values
 
 sites = []
 rmses = []
-def rmse(predictions, targets):
+def calc_rmse(predictions, targets):
     return np.sqrt(((predictions - targets) ** 2).mean()) 
 for site_ct,site_id in enumerate(site_ids):
     print(site_ct,"/",len(site_ids), " site")
@@ -20,7 +20,7 @@ for site_ct,site_id in enumerate(site_ids):
         loss_outputs = df['temp_pred'].values[np.isfinite(df['temp_actual'].values)]
         loss_actual = df['temp_pred'].values[np.isfinite(df['temp_actual'].values)]
         sites.append(site_id)
-        rmse = rmse(loss_outputs, loss_actual)
+        rmse = calc_rmse(loss_outputs, loss_actual)
         print("rmse: ",rmse)
-        rmses.append(rmse(loss_outputs, loss_actual))
+        rmses.append(rmse)
 pdb.set_trace()
