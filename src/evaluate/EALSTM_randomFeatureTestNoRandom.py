@@ -153,9 +153,12 @@ else:
     np.save("randomFeatureTest_trn_dates",trn_dates)
 
 #add more random
-rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],60))
-trn_data = torch.from_numpy(np.concatenate([rand_data,trn_data],axis=2))
-n_static_feats = 64
+#add more random
+rand_to_add = 60
+if rand_add_bool:
+    rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],60))
+    trn_data = torch.from_numpy(np.concatenate([rand_data,trn_data],axis=2))
+    n_static_feats = n_static_feats+rand_to_add
 
 
 #ENABLE FOR HYPERTUNE
@@ -699,6 +702,10 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
                                                 outputFullTestMatrix=False, sparseCustom=None, \
                                                 allTestSeq=False, static_feats=True,n_static_feats=4,\
                                                 postProcessSplits=True)  
+    if rand_add_bool:
+        rand_data = np.random.random((tst_data_target.shape[0],tst_data_target.shape[1],rand_to_add))
+        tst_data_target = torch.from_numpy(np.concatenate([rand_data,tst_data_target],axis=2))
+        n_static_feats = 64
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
