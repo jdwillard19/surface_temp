@@ -19,8 +19,8 @@ for site_ct,site_id in enumerate(site_ids):
         df = pd.read_feather("../../results/SWT_results/outputs_"+site_id+".feather") 
         loss_outputs = df['temp_pred'].values[np.isfinite(df['temp_actual'].values)]
         loss_actual = df['temp_actual'].values[np.isfinite(df['temp_actual'].values)]
+        pdb.set_trace()
         sites.append(site_id)
         rmse = calc_rmse(loss_outputs, loss_actual)
         print("rmse: ",rmse)
         rmses.append(rmse)
-pdb.set_trace()
