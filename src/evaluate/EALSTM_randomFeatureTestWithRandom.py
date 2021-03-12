@@ -161,6 +161,11 @@ if hypertune:
     val_data = trn_data[-4000:,:,:]
     trn_data = trn_data[:-4000,:,:]
 
+#add more random
+rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],60))
+trn_data = torch.from_numpy(np.concatenate([rand_data,trn_data],axis=2))
+n_static_feats = 64
+
 # (_, _, tst_data, tst_dates, unique_tst_dates) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 #                                             win_shift= win_shift, begin_loss_ind = 0, \
 #                                             outputFullTestMatrix=False, sparseCustom=None, \
