@@ -4,5 +4,5 @@ import pdb
 
 
 
-df = pd.read_feather("../../results/final_all_obs.csv")
+df = pd.read_feather("../../results/final_all_obs.feather")
 pdb.set_trace()
