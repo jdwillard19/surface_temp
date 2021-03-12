@@ -25,7 +25,10 @@ for site_ct,site_id in enumerate(site_ids):
 
         df = pd.DataFrame(data={'site_id':site_id, 'date':loss_dates, 'pred':loss_outputs, 'actual':loss_actual})
         final_df = pd.concat([final_df,df])
-        pdb.set_trace()
+
+final_df.reset_index(inplace=True)
+final_df.to_feather("../../results/final_all_obs.feather")
+final_df.to_csv("../../results/final_all_obs.csv")
 
 
         # sites.append(site_id)
