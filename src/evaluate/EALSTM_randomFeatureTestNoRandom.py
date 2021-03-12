@@ -152,7 +152,12 @@ else:
     np.save("randomFeatureTest_trn",trn_data)
     np.save("randomFeatureTest_trn_dates",trn_dates)
 
-pdb.set_trace()
+#add more random
+rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],60))
+trn_data = np.concatenate([rand_data,trn_data],axis=2)
+n_static_feats = 64
+
+
 #ENABLE FOR HYPERTUNE
 hypertune = False
 if hypertune:
@@ -768,7 +773,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom.csv")
+final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom_62extra.csv")
 
 save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
