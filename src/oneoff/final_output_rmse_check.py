@@ -35,3 +35,7 @@ final_df.to_csv("../../results/final_all_obs.csv")
         # rmse = calc_rmse(loss_outputs, loss_actual)
         # print("rmse: ",rmse)
         # rmses.append(rmse)
+#    spring runs from March 1 to May 31;
+    # summer runs from June 1 to August 31;
+    # fall (autumn) runs from September 1 to November 30; and.
+    # winter runs from December 1 to February 28 (February 29 in a leap year).
