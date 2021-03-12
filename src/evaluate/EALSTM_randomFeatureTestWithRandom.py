@@ -163,6 +163,7 @@ if hypertune:
 
 #add more random
 rand_to_add = 60
+rand_add_bool = True
 if rand_add_bool:
     rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],60))
     trn_data = torch.from_numpy(np.concatenate([rand_data,trn_data],axis=2))
