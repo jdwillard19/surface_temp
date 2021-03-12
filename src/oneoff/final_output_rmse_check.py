@@ -23,11 +23,11 @@ for site_ct,site_id in enumerate(site_ids):
         loss_dates = df['index'].values[np.isfinite(df['temp_actual'].values)]
 
 
-        df = pd.DataFrame(data={'date':loss_dates, 'pred':loss_outputs, 'actual':loss_actual})
+        df = pd.DataFrame(data={'site_id':site_id, 'date':loss_dates, 'pred':loss_outputs, 'actual':loss_actual})
         final_df = pd.concat([final_df,df])
         pdb.set_trace()
 
-        
+
         # sites.append(site_id)
         # rmse = calc_rmse(loss_outputs, loss_actual)
         # print("rmse: ",rmse)
