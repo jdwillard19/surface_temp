@@ -60,7 +60,6 @@ seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
 n_features = 9  #number of physical drivers
 n_static_feats = 4
-n_total_feats =9
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
@@ -116,14 +115,7 @@ yhat_batch_size = 1
 # lakenames = metadata['site_id'].values
 
 
-# if not os.path.exists("./ealstm_trn_data_5fold_k"+str(k)+".npy"):
-#     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
-#                                                     seq_length, n_total_feats,\
-#                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-#                                                     static_feats=True,n_static_feats = 4,verbose=True) 
 
-#     np.save("ealstm_trn_data_5fold_k"+str(k)+".npy",trn_data)
-# else:
 #     trn_data = torch.from_numpy(np.load("ealstm_trn_data_5fold_k"+str(k)+".npy"))
 
 # (trn_data, trn_dates, tst_data, tst_dates, unique_tst_dates,\
@@ -160,7 +152,7 @@ rand_add_bool = True
 if rand_add_bool:
     rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],60))
     trn_data = torch.from_numpy(np.concatenate([rand_data,trn_data],axis=2))
-    n_static_feats = n_static_feats+rand_to_add
+    n_features = n_features+rand_to_add
 #ENABLE FOR HYPERTUNE
 if hypertune:
     val_data = trn_data[-4000:,:,:]
@@ -168,14 +160,7 @@ if hypertune:
 
 # (_, _, tst_data, tst_dates, unique_tst_dates) = buildLakeDataForRNN_manylakes_gauged(lakenames, seq_length, n_features, \
 #                                             win_shift= win_shift, begin_loss_ind = 0, \
-#                                             outputFullTestMatrix=False, sparseCustom=None, \
-#                                             allTestSeq=False, static_feats=True,n_static_feats=4,\
-#                                             postProcessSplits=True)                 
-   
-# (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
-#                                             seq_length, n_total_feats,\
-#                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-#                                             static_feats=True,n_static_feats = 4) 
+
 # np.save("conus_trn_data_final.npy",trn_data)
 # np.save("_tst_data_wStatic.npy",tst_data)
 # sys.exit()
@@ -186,7 +171,6 @@ if hypertune:
 # trn_data = torch.from_numpy(np.load("conus_trn_data_final.npy",allow_pickle=True))
 # n_features = 4
 # n_static_feats = 1
-# n_total_feats = n_features + n_static_feats
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
@@ -244,7 +228,6 @@ see <https://opensource.org/licenses/Apache-2.0>
 #         self.input_size = input_size
 #         self.hidden_size = hidden_size
 #         self.batch_size = batch_size
-#         self.lstm = nn.LSTM(input_size = n_total_feats, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
 #         self.out = nn.Linear(hidden_size, 1) #1?
 #         self.hidden = self.init_hidden()
 #         self.w_upper_to_lower = []
@@ -605,7 +588,6 @@ class Model(nn.Module):
 
 
 
-# lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
 lstm_net = Model(input_size_dyn=n_features,input_size_stat = 0,no_static=True,hidden_size=n_hidden,initial_forget_bias=5)
 
 #tell model to use GPU if needed
@@ -734,7 +716,7 @@ for epoch in range(n_eps):
                     #this loop is dated, there is now only one item in testloader
 
                     #parse data into inputs and targets
-                    inputs = data[:,:,:n_total_feats].float()
+                    inputs = data[:,:,:n_features].float()
                     targets = data[:,:,-1].float()
                     targets = targets[:, begin_loss_ind:]
                     # tmp_dates = tst_dates[:, begin_loss_ind:]
@@ -800,6 +782,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
+    n_features = 9
     (_, _, tst_data_target, tst_dates, unique_tst_dates_target) = buildLakeDataForRNN_manylakes_gauged([lake_id], seq_length, n_features, \
                                                 win_shift= win_shift, begin_loss_ind = 0, \
                                                 outputFullTestMatrix=False, sparseCustom=None, \
@@ -811,7 +794,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
     if rand_add_bool:
         rand_data = np.random.random((tst_data_target.shape[0],tst_data_target.shape[1],rand_to_add))
         tst_data_target = torch.from_numpy(np.concatenate([rand_data,tst_data_target],axis=2))
-        n_static_feats = 64
+        n_features += rand_to_add
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
@@ -826,7 +809,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
             #this loop is dated, there is now only one item in testloader
 
             #parse data into inputs and targets
-            inputs = data[:,:,:n_total_feats].float()
+            inputs = data[:,:,:n_features].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates[:, begin_loss_ind:]

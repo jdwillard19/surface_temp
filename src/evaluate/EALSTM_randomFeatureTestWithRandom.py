@@ -59,7 +59,7 @@ first_save_epoch = 0
 #ow
 seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
-n_features = 5  #number of physical drivers
+n_features = 5 #number of physical drivers
 n_static_feats = 4
 n_total_feats =n_static_feats+n_features
 win_shift = 175 #how much to slide the window on training set each time
@@ -247,7 +247,7 @@ class LSTM(nn.Module):
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.batch_size = batch_size
-        self.lstm = nn.LSTM(input_size = n_total_feats, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
+        self.lstm = nn.LSTM(input_size = n_features, hidden_size=hidden_size, batch_first=True,num_layers=num_layers,dropout=dropout) #batch_first=True?
         self.out = nn.Linear(hidden_size, 1) #1?
         self.hidden = self.init_hidden()
         self.w_upper_to_lower = []
@@ -634,7 +634,7 @@ for epoch in range(n_eps):
                     #this loop is dated, there is now only one item in testloader
 
                     #parse data into inputs and targets
-                    inputs = data[:,:,:n_total_feats].float()
+                    inputs = data[:,:,:n_features].float()
                     targets = data[:,:,-1].float()
                     targets = targets[:, begin_loss_ind:]
                     # tmp_dates = tst_dates[:, begin_loss_ind:]
@@ -726,7 +726,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
             #this loop is dated, there is now only one item in testloader
 
             #parse data into inputs and targets
-            inputs = data[:,:,:n_total_feats].float()
+            inputs = data[:,:,:n_features].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates[:, begin_loss_ind:]
