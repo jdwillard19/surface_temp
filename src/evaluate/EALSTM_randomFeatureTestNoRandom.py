@@ -174,10 +174,7 @@ if hypertune:
 #                                             allTestSeq=False, static_feats=True,n_static_feats=4,\
 #                                             postProcessSplits=True)                 
    
-# (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
-#                                             seq_length, n_total_feats,\
-#                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-#                                             static_feats=True,n_static_feats = 4) 
+
 # np.save("conus_trn_data_final.npy",trn_data)
 # np.save("_tst_data_wStatic.npy",tst_data)
 # sys.exit()
@@ -188,7 +185,6 @@ if hypertune:
 # trn_data = torch.from_numpy(np.load("conus_trn_data_final.npy",allow_pickle=True))
 # n_features = 4
 # n_static_feats = 1
-# n_total_feats = n_features + n_static_feats
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
@@ -633,7 +629,7 @@ for epoch in range(n_eps):
                     #this loop is dated, there is now only one item in testloader
 
                     #parse data into inputs and targets
-                    inputs = data[:,:,:n_total_feats].float()
+                    inputs = data[:,:,:-1].float()
                     targets = data[:,:,-1].float()
                     targets = targets[:, begin_loss_ind:]
                     # tmp_dates = tst_dates[:, begin_loss_ind:]
@@ -721,7 +717,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
             #this loop is dated, there is now only one item in testloader
 
             #parse data into inputs and targets
-            inputs = data[:,:,:n_total_feats].float()
+            inputs = data[:,:,:-1].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates[:, begin_loss_ind:]
