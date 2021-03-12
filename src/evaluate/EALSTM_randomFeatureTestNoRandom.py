@@ -154,7 +154,7 @@ else:
 
 #add more random
 rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],60))
-trn_data = np.concatenate([rand_data,trn_data],axis=2)
+trn_data = torch.from_numpy(np.concatenate([rand_data,trn_data],axis=2))
 n_static_feats = 64
 
 
