@@ -60,7 +60,6 @@ seq_length = 350 #how long of sequences to use in model
 begin_loss_ind = 0#index in sequence where we begin to calculate error or predict
 n_features = 9  #number of physical drivers
 n_static_feats = 4
-n_total_feats =9
 win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
@@ -734,7 +733,7 @@ for epoch in range(n_eps):
                     #this loop is dated, there is now only one item in testloader
 
                     #parse data into inputs and targets
-                    inputs = data[:,:,:n_total_feats].float()
+                    inputs = data[:,:,:n_features].float()
                     targets = data[:,:,-1].float()
                     targets = targets[:, begin_loss_ind:]
                     # tmp_dates = tst_dates[:, begin_loss_ind:]
@@ -826,7 +825,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
             #this loop is dated, there is now only one item in testloader
 
             #parse data into inputs and targets
-            inputs = data[:,:,:n_total_feats].float()
+            inputs = data[:,:,:n_features].float()
             targets = data[:,:,-1].float()
             targets = targets[:, begin_loss_ind:]
             tmp_dates = tst_dates[:, begin_loss_ind:]
