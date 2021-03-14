@@ -711,7 +711,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
     if rand_add_bool:
         rand_data = np.random.random((tst_data_target.shape[0],tst_data_target.shape[1],rand_to_add))
         tst_data_target = torch.from_numpy(np.concatenate([rand_data,tst_data_target],axis=2))
-        n_features += rand_to_add
+        n_static_feats = 64
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
