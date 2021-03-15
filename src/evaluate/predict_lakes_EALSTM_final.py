@@ -463,10 +463,12 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
+        print("observed")
     else:
         (tst_data_target, tst_dates) = buildLakeDataForRNN_conus_NoLabel(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
+        print("unobserved")
     
     unique_tst_dates_target = np.unique(tst_dates)
     assert unique_tst_dates_target.shape[0] == 15385, "test data incorrect size"
