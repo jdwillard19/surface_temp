@@ -423,10 +423,12 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     if target_id == "nhdhr_{ef5a02dc-f608-4740-ab0e-de374bf6471c}" or target_id == 'nhdhr_136665792' or target_id == 'nhdhr_136686179':
         continue
 
-    pdb.set_trace()
-    tmp = pd.read_feather('../../results/SWT_results/outputs_'+target_id+'.feather').shape[0]
+
 
     print(str(targ_ct),'/',len(test_lakes),':',target_id)
+    if pd.read_feather('../../results/SWT_results/outputs_'+target_id+'.feather').shape[0] == 14976:
+        print("already good")
+
     lake_df = pd.DataFrame()
     lake_id = target_id
 
@@ -470,7 +472,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     unique_tst_dates_target = np.unique(tst_dates)
     assert unique_tst_dates_target.shape[0] == 15385, "test data incorrect size"
-    continue
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
