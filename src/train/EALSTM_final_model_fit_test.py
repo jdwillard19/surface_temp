@@ -113,8 +113,7 @@ lakenames = metadata['site_id'].values
 
 ep_arr = []   
 err_per_site = pd.read_feather("../../results/err_per_site3.feather")
-split_lakenames = err_per_site[err_per_site['n_obs'] >= 200]['site_id'].values[:]
-pdb.set_trace()
+split_lakenames = err_per_site[err_per_site['n_obs'] >= 200]['site_id'].values[:50]
 assert len(lakenames)==50
 pdb.set_trace()
 
