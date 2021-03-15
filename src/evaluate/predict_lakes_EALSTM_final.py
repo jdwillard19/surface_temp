@@ -86,7 +86,7 @@ targ_rmse = 2.36
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 test_lakes = metadata['site_id'].values[start:end]
-test_lakes = np.array(['nhdhr_86276397','nhdhr_132806735'])
+# test_lakes = np.array(['nhdhr_86276397','nhdhr_132806735'])
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 
@@ -458,7 +458,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     observed = False
 
-    pdb.set_trace()
+    # pdb.set_trace()
     if metadata[metadata['site_id']==target_id]['observed'].values[0]:
         (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
@@ -468,6 +468,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
     unique_tst_dates_target = np.unique(tst_dates)
+    pdb.set_trace()
+
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
