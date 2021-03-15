@@ -467,9 +467,10 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         (tst_data_target, tst_dates) = buildLakeDataForRNN_conus_NoLabel(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
+    
     unique_tst_dates_target = np.unique(tst_dates)
-    pdb.set_trace()
-
+    assert unique_tst_dates_target.shape[0] == 15385, "test data incorrect size"
+    continue
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
