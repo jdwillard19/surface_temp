@@ -1291,9 +1291,9 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
 
     feat_mat_raw = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_ea_conus_021621.npy"))
     feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features_ea_conus_021621.npy"))
-    if removeElevation:
-        feat_mat = np.delete(feat_mat,29,axis=1)
-        feat_mat_raw = np.delete(feat_mat_raw,29,axis=1)
+    # if removeElevation:
+    #     feat_mat = np.delete(feat_mat,29,axis=1)
+    #     feat_mat_raw = np.delete(feat_mat_raw,29,axis=1)
     if feat_mat.shape[0] < seq_length:
         return (None,None)
     full = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy"))
@@ -1442,8 +1442,9 @@ def buildLakeDataForRNN_conus(lakename, data_dir, seq_length, n_features, \
         else:
             # print(X_trn[i,:,-1])
             # print("NO OBSERVE, REMOVE")
-            tr_seq_removed += 1
-            trn_del_ind = np.append(trn_del_ind, i)
+            if not outputFullTestMatrix:
+                tr_seq_removed += 1
+                trn_del_ind = np.append(trn_del_ind, i)
 
     #remove denoted values from trn and tst
     X_trn_tmp = np.delete(X_trn, trn_del_ind, axis=0)
