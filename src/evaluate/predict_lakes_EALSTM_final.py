@@ -86,7 +86,7 @@ targ_rmse = 2.36
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 test_lakes = metadata['site_id'].values[start:end]
-# test_lakes = np.array(['nhdhr_86276397','nhdhr_132806735'])
+test_lakes = np.array(['nhdhr_86276397','nhdhr_132806735'])
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 
