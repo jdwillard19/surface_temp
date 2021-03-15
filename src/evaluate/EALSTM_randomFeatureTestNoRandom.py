@@ -154,7 +154,7 @@ else:
 
 #add more random
 #add more random
-rand_to_add = 12
+rand_to_add = 252
 rand_add_bool = True
 if rand_add_bool:
     rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],rand_to_add))
@@ -777,7 +777,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom_16extra.csv")
+final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom_252extra.csv")
 
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom_16extra"
+save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom_252extra"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
