@@ -154,10 +154,10 @@ else:
 
 #add more random
 #add more random
-rand_to_add = 60
+rand_to_add = 12
 rand_add_bool = True
 if rand_add_bool:
-    rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],60))
+    rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],rand_to_add))
     trn_data = torch.from_numpy(np.concatenate([rand_data,trn_data],axis=2))
     n_static_feats = n_static_feats+rand_to_add
 
@@ -702,7 +702,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
     if rand_add_bool:
         rand_data = np.random.random((tst_data_target.shape[0],tst_data_target.shape[1],rand_to_add))
         tst_data_target = torch.from_numpy(np.concatenate([rand_data,tst_data_target],axis=2))
-        n_static_feats = 64
+        n_static_feats = 16
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
@@ -777,7 +777,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom_62extra.csv")
+final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom_16extra.csv")
 
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom"
+save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_noRandom_16extra"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
