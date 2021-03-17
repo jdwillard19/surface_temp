@@ -58,7 +58,7 @@ test = False
 #params
 ###########################33
 first_save_epoch = 0
-patience = 30
+patience = 100
 
 #ow
 seq_length = 350 #how long of sequences to use in model
