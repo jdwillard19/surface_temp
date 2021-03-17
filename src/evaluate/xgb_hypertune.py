@@ -49,7 +49,7 @@ columns = ['Surface_Area','Latitude','Longitude',
 #                             X[i-14,4:])
 #                   ,X[i-30,4:])
 # train_df = pd.DataFrame(columns=columns)
-
+k = int(sys.argv[1])
 param_search = True
 
 # lookback = 4
@@ -61,7 +61,8 @@ param_search = True
 # final_output_df = pd.DataFrame()
 # result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
-train_lakes = metadata['site_id'].values
+train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values
+
 # lakenames = metadata['site_id'].values
 # test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 # assert(np.isin(train_lakes,test_lakes,invert=True).all())
@@ -97,12 +98,13 @@ if param_search:
     gbm = xgb.XGBRegressor(booster='gbtree')
     nfolds = 3
     parameters = {'objective':['reg:squarederror'],
-                  'learning_rate': [.025, 0.05,.10], #so called `eta` value
+                  'learning_rate': [.025, 0.05], #so called `eta` value
                   'max_depth': [6],
                   'min_child_weight': [11],
                   'subsample': [0.8],
                   'colsample_bytree': [0.7],
-                  'n_estimators': [5000,10000,15000], #number of trees, change it to 1000 for better results
+                  'n_estimators': [5000,10000], #number of trees, change it to 1000 for better results
+                  # 'n_estimators': [5000,10000,15000], #number of trees, change it to 1000 for better results
                   }
     def gb_param_selection(X, y, nfolds):
         # ests = np.arange(1000,6000,600)
