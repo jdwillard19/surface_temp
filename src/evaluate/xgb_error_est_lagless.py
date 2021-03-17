@@ -58,14 +58,14 @@ param_search = True
 #build training set
 k = int(sys.argv[1])
 train = True
-save_file_path = '../../models/xgb_lagless_surface_temp_fold'+str(k)+"_03012021_lime.joblib"
+save_file_path = '../../models/xgb_lagless_surface_temp_fold'+str(k)+"_03172021.joblib"
 
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
 
-train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values[300:]
+train_lakes = metadata[metadata['5fold_fold']!=k]['site_id'].values
 # lakenames = metadata['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values[300:]
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 assert(np.isin(train_lakes,test_lakes,invert=True).all())
 train_df = pd.DataFrame(columns=columns)
 test_df = pd.DataFrame(columns=columns)
@@ -97,7 +97,7 @@ if train:
 
     print("train set dimensions: ",X.shape)
     #construct lookback feature set??
-    model = xgb.XGBRegressor(booster='gbtree',n_estimators=5000,learning_rate=.025)
+    model = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025)
     # model = xgb.XGBRegressor(booster='gbtree',n_estimators=5000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7,random_state=2)
 
     if train:
@@ -111,10 +111,10 @@ else:
 
 
 
-explainer = lime_tabular.LimeTabularExplainer(
-    training_data=train_df,
-    mode='regression'
-)
+# explainer = lime_tabular.LimeTabularExplainer(
+#     training_data=train_df,
+#     mode='regression'
+# )
 # importances = model.feature_importances_
 # print(importances)
 # sorted_feats = [x for _,x in sorted(zip(importances,columns[:-1]))]
@@ -188,7 +188,7 @@ for ct, lake_id in enumerate(test_lakes):
 result_df.reset_index(inplace=True)
 print("tst rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))
 
-result_df.to_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
+result_df.to_feather("../../results/xgb_lagless_0317201_fold"+str(k)+".feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
