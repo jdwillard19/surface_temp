@@ -58,7 +58,7 @@ test = False
 #params
 ###########################33
 first_save_epoch = 0
-patience = 200
+patience = 30
 
 #ow
 seq_length = 350 #how long of sequences to use in model
@@ -133,13 +133,13 @@ best_trnrmse_per_hid[:] = np.nan
 for hid_ct,n_hidden in enumerate(n_hid_arr):
     print("n hidden: ",n_hidden)
     n_hidden = int(n_hidden)
-    trn_rmse_per_ep = np.empty((1,int(n_eps/10)))
+    trn_rmse_per_ep = np.empty((len(folds_arr),int(n_eps/10)))
     trn_rmse_per_ep[:] = np.nan
-    tst_rmse_per_ep = np.empty((1,int(n_eps/10)))
+    tst_rmse_per_ep = np.empty((len(folds_arr),int(n_eps/10)))
     tst_rmse_per_ep[:] = np.nan
-    for k in folds_arr:
+    for k_ct, k in folds_arr:
         print("fold ",k)
-        k = int(k)
+        k = int(folds_arr[0])
         other_ks = np.delete(folds_arr,k)
         lakenames = metadata[np.isin(metadata['5fold_fold'],other_ks)]['site_id'].values[:10]
         # lakenames = metadata['site_id'].values
