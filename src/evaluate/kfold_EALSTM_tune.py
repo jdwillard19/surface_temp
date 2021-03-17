@@ -74,8 +74,8 @@ num_layers = 1
 # n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0
-k = int(sys.argv[2])
-folds_arr = np.delete(np.arange(5),[k])
+og_k = int(sys.argv[2])
+folds_arr = np.delete(np.arange(5),[og_k])
 
 # n_eps = 10000
 n_eps = 10000
@@ -147,7 +147,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         pdb.set_trace()
         ep_arr = []   
 
-        if not os.path.exists("./ealstm_trn_data_fold"+str(k)+".npy"):
+        if not os.path.exists("./ealstm_trn_data_ofold"+str(og_k)+"_ifold"+str(k)+".npy"):
             (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                             seq_length, n_total_feats,\
                                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
@@ -157,11 +157,11 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
                                                         win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                         static_feats=True,n_static_feats = 4) 
 
-            np.save("ealstm_trn_data_fold"+str(k)+".npy",trn_data)
-            np.save("ealstm_tst_data_fold"+str(k)+".npy",tst_data)
+            np.save("ealstm_trn_data_ofold"+str(og_k)+"_ifold"+str(k)+".npy",trn_data)
+            np.save("ealstm_tst_data_ofold"+str(og_k)+"_ifold"+str(k)+".npy",tst_data)
         else:
-            trn_data = torch.from_numpy(np.load("ealstm_trn_data_fold"+str(k)+".npy"))
-            tst_data = torch.from_numpy(np.load("ealstm_tst_data_fold"+str(k)+".npy"))
+            trn_data = torch.from_numpy(np.load("ealstm_trn_data_ofold"+str(og_k)+"_ifold"+str(k)+".npy"))
+            tst_data = torch.from_numpy(np.load("ealstm_tst_data_ofold"+str(og_k)+"_ifold"+str(k)+".npy"))
 
         # sys.exit()
         # trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
