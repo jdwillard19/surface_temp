@@ -48,8 +48,8 @@ for name in range(n_folds):
     script2 = "python xgb_error_est_lagless.py %s"%(l)
     # script3 = "python singleModel_customSparse.py %s"%(l)
     all= "\n".join([header,script,script2])
-    sbatch = "\n".join(["sbatch job_%s_foldXGB.sh"%(l),sbatch])
-    with open('./jobs/job_{}_foldXGB.sh'.format(l), 'w') as output:
+    sbatch = "\n".join(["sbatch job_%s_foldXGB_err.sh"%(l),sbatch])
+    with open('./jobs/job_{}_foldXGB_err.sh'.format(l), 'w') as output:
         output.write(all)
 
 # for name in range(n_folds):
