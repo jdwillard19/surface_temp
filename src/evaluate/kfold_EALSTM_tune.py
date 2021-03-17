@@ -133,9 +133,11 @@ best_trnrmse_per_hid[:] = np.nan
 for hid_ct,n_hidden in enumerate(n_hid_arr):
     print("n hidden: ",n_hidden)
     n_hidden = int(n_hidden)
-    trn_rmse_per_ep = np.empty((len(folds_arr),int(n_eps/10)))
+    # trn_rmse_per_ep = np.empty((len(folds_arr),int(n_eps/10)))
+    trn_rmse_per_ep = np.empty((1,int(n_eps/10)))
     trn_rmse_per_ep[:] = np.nan
-    tst_rmse_per_ep = np.empty((len(folds_arr),int(n_eps/10)))
+    # tst_rmse_per_ep = np.empty((len(folds_arr),int(n_eps/10)))
+    tst_rmse_per_ep = np.empty((1,int(n_eps/10)))
     tst_rmse_per_ep[:] = np.nan
     for k_ct, k in folds_arr:
         print("fold ",k)
