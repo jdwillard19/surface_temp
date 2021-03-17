@@ -74,8 +74,8 @@ num_layers = 1
 # n_hidden = 128
 # lambda1 = 1e-
 lambda1 = 0
-k = int(sys.argv[1])
-folds_arr = np.array([k])
+k = int(sys.argv[2])
+folds_arr = np.delete(np.arange(5),[k])
 
 # n_eps = 10000
 n_eps = 10000
@@ -118,6 +118,7 @@ yhat_batch_size = 1
 #create train and test sets
 
 n_folds = 3
+# k = int(sys.argv[1])
 # trn_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
 # tst_rmse_per_ep = np.empty((n_folds,int(n_eps/10)))
 # tst_rmse_per_ep = []
@@ -139,10 +140,11 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     for k in folds_arr:
         print("fold ",k)
         k = int(k)
-        lakenames = metadata[metadata['3fold_fold']!=k]['site_id'].values
+        other_ks = np.delete(folds_arr,k)
+        lakenames = metadata[np.isin(metadata['5fold_fold'],other_ks)]['site_id'].values
         # lakenames = metadata['site_id'].values
-        test_lakenames = metadata[metadata['3fold_fold']==k]['site_id'].values
-
+        test_lakenames = metadata[metadata['5fold_fold']==k]['site_id'].values
+        pdb.set_trace()
         ep_arr = []   
 
         if not os.path.exists("./ealstm_trn_data_fold"+str(k)+".npy"):
