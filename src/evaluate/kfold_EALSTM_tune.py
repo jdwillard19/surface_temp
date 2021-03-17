@@ -48,7 +48,7 @@ torch.set_printoptions(precision=10)
 ### debug tools
 debug_train = False
 debug_end = False
-verbose = True
+verbose = False
 save = True
 test = False
 
@@ -145,9 +145,9 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         print("fold ",k)
         k = int(folds_arr[0])
         other_ks = np.delete(folds_arr,k)
-        lakenames = metadata[np.isin(metadata['5fold_fold'],other_ks)]['site_id'].values[:10]
+        lakenames = metadata[np.isin(metadata['5fold_fold'],other_ks)]['site_id'].values
         # lakenames = metadata['site_id'].values
-        test_lakenames = metadata[metadata['5fold_fold']==k]['site_id'].values[:10]
+        test_lakenames = metadata[metadata['5fold_fold']==k]['site_id'].values
         ep_arr = []   
 
         if not os.path.exists("./ealstm_trn_data_ofold"+str(og_k)+"_ifold"+str(k)+".npy"):
@@ -178,8 +178,8 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         print("train_data size: ",trn_data.size())
         print(len(lakenames), " lakes of data")
         # trn_data = tst_data
-        batch_size = trn_data.size()[0]
-        # batch_size = int(math.floor(trn_data.size()[0])/150)
+        # batch_size = trn_data.size()[0]
+        batch_size = int(math.floor(trn_data.size()[0])/150)
         # batch_size = 2000
 
 
