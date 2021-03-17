@@ -141,9 +141,9 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         print("fold ",k)
         k = int(k)
         other_ks = np.delete(folds_arr,k)
-        lakenames = metadata[np.isin(metadata['5fold_fold'],other_ks)]['site_id'].values
+        lakenames = metadata[np.isin(metadata['5fold_fold'],other_ks)]['site_id'].values[:10]
         # lakenames = metadata['site_id'].values
-        test_lakenames = metadata[metadata['5fold_fold']==k]['site_id'].values
+        test_lakenames = metadata[metadata['5fold_fold']==k]['site_id'].values[:10]
         pdb.set_trace()
         ep_arr = []   
 
