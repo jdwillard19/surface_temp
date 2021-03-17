@@ -140,7 +140,7 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     tst_rmse_per_ep = np.empty((1,int(n_eps/10)))
     tst_rmse_per_ep[:] = np.nan
     pdb.set_trace()
-    for k_ct, k in folds_arr:
+    for k_ct, k in enumerate(folds_arr):
         print("fold ",k)
         k = int(folds_arr[0])
         other_ks = np.delete(folds_arr,k)
