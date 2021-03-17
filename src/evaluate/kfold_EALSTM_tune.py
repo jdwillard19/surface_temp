@@ -75,7 +75,7 @@ num_layers = 1
 # lambda1 = 1e-
 lambda1 = 0
 og_k = int(sys.argv[2])
-folds_arr = np.delete(np.arange(5),[og_k])
+folds_arr = np.array(np.delete(np.arange(5),[og_k]))
 
 # n_eps = 10000
 n_eps = 10000
