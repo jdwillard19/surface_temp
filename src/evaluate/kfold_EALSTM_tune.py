@@ -139,15 +139,15 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
     # tst_rmse_per_ep = np.empty((len(folds_arr),int(n_eps/10)))
     tst_rmse_per_ep = np.empty((1,int(n_eps/10)))
     tst_rmse_per_ep[:] = np.nan
-    pdb.set_trace()
     for k_ct, k in enumerate(folds_arr):
+        if k_ct > 0:
+            continue
         print("fold ",k)
         k = int(folds_arr[0])
         other_ks = np.delete(folds_arr,k)
         lakenames = metadata[np.isin(metadata['5fold_fold'],other_ks)]['site_id'].values[:10]
         # lakenames = metadata['site_id'].values
         test_lakenames = metadata[metadata['5fold_fold']==k]['site_id'].values[:10]
-        pdb.set_trace()
         ep_arr = []   
 
         if not os.path.exists("./ealstm_trn_data_ofold"+str(og_k)+"_ifold"+str(k)+".npy"):
