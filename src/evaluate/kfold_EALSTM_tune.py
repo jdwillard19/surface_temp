@@ -66,7 +66,7 @@ begin_loss_ind = 0#index in sequence where we begin to calculate error or predic
 n_features = 5  #number of physical drivers
 n_static_feats = 4
 n_total_feats =n_static_feats+n_features
-win_shift = 350 #how much to slide the window on training set each time
+win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
@@ -175,8 +175,8 @@ for hid_ct,n_hidden in enumerate(n_hid_arr):
         print("train_data size: ",trn_data.size())
         print(len(lakenames), " lakes of data")
         # trn_data = tst_data
-        # batch_size = trn_data.size()[0]
-        batch_size = int(math.floor(trn_data.size()[0])/150)
+        batch_size = trn_data.size()[0]
+        # batch_size = int(math.floor(trn_data.size()[0])/150)
         # batch_size = 2000
 
 
