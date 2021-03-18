@@ -4,14 +4,14 @@ import pdb
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
-site_ids = metadata[metadata['5fold_fold'] != 0]['site_id'].values #CHANGE DIS----------
+site_ids = metadata['site_id'].values #CHANGE DIS----------
 n_folds = 5
 
 combined_df = pd.DataFrame()
 combined_lm = pd.DataFrame()
 combined_gb = pd.DataFrame()
 combined_ea = pd.DataFrame()
-for k in range(1,n_folds): #CHANGE DIS----------------
+for k in range(n_folds): #CHANGE DIS----------------
 
 	print("fold ",k)
 	# lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
