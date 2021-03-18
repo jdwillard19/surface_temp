@@ -22,7 +22,6 @@ sys.path.append('../models')
 from pytorch_model_operations import saveModel
 import pytorch_data_operations
 import datetime
-import pdb
 from torch.utils.data import DataLoader
 from pytorch_data_operations import buildLakeDataForRNN_multilakemodel_conus, parseMatricesFromSeqs, buildLakeDataForRNN_conus
 
@@ -66,15 +65,15 @@ win_shift = 175 #how much to slide the window on training set each time
 save = True 
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
-num_layers = 2
-n_hidden = 128
+num_layers = 1
+n_hidden = 256
 # lambda1 = 1e-
-lambda1 = 0.0001
+lambda1 = 0.000
 
 # n_eps = 10000
-n_eps = 1000
-targ_ep = 40
-targ_rmse = 2.40
+n_eps = 2000
+targ_ep = 220
+targ_rmse = 2.06
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
@@ -680,4 +679,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             print("missed obs?")
 
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
-final_output_df.to_feather("../../results/err_est_outputs_2layer128hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
+final_output_df.to_feather("../../results/err_est_outputs_031821_EALSTM_fold"+str(k)+".feather")
+save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_257rmse_fold"+str(k)
+saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+pdb.set_trace()
