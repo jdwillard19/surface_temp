@@ -37,6 +37,8 @@ final_df.reset_index(inplace=True)
 final_df.to_feather("../../results/final_all_obs.feather")
 final_df.to_csv("../../results/final_all_obs.csv")
 
+obs_sites = metadata[metadata['observed'] == True]['site_id'].values
+rmse_per_site = np.array([calc_rmse(final_df[final_df['site_id']==i_d]['pred'], final_df[final_df['site_id']==i_d]['actual']) for i_d in obs_sites])
 pdb.set_trace()
 
 

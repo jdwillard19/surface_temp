@@ -4,14 +4,14 @@ import pdb
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
-site_ids = metadata['site_id'].values
+site_ids = metadata[metadata['5fold_fold'] != 0]['site_id'].values #CHANGE DIS----------
 n_folds = 5
 
 combined_df = pd.DataFrame()
 combined_lm = pd.DataFrame()
 combined_gb = pd.DataFrame()
 combined_ea = pd.DataFrame()
-for k in range(n_folds):
+for k in range(1,n_folds): #CHANGE DIS----------------
 
 	print("fold ",k)
 	# lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
@@ -24,7 +24,7 @@ for k in range(n_folds):
 	# ea_df = pd.read_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_1layer256hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_2layer128hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
-	ea_df = pd.read_feather("../../results/err_est_outputs_1layer256hid_2.32rmse_EALSTM_fold"+str(k)+".feather")
+	ea_df = pd.read_feather("../../results/err_est_outputs_03182021_EALSTM_fold"+str(k)+".feather")
 
 
 	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
@@ -47,10 +47,10 @@ combined_df['wtemp_predicted-linear_model'] = combined_lm['temp_pred_lm']
 # combined_df['wtemp_actual'] = combined_ea['wtemp_actual']
 combined_df['wtemp_actual'] = combined_gb['temp_actual']
 combined_df.reset_index(inplace=True)
-combined_df.to_feather("../../results/all_outputs_and_obs2.feather")
-combined_df.to_csv("../../results/all_outputs_and_obs2.csv")
+combined_df.to_feather("../../results/all_outputs_and_obs_031821.feather")
+combined_df.to_csv("../../results/all_outputs_and_obs_031821.csv")
 
-combined_df = pd.read_feather("../../results/all_outputs_and_obs2.feather")
+combined_df = pd.read_feather("../../results/all_outputs_and_obs_031821.feather")
 
 per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
 # per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost'])
@@ -69,6 +69,5 @@ for i,site_id in enumerate(site_ids):
 	per_site_df = per_site_df.append(site_df)
 
 per_site_df.reset_index(inplace=True)
-per_site_df.to_csv("../../results/err_per_site3.csv")
-per_site_df.to_feather("../../results/err_per_site3.feather")
-pdb.set_trace()
+per_site_df.to_csv("../../results/err_per_site_031821.csv")
+per_site_df.to_feather("../../results/err_per_site_031821.feather")
