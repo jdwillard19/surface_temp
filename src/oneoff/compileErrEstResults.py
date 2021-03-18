@@ -17,7 +17,12 @@ for k in range(n_folds): #CHANGE DIS----------------
 	# lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
 	lm_df = pd.read_feather("../../results/lm_lagless_030121_fold"+str(k)+".feather")
 	# gb_df = pd.read_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
-	gb_df = pd.read_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
+
+	if os.path.exists("../../results/xgb_lagless_0317201_fold"+str(k)+".feather"):
+		gb_df = pd.read_feather("../../results/xgb_lagless_0317201_fold"+str(k)+".feather")
+		pdb.set_trace()
+	else:
+		gb_df = pd.read_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
 
 
 	gb_date_df = pd.read_feather("../../results/xgb_lagless_dates_fold"+str(k)+".feather")
