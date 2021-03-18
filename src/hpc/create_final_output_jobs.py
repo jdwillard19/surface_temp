@@ -25,7 +25,7 @@ for i in range(len(start)):
     l2 = end[i]
 
     # if not os.path.exists("../../../models/single_lake_models/"+name+"/PGRNN_basic_normAll_pball"): 
-    header = "#!/bin/bash -l\n#SBATCH --time=23:59:00\n#SBATCH --ntasks=8\n#SBATCH --mem=20g\n#SBATCH --mail-type=ALL\n#SBATCH --mail-user=willa099@umn.edu\n#SBATCH --gres=gpu:k40:2\n#SBATCH --output=final_output_%s.out\n#SBATCH --error=final_output_%s.err\n\n#SBATCH -p k40"%(i,i)
+    header = "#!/bin/bash -l\n#SBATCH --time=08:59:00\n#SBATCH --ntasks=8\n#SBATCH --mem=20g\n#SBATCH --mail-type=ALL\n#SBATCH --mail-user=willa099@umn.edu\n#SBATCH --gres=gpu:k40:2\n#SBATCH --output=final_output_%s.out\n#SBATCH --error=final_output_%s.err\n\n#SBATCH -p k40"%(i,i)
     script = "source /home/kumarv/willa099/takeme_evaluate.sh\n" #cd to directory with training script
     # script2 = "python write_NLDAS_xy_pairs.py %s %s"%(l,l2)
     script2 = "python predict_lakes_EALSTM_final.py %s %s"%(l,l2)
