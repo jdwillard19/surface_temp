@@ -67,7 +67,7 @@ dropout = 0.
 num_layers = 1
 n_hidden = 128
 # lambda1 = 1e-
-lambda1 = 0.000
+lambda1 = 1e-3
 
 # n_eps = 10000
 n_eps = 6000
@@ -128,7 +128,9 @@ yhat_batch_size = 1
 #
 
 print(len(lakenames), " lakes")
-
+n_lakes = len(lakenames)
+err_per_lake = np.empty((n_lakes))
+err_per_lake[:] = np.nan
 # lakenames = lakenames[:2]
 
 trn_data = None
@@ -147,8 +149,8 @@ else:
 
 trn_data[:,:,:4] =  np.random.normal()
 #add more random
-rand_to_add = 252
-rand_add_bool = True
+# rand_to_add = 252
+rand_add_bool = False
 if rand_add_bool:
     rand_data = np.random.random((trn_data.shape[0],trn_data.shape[1],rand_to_add))
     trn_data = torch.from_numpy(np.concatenate([rand_data,trn_data],axis=2))
@@ -860,6 +862,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
 
 
         mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+        rmse_per_lake[targ_ct] = mat_rmse
         output_df = pd.DataFrame()
         output_df['site_id'] = [target_id]
         output_df['rmse'] = [mat_rmse]
@@ -869,7 +872,7 @@ for targ_ct, target_id in enumerate(lakenames): #for each target lake
         print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/randomFeatureExperiment_LSTM_wRandom_256.csv")
+final_output_df.to_csv("../../results/randomFeatureExperiment_LSTM_w4Random_l1_1e-3.csv")
 
-save_path = "../../models/LSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_wRandom_256"
+save_path = "../../models/LSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_w4Random_l1_1e-3"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)

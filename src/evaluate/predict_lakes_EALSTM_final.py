@@ -426,8 +426,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
 
     print(str(targ_ct),'/',len(test_lakes),':',target_id)
-    if pd.read_feather('../../results/SWT_results/outputs_'+target_id+'.feather').shape[0] == 14976:
-        print("already good")
+    # if pd.read_feather('../../results/SWT_results/outputs_'+target_id+'.feather').shape[0] == 14976:
+    #     print("already good")
 
     lake_df = pd.DataFrame()
     lake_id = target_id
