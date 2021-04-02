@@ -74,16 +74,16 @@ metadata.to_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 # pdb.set_trace()
 # fig = px.scatter_3d(metadata, x='lon', y='lat', z='log_area',color='cluster')
 # # fig = px.scatter_3d(target_meta, x='lon', y='lat', z='rmse',color='cluster')
-# for i in cluster_label_vals:
-# 	target_meta['isCluster'+str(i)] = (target_meta['cluster'] == i)
-# 	fig = px.scatter(target_meta, x='lon', y='lat',colokr='isCluster'+str(i))
-# 	# fig = px.scatter(metadata[metadata['cluster']==i], x='lon', y='lat',color='cluster')
-# 	# fig = px.scatter(metadata[metadata['cluster'] != i], x='lon', y='lat')
-# 	fig.update_traces(marker=dict(size=5),
-#                   selector=dict(mode='markers'))
-# 	fig.write_html("clustered_lakes-conus_cluster_"+str(i)+".html")
+for i in cluster_label_vals:
+	target_meta['isCluster'+str(i)] = (target_meta['cluster'] == i)
+	fig = px.scatter(target_meta, x='lon', y='lat',colokr='isCluster'+str(i))
+	# fig = px.scatter(metadata[metadata['cluster']==i], x='lon', y='lat',color='cluster')
+	# fig = px.scatter(metadata[metadata['cluster'] != i], x='lon', y='lat')
+	fig.update_traces(marker=dict(size=5),
+                  selector=dict(mode='markers'))
+	fig.write_html("clustered_lakes-conus_cluster_"+str(i)+".html")
 
-#                     #color='petal_length', symbol='species')
+                    #color='petal_length', symbol='species')
 
 # sys.exit()
 # fig.write_html("clustered_lakes-conus_"+str(n_clusters)+"clusters_rmse_z_axis.html")

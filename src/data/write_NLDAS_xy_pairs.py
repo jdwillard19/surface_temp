@@ -16,10 +16,11 @@ import datetime
 #load metadata, get ids
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_020421.csv")
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
+# metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_040221.csv")
 
 #load wst obs
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040221.feather")
 
 #get site ids
 site_ids = np.unique(metadata['site_id'].values)
