@@ -37,7 +37,7 @@ mean_feats = np.array([13.1700613, 41.67473611, -90.43172611, 397.97342139, 1.76
 std_feats = np.array([1.630222, 6.45012084, 9.8714776, 474.08400329,9.10455152, 7.54579132, 3.32533227, 1.62018831, 1.70615275])
    
 
-#add ftype and fcodes
+#add ftype and fcodes (REMOVED)
 # Ftypes = np.unique(metadata['FType'])
 # Fcodes = np.unique(metadata['FCode'])
 # ftype_arrs = [[1 if metadata.iloc[i]['FType']==int(j) else 0 for i in range(metadata.shape[0])] for j in Ftypes]
@@ -154,7 +154,6 @@ for site_ct, site_id in enumerate(site_ids):
     n_unq_obs_dates = unq_obs_dates.shape[0]
     n_obs = n_unq_obs_dates
 
-    place obs data
     n_obs_placed = 0
     # n_trn_obs_placed = 0
     for o in range(0,n_obs):
