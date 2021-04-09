@@ -22,7 +22,7 @@ site_ids = np.unique(metadata['site_id'].values[start:end])
 
 # metadata.set_index("site_id",inplace=True)
 #load wst obs
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
 obs.sort_values('Date',inplace=True)
 obs = obs[:-2] #delete error obs year 2805, and 2021
 #get site ids
