@@ -84,6 +84,7 @@ for ct, lake_id in enumerate(train_lakes):
     X = np.array([X[i,:] for i in inds],dtype = np.float)
     y = y[inds]
     #remove days without obs
+    pdb.set_trace()
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
 
     # data = data[np.where(np.isfinite(data[:,-1]))]
