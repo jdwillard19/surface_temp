@@ -70,6 +70,7 @@ train_df = pd.DataFrame(columns=columns)
 # test_df = pd.DataFrame(columns=columns)
 
 for ct, lake_id in enumerate(train_lakes):
+    print(ct)
     # if ct %100 == 0:
     print(" assembling training lake ",ct,"/",len(train_lakes),": ",lake_id)
     #load data
@@ -84,7 +85,6 @@ for ct, lake_id in enumerate(train_lakes):
     X = np.array([X[i,:] for i in inds],dtype = np.float)
     y = y[inds]
     #remove days without obs
-    pdb.set_trace()
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
 
     # data = data[np.where(np.isfinite(data[:,-1]))]
