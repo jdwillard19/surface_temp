@@ -70,9 +70,6 @@ train_df = pd.DataFrame(columns=columns)
 # test_df = pd.DataFrame(columns=columns)
 
 for ct, lake_id in enumerate(train_lakes):
-    print(ct)
-    if ct == 108:
-      pdb.set_trace()
     # if ct %100 == 0:
     print(" assembling training lake ",ct,"/",len(train_lakes),": ",lake_id)
     #load data
@@ -83,6 +80,8 @@ for ct, lake_id in enumerate(train_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
+    if inds.shape[0] == 0:
+      continue
     # inds = inds[np.where(inds > farthest_lookback)[0]]
     X = np.array([X[i,:] for i in inds],dtype = np.float)
     y = y[inds]
