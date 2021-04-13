@@ -72,8 +72,8 @@ lambda1 = 0.000
 
 # n_eps = 10000
 n_eps = 2000
-targ_ep = 220
-targ_rmse = 2.06
+targ_ep = 80
+targ_rmse = 2.18
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
