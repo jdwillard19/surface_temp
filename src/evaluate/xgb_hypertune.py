@@ -71,6 +71,8 @@ train_df = pd.DataFrame(columns=columns)
 
 for ct, lake_id in enumerate(train_lakes):
     print(ct)
+    if ct == 108:
+      pdb.set_trace()
     # if ct %100 == 0:
     print(" assembling training lake ",ct,"/",len(train_lakes),": ",lake_id)
     #load data
