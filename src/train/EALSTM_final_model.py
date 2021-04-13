@@ -79,7 +79,7 @@ targ_rmse = 2.43
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
+# obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 ###############################
 # data preprocess
 ##################################
@@ -114,15 +114,15 @@ lakenames = metadata['site_id'].values
 ep_arr = []   
 # err_per_site = pd.read_feather("../../results/err_per_site3.feather")
 # lakenames = err_per_site[err_per_site['n_obs'] >= 100]['site_id'].values
-if not os.path.exists("./ealstm_trn_data_final.npy"):
+if not os.path.exists("./ealstm_trn_data_final_041321.npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                     static_feats=True,n_static_feats = 4,verbose=True) 
 
-    np.save("./ealstm_trn_data_final.npy",trn_data)
+    np.save("./ealstm_trn_data_final_041321.npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_final.npy"))
+    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_final_041321.npy"))
 
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
