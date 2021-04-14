@@ -114,15 +114,15 @@ lakenames = metadata['site_id'].values
 ep_arr = []   
 # err_per_site = pd.read_feather("../../results/err_per_site3.feather")
 # lakenames = err_per_site[err_per_site['n_obs'] >= 100]['site_id'].values
-if not os.path.exists("./ealstm_trn_data_final_041321.npy"):
+if not os.path.exists("./ealstm_trn_data_final_041421.npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                     static_feats=True,n_static_feats = 4,verbose=True) 
 
-    np.save("./ealstm_trn_data_final_041321.npy",trn_data)
+    np.save("./ealstm_trn_data_final_041421.npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_final_041321.npy"))
+    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_final_041421.npy"))
 
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
@@ -680,5 +680,5 @@ for epoch in range(n_eps):
 
 # # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 # final_output_df.to_feather("../../results/err_est_outputs_1layer256hid_2.32rmse_EALSTM_fold"+str(k)+".feather")
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
+save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final2"
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
