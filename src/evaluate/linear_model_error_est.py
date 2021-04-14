@@ -19,7 +19,7 @@ currentDT = datetime.datetime.now()
 print("script start: ",str(currentDT))
 
 #file to save model  to
-save_file_path = '../../models/xgb_surface_temp.joblib'
+save_file_path = '../../models/lm_surface_temp.joblib'
 
 
 # metadata = pd.read_csv("../../metadata/conus_source_metadata.csv")
@@ -127,7 +127,7 @@ for ct, lake_id in enumerate(test_lakes):
 
       # test_df = pd.concat([test_df, new_df], ignore_index=True)
 result_df.reset_index(inplace=True)
-result_df.to_feather("../../results/lm_lagless_030121_fold"+str(k)+".feather")
+result_df.to_feather("../../results/lm_lagless_041321_fold"+str(k)+".feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
