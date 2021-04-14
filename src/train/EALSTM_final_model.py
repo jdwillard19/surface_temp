@@ -568,6 +568,11 @@ for epoch in range(n_eps):
     if verbose:
         print("train rmse loss=", avg_loss)
 
+    if avg_loss < min_train_rmse:
+        min_train_rmse = avg_loss
+        print("model saved")
+        save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
+        saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
     # if epoch % 10 is 0:
     if avg_loss < targ_rmse and epoch > targ_ep:
         print("training complete")
