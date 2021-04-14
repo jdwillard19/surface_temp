@@ -23,7 +23,7 @@ save_file_path = '../../models/lm_surface_temp.joblib'
 
 
 # metadata = pd.read_csv("../../metadata/conus_source_metadata.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
 
 train_lakes = metadata['site_id'].values
 
