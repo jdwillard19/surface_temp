@@ -71,7 +71,7 @@ n_hidden = 256
 lambda1 = 0.000
 
 # n_eps = 10000
-n_eps = 2000
+n_eps = 1000
 targ_ep = 40
 targ_rmse = 2.43
 # targ_ep = 0 #DEBUG VALUE
