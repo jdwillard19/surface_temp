@@ -4,9 +4,9 @@
 #SBATCH --mem=20g
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=willa099@umn.edu
-#SBATCH --output=EALSTM_final_030421.out
-#SBATCH --error=EA_LSTM_final_030421.err
+#SBATCH --output=EALSTM_final_041421.out
+#SBATCH --error=EA_LSTM_final_041421.err
 #SBATCH --gres=gpu:k40:2
 #SBATCH -p k40
 source /home/kumarv/willa099/takeme_train.sh
-python EALSTM_final_model.py
+python EALSTM_final_model2.py
