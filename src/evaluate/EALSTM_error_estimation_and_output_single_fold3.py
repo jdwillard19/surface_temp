@@ -77,7 +77,7 @@ targ_rmse = 2.44
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
 fold = int(sys.argv[1])
@@ -682,4 +682,3 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 final_output_df.to_feather("../../results/err_est_outputs_031821_EALSTM_fold"+str(k)+".feather")
 save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_237rmse_fold"+str(k)
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
-pdb.set_trace()
