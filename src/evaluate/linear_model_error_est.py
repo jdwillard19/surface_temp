@@ -70,6 +70,8 @@ for ct, lake_id in enumerate(train_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
+    if inds.shape[0] == 0:
+        continue
     # inds = inds[np.where(inds > farthest_lookback)]
 
     # if lookback > 0:
