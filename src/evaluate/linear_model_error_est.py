@@ -108,6 +108,8 @@ for ct, lake_id in enumerate(test_lakes):
     X = data[:,:-1]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
+    if inds.shape[0] == 0:
+        continue
 
         # X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
     X = np.array([X[i,:] for i in inds],dtype = np.float)
