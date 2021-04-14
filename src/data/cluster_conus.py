@@ -13,6 +13,8 @@ metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521.csv")
 obs = pd.read_feather("../../data/raw/obs/temp_wqp_munged.feather")
 
 site_ids = np.unique(obs['site_id'].values)
+site_ids2 = np.unique(metadata['site_id'].values)
+pdb.set_trace()
 # metadata = metadata[np.isin(metadata['site_id'],site_ids)]
 metadata['log_area'] = np.log(metadata['area_m2'].values)
 
