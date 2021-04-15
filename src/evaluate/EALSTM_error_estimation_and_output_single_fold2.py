@@ -114,16 +114,15 @@ lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
 test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 
 ep_arr = []   
-if not os.path.exists("./ealstm_trn_data_5fold_k"+str(k)+".npy"):
+if not os.path.exists("./ealstm_trn_data_041421_5fold_k"+str(k)+".npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                     static_feats=True,n_static_feats = 4,verbose=True) 
 
-    np.save("ealstm_trn_data_5fold_k"+str(k)+".npy",trn_data)
+    np.save("ealstm_trn_data_041421_5fold_k"+str(k)+".npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("ealstm_trn_data_5fold_k"+str(k)+".npy"))
-
+    trn_data = torch.from_numpy(np.load("ealstm_trn_data_041421_5fold_k"+str(k)+".npy"))
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
 #                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
