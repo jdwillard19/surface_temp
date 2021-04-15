@@ -463,7 +463,16 @@ if use_gpu:
     lstm_net = lstm_net.cuda()
 
 
-
+load_path = "../../models/EALSTM_256hid_1_final"
+n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
+lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
+if use_gpu:
+    lstm_net = lstm_net.cuda(0)
+pretrain_dict = torch.load(load_path)['state_dict']
+model_dict = lstm_net.state_dict()
+pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
+model_dict.update(pretrain_dict)
+lstm_net.load_state_dict(pretrain_dict)
 
 #define loss and optimizer
 mse_criterion = nn.MSELoss()
@@ -479,99 +488,7 @@ best_pred_mat = np.empty(())
 manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
 
 #stop training if true
-min_train_rmse = 999
-min_train_ep = -1
-done = False
-for epoch in range(n_eps):
-    if done:
-        break
-    # if verbose and epoch % 10 == 0:
-    if verbose:
-        print("train epoch: ", epoch)
 
-    running_loss = 0.0
-
-    #reload loader for shuffle
-    #batch samplers used to draw samples in dataloaders
-    batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_batches)
-
-    trainloader = DataLoader(train_data, batch_sampler=batch_sampler, pin_memory=True)
-
-
-    #zero the parameter gradients
-    optimizer.zero_grad()
-    lstm_net.train(True)
-    avg_loss = 0
-    batches_done = 0
-    ct = 0
-    for m, data in enumerate(trainloader, 0):
-        #now for mendota data
-        #this loop is dated, there is now only one item in testloader
-
-        #parse data into inputs and targets
-        inputs = data[0].float()
-        targets = data[1].float()
-        targets = targets[:, begin_loss_ind:]
-        # tmp_dates = tst_dates_target[:, begin_loss_ind:]
-        # depths = inputs[:,:,0]
-
-
-        #cuda commands
-        if(use_gpu):
-            inputs = inputs.cuda()
-            targets = targets.cuda()
-
-        #forward  prop
-        # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-        # lstm_net.reset_parameters()
-        # h_state = None
-        outputs, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
-        outputs = outputs.view(outputs.size()[0],-1)
-
-        #calculate losses
-        reg1_loss = 0
-        if lambda1 > 0:
-            reg1_loss = calculate_l1_loss(lstm_net)
-
-
-        loss_outputs = outputs[:,begin_loss_ind:]
-        loss_targets = targets[:,begin_loss_ind:].cpu()
-
-
-        #get indices to calculate loss
-        loss_indices = np.array(np.isfinite(loss_targets.cpu()), dtype='bool_')
-
-        if use_gpu:
-            loss_outputs = loss_outputs.cuda()
-            loss_targets = loss_targets.cuda()
-        loss = mse_criterion(loss_outputs[loss_indices], loss_targets[loss_indices]) + lambda1*reg1_loss 
-        #backward
-
-        loss.backward(retain_graph=False)
-        if grad_clip > 0:
-            clip_grad_norm_(lstm_net.parameters(), grad_clip, norm_type=2)
-
-        #optimize
-        optimizer.step()
-
-        #zero the parameter gradients
-        optimizer.zero_grad()
-        avg_loss += loss
-        batches_done += 1
-
-    #check for convergence
-    avg_loss = avg_loss / batches_done
-    train_avg_loss = avg_loss
-    # if verbose and epoch %100 is 0:
-
-
-    if verbose:
-        print("train rmse loss=", avg_loss)
-
-    # if epoch % 10 is 0:
-    if avg_loss < targ_rmse and epoch > targ_ep:
-        print("training complete")
-        break
 
         #after training, do test predictions / error estimation
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
