@@ -3,9 +3,13 @@ import numpy as np
 import pdb
 import os
 
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
-site_ids = metadata['site_id'].values #CHANGE DIS----------
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
+# obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
+
+site_ids = np.unique(obs['site_id'].values)
+print(len(site_ids), ' lakes')
+# site_ids = metadata['site_id'].values #CHANGE DIS----------
 n_folds = 5
 
 combined_df = pd.DataFrame()
@@ -16,14 +20,13 @@ for k in range(n_folds): #CHANGE DIS----------------
 
 	print("fold ",k)
 	# lm_df = pd.read_feather("../../results/lm_conus_022221_fold"+str(k)+".feather")
-	lm_df = pd.read_feather("../../results/lm_lagless_030121_fold"+str(k)+".feather")
+	lm_df = pd.read_feather("../../results/lm_lagless_041321_fold"+str(k)+".feather")
 	# gb_df = pd.read_feather("../../results/xgb_conus_022221_fold"+str(k)+".feather")
 
-	if os.path.exists("../../results/xgb_lagless_0317201_fold"+str(k)+".feather"):
-		gb_df = pd.read_feather("../../results/xgb_lagless_0317201_fold"+str(k)+".feather")
-		pdb.set_trace()
-	else:
-		gb_df = pd.read_feather("../../results/xgb_lagless_0301201_fold"+str(k)+".feather")
+	if os.path.exists("../../results/xgb_lagless_041321_fold"+str(k)+".feather"):
+		gb_df = pd.read_feather("../../results/xgb_lagless_041321_fold"+str(k)+".feather")
+	# else:
+		# gb_df = pd.read_feather("../../results/xgb_lagless_041321_fold"+str(k)+".feather")
 
 
 	gb_date_df = pd.read_feather("../../results/xgb_lagless_dates_fold"+str(k)+".feather")
@@ -56,7 +59,7 @@ combined_df.reset_index(inplace=True)
 combined_df.to_feather("../../results/all_outputs_and_obs_031821.feather")
 combined_df.to_csv("../../results/all_outputs_and_obs_031821.csv")
 
-combined_df = pd.read_feather("../../results/all_outputs_and_obs_031821.feather")
+combined_df = pd.read_feather("../../results/all_outputs_and_obs_041521.feather")
 
 per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
 # per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost'])
@@ -75,5 +78,5 @@ for i,site_id in enumerate(site_ids):
 	per_site_df = per_site_df.append(site_df)
 
 per_site_df.reset_index(inplace=True)
-per_site_df.to_csv("../../results/err_per_site_031821.csv")
-per_site_df.to_feather("../../results/err_per_site_031821.feather")
+per_site_df.to_csv("../../results/err_per_site_041421.csv")
+per_site_df.to_feather("../../results/err_per_site_041421.feather")
