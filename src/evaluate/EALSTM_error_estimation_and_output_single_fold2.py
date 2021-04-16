@@ -74,6 +74,8 @@ lambda1 = 0.000
 n_eps = 2000
 targ_ep = 80
 targ_rmse = 2.18
+patience = 100
+
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
