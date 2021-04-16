@@ -69,7 +69,7 @@ num_layers = 1
 n_hidden = 256
 # lambda1 = 1e-
 lambda1 = 0.000
-
+patience = 100
 # n_eps = 10000
 n_eps = 2000
 targ_ep = 50
@@ -567,7 +567,17 @@ for epoch in range(n_eps):
 
     if verbose:
         print("train rmse loss=", avg_loss)
-
+    if avg_loss < min_train_rmse:
+        ep_since_min = 0
+        min_train_rmse = avg_loss
+        print("model saved")
+        save_path = "../../models/EALSTM_err_est_"+str(k)
+        saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+    else:
+        ep_since_min += 1
+    if ep_since_min >= patience:
+        print("training complete")
+        break
     # if epoch % 10 is 0:
     if avg_loss < targ_rmse and epoch > targ_ep:
         print("training complete")
@@ -680,5 +690,5 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df.to_feather("../../results/err_est_outputs_031821_EALSTM_fold"+str(k)+".feather")
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_257rmse_fold"+str(k)
-saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+# save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_257rmse_fold"+str(k)
+# saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)

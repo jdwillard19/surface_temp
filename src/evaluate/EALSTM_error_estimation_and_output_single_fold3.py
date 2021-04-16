@@ -566,7 +566,17 @@ for epoch in range(n_eps):
 
     if verbose:
         print("train rmse loss=", avg_loss)
-
+    if avg_loss < min_train_rmse:
+        ep_since_min = 0
+        min_train_rmse = avg_loss
+        print("model saved")
+        save_path = "../../models/EALSTM_err_est_"+str(k)
+        saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+    else:
+        ep_since_min += 1
+    if ep_since_min >= patience:
+        print("training complete")
+        break
     # if epoch % 10 is 0:
     if avg_loss < targ_rmse and epoch > targ_ep:
         print("training complete")

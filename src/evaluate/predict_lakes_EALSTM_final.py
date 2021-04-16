@@ -87,7 +87,7 @@ targ_rmse = 2.36
 metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 test_lakes = metadata['site_id'].values[start:end]
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
+# obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 
 ###############################
 # data preprocess
@@ -403,7 +403,7 @@ lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden
 if use_gpu:
     lstm_net = lstm_net.cuda()
 
-load_path = "../../models/EALSTM_256hid_1_final"
+load_path = "../../models/EALSTM_final_041521"
 n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
 lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
 if use_gpu:
@@ -521,6 +521,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                                         n_test_dates_target,
                                                         unique_tst_dates_target) 
 
+        
         outputm_npy = np.transpose(outputm_npy)
         label_mat= np.transpose(labelm_npy)
         output_df = pd.DataFrame(data=outputm_npy, columns=['temp_pred'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
