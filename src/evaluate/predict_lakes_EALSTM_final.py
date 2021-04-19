@@ -73,15 +73,7 @@ grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
 n_hidden = 128
-# lambda1 = 1e-
-lambda1 = 0
 
-# n_eps = 10000
-n_eps = 800
-targ_ep = 340
-targ_rmse = 2.36
-# targ_ep = 0 #DEBUG VALUE
-# targ_rmse = 3.5 #DEBUG VALUE
 
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
