@@ -55,10 +55,10 @@ combined_df['wtemp_predicted-linear_model'] = combined_lm['temp_pred_lm']
 # combined_df['wtemp_actual'] = combined_ea['wtemp_actual']
 combined_df['wtemp_actual'] = combined_gb['temp_actual']
 combined_df.reset_index(inplace=True)
-combined_df.to_feather("../../results/all_outputs_and_obs_031821.feather")
-combined_df.to_csv("../../results/all_outputs_and_obs_031821.csv")
+combined_df.to_feather("../../results/all_outputs_and_obs_041921.feather")
+combined_df.to_csv("../../results/all_outputs_and_obs_041921.csv")
 
-combined_df = pd.read_feather("../../results/all_outputs_and_obs_041521.feather")
+combined_df = pd.read_feather("../../results/all_outputs_and_obs_041921.feather")
 
 per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
 # per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost'])
@@ -77,5 +77,5 @@ for i,site_id in enumerate(site_ids):
 	per_site_df = per_site_df.append(site_df)
 
 per_site_df.reset_index(inplace=True)
-per_site_df.to_csv("../../results/err_per_site_041421.csv")
-per_site_df.to_feather("../../results/err_per_site_041421.feather")
+per_site_df.to_csv("../../results/err_per_site_041921.csv")
+per_site_df.to_feather("../../results/err_per_site_041921.feather")
