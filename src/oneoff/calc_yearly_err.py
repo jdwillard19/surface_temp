@@ -5,9 +5,11 @@ import matplotlib.pyplot as plt
 
 
 # df = pd.read_feather("../../results/final_all_obs.feather")
-df = pd.read_feather("../../results/all_outputs_and_obs_031821.feather")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
+# df = pd.read_feather("../../results/all_outputs_and_obs_031821.feather")
+df = pd.read_feather("../../results/all_outputs_and_obs_041921.feather")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
+
 site_ids = metadata['site_id'].values #CHANGE DIS---------
 df['Date'] = [str(d) for d in df['Date'].values]
 years = range(1980,2021)
@@ -40,7 +42,7 @@ wi_rmse = []
 n_wi = []
 
 
-for site_id in 
+# for site_id in 
 #Meteorological spring includes March, April, and May;
 # meteorological summer includes June, July, and August;
 # meteorological fall includes September, October, and November; and
