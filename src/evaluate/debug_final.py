@@ -27,6 +27,7 @@ from torch.utils.data import DataLoader
 from pytorch_data_operations import buildLakeDataForRNN_multilakemodel_conus, parseMatricesFromSeqs, buildLakeDataForRNN_conus, buildLakeDataForRNN_conus_NoLabel
 import lime
 
+from lime import lime_tabular
 
 #script start
 currentDT = datetime.datetime.now()
@@ -490,7 +491,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # trn_df = pd.DataFrame(data=trn_data, index=None, columns=all_names)
 
             # explainer = lime.lime_tabular.LimeTabularExplainer(trn_df, feature_names=feat_names, class_names=['surface_temp'], verbose=True, mode='regression')
-            explainer = lime.lime_tabular.RecurrentTabularExplainer(trn_data, training_labels=trn_labels, mode='regression', feature_names=feat_names, 
+            explainer = lime_tabular.RecurrentTabularExplainer(trn_data, training_labels=trn_labels, mode='regression', feature_names=feat_names, 
                                                   verbose=False, class_names=['surface_temp'])
 
             exp = explainer.explain_instance(inputs[50], wrapped_net,num_features=9)
