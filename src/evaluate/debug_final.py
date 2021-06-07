@@ -25,7 +25,7 @@ import datetime
 import pdb
 from torch.utils.data import DataLoader
 from pytorch_data_operations import buildLakeDataForRNN_multilakemodel_conus, parseMatricesFromSeqs, buildLakeDataForRNN_conus, buildLakeDataForRNN_conus_NoLabel
-
+import lime
 
 
 #script start
@@ -77,7 +77,9 @@ n_hidden = 128
 metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 # test_lakes = metadata['site_id'].values[start:end]
 test_lakes = metadata[metadata['site_id'] == 'nhdhr_109991096']['site_id'].values
-
+trn_data_load = np.load("../train/ealstm_trn_data_final_041321.npy")
+trn_data = trn_data[:,:,:-1]
+trn_labels = trn_data[:,:,-1]
 #####################
 #params
 ###########################
@@ -474,13 +476,31 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             h_state = None
             # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
             # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+
+            def wrapped_net(x):
+                pred, h_state, _ = lstm_net(x[:,n_static_feats:], x[0,:n_static_feats])
+                pred = pred.view(pred.size()[0],-1)
+                return pred[:, begin_loss_ind:].numpy()
             pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
 
+            feat_names = ['log_area','latitude','longitude','elevation','shortwave_radiation','longwave_radiation','air_temp','windspeed_u','windspeed_v']
+            all_names = ['log_area','latitude','longitude','elevation','shortwave_radiation','longwave_radiation','air_temp','windspeed_u','windspeed_v','surface_temp']
+            # trn_df = pd.DataFrame(data=trn_data, index=None, columns=all_names)
+
+            # explainer = lime.lime_tabular.LimeTabularExplainer(trn_df, feature_names=feat_names, class_names=['surface_temp'], verbose=True, mode='regression')
+            explainer = lime.lime_tabular.RecurrentTabularExplainer(trn_data, training_labels=trn_labels, mode='regression', feature_names=feat_names, 
+                                                  verbose=False, class_names=['surface_temp'])
+
+            exp = explainer.explain_instance(inputs[50], wrapped_net,num_features=9)
+            file_path = './explain.html'
+            exp.save_to_file(file_path)
             #calculate error
             targets = targets.cpu()
             pdb.set_trace()
+
+            
             loss_indices = np.where(np.isfinite(targets))
             if use_gpu:
                 targets = targets.cuda()
