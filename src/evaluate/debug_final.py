@@ -496,7 +496,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                                   verbose=False, class_names=['surface_temp'])
             print("shape trn data ", trn_data.shape)
             print("shape trn label ", trn_labels.shape)
-            lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
+            # lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
+            lime_input = inputs[50].cpu().numpy()
             # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.shape)
 
