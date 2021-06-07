@@ -494,7 +494,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             explainer = lime_tabular.RecurrentTabularExplainer(trn_data, training_labels=trn_labels, mode='regression', feature_names=feat_names, 
                                                   verbose=False, class_names=['surface_temp'])
 
-            exp = explainer.explain_instance(inputs[50], wrapped_net,num_features=9)
+            exp = explainer.explain_instance(inputs[50].cpu().numpy(), wrapped_net,num_features=9)
             file_path = './explain.html'
             exp.save_to_file(file_path)
             #calculate error
