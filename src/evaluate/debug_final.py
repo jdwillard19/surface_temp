@@ -493,6 +493,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # explainer = lime.lime_tabular.LimeTabularExplainer(trn_df, feature_names=feat_names, class_names=['surface_temp'], verbose=True, mode='regression')
             explainer = lime_tabular.RecurrentTabularExplainer(trn_data, training_labels=trn_labels, mode='regression', feature_names=feat_names, 
                                                   verbose=False, class_names=['surface_temp'])
+            print("shape trn data ", trn_data.shape)
+            print("shape trn label ", trn_label.shape)
             print("shape input", inputs[50].cpu().numpy().shape)
             exp = explainer.explain_instance(inputs[50].cpu().numpy(), wrapped_net,num_features=9)
             file_path = './explain.html'
