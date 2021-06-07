@@ -495,8 +495,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                                   verbose=False, class_names=['surface_temp'])
             print("shape trn data ", trn_data.shape)
             print("shape trn label ", trn_labels.shape)
-            print("shape input", inputs[50].cpu().numpy().shape)
             lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
+            print("shape input", lime_input.shape)
+
             exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9)
             file_path = './explain.html'
             exp.save_to_file(file_path)
