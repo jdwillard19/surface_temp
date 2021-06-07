@@ -78,8 +78,8 @@ metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 # test_lakes = metadata['site_id'].values[start:end]
 test_lakes = metadata[metadata['site_id'] == 'nhdhr_109991096']['site_id'].values
 trn_data_load = np.load("../train/ealstm_trn_data_final_041321.npy")
-trn_data = trn_data[:,:,:-1]
-trn_labels = trn_data[:,:,-1]
+trn_data = trn_data_load[:,:,:-1]
+trn_labels = trn_data_load[:,:,-1]
 #####################
 #params
 ###########################
