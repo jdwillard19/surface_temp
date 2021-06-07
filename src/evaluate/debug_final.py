@@ -496,7 +496,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             print("shape trn data ", trn_data.shape)
             print("shape trn label ", trn_labels.shape)
             print("shape input", inputs[50].cpu().numpy().shape)
-            exp = explainer.explain_instance(inputs[50].cpu().numpy(), wrapped_net,num_features=9)
+            lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
+            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9)
             file_path = './explain.html'
             exp.save_to_file(file_path)
             #calculate error
