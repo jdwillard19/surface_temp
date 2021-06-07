@@ -496,7 +496,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             print("shape trn data ", trn_data.shape)
             print("shape trn label ", trn_labels.shape)
             # lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
-            lime_input = torch.unsqueeze(inputs[50])
+            lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.size())
 
             exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9)
