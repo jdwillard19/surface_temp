@@ -75,7 +75,7 @@ n_hidden = 128
 
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
 metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
-test_lakes = metadata['site_id'].values[start:end]
+# test_lakes = metadata['site_id'].values[start:end]
 test_lakes = metadata[metadata['site_id'] == 'nhdhr_109991096']['site_id'].values
 
 #####################
