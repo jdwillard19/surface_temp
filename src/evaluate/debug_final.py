@@ -479,6 +479,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
 
             def wrapped_net(x):
+                x = torch.tensor(x)
                 pred, h_state, _ = lstm_net(x[:,n_static_feats:], x[0,:n_static_feats])
                 pred = pred.view(pred.size()[0],-1)
                 return pred[:, begin_loss_ind:].numpy()
@@ -495,8 +496,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                                   verbose=False, class_names=['surface_temp'])
             print("shape trn data ", trn_data.shape)
             print("shape trn label ", trn_labels.shape)
-            # lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
-            lime_input = torch.unsqueeze(inputs[50],0)
+            lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
+            # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.size())
 
             exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9)
