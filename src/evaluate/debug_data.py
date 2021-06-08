@@ -50,4 +50,5 @@ xarr = np.arange(dates_b.shape[0])
 #plot inputs
 plt.plot(xarr,inputs_b[:,5],color='red')
 plt.plot(xarr,inputs_g[:,5],color='blue')
+plt.title("air temp")
 plt.show()

@@ -520,7 +520,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 return pred[:, 250].cpu().numpy()
             # exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(150))
             # pdb.set_trace()
-            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9,labels=['surface_temp'])
+            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=50,labels=['surface_temp'])
             file_path = './explain.html'
             exp.save_to_file(file_path)
             pdb.set_trace()
