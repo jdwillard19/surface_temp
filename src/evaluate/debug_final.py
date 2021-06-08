@@ -80,10 +80,10 @@ metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 # test_lakes = metadata['site_id'].values[start:end]
 test_lakes = metadata[metadata['site_id'] == 'nhdhr_109991096']['site_id'].values
 trn_data_load = np.load("../train/ealstm_trn_data_final_041321.npy")
-# trn_data = trn_data_load[:,:,:-1]
-trn_data = trn_data_load[:100,:,:-1]
-# trn_labels = trn_data_load[:,:,-1]
-trn_labels = trn_data_load[:100,:,-1]
+trn_data = trn_data_load[:,:,:-1]
+# trn_data = trn_data_load[:100,:,:-1]
+trn_labels = trn_data_load[:,:,-1]
+# trn_labels = trn_data_load[:100,:,-1]
 #####################
 #params
 ###########################
@@ -517,7 +517,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 print("predict size: ",pred.shape)
                 # return pred[:, begin_loss_ind:].cpu().numpy()
                 # return pred[:, begin_loss_ind:].cpu().numpy()
-                return pred[:, 100].cpu().numpy()
+                return pred[:, 250].cpu().numpy()
             # exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(150))
             # pdb.set_trace()
             exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9,labels=['surface_temp'])
