@@ -495,12 +495,13 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             print("shape trn data ", trn_data.shape)
             print("shape trn label ", trn_labels.shape)
             # lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
+            lime_input = []
             lime_input = inputs[50].cpu().numpy()
             # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.shape)
             def wrapped_net(x):
-                pdb.set_trace()
-                x = torch.tensor(x)[50]
+                # pdb.set_trace()
+                x = torch.tensor(x)[0]
                 x = torch.unsqueeze(x.cuda().float(),0)
                 print("dynamic size: ",x[:,:,n_static_feats:].size())
                 # print("dynamic size: ",x[:,n_static_feats:].size())
