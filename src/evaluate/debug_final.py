@@ -480,7 +480,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             def wrapped_net(x):
                 x = torch.tensor(x)
-                x = x.cuda()
+                x = x.cuda().float()
                 print("dynamic size: ",x[:,n_static_feats:].size())
                 print("static size: ",x[:,:n_static_feats].size())
                 # print("static size: ",x[0,:n_static_feats].size())
