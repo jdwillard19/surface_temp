@@ -14,6 +14,7 @@ import random
 import math
 import sys
 import re
+import copy
 import os
 sys.path.append('../../data')
 sys.path.append('../data')
@@ -496,19 +497,20 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             print("shape trn label ", trn_labels.shape)
             # lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
             lime_input = []
-            lime_input = inputs[50].cpu().numpy()
+            lime_input = copy.deepcopy(inputs[50].cpu().numpy())
             # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.shape)
-            def wrapped_net(x):
+            def wrapped_net(inp):
+                print("inp shape: ", inp.shape)
                 # pdb.set_trace()
-                x = torch.tensor(x)[0]
-                x = torch.unsqueeze(x.cuda().float(),0)
-                print("dynamic size: ",x[:,:,n_static_feats:].size())
+                inp = torch.tensor(inp)[0]
+                inp = torch.unsqueeze(inp.cuda().float(),0)
+                print("dynamic size: ",inp[:,:,n_static_feats:].size())
                 # print("dynamic size: ",x[:,n_static_feats:].size())
                 # print("static size: ",x[:,:n_static_feats].size())
-                print("static size: ",x[:,0,:n_static_feats].size())
+                print("static size: ",inp[:,0,:n_static_feats].size())
                 # print("static size: ",x[0,:n_static_feats].size())
-                pred, h_state, _ = lstm_net(x[:,:,n_static_feats:], x[:,0,:n_static_feats])
+                pred, h_state, _ = lstm_net(inp[:,:,n_static_feats:], inp[:,0,:n_static_feats])
                 # pred, h_state, _ = lstm_net(x[:,n_static_feats:], x[0,:n_static_feats])
                 pred = pred.view(pred.size()[0],-1)
                 print("predict size: ",pred.shape)
