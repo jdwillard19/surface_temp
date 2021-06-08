@@ -480,19 +480,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
             # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
 
-            def wrapped_net(x):
-                x = torch.tensor(x)[50]
-                x = torch.unsqueeze(x.cuda().float(),0)
-                print("dynamic size: ",x[:,:,n_static_feats:].size())
-                # print("dynamic size: ",x[:,n_static_feats:].size())
-                # print("static size: ",x[:,:n_static_feats].size())
-                print("static size: ",x[:,0,:n_static_feats].size())
-                # print("static size: ",x[0,:n_static_feats].size())
-                pred, h_state, _ = lstm_net(x[:,:,n_static_feats:], x[:,0,:n_static_feats])
-                # pred, h_state, _ = lstm_net(x[:,n_static_feats:], x[0,:n_static_feats])
-                pred = pred.view(pred.size()[0],-1)
-                print("predict size: ",pred.shape)
-                return pred[:, begin_loss_ind:].cpu().numpy()
+
             pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
@@ -510,7 +498,20 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             lime_input = inputs[50].cpu().numpy()
             # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.shape)
-
+            def wrapped_net(x):
+                pdb.set_trace()
+                x = torch.tensor(x)[50]
+                x = torch.unsqueeze(x.cuda().float(),0)
+                print("dynamic size: ",x[:,:,n_static_feats:].size())
+                # print("dynamic size: ",x[:,n_static_feats:].size())
+                # print("static size: ",x[:,:n_static_feats].size())
+                print("static size: ",x[:,0,:n_static_feats].size())
+                # print("static size: ",x[0,:n_static_feats].size())
+                pred, h_state, _ = lstm_net(x[:,:,n_static_feats:], x[:,0,:n_static_feats])
+                # pred, h_state, _ = lstm_net(x[:,n_static_feats:], x[0,:n_static_feats])
+                pred = pred.view(pred.size()[0],-1)
+                print("predict size: ",pred.shape)
+                return pred[:, begin_loss_ind:].cpu().numpy()
             exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(150))
             file_path = './explain.html'
             exp.save_to_file(file_path)
