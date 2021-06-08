@@ -487,7 +487,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 pred, h_state, _ = lstm_net(x[:,:,n_static_feats:], x[:,0,:n_static_feats])
                 # pred, h_state, _ = lstm_net(x[:,n_static_feats:], x[:,:n_static_feats])
                 pred = pred.view(pred.size()[0],-1)
-                return pred[:, begin_loss_ind:].numpy()
+                return pred[:, begin_loss_ind:].cpu().numpy()
             pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, begin_loss_ind:]
