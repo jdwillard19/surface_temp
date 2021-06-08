@@ -438,7 +438,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
     observed = False
 
-    # pdb.set_trace()
     if metadata[metadata['site_id']==target_id]['observed'].values[0]:
         (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
@@ -509,9 +508,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(150))
             file_path = './explain.html'
             exp.save_to_file(file_path)
+            pdb.set_trace()
             #calculate error
             targets = targets.cpu()
-            pdb.set_trace()
 
             
             loss_indices = np.where(np.isfinite(targets))
