@@ -492,7 +492,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             # explainer = lime.lime_tabular.LimeTabularExplainer(trn_df, feature_names=feat_names, class_names=['surface_temp'], verbose=True, mode='regression')
             explainer = lime_tabular.RecurrentTabularExplainer(trn_data, training_labels=trn_labels, mode='regression', feature_names=feat_names, 
-                                                  verbose=False, class_names=['surface_temp'])
+                                                  verbose=True, class_names=['surface_temp'])
             print("shape trn data ", trn_data.shape)
             print("shape trn label ", trn_labels.shape)
             # lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
@@ -515,7 +515,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 # pred, h_state, _ = lstm_net(x[:,n_static_feats:], x[0,:n_static_feats])
                 pred = pred.view(pred.size()[0],-1)
                 print("predict size: ",pred.shape)
-                return pred[:, begin_loss_ind:].cpu().numpy()
+                # return pred[:, begin_loss_ind:].cpu().numpy()
+                return pred[:, begin_loss_ind:].cpu().numpy().flatten()
             # exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(150))
             pdb.set_trace()
             exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9)
