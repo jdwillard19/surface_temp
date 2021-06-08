@@ -498,7 +498,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
             lime_input = []
             # lime_input = np.array(copy.deepcopy(inputs[31].cpu().numpy()))
-            lime_input = np.array(copy.deepcopy(inputs[50].cpu().numpy()))
+            lime_input = np.array(copy.deepcopy(inputs[31].cpu().numpy()))
             # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.shape)
             def wrapped_net(inp):
