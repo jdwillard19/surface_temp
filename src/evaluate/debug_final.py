@@ -80,7 +80,7 @@ metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 test_lakes = metadata[metadata['site_id'] == 'nhdhr_109991096']['site_id'].values
 trn_data_load = np.load("../train/ealstm_trn_data_final_041321.npy")
 trn_data = trn_data_load[:100,:,:-1]
-trn_labels = trn_data_load[:,:,-1]
+trn_labels = trn_data_load[:100,:,-1]
 #####################
 #params
 ###########################
@@ -480,6 +480,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
 
             def wrapped_net(x):
                 x = torch.tensor(x)
+                x.cuda()
                 print("dynamic size: ",x[:,n_static_feats:].size())
                 print("static size: ",x[:,:n_static_feats].size())
                 # print("static size: ",x[0,:n_static_feats].size())
