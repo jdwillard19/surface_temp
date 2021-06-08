@@ -497,7 +497,8 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             print("shape trn label ", trn_labels.shape)
             # lime_input = np.expand_dims(inputs[50].cpu().numpy(),0)
             lime_input = []
-            lime_input = np.array(copy.deepcopy(inputs[31].cpu().numpy()))
+            # lime_input = np.array(copy.deepcopy(inputs[31].cpu().numpy()))
+            lime_input = np.array(copy.deepcopy(inputs[50].cpu().numpy()))
             # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.shape)
             def wrapped_net(inp):
@@ -520,7 +521,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 return pred[:, 250].cpu().numpy()
             # exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(150))
             # pdb.set_trace()
-            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=50,labels=['surface_temp'])
+            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=50,labels=['surface_temp'],num_samples=20000)
             file_path = './explain.html'
             exp.save_to_file(file_path)
             pdb.set_trace()
