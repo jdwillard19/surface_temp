@@ -516,6 +516,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                 print("predict size: ",pred.shape)
                 return pred[:, begin_loss_ind:].cpu().numpy()
             # exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(150))
+            pdb.set_trace()
             exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9)
             file_path = './explain.html'
             exp.save_to_file(file_path)
