@@ -447,6 +447,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
 
+    prinet("tst data size: ",tst_data_target.shape)
     unique_tst_dates_target = np.unique(tst_dates)
     assert unique_tst_dates_target.shape[0] == 15385, "test data incorrect size"
     #useful values, LSTM params
