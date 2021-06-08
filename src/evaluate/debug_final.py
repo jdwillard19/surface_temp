@@ -79,8 +79,8 @@ metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
 # test_lakes = metadata['site_id'].values[start:end]
 test_lakes = metadata[metadata['site_id'] == 'nhdhr_109991096']['site_id'].values
 trn_data_load = np.load("../train/ealstm_trn_data_final_041321.npy")
-trn_data = trn_data_load[:100,:,:-1]
-trn_labels = trn_data_load[:100,:,-1]
+trn_data = trn_data_load[:,:,:-1]
+trn_labels = trn_data_load[:,:,-1]
 #####################
 #params
 ###########################
@@ -506,7 +506,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.shape)
 
-            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9)
+            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(pred))
             file_path = './explain.html'
             exp.save_to_file(file_path)
             #calculate error
