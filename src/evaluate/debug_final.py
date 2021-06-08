@@ -506,7 +506,7 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             # lime_input = torch.unsqueeze(inputs[50],0)
             print("shape input", lime_input.shape)
 
-            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(pred))
+            exp = explainer.explain_instance(lime_input, wrapped_net,num_features=9, labels=(150))
             file_path = './explain.html'
             exp.save_to_file(file_path)
             #calculate error
