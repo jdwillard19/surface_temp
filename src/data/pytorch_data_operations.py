@@ -340,7 +340,7 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
 def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
                                             test_seq_per_depth=1, sparseCustom=None, \
-                                            allTestSeq=False,verbose=False,\
+                                            allTestSeq=False,verbose=False,cold_filter=False,\
                                             oldFeat = False, normGE10=False, postProcessSplits=True, randomSeed=0,static_feats=False,n_static_feats = 0):
 
     #NONAN
@@ -377,7 +377,11 @@ def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, 
         # if removeElevation:
         #     feat_mat = np.delete(feat_mat,29,axis=1)
         #     feat_mat_raw = np.delete(feat_mat_raw,29,axis=1)
-        trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy"))
+        if not cold_filter:
+            trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full.npy"))
+        else:
+            trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/full_061121_cold_lab_filtered.npy"))
+
 
 
 

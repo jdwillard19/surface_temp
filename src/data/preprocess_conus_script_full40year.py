@@ -20,12 +20,13 @@ start = int(sys.argv[1])
 end = int(sys.argv[2])
 site_ids = np.unique(metadata['site_id'].values[start:end])
 
-# metadata.set_index("site_id",inplace=True)
 #load wst obs
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
+# obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
+obs = pd.read_feather("../../data/raw/obs/swt_obs_061121_coarse_lab_filter.feather")
+
+
 obs.sort_values('Date',inplace=True)
 obs = obs[:-2] #delete error obs year 2805, and 2021
-#get site ids
 n_lakes = site_ids.shape[0]
 
 
@@ -173,12 +174,14 @@ for site_ct, site_id in enumerate(site_ids):
 
     feat_path = "../../data/processed/"+site_id+"/features_ea_conus_021621"
     norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea_conus_021621"
-    full_path = "../../data/processed/"+site_id+"/full"
+    # full_path = "../../data/processed/"+site_id+"/full"
+    full_path = "../../data/processed/"+site_id+"/full_061121_cold_lab_filtered"
+    
     dates_path = "../../data/processed/"+site_id+"/dates"
 
 
-    np.save(feat_path, site_feats)
-    np.save(norm_feat_path, feats_norm)
-    np.save(dates_path, site_dates)
+    # np.save(feat_path, site_feats)
+    # np.save(norm_feat_path, feats_norm)
+    # np.save(dates_path, site_dates)
     np.save(full_path, site_obs_mat)
 
