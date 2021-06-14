@@ -78,6 +78,7 @@ targ_rmse = 2.43
 # targ_rmse = 3.5 #DEBUG VALUE
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
+trn_data = np.load("ealstm_trn_data_final_041321.npy")
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 # obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 ###############################

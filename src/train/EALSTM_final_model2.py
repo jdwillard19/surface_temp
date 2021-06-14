@@ -114,6 +114,8 @@ lakenames = metadata['site_id'].values
 ep_arr = []   
 # err_per_site = pd.read_feather("../../results/err_per_site3.feather")
 # lakenames = err_per_site[err_per_site['n_obs'] >= 100]['site_id'].values
+
+#TODO uncomment this after debug
 if not os.path.exists("./ealstm_trn_data_final_041421.npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
@@ -123,6 +125,20 @@ if not os.path.exists("./ealstm_trn_data_final_041421.npy"):
     np.save("./ealstm_trn_data_final_041421.npy",trn_data)
 else:
     trn_data = torch.from_numpy(np.load("./ealstm_trn_data_final_041421.npy"))
+
+
+
+
+if not os.path.exists("./ealstm_trn_data_cold_filter_061421.npy"):
+    (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
+                                                    seq_length, n_total_feats,\
+                                                    win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                    static_feats=True,n_static_feats = 4,verbose=True,cold_filter=True) 
+
+    np.save("./ealstm_trn_data_cold_filter_061421.npy",trn_data)
+else:
+    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_cold_filter_061421.npy"))
+
 
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
