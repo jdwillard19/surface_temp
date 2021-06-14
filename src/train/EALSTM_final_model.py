@@ -579,12 +579,18 @@ for epoch in range(n_eps):
     if avg_loss < min_train_rmse:
         min_train_rmse = avg_loss
         print("model saved")
-        save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
+        # save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
+        save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_DEBUG_COLD_TEMP"
         saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
     # if epoch % 10 is 0:
     if avg_loss < targ_rmse and epoch > targ_ep:
         print("training complete")
+        # print("model saved")
+        # save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
+        # saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
         break
+
+print("training complete")
 
         #after training, do test predictions / error estimation
 # for targ_ct, target_id in enumerate(test_lakes): #for each target lake
@@ -693,5 +699,3 @@ for epoch in range(n_eps):
 
 # # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 # final_output_df.to_feather("../../results/err_est_outputs_1layer256hid_2.32rmse_EALSTM_fold"+str(k)+".feather")
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"_final"
-saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
