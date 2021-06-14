@@ -78,7 +78,6 @@ targ_rmse = 2.43
 # targ_rmse = 3.5 #DEBUG VALUE
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-trn_data = np.load("ealstm_trn_data_final_041321.npy")
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 # obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
 ###############################
@@ -109,21 +108,29 @@ yhat_batch_size = 1
 
 final_output_df = pd.DataFrame()
 lakenames = metadata['site_id'].values
-# lakenames = metadata['site_id'].values
-# test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 
 ep_arr = []   
-# err_per_site = pd.read_feather("../../results/err_per_site3.feather")
-# lakenames = err_per_site[err_per_site['n_obs'] >= 100]['site_id'].values
-if not os.path.exists("./ealstm_trn_data_final_041321.npy"):
+#TODO uncomment after debug
+# if not os.path.exists("./ealstm_trn_data_final_041321.npy"):
+#     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
+#                                                     seq_length, n_total_feats,\
+#                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+#                                                     static_feats=True,n_static_feats = 4,verbose=True) 
+
+#     np.save("./ealstm_trn_data_final_041321.npy",trn_data)
+# else:
+#     trn_data = torch.from_numpy(np.load("./ealstm_trn_data_final_041321.npy"))
+
+
+if not os.path.exists("./ealstm_trn_data_cold_filter_061421.npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                    static_feats=True,n_static_feats = 4,verbose=True) 
+                                                    static_feats=True,n_static_feats = 4,verbose=True,cold_filter=True) 
 
-    np.save("./ealstm_trn_data_final_041321.npy",trn_data)
+    np.save("./ealstm_trn_data_cold_filter_061421.npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_final_041321.npy"))
+    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_cold_filter_061421.npy"))
 
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
