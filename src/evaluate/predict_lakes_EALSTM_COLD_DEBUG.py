@@ -395,7 +395,7 @@ lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden
 if use_gpu:
     lstm_net = lstm_net.cuda()
 
-load_path = "../../models/EALSTM_final_041521"
+load_path = "../../models/EALSTM_256hid_1_DEBUG_COLD_TEMP"
 n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
 lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
 if use_gpu:
@@ -524,7 +524,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
         output_df['temp_actual'] = label_df['temp_actual']
 
+        # lake_output_path = '../../results/SWT_results/outputs_'+target_id+'.feather'
         lake_output_path = '../../results/SWT_results_COLD_DEBUG/outputs_'+target_id+'_COLD_DEBUG.feather'
+        #
         # if not os.path.exists(lake_output_path):
         #     os.mkdir(lake_output_path)
         output_df = output_df[~output_df['index'].str.contains("1979")]
