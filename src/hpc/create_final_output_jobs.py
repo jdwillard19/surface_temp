@@ -29,6 +29,8 @@ for i in range(len(start)):
     script = "source /home/kumarv/willa099/takeme_evaluate.sh\n" #cd to directory with training script
     # script2 = "python write_NLDAS_xy_pairs.py %s %s"%(l,l2)
     script2 = "python predict_lakes_EALSTM_final.py %s %s"%(l,l2)
+    # script2 = "python predict_lakes_EALSTM_COLD_DEBUG.py %s %s"%(l,l2)
+    
     # script3 = "python singleModel_customSparse.py %s"%(l)
     all= "\n".join([header,script,script2])
     sbatch = "\n".join(["sbatch job_finalout_%s.sh"%(i),sbatch])
