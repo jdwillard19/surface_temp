@@ -524,7 +524,9 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
         output_df['temp_actual'] = label_df['temp_actual']
 
-        lake_output_path = '../../results/SWT_results_COLD_DEBUG/outputs_'+target_id+'_COLD_DEBUG.feather'
+        lake_output_path = '../../results/SWT_results/outputs_'+target_id+'.feather'
+        # lake_output_path = '../../results/SWT_results_COLD_DEBUG/outputs_'+target_id+'_COLD_DEBUG.feather'
+        #
         # if not os.path.exists(lake_output_path):
         #     os.mkdir(lake_output_path)
         output_df = output_df[~output_df['index'].str.contains("1979")]
