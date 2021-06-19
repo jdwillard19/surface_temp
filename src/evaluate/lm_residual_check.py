@@ -88,6 +88,8 @@ for ct, lake_id in enumerate(train_lakes):
 X = train_df[columns[:-1]].values
 y = np.ravel(train_df[columns[-1]].values)
 
+np.save("./lm_train_x",X)
+np.save("./lm_train_y",y)
 print("train set dimensions: ",X.shape)
 #construct lookback feature set??
 model = LinearRegression()
