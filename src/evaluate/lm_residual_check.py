@@ -154,7 +154,7 @@ merged_df['residual'] = merged_df['temp_actual_y']-merged_df['temp_pred_lm']
 source_ids = np.unique(merged_df['source'].values)
 print(len(np.unique(merged_df['source'].values)), " unique monitoring IDs")
 source_df = pd.DataFrame()
-res_per_source = np.empty((len(source_ids)))
+mean_res_per_source = np.empty((len(source_ids)))
 mean_res_per_source[:] = np.nan
 # median_res_per_source[:] = np.nan
 for i,i_d in enumerate(source_ids):
