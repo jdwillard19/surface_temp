@@ -166,4 +166,5 @@ for i,i_d in enumerate(source_ids):
     print(n_obs_per_source[i], " obs with ", mean_res_per_source[i], " mean res")
 source_df['source'] = source_ids
 source_df['mean res'] = mean_res_per_source
+source_df['n_obs'] = n_obs_per_source
 pdb.set_trace()
