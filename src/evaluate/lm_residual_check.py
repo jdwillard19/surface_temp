@@ -151,4 +151,15 @@ obs_df = obs_df.astype({"Date": 'datetime64[ns]'})
 merged_df = pd.merge(obs_df,result_df, how ='inner', left_on = ['site_id','Date'], right_on = ['site_id','Date'])
 merged_df['residual'] = merged_df['temp_actual_y']-merged_df['temp_pred_lm']
 
+source_ids = np.unique(merged_df['source'].values)
 print(len(np.unique(merged_df['source'].values)), " unique monitoring IDs")
+source_df = pd.DataFrame()
+res_per_source = np.empty((len(source_ids)))
+mean_res_per_source[:] = np.nan
+# median_res_per_source[:] = np.nan
+for i,i_d in enumerate(source_ids):
+    mean_res_per_source[i] = merged_df[merged_df['source']==i_d]['residual'].mean()
+
+source_df['source'] = source_ids
+source_df['mean res'] = mean_res_per_source
+pdb.set_trace()
