@@ -108,18 +108,19 @@ for ct, lake_id in enumerate(train_lakes):
     #load data
     feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
-    # dates = np.load("../../data/processed/"+name+"/dates.npy")
+    dates = np.load("../../data/processed/"+name+"/dates.npy")
     data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
     X = data[:,:-1]
     y = data[:,-1]
     inds = np.where(np.isfinite(y))[0]
     if inds.shape[0] == 0:
         continue
-
         # X = np.array([np.append(np.append(np.append(X[i,:],X[i-lookback:i,4:].flatten()),X[i-14,4:]),X[i-30,4:]) for i in np.arange(farthest_lookback,X.shape[0])],dtype = np.half)
     X = np.array([X[i,:] for i in inds],dtype = np.float)
     # y = y[farthest_lookback:]
     y = y[inds]
+    dates = dates[inds]
+
     #remove days without obs
     data = np.concatenate((X,y.reshape(len(y),1)),axis=1)
     data = data[np.where(np.isfinite(data[:,-1]))]
@@ -131,6 +132,7 @@ for ct, lake_id in enumerate(train_lakes):
     df = pd.DataFrame()
     df['temp_pred_lm'] = y_pred
     df['temp_actual'] = y_act
+    df['Date'] = dates
     df['site_id'] = lake_id
     result_df = result_df.append(df)
 
