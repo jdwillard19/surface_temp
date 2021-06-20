@@ -158,6 +158,7 @@ mean_res_per_source = np.empty((len(source_ids)))
 mean_res_per_source[:] = np.nan
 # median_res_per_source[:] = np.nan
 for i,i_d in enumerate(source_ids):
+    print(i,"/",len(source_ids))
     mean_res_per_source[i] = merged_df[merged_df['source']==i_d]['residual'].mean()
 
 source_df['source'] = source_ids
