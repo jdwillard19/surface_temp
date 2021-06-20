@@ -133,6 +133,7 @@ for ct, lake_id in enumerate(train_lakes):
     df['temp_pred_lm'] = y_pred
     df['temp_actual'] = y_act
     df['Date'] = dates
+    assert len(y_act) == len(dates)
     df['site_id'] = lake_id
     result_df = result_df.append(df)
 
