@@ -108,7 +108,7 @@ for ct, lake_id in enumerate(train_lakes):
     #load data
     feats = np.load("../../data/processed/"+lake_id+"/features_ea_conus_021621.npy")
     labs = np.load("../../data/processed/"+lake_id+"/full.npy")
-    dates = np.load("../../data/processed/"+name+"/dates.npy")
+    dates = np.load("../../data/processed/"+lake_id+"/dates.npy")
     data = np.concatenate((feats[:,:],labs.reshape(labs.shape[0],1)),axis=1)
     X = data[:,:-1]
     y = data[:,-1]
