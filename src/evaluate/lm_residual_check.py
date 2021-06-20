@@ -146,6 +146,9 @@ if train:
 
 result_df = pd.read_feather("../../results/lm_lagless_061921.feather")
 obs_df = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_wSource_061921.feather")
-pdb.set_trace()
+obs_df.columns = ['Date','site_id','temp_actual','source']
+obs_df = obs_df.astype({"Date": 'datetime64[ns]'})
+merged_df = pd.merge(obs_df,result_df, how ='inner', left_on = ['site_id','Date'], right_on = ['site_id','Date'])
+merged_df['residual'] = merged_df['temp_actual_y']-merged_df['temp_pred_lm']
 
-merged_df = obs_df.merge(result_df, how = 'inner', on = ['date', 'hours'])
+print(len(np.unique(merged_df['source'].values)), " unique monitoring IDs")
