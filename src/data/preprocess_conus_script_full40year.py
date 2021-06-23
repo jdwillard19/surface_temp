@@ -15,14 +15,14 @@ import datetime
 
 #load metadata, get ids
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_conus.csv")
-metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_full_conus_062321.csv")
 start = int(sys.argv[1])
 end = int(sys.argv[2])
 site_ids = np.unique(metadata['site_id'].values[start:end])
 
 #load wst obs
-# obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
-obs = pd.read_feather("../../data/raw/obs/swt_obs_061121_coarse_lab_filter.feather").drop(['level_0','index','month'],axis=1)
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_062321.feather")
+# obs = pd.read_feather("../../data/raw/obs/swt_obs_061121_coarse_lab_filter.feather").drop(['level_0','index','month'],axis=1)
 
 
 
@@ -175,8 +175,8 @@ for site_ct, site_id in enumerate(site_ids):
 
     feat_path = "../../data/processed/"+site_id+"/features_ea_conus_021621"
     norm_feat_path = "../../data/processed/"+site_id+"/processed_features_ea_conus_021621"
-    # full_path = "../../data/processed/"+site_id+"/full"
-    full_path = "../../data/processed/"+site_id+"/full_061121_cold_lab_filtered"
+    full_path = "../../data/processed/"+site_id+"/full"
+    # full_path = "../../data/processed/"+site_id+"/full_061121_cold_lab_filtered"
 
     dates_path = "../../data/processed/"+site_id+"/dates"
 
