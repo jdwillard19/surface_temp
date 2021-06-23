@@ -18,7 +18,7 @@ ct = 0
 start = np.arange(0,186000,2000,dtype=np.int32)
 # end = start[:] + 10000
 end = start[:] + 2000
-end[-1] = 185553
+end[-1] = 185550
 for i in range(len(start)):
     ct += 1
     #for each unique lake
