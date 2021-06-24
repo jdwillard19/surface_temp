@@ -76,7 +76,7 @@ n_hidden = 128
 
 
 # metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-metadata = pd.read_csv("../../metadata/lake_metadata_full_conus_185k.csv")
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_full_conus_062321.csv")
 test_lakes = metadata['site_id'].values[start:end]
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
 # obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
@@ -395,7 +395,7 @@ lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden
 if use_gpu:
     lstm_net = lstm_net.cuda()
 
-load_path = "../../models/EALSTM_final_041521"
+load_path = "../../models/EALSTM_256hid_1_final_062421"
 n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
 lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
 if use_gpu:
