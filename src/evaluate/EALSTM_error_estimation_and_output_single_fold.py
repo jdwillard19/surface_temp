@@ -105,10 +105,7 @@ yhat_batch_size = 1
 #create train and test sets
 
 final_output_df = pd.DataFrame()
-lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
-test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 
-ep_arr = []   
 
 
 #INSERT FOUND HYPERPARAMETERS FOR EACH FOLD HERE
@@ -133,6 +130,12 @@ targ_ep = 0 #DEBUG VALUE
 targ_rmse = 3.5 #DEBUG VALUE
 metadata = metadata.iloc[150:250] #DEBUG VALUE
 
+
+#get lakenames
+lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
+
+ep_arr = []   
 if not os.path.exists("./ealstm_trn_data_062421_5fold_k"+str(k)+".npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
