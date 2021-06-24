@@ -122,15 +122,15 @@ ep_arr = []
 #     trn_data = torch.from_numpy(np.load("./ealstm_trn_data_final_041321.npy"))
 
 
-if not os.path.exists("./ealstm_trn_data_cold_filter_061421.npy"):
+if not os.path.exists("./ealstm_trn_data_062321.npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
-                                                    static_feats=True,n_static_feats = 4,verbose=True,cold_filter=True) 
+                                                    static_feats=True,n_static_feats = 4,verbose=True,cold_filter=False) 
 
-    np.save("./ealstm_trn_data_cold_filter_061421.npy",trn_data)
+    np.save("./ealstm_trn_data_062321.npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_cold_filter_061421.npy"))
+    trn_data = torch.from_numpy(np.load("./ealstm_trn_data_062321.npy"))
 
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
