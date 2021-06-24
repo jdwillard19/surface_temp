@@ -126,9 +126,9 @@ elif k == 4:
     targ_rmse = 2.42
 
 #DEBUG VALUES
-targ_ep = 0 #DEBUG VALUE
-targ_rmse = 3.5 #DEBUG VALUE
-metadata = metadata.iloc[150:250] #DEBUG VALUE
+# targ_ep = 0 #DEBUG VALUE
+# targ_rmse = 3.5 #DEBUG VALUE
+# metadata = metadata.iloc[150:250] #DEBUG VALUE
 
 
 #get lakenames
