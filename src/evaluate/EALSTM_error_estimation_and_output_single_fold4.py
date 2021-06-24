@@ -67,20 +67,18 @@ grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
 n_hidden = 256
-# lambda1 = 1e-
 lambda1 = 0.000
 patience = 100
 
-# n_eps = 10000
 n_eps = 1000
-targ_ep = 10
-targ_rmse = 2.42
+targ_ep = None
+targ_rmse = None
 # targ_ep = 0 #DEBUG VALUE
 # targ_rmse = 3.5 #DEBUG VALUE
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_062321.feather")
 fold = int(sys.argv[1])
 ###############################
 # data preprocess
@@ -115,15 +113,33 @@ lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
 test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 
 ep_arr = []   
-if not os.path.exists("./ealstm_trn_data_041421_5fold_k"+str(k)+".npy"):
+
+
+#INSERT FOUND HYPERPARAMETERS FOR EACH FOLD HERE
+if k == 0:
+    targ_ep = 50
+    targ_rmse = 2.20
+elif k == 1:
+    targ_ep = 70
+    targ_rmse = 2.45
+elif k == 2:
+    targ_ep = 80
+    targ_rmse = 2.18
+elif k == 3:
+    targ_ep = 50
+    targ_rmse = 2.44
+elif k == 4:
+    targ_ep = 50
+    targ_rmse = 2.42
+if not os.path.exists("./ealstm_trn_data_062421_5fold_k"+str(k)+".npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                     static_feats=True,n_static_feats = 4,verbose=True) 
 
-    np.save("ealstm_trn_data_041421_5fold_k"+str(k)+".npy",trn_data)
+    np.save("ealstm_trn_data_062421_5fold_k"+str(k)+".npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("ealstm_trn_data_041421_5fold_k"+str(k)+".npy"))
+    trn_data = torch.from_numpy(np.load("ealstm_trn_data_062421_5fold_k"+str(k)+".npy"))
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
 #                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\

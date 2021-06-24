@@ -67,20 +67,17 @@ grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
 n_hidden = 256
-# lambda1 = 1e-
 lambda1 = 0.000
+patience = 100
 
-# n_eps = 10000
 n_eps = 1000
-targ_ep = 60
-targ_rmse = 2.32
-# targ_ep = 0 #DEBUG VALUE
-# targ_rmse = 3.5 #DEBUG VALUE
+targ_ep = None
+targ_rmse = None
 
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-# metadata = metadata.iloc[150:350] #DEBUG VALUE
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
-fold = int(sys.argv[1])
+
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_062321.feather")
+k = int(sys.argv[1])
 ###############################
 # data preprocess
 ##################################
@@ -108,22 +105,43 @@ yhat_batch_size = 1
 #create train and test sets
 
 final_output_df = pd.DataFrame()
-k = fold
 lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
-# lakenames = metadata['site_id'].values
 test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
 
 ep_arr = []   
-if not os.path.exists("./ealstm_trn_data_5fold_k"+str(k)+".npy"):
+
+
+#INSERT FOUND HYPERPARAMETERS FOR EACH FOLD HERE
+if k == 0:
+    targ_ep = 50
+    targ_rmse = 2.20
+elif k == 1:
+    targ_ep = 70
+    targ_rmse = 2.45
+elif k == 2:
+    targ_ep = 80
+    targ_rmse = 2.18
+elif k == 3:
+    targ_ep = 50
+    targ_rmse = 2.44
+elif k == 4:
+    targ_ep = 50
+    targ_rmse = 2.42
+
+#DEBUG VALUES
+targ_ep = 0 #DEBUG VALUE
+targ_rmse = 3.5 #DEBUG VALUE
+metadata = metadata.iloc[150:250] #DEBUG VALUE
+
+if not os.path.exists("./ealstm_trn_data_062421_5fold_k"+str(k)+".npy"):
     (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
                                                     seq_length, n_total_feats,\
                                                     win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
                                                     static_feats=True,n_static_feats = 4,verbose=True) 
 
-    np.save("ealstm_trn_data_5fold_k"+str(k)+".npy",trn_data)
+    np.save("ealstm_trn_data_062421_5fold_k"+str(k)+".npy",trn_data)
 else:
-    trn_data = torch.from_numpy(np.load("ealstm_trn_data_5fold_k"+str(k)+".npy"))
-
+    trn_data = torch.from_numpy(np.load("ealstm_trn_data_062421_5fold_k"+str(k)+".npy"))
 # (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
 #                                             seq_length, n_total_feats,\
 #                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
@@ -142,7 +160,7 @@ else:
 print("train_data size: ",trn_data.size())
 print(len(lakenames), " lakes of data")
 # trn_data = tst_data
-batch_size = int(math.floor(trn_data.size()[0])/150)
+# batch_size = int(math.floor(trn_data.size()[0])/150) #REAL VALUE
 # batch_size = int(math.floor(trn_data.size()[0])/20)
 # batch_size = 3000
 # batch_size = trn_data.size()[0] #DEBUG VALUE
@@ -567,7 +585,17 @@ for epoch in range(n_eps):
 
     if verbose:
         print("train rmse loss=", avg_loss)
-
+    if avg_loss < min_train_rmse:
+        ep_since_min = 0
+        min_train_rmse = avg_loss
+        print("model saved")
+        save_path = "../../models/EALSTM_err_est_"+str(k)
+        saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
+    else:
+        ep_since_min += 1
+    if ep_since_min >= patience:
+        print("training complete")
+        break
     # if epoch % 10 is 0:
     if avg_loss < targ_rmse and epoch > targ_ep:
         print("training complete")
@@ -679,6 +707,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             print("missed obs?")
 
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
-final_output_df.to_feather("../../results/err_est_outputs_1layer256hid_2.32rmse_EALSTM_fold"+str(k)+".feather")
-save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_232rmse_fold"+str(k)
+final_output_df.to_feather("../../results/err_est_outputs_031821_EALSTM_fold"+str(k)+".feather")
+save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_237rmse_fold"+str(k)
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)

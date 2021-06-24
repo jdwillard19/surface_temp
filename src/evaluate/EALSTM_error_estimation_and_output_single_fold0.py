@@ -79,7 +79,7 @@ targ_rmse = 2.20
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
 # metadata = metadata.iloc[150:350] #DEBUG VALUE
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_062321.feather")
 fold = int(sys.argv[1])
 ###############################
 # data preprocess
