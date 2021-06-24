@@ -166,7 +166,7 @@ print(len(lakenames), " lakes of data")
 # batch_size = int(math.floor(trn_data.size()[0])/150) #REAL VALUE
 # batch_size = int(math.floor(trn_data.size()[0])/20)
 # batch_size = 3000
-# batch_size = trn_data.size()[0] #DEBUG VALUE
+batch_size = trn_data.size()[0] #DEBUG VALUE
 
 
 
