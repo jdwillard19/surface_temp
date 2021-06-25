@@ -5,7 +5,7 @@ import os
 
 metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
 # obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
-obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_040821.feather")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_062321.feather")
 
 site_ids = np.unique(obs['site_id'].values)
 print(len(site_ids), ' lakes')
@@ -33,7 +33,7 @@ for k in range(n_folds): #CHANGE DIS----------------
 	# ea_df = pd.read_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_1layer256hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_2layer128hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
-	ea_df = pd.read_feather("../../results/err_est_outputs_031821_EALSTM_fold"+str(k)+".feather")
+	ea_df = pd.read_feather("../../results/err_est_outputs_062321_EALSTM_fold"+str(k)+".feather")
 
 	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
 	assert (ea_df['Date'].values == gb_date_df['Date'].values).all()
@@ -55,10 +55,10 @@ combined_df['wtemp_predicted-linear_model'] = combined_lm['temp_pred_lm']
 # combined_df['wtemp_actual'] = combined_ea['wtemp_actual']
 combined_df['wtemp_actual'] = combined_gb['temp_actual']
 combined_df.reset_index(inplace=True)
-combined_df.to_feather("../../results/all_outputs_and_obs_041921.feather")
-combined_df.to_csv("../../results/all_outputs_and_obs_041921.csv")
+combined_df.to_feather("../../results/all_outputs_and_obs_062321.feather")
+combined_df.to_csv("../../results/all_outputs_and_obs_062321.csv")
 
-combined_df = pd.read_feather("../../results/all_outputs_and_obs_041921.feather")
+combined_df = pd.read_feather("../../results/all_outputs_and_obs_062321.feather")
 
 per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost','rmse_lm'])
 # per_site_df = pd.DataFrame(columns=['site_id','n_obs','rmse_ealstm','rmse_xgboost'])
@@ -77,5 +77,5 @@ for i,site_id in enumerate(site_ids):
 	per_site_df = per_site_df.append(site_df)
 
 per_site_df.reset_index(inplace=True)
-per_site_df.to_csv("../../results/err_per_site_041921.csv")
-per_site_df.to_feather("../../results/err_per_site_041921.feather")
+per_site_df.to_csv("../../results/err_per_site_062321.csv")
+per_site_df.to_feather("../../results/err_per_site_062321.feather")
