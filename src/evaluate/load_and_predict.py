@@ -22,9 +22,8 @@ sys.path.append('../models')
 from pytorch_model_operations import saveModel
 import pytorch_data_operations
 import datetime
-import pdb
 from torch.utils.data import DataLoader
-from pytorch_data_operations import buildLakeDataForRNN_multilakemodel_conus, parseMatricesFromSeqs, buildLakeDataForRNN_conus, buildLakeDataForRNN_conus_NoLabel
+from pytorch_data_operations import buildLakeDataForRNN_multilakemodel_conus, parseMatricesFromSeqs, buildLakeDataForRNN_conus
 
 
 
@@ -51,15 +50,10 @@ test = True
 
 
 
-start = int(sys.argv[1])
-end = int(sys.argv[2])
-
-
 #####################3
 #params
 ###########################33
 first_save_epoch = 0
-patience = 200
 
 #ow
 seq_length = 350 #how long of sequences to use in model
@@ -72,15 +66,18 @@ save = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
 num_layers = 1
-n_hidden = 128
+n_hidden = 256
+lambda1 = 0.000
+patience = 100
+
+n_eps = 1000
+targ_ep = None
+targ_rmse = None
 
 
-# metadata = pd.read_csv("../../metadata/surface_lake_metadata_021521_wCluster.csv")
-metadata = pd.read_csv("../../metadata/surface_lake_metadata_file_full_conus_062321.csv")
-test_lakes = metadata['site_id'].values[start:end]
-# metadata = metadata.iloc[150:350] #DEBUG VALUE
-# obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_020421.feather")
-
+metadata = pd.read_csv("../../metadata/surface_lake_metadata_041421_wCluster.csv")
+obs = pd.read_feather("../../data/raw/obs/surface_lake_temp_daily_062321.feather")
+k = int(sys.argv[1])
 ###############################
 # data preprocess
 ##################################
@@ -107,13 +104,104 @@ yhat_batch_size = 1
 ##################################
 #create train and test sets
 
+final_output_df = pd.DataFrame()
 
 
+
+#INSERT FOUND HYPERPARAMETERS FOR EACH FOLD HERE
+if k == 0:
+    targ_ep = 50
+    targ_rmse = 2.20
+elif k == 1:
+    targ_ep = 70
+    targ_rmse = 2.45
+elif k == 2:
+    targ_ep = 80
+    targ_rmse = 2.18
+elif k == 3:
+    targ_ep = 50
+    targ_rmse = 2.44
+elif k == 4:
+    targ_ep = 50
+    targ_rmse = 2.42
+
+#DEBUG VALUES
+# targ_ep = 0 #DEBUG VALUE
+# targ_rmse = 3.5 #DEBUG VALUE
+# metadata = metadata.iloc[150:250] #DEBUG VALUE
+
+
+#get lakenames
+lakenames = metadata[metadata['5fold_fold']!=k]['site_id'].values
+test_lakes = metadata[metadata['5fold_fold']==k]['site_id'].values
+
+ep_arr = []   
+if not os.path.exists("./ealstm_trn_data_062421_5fold_k"+str(k)+".npy"):
+    (trn_data, _) = buildLakeDataForRNN_multilakemodel_conus(lakenames,\
+                                                    seq_length, n_total_feats,\
+                                                    win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+                                                    static_feats=True,n_static_feats = 4,verbose=True) 
+
+    np.save("ealstm_trn_data_062421_5fold_k"+str(k)+".npy",trn_data)
+else:
+    trn_data = torch.from_numpy(np.load("ealstm_trn_data_062421_5fold_k"+str(k)+".npy"))
+# (tst_data, _) = buildLakeDataForRNN_multilakemodel_conus(test_lakenames,\
+#                                             seq_length, n_total_feats,\
+#                                             win_shift = win_shift, begin_loss_ind = begin_loss_ind,\
+#                                             static_feats=True,n_static_feats = 4) 
+# np.save("conus_trn_data_final.npy",trn_data)
+# np.save("_tst_data_wStatic.npy",tst_data)
+# sys.exit()
+# trn_data = torch.from_numpy(np.load("conus_trn_data_wStatic.npy"))
+# tst_data = torch.from_numpy(np.load("global_tst_data_wStatic.npy"))
+# tst_data = tst_data[:,:,[0,1,2,4,7,-1]]
+
+# trn_data = torch.from_numpy(np.load("conus_trn_data_final.npy",allow_pickle=True))
+# n_features = 4
+# n_static_feats = 1
+# n_total_feats = n_features + n_static_feats
+print("train_data size: ",trn_data.size())
+print(len(lakenames), " lakes of data")
+# trn_data = tst_data
+batch_size = int(math.floor(trn_data.size()[0])/150) #REAL VALUE
+# batch_size = int(math.floor(trn_data.size()[0])/20)
+# batch_size = 3000
+# batch_size = trn_data.size()[0] #DEBUG VALUE
+
+
+
+#Dataset classes
+class TemperatureTrainDataset(Dataset):
+#training dataset class, allows Dataloader to load both input/target
+    def __init__(self, trn_data):
+        self.len = trn_data.shape[0]
+        self.x_data = trn_data[:,:,:-1].float()
+        self.y_data = trn_data[:,:,-1].float()
+
+    def __getitem__(self, index):
+        return self.x_data[index], self.y_data[index]
+
+    def __len__(self):
+        return self.len
+
+
+
+
+#format training data for loading
+train_data = TemperatureTrainDataset(trn_data)
+
+
+#format total y-hat data for loading
+# total_data = TotalModelOutputDataset(all_data, all_phys_data, all_dates)
+n_batches = math.floor(trn_data.size()[0] / batch_size)
+
+#batch samplers used to draw samples in dataloaders
+batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_batches)
 
 
 #define EA-LSTM class
 """
-This code block is part of the accompanying code to the manuscript:
+This file is part of the accompanying code to the manuscript:
 Kratzert, F., Klotz, D., Shalev, G., Klambauer, G., Hochreiter, S., Nearing, G., "Benchmarking
 a Catchment-Aware Long Short-Term Memory Network (LSTM) for Large-Scale Hydrological Modeling".
 submitted to Hydrol. Earth Syst. Sci. Discussions (2019)
@@ -395,11 +483,7 @@ lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden
 if use_gpu:
     lstm_net = lstm_net.cuda()
 
-load_path = "../../models/EALSTM_256hid_1_final_062421"
-n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
-if use_gpu:
-    lstm_net = lstm_net.cuda(0)
+load_path = "../../models/EALSTM_err_est_"+str(k)
 pretrain_dict = torch.load(load_path)['state_dict']
 model_dict = lstm_net.state_dict()
 pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
@@ -407,20 +491,29 @@ model_dict.update(pretrain_dict)
 lstm_net.load_state_dict(pretrain_dict)
 
 
+#define loss and optimizer
 mse_criterion = nn.MSELoss()
+optimizer = optim.Adam(lstm_net.parameters(), lr=.005)#, weight_decay=0.01)
+
+#training loop
+
+min_mse = 99999
+min_mse_tsterr = None
+ep_min_mse = -1
+ep_since_min = 0
+best_pred_mat = np.empty(())
+manualSeed = [random.randint(1, 99999999) for i in range(n_eps)]
+
+#stop training if true
+min_train_rmse = 999
+min_train_ep = -1
+done = False
 
 
-#after training, do test predictions / error estimation
+        #after training, do test predictions / error estimation
 for targ_ct, target_id in enumerate(test_lakes): #for each target lake
-    if target_id == "nhdhr_{ef5a02dc-f608-4740-ab0e-de374bf6471c}" or target_id == 'nhdhr_136665792' or target_id == 'nhdhr_136686179':
-        continue
-
-
-
-    print(str(targ_ct),'/',len(test_lakes),':',target_id)
-    # if pd.read_feather('../../results/SWT_results/outputs_'+target_id+'.feather').shape[0] == 14976:
-    #     print("already good")
-
+    # if targ_ct %100 == 0:
+    #     print(str(targ_ct),'/',len(test_lakes),':',target_id)
     lake_df = pd.DataFrame()
     lake_id = target_id
 
@@ -449,21 +542,10 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     seq_length = 350
     win_shift = 175
     begin_loss_ind = 0
-
-    observed = False
-
-    # pdb.set_trace()
-    if metadata[metadata['site_id']==target_id]['observed'].values[0]:
-        (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
+    (tst_data_target, tst_dates) = buildLakeDataForRNN_conus(target_id, data_dir_target, seq_length, n_features,
                                        win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
                                        outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
-    else:
-        (tst_data_target, tst_dates) = buildLakeDataForRNN_conus_NoLabel(target_id, data_dir_target, seq_length, n_features,
-                                       win_shift = win_shift, begin_loss_ind = begin_loss_ind, 
-                                       outputFullTestMatrix=True, allTestSeq=True, n_static_feats=n_static_feats)
-
     unique_tst_dates_target = np.unique(tst_dates)
-    assert unique_tst_dates_target.shape[0] == 15385, "test data incorrect size"
     #useful values, LSTM params
     batch_size = tst_data_target.size()[0]
     n_test_dates_target = unique_tst_dates_target.shape[0]
@@ -512,30 +594,30 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
         (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
                                                         n_test_dates_target,
                                                         unique_tst_dates_target) 
-
-        
-        outputm_npy = np.transpose(outputm_npy)
-        label_mat= np.transpose(labelm_npy)
-        output_df = pd.DataFrame(data=outputm_npy, columns=['temp_pred'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
-        label_df = pd.DataFrame(data=label_mat, columns=['temp_actual'], index=[str(x)[:10] for x in unique_tst_dates_target]).reset_index()
-        output_df.rename(columns={'Date': 'temp_pred'})
-        label_df.rename(columns={'Date': 'temp_actual'})
-
-        assert np.isfinite(np.array(output_df.values[:,1:],dtype=np.float32)).all(), "nan output"
-        output_df['temp_actual'] = label_df['temp_actual']
-
-        lake_output_path = '../../results/SWT_results/outputs_'+target_id+'.feather'
-        #
-        # if not os.path.exists(lake_output_path):
-        #     os.mkdir(lake_output_path)
-        output_df = output_df[~output_df['index'].str.contains("1979")]
-        output_df = output_df[~output_df['index'].str.contains("2021")]
-        output_df.reset_index(inplace=True)
-        assert output_df.shape[0] == 14976
-        
-        output_df.to_feather(lake_output_path)
+        #to store output
+        # output_mats[i,:,:] = outputm_npy
+        loss_output = outputm_npy[~np.isnan(labelm_npy)]
+        loss_label = labelm_npy[~np.isnan(labelm_npy)]
+        loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
+        # print(unique_tst_dates_target)
+        output_df = pd.DataFrame()
+        output_df['Date'] = loss_days
+        output_df['site_id'] = target_id
+        output_df['wtemp_predicted'] = loss_output
+        output_df['wtemp_actual'] =loss_label
+        output_df['fold'] = k
 
 
+        final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
+        mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
+        # if targ_ct % 100
+        print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
+        if output_df.shape[0] != obs[obs['site_id']==target_id].shape[0]:
+            print("missed obs?")
+
+# final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
+final_output_df.to_feather("../../results/err_est_outputs_062421_EALSTM_fold"+str(k)+".feather")
+save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_237rmse_fold"+str(k)
+saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
 
-print("DONE!")
