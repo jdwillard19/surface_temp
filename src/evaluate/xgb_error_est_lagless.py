@@ -60,7 +60,7 @@ k = int(sys.argv[1])
 n_estimators = int(sys.argv[2])
 learning_rate = float(sys.argv[3])
 train = True
-save_file_path = '../../models/xgb_lagless_surface_temp_fold'+str(k)+"_04132021.joblib"
+save_file_path = '../../models/xgb_lagless_surface_temp_fold'+str(k)+"_062421.joblib"
 
 final_output_df = pd.DataFrame()
 result_df = pd.DataFrame(columns=['site_id','temp_pred_xgb','temp_actual'])
@@ -194,7 +194,7 @@ for ct, lake_id in enumerate(test_lakes):
 result_df.reset_index(inplace=True)
 print("tst rmse: ",np.sqrt(((result_df['temp_pred_xgb']-result_df['temp_actual'])**2).mean()))
 
-result_df.to_feather("../../results/xgb_lagless_041321_fold"+str(k)+".feather")
+result_df.to_feather("../../results/xgb_lagless_062421_fold"+str(k)+".feather")
 # if param_search:
 #     gbm = xgb.XGBRegressor(booster='gbtree',n_estimators=10000,learning_rate=.025,max_depth=6,min_child_weight=11,subsample=.8,colsample_bytree=.7)
 #     nfolds = 3
