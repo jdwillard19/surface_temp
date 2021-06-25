@@ -710,6 +710,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
             print("missed obs?")
 
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
-final_output_df.to_feather("../../results/err_est_outputs_031821_EALSTM_fold"+str(k)+".feather")
+final_output_df.to_feather("../../results/err_est_outputs_062421_EALSTM_fold"+str(k)+".feather")
 save_path = "../../models/EALSTM_"+str(n_hidden)+"hid_"+str(num_layers)+"layer_237rmse_fold"+str(k)
 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
