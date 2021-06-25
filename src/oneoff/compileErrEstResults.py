@@ -33,8 +33,7 @@ for k in range(n_folds): #CHANGE DIS----------------
 	# ea_df = pd.read_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_1layer256hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
 	# ea_df = pd.read_feather("../../results/err_est_outputs_2layer128hid_2.4rmse_EALSTM_fold"+str(k)+".feather")
-	ea_df = pd.read_feather("../../results/err_est_outputs_062321_EALSTM_fold"+str(k)+".feather")
-
+	ea_df = pd.read_feather("../../results/err_est_outputs_06421_EALSTM_fold"+str(k)+".feather")
 	ea_df.drop(ea_df[ea_df['Date'] < gb_date_df['Date'].min()].index,axis=0,inplace=True)
 	assert (ea_df['Date'].values == gb_date_df['Date'].values).all()
 	assert ea_df.shape[0] == lm_df.shape[0]
