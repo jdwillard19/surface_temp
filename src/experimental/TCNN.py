@@ -135,7 +135,6 @@ n_features = 9
 train_data = TemperatureTrainDataset(trn_data)
 
 #params
-n_features = 9
 batch_size = 10
 n_eps = 1000
 n_batches = math.floor(trn_data.size()[0] / batch_size)
