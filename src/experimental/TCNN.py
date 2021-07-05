@@ -2,12 +2,13 @@ import torch
 import torch.nn as nn
 from torch.nn.utils import weight_norm
 import numpy as np
+sys.path.append('../../data')
+
 import pytorch_data_operations
 import pandas as pd
 import pdb
 import os
 import sys
-sys.path.append('../../data')
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from torch.nn.utils.clip_grad import clip_grad_norm_ 
