@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn.utils import weight_norm
 import numpy as np
 import sys
-sys.path.append('../../data')
+sys.path.append('../data')
 import pytorch_data_operations
 import pandas as pd
 import pdb
