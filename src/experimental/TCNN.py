@@ -111,10 +111,7 @@ class TCN(nn.Module):
         y1 = self.tcn(x)
         return self.linear(y1[:, :, -1])
 
-tcn = TCN(input_size=n_features, output_size=1,num_channels=n_features+1,kernel_size=2,dropout=.2)
 
-if torch.cuda.is_available():
-    tcn = tcn.cuda()
 
 
 
@@ -138,7 +135,13 @@ train_data = TemperatureTrainDataset(trn_data)
 batch_size = 10
 n_eps = 1000
 n_batches = math.floor(trn_data.size()[0] / batch_size)
+
+tcn = TCN(input_size=n_features, output_size=1,num_channels=n_features+1,kernel_size=2,dropout=.2)
+
+if torch.cuda.is_available():
+    tcn = tcn.cuda()
 optimizer = torch.optim.AdamW(trn.parameters(), lr=lr)
+
 
 for epoch in range(n_eps):
     if done:
