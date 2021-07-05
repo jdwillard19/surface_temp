@@ -397,7 +397,7 @@ def buildDataTCN_trn(lakenames, seq_length,n_features):
         trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
         # X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
         # tst_dates_comp = torch.cat([tst_dates_comp,torch.from_numpy(tst_dates)],dim=0)
-  return (X_trn_comp, trn_dates_comp)
+    return (X_trn_comp, trn_dates_comp)
 
 def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
