@@ -337,9 +337,9 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
         
     return (X_trn_comp, trn_dates_comp, X_tst_comp, tst_dates_comp)
 
-def buildDataTCN_tst(lakename,seq_length,n_features)
+# def buildDataTCN_tst(lakename,seq_length,n_features):
 
-def buildDataTCN_trn(lakenames, seq_length,n_features)
+def buildDataTCN_trn(lakenames, seq_length,n_features):
         #NONAN
     #PARAMETERS
         #@lakenames = array of lake names as the folder of /data/processed/{lakename}
