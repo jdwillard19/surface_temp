@@ -337,6 +337,68 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
         
     return (X_trn_comp, trn_dates_comp, X_tst_comp, tst_dates_comp)
 
+def buildDataTCN_tst(lakename,seq_length,n_features)
+
+def buildDataTCN_trn(lakenames, seq_length,n_features)
+        #NONAN
+    #PARAMETERS
+        #@lakenames = array of lake names as the folder of /data/processed/{lakename}
+        #@seq_length = sequence length of LSTM inputs
+        #@n_features = number of physical drivers
+        #@win_shift = days to move in the sliding window for the training set
+        #@begin_loss_ind = index in sequence to begin calculating loss function (to avoid poor accuracy in early parts of the sequence)
+
+    #composite data structures
+    X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
+    trn_dates_comp = torch.Tensor(0, seq_length)
+    X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
+    tst_dates_comp = torch.Tensor(0, seq_length)
+
+    for lake_ct, lakename in enumerate(lakenames):
+        if verbose:
+            print("loading data for lake ",lake_ct,"/",len(lakenames))
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        base_path = "../../../lake_conus_surface_temp_2021/data/processed/"
+
+        #load data
+        feat_mat_raw = np.load(os.path.join(my_path, base_path+lakename+"/features.npy"))
+        feat_mat = np.load(os.path.join(my_path, base_path+lakename+"/processed_features.npy"))
+        obs = np.load(os.path.join(my_path, base_path+lakename+"/full.npy"))
+        dates = np.load(os.path.join(my_path, base_path+lakename+"/dates.npy"))
+
+        dates = pd.to_datetime(dates, format='%Y-%m-%d')
+        dates = np.array(dates,dtype=np.datetime64)
+
+        years = dates.astype('datetime64[Y]').astype(int) + 1970
+        assert np.isfinite(feat_mat).all(), "feat_mat has nan at" + str(np.argwhere(np.isfinite(feat_mat)))
+        assert np.isfinite(feat_mat_raw).all(), "feat_mat_raw has nan at" + str(np.argwhere(np.isfinite(feat_mat_raw)))
+        # assert np.isfinite(Y_mat).any(), "Y_mat has nan at" + str(np.argwhere(np.isfinite(Y_mat)))
+
+        assert feat_mat.shape[0] == feat_mat_raw.shape[0]
+        win_shift_tst = begin_loss_ind
+        udates = dates
+        n_dates = feat_mat.shape[0]
+        if verbose:
+            print("n dates: ", n_dates)
+
+
+        #get obs indices
+        pdb.set_trace()
+
+        X_trn = X_trn_tmp
+        trn_dates = trn_dates_tmp
+        X_tst = X_tst_tmp
+        tst_dates = tst_dates_tmp
+
+
+        assert np.isfinite(X_trn[:,:,:-1]).all(), "X_trn has nan"
+        # assert np.isfinite(all_dates).any(), "all_dates has nan"
+        X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
+        trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
+        # X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
+        # tst_dates_comp = torch.cat([tst_dates_comp,torch.from_numpy(tst_dates)],dim=0)
+  return (X_trn_comp, trn_dates_comp)
+
 def buildLakeDataForRNN_multilakemodel_conus(lakenames, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
                                             test_seq_per_depth=1, sparseCustom=None, \

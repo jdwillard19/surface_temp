@@ -13,7 +13,7 @@ cat( "\n" )
 authenticate_sb(un,pas)
 
 
-dest_dir = '../../data/raw/sb_mtl_data_release/'
+dest_dir = '../../data/raw/data_release/'
 
 
 #pb0 predictions
@@ -27,8 +27,8 @@ item_file_download('5ebe568182ce476925e44b2d',overwrite_file=TRUE,dest_dir=dest_
 item_file_download('5ebe564782ce476925e44b26?f=__disk__59%2Fe4%2Fac%2F59e4ac7164496cf60ad5db619349c9caf93e8152',overwrite_file=TRUE,dest_dir=dest_dir)
 
 
-#temperature obs 
-item_file_download('5ebe566a82ce476925e44b29?f=__disk__a5%2F63%2F23%2Fa56323d939ab21d71e160e355d304ac027567551',overwrite_file=TRUE,dest_dir=dest_dir)
+#temperature obs (updated 06/25/21)
+item_file_download('60341c3ed34eb12031172aa6?f=__disk__64%2Fba%2Fa3%2F64baa3d97c8c89eed62b3c162ddd04ea770a4cc9',overwrite_file=TRUE,dest_dir=dest_dir)
 
 # pb0 configs
 item_file_download('5ebe567782ce476925e44b2b?f=__disk__87%2F71%2F17%2F877117acec395850457dfa317c0d576b453bcdda',overwrite_file=TRUE,dest_dir=dest_dir)
