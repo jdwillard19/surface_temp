@@ -375,8 +375,6 @@ def buildDataTCN_trn(lakenames, seq_length,n_features,verbose=True):
         # assert np.isfinite(Y_mat).any(), "Y_mat has nan at" + str(np.argwhere(np.isfinite(Y_mat)))
 
         assert feat_mat.shape[0] == feat_mat_raw.shape[0]
-        win_shift_tst = begin_loss_ind
-        udates = dates
         n_dates = feat_mat.shape[0]
         if verbose:
             print("n dates: ", n_dates)
