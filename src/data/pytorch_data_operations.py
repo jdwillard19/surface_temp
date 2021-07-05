@@ -363,7 +363,7 @@ def buildDataTCN_trn(lakenames, seq_length,n_features,verbose=True):
         #load data
         feat_mat_raw = np.load(os.path.join(my_path, base_path+lakename+"/features.npy"))
         feat_mat = np.load(os.path.join(my_path, base_path+lakename+"/processed_features.npy"))
-        obs = np.load(os.path.join(my_path, base_path+lakename+"/full.npy"))
+        obs = np.load(os.path.join(my_path, base_path+lakename+"/obs.npy"))
         dates = np.load(os.path.join(my_path, base_path+lakename+"/dates.npy"))
 
         dates = pd.to_datetime(dates, format='%Y-%m-%d')
