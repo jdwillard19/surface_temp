@@ -339,7 +339,7 @@ def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
 
 # def buildDataTCN_tst(lakename,seq_length,n_features):
 
-def buildDataTCN_trn(lakenames, seq_length,n_features):
+def buildDataTCN_trn(lakenames, seq_length,n_features,verbose=True):
         #NONAN
     #PARAMETERS
         #@lakenames = array of lake names as the folder of /data/processed/{lakename}
