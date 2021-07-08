@@ -48,7 +48,7 @@ for site_id in site_ids:
 	obs_ct = 0
 	while obs_ct < 100:
 		bin_df = site_df[site_df['bin_id'] == unq_bins[bin_ind]]
-		if ct_per_unq_bins[bin_ind] > 0:
+		if ct_per_unq_bin[bin_ind] > 0:
 			pdb.set_trace()
 	pdb.set_trace()
  # for obs in obs
