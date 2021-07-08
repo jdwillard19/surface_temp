@@ -76,9 +76,9 @@ for site_ct, site_id in enumerate(site_ids):
     rand_vec_rep = np.repeat(np.expand_dims(np.random.normal(loc=0,scale=1,size=512),axis=0),og_feats.shape[0],axis=0)
 
     #create new feat sets
-    feats_raw_wDepth = np.insert(og_feats_raw,0,np.repeat(depth,og_feats.shape[0]),axis=1)
+    # feats_raw_wDepth = np.insert(og_feats_raw,0,np.repeat(depth,og_feats.shape[0]),axis=1)
     feats_wDepth = np.insert(og_feats,0,np.repeat(norm_depth,og_feats.shape[0]),axis=1)
-    feats_raw_oneHot = np.concatenate((one_hot_rep,og_feats_raw),axis=1)
+    # feats_raw_oneHot = np.concatenate((one_hot_rep,og_feats_raw),axis=1)
     feats_oneHot = np.concatenate((one_hot_rep,og_feats),axis=1)
     feats_2random = np.concatenate((rand_vec_rep[:,:2],og_feats),axis=1)
     feats_8random = np.concatenate((rand_vec_rep[:,:8],og_feats),axis=1)
