@@ -16,8 +16,6 @@ obs = obs[np.isin(obs['site_id'],site_ids)]
 # 
 #create train/test split
 def createBinID(date):
-	pdb.set_trace()
-	tmp = 0
 	years_since = int(date[:4]) - 1980
 	if '-12-' in date or '-01-' in date or '-02-' in date:
 		return years_since*4+1
