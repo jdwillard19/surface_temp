@@ -97,6 +97,7 @@ for site_ct, site_id in enumerate(site_ids):
 
 
     # get unique observation days
+    pdb.set_trace()
     unq_obs_dates_trn = np.unique(site_obs_trn['Date'].values)
     unq_obs_dates_tst = np.unique(site_obs_tst['Date'].values)
     n_obs_trn = unq_obs_dates_trn.shape[0]
@@ -178,7 +179,7 @@ for site_ct, site_id in enumerate(site_ids):
     np.save(feats_128rand_path, feats_128random)
     np.save(feats_256rand_path, feats_256random)
     np.save(feats_512rand_path, feats_512random)
-    
+
     np.save(dates_path, dates)
     np.save(obs_path_trn, site_obs_trn)
     np.save(obs_path_tst, site_obs_tst)
