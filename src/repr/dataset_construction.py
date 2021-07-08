@@ -37,10 +37,11 @@ obs['subset'] = 'none'
 
 
 for site_ct,site_id in enumerate(site_ids):
-    if site_ct < 82:
-        continue
     print(site_ct,"/",len(site_ids))
     site_df = obs[obs['site_id']==site_id]
+    if site_df.shape[0] < 100:
+        print("not enough")
+        pdb.set_trace()
     unq_bins,ct_per_unq_bin = np.unique(site_df['bin_id'],return_counts=True)
 
     #keep track of what we already added
