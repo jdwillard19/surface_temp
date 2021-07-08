@@ -65,6 +65,12 @@ for site_ct, site_id in enumerate(site_ids):
     #load depth
     depth = metadata_wDepth[metadata_wDepth['site_id']==site_id]['max_depth'].values[0]
     norm_depth = normalizeDepth(depth)
+    one_hot_vec = np.zeros(len(site_ids))
+    one_hot_vec[site_ct] = 1
+
+    feats_raw_wDepth = np.insert(og_feats_raw,0,np.repeat(depth,og_feats.shape[0]),axis=1)
+    feats_wDepth = np.insert(og_feats,0,np.repeat(norm_depth,og_feats.shape[0]),axis=1)
+
     pdb.set_trace()
 
     #data structs to fill
