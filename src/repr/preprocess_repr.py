@@ -3,7 +3,7 @@ import numpy as np
 import sys
 import os
 import pdb
-
+import xarray as xr
 site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
 
 
