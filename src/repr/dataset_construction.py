@@ -10,7 +10,7 @@ import os
 site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
 
 #load obs
-obs = pd.read_csv("lake_surface_temp_obs.csv")
+obs = pd.read_csv("../../data/raw/obs/lake_surface_temp_obs.csv")
 
 #trim obs to sites
 pdb.set_trace()
