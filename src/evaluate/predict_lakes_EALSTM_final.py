@@ -424,23 +424,6 @@ for targ_ct, target_id in enumerate(test_lakes): #for each target lake
     lake_df = pd.DataFrame()
     lake_id = target_id
 
-    # lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
-    # lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
-    # X = pd.DataFrame(lake_df[feats])
-
-
-    # y_pred = model.predict(X)
-    # lake_df['rmse_pred'] = y_pred
-
-    # lake_df.sort_values(by=['rmse_pred'], inplace=True)
-    # lowest_rmse = lake_df.iloc[0]['rmse_pred']
-# 
-    # top_ids = [str(j) for j in lake_df.iloc[:k]['site_id']]
-    
-    # best_site = top_ids[0]
-
-
-
 
     data_dir_target = "../../data/processed/"+target_id+"/" 
     #target agnostic model and data params

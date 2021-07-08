@@ -30,6 +30,7 @@ target_id = sys.argv[1]
 
 #read in needed data
 train_lakes = np.load("../../data/static/lists/source_lakes_wrr.npy") 
+
 #write results to below lists
 csv_all = [] 
 first_row_str_all = "target_id,source_id,rmse"

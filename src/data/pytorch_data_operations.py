@@ -381,6 +381,14 @@ def buildDataTCN_trn(lakenames, seq_length,n_features,verbose=True):
 
 
         #get obs indices
+        obs_inds = np.where(np.isfinite(obs))[0]
+        obs_inds = obs_inds[obs_inds > seq_length]
+
+        for ind in obs_ind:
+            trn_seq = np.empty((seq_length+1))
+            trn_seq[:] = np.nan
+            start_ind = ind-seq_length
+            trn_seq[:-1] = feat_mat[ind-seq_length:]
         pdb.set_trace()
 
         X_trn = X_trn_tmp
