@@ -33,5 +33,12 @@ def createBinID(date):
  #year since 1980 * 4 + season (winter1,spring2,summ3,fall4)
 
 obs['bin_id'] = [createBinID(date) for date in obs['Date'].values]
-pdb.set_trace()
+obs['subset'] = 'none'
+
+
+for site_id in site_ids:
+	site_df = obs[obs['site_id']==site_id]
+	unq_bins,cts_per_unq_bin = np.unique(site_df['bin_id'],return_counts=True)
+
+	pdb.set_trace()
  # for obs in obs
