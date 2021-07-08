@@ -15,6 +15,11 @@ base_path = '../../../lake_conus_surface_temp_2021/data/raw/data_release/'
 w1 = xr.open_dataset(base_path+'01_weather_N40-53_W98-126.nc4')
 dates = w1['time'].values
 
+depth_mean = 12.441255588405763
+depth_std = 10.668159266974529
+def normalizeDepth(depth):
+	return (depth - depth_mean) / depth_std
+
 feat_base_path = '../../../lake_conus_surface_temp_2021/data/raw/feats/'
 og_proc_base_path = '../../../lake_conus_surface_temp_2021/'
 
@@ -58,6 +63,8 @@ for site_ct, site_id in enumerate(site_ids):
 
 
     #load depth
+    depth = metadata_wDepth[metadata_wDepth['site_id']==site_id]['max_depth'].values[0]
+    norm_depth = normalizeDepth(depth)
     pdb.set_trace()
 
     #data structs to fill
