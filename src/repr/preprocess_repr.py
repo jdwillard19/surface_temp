@@ -65,11 +65,30 @@ for site_ct, site_id in enumerate(site_ids):
     #load depth
     depth = metadata_wDepth[metadata_wDepth['site_id']==site_id]['max_depth'].values[0]
     norm_depth = normalizeDepth(depth)
+
+    #create one hot vec
     one_hot_vec = np.zeros(len(site_ids))
     one_hot_vec[site_ct] = 1
+    one_hot_rep = np.repeat(np.expand_dims(one_hot_vec,0),og_feats.shape[0],axis=0)
 
+    #create random vector
+	np.random.seed(site_ct)
+    rand_vec_rep = np.repeat(np.expand_dims(np.random.normal(loc=0,scale=1,size=512),axis=0),og_feats.shape[0],axis=0)
+
+    #create new feat sets
     feats_raw_wDepth = np.insert(og_feats_raw,0,np.repeat(depth,og_feats.shape[0]),axis=1)
     feats_wDepth = np.insert(og_feats,0,np.repeat(norm_depth,og_feats.shape[0]),axis=1)
+    feats_raw_oneHot = np.concatenate((one_hot_rep,og_feats_raw),axis=1)
+    feats_oneHot = np.concatenate((one_hot_rep,og_feats),axis=1)
+    feats_2random = np.concatenate((rand_vec_rep[:,:2],og_feats),axis=1)
+    feats_8random = np.concatenate((rand_vec_rep[:,:8],og_feats),axis=1)
+    feats_32random = np.concatenate((rand_vec_rep[:,:32],og_feats),axis=1)
+    feats_128random = np.concatenate((rand_vec_rep[:,:128],og_feats),axis=1)
+    feats_256random = np.concatenate((rand_vec_rep[:,:256],og_feats),axis=1)
+    feats_512random = np.concatenate((rand_vec_rep[:,:512],og_feats),axis=1)
+
+    #(2,8,32,128,256,512)
+
 
     pdb.set_trace()
 
@@ -117,19 +136,54 @@ for site_ct, site_id in enumerate(site_ids):
     if not os.path.exists("../../models/"+site_id):
         os.mkdir("../../models/"+site_id)
 
+    # feats_raw_wDepth = np.insert(og_feats_raw,0,np.repeat(depth,og_feats.shape[0]),axis=1)
+    # feats_wDepth = np.insert(og_feats,0,np.repeat(norm_depth,og_feats.shape[0]),axis=1)
+    # feats_raw_oneHot = np.concatenate((one_hot_rep,og_feats_raw),axis=1)
+    # feats_oneHot = np.concatenate((one_hot_rep,og_feats),axis=1)
+    # feats_2random = np.concatenate((rand_vec_rep[:,:2],og_feats),axis=1)
+    # feats_8random = np.concatenate((rand_vec_rep[:,:8],og_feats),axis=1)
+    # feats_32random = np.concatenate((rand_vec_rep[:,:32],og_feats),axis=1)
+    # feats_128random = np.concatenate((rand_vec_rep[:,:128],og_feats),axis=1)
+    # feats_256random = np.concatenate((rand_vec_rep[:,:256],og_feats),axis=1)
+    # feats_512random = np.concatenate((rand_vec_rep[:,:512],og_feats),axis=1)
     feat_path = "../../data/processed/"+site_id+"/features"
     norm_feat_path = "../../data/processed/"+site_id+"/processed_features"
+    feats_wDepth_path =  "../../data/processed/"+site_id+"/features_wDepth"
+    feats_onehot_path = "../../data/processed/"+site_id+"/features_wOneHot"
+    feats_2rand_path = "../../data/processed/"+site_id+"/features_2rand"
+    feats_8rand_path = "../../data/processed/"+site_id+"/features_8rand"
+    feats_32rand_path = "../../data/processed/"+site_id+"/features_32rand"
+    feats_128rand_path = "../../data/processed/"+site_id+"/features_128rand"
+    feats_256rand_path = "../../data/processed/"+site_id+"/features_256rand"
+    feats_512rand_path = "../../data/processed/"+site_id+"/features_512rand"
     obs_path_trn = "../../data/processed/"+site_id+"/trn"
     obs_path_tst = "../../data/processed/"+site_id+"/tst"
     dates_path = "../../data/processed/"+site_id+"/dates"
 
     #assert and save
-    assert np.isfinite(site_feats).all()
-    assert np.isfinite(feats_norm).all()
+    assert np.isfinite(og_feats_raw).all()
+    assert np.isfinite(og_feats).all()
+    assert np.isfinite(feats_wDepth).all()
+    assert np.isfinite(feats_oneHot).all()
+    assert np.isfinite(feats_2random).all()
+    assert np.isfinite(feats_8random).all()
+    assert np.isfinite(feats_32random).all()
+    assert np.isfinite(feats_128random).all()
+    assert np.isfinite(feats_256random).all()
+    assert np.isfinite(feats_512random).all()
     assert np.isfinite(dates).all()
 
-    np.save(feat_path, site_feats)
-    np.save(norm_feat_path, feats_norm)
+    np.save(feat_path, og_feats_raw)
+    np.save(norm_feat_path, og_feats)
+    np.save(feats_wDepth_path, feats_wDepth)
+    np.save(feats_onehot_path, feats_oneHot)
+    np.save(feats_2rand_path, feats_2random)
+    np.save(feats_8rand_path, feats_8random)
+    np.save(feats_32rand_path, feats_32random)
+    np.save(feats_128rand_path, feats_128random)
+    np.save(feats_256rand_path, feats_256random)
+    np.save(feats_512rand_path, feats_512random)
+    
     np.save(dates_path, dates)
     np.save(obs_path_trn, site_obs_trn)
     np.save(obs_path_tst, site_obs_tst)
