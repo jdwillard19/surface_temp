@@ -7,7 +7,7 @@ import os
 
 
 #load lakes
-site_ids = np.load("../../metadata/lakeset.npy")
+site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
 
 #load obs
 obs = pd.read_csv("lake_surface_temp_obs.csv")
