@@ -16,19 +16,19 @@ obs = obs[np.isin(obs['site_id'],site_ids)]
 # 
 #create train/test split
 def createBinID(date):
-	years_since = int(date[:4]) - 1980
-	if '-12-' in date or '-01-' in date or '-02-' in date:
-		return years_since*4+1
-	elif '-03-' in date or '-04-' in date or '-05-' in date:
-		return years_since*4+2
-	elif '-06-' in date or '-07-' in date or '-08-' in date:
-		return years_since*4+3
-	elif '-09-' in date or '-10-' in date or '-11-' in date:
-		return years_since*4+4
-	else:
-		print("err")
-		pdb.set_trace()
-		return None
+    years_since = int(date[:4]) - 1980
+    if '-12-' in date or '-01-' in date or '-02-' in date:
+        return years_since*4+1
+    elif '-03-' in date or '-04-' in date or '-05-' in date:
+        return years_since*4+2
+    elif '-06-' in date or '-07-' in date or '-08-' in date:
+        return years_since*4+3
+    elif '-09-' in date or '-10-' in date or '-11-' in date:
+        return years_since*4+4
+    else:
+        print("err")
+        pdb.set_trace()
+        return None
 # site_df[(site_df['Date'].str.contains('-12-')) | (site_df['Date'].str.contains('-01-')) | (site_df['Date'].str.contains('-02-'))]
  #year since 1980 * 4 + season (winter1,spring2,summ3,fall4)
 
@@ -37,30 +37,30 @@ obs['subset'] = 'none'
 
 
 for site_id in site_ids:
-	site_df = obs[obs['site_id']==site_id]
-	unq_bins,ct_per_unq_bin = np.unique(site_df['bin_id'],return_counts=True)
+    site_df = obs[obs['site_id']==site_id]
+    unq_bins,ct_per_unq_bin = np.unique(site_df['bin_id'],return_counts=True)
 
-	#keep track of what we already added
-	excluded_date_list = site_df['Date'].values
-	included_date_list = []
+    #keep track of what we already added
+    excluded_date_list = site_df['Date'].values
+    included_date_list = []
 
-	bin_ind = unq_bins.shape[0]-1
-	obs_ct = 0
-	while obs_ct < 100:
-		bin_df = site_df[site_df['bin_id'] == unq_bins[bin_ind]]
-		if ct_per_unq_bin[bin_ind] > 0:
-			#trim bin df to not select twice
-			bin_df = bin_df[np.logical_not(np.isin(bin_df['Date'],included_date_list))]
+    bin_ind = unq_bins.shape[0]-1
+    obs_ct = 0
+    while obs_ct < 100:
+        bin_df = site_df[site_df['bin_id'] == unq_bins[bin_ind]]
+        if ct_per_unq_bin[bin_ind] > 0:
+            #trim bin df to not select twice
+            bin_df = bin_df[np.logical_not(np.isin(bin_df['Date'],included_date_list))]
 
-			#select random
-			included_date_list.append(bin_df.iloc[np.random.choice(np.arange(bin_df.shape[0]),1)]['Date'].values[0])
- 			
-			#update counts
- 			ct_per_unq_bin[bin_ind] -= 1
- 			obs_ct += 1
-		if bin_ind == 0:
-			bin_ind = unq_bins.shape[0]-1
-		else:
-			bin_ind -= 1
-	pdb.set_trace()
+            #select random
+            included_date_list.append(bin_df.iloc[np.random.choice(np.arange(bin_df.shape[0]),1)]['Date'].values[0])
+            
+            #update counts
+            ct_per_unq_bin[bin_ind] -= 1
+            obs_ct += 1
+        if bin_ind == 0:
+            bin_ind = unq_bins.shape[0]-1
+        else:
+            bin_ind -= 1
+    pdb.set_trace()
  # for obs in obs
