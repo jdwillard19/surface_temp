@@ -18,7 +18,7 @@ dates = w1['time'].values
 depth_mean = 12.441255588405763
 depth_std = 10.668159266974529
 def normalizeDepth(depth):
-	return (depth - depth_mean) / depth_std
+    return (depth - depth_mean) / depth_std
 
 feat_base_path = '../../../lake_conus_surface_temp_2021/data/raw/feats/'
 og_proc_base_path = '../../../lake_conus_surface_temp_2021/'
@@ -72,7 +72,7 @@ for site_ct, site_id in enumerate(site_ids):
     one_hot_rep = np.repeat(np.expand_dims(one_hot_vec,0),og_feats.shape[0],axis=0)
 
     #create random vector
-	np.random.seed(site_ct)
+    np.random.seed(site_ct)
     rand_vec_rep = np.repeat(np.expand_dims(np.random.normal(loc=0,scale=1,size=512),axis=0),og_feats.shape[0],axis=0)
 
     #create new feat sets
