@@ -51,8 +51,6 @@ for site_ct,site_id in enumerate(site_ids):
     bin_ind = unq_bins.shape[0]-1
     obs_ct = 0
     while obs_ct < 100:
-        if obs_ct == 50:
-            pdb.set_trace()
         bin_df = site_df[site_df['bin_id'] == unq_bins[bin_ind]]
         if ct_per_unq_bin[bin_ind] > 0:
             #trim bin df to not select twice
