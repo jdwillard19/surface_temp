@@ -36,7 +36,8 @@ obs['bin_id'] = [createBinID(date) for date in obs['Date'].values]
 obs['subset'] = 'none'
 
 
-for site_id in site_ids:
+for site_id,site_ct in enumerate(site_ids):
+    print(site_ct,"/",len(site_ids))
     site_df = obs[obs['site_id']==site_id]
     unq_bins,ct_per_unq_bin = np.unique(site_df['bin_id'],return_counts=True)
 
