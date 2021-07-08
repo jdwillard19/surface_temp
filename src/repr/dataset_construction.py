@@ -49,6 +49,18 @@ for site_id in site_ids:
 	while obs_ct < 100:
 		bin_df = site_df[site_df['bin_id'] == unq_bins[bin_ind]]
 		if ct_per_unq_bin[bin_ind] > 0:
-			pdb.set_trace()
+			#trim bin df to not select twice
+			bin_df = bin_df[np.logical_not(np.isin(bin_df['Date'],included_date_list))]
+
+			#select random
 			included_date_list.append(bin_df.iloc[np.random.choice(np.arange(bin_df.shape[0]),1)]['Date'].values[0])
+ 			
+			#update counts
+ 			ct_per_unq_bin[bin_ind] -= 1
+ 			obs_ct += 1
+		if bin_ind == 0:
+			bin_ind = unq_bins.shape[0]-1
+		else:
+			bin_ind -= 1
+	pdb.set_trace()
  # for obs in obs
