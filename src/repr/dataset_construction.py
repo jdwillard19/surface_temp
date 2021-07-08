@@ -38,7 +38,17 @@ obs['subset'] = 'none'
 
 for site_id in site_ids:
 	site_df = obs[obs['site_id']==site_id]
-	unq_bins,cts_per_unq_bin = np.unique(site_df['bin_id'],return_counts=True)
+	unq_bins,ct_per_unq_bin = np.unique(site_df['bin_id'],return_counts=True)
 
+	#keep track of what we already added
+	excluded_date_list = site_df['Date'].values
+	included_date_list = []
+
+	bin_ind = unq_bins.shape[0]-1
+	obs_ct = 0
+	while obs_ct < 100:
+		bin_df = site_df[site_df['bin_ind'] == bin_ind]
+		if ct_per_unq_bins[bin_ind] > 0
+			pdb.set_trace()
 	pdb.set_trace()
  # for obs in obs
