@@ -50,5 +50,5 @@ for site_id in site_ids:
 		bin_df = site_df[site_df['bin_id'] == unq_bins[bin_ind]]
 		if ct_per_unq_bin[bin_ind] > 0:
 			pdb.set_trace()
-	pdb.set_trace()
+			included_date_list.append(bin_df.iloc[np.random.choice(np.arange(bin_df.shape[0]),1)]['Date'].values[0])
  # for obs in obs
