@@ -62,5 +62,12 @@ for site_id in site_ids:
             bin_ind = unq_bins.shape[0]-1
         else:
             bin_ind -= 1
-    pdb.set_trace()
+
+    site_df_new = site_df[np.isin(site_df['Date'],included_date_list)]
+    site_df_new = site_df_new.sort_values(by='Date')
+    site_df_new['subset'] = ['train' if i >= 30 else 'test' for i in range(100)]
+    site_df_new = site_df_new.reset_index()
+    site_df_new.to_feather("../../data/raw/obs/"+site_id+"_100obs.feather")
+
+
  # for obs in obs
