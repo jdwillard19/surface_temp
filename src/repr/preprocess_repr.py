@@ -122,9 +122,8 @@ for site_ct, site_id in enumerate(site_ids):
         site_obs_tst[date_ind] = site_obs_tst_df['wtemp_obs'].values[o]
         n_obs_placed_tst += 1
 
-    pdb.set_trace()
-    assert np.count_nonzero(site_obs_trn) == 70
-    assert np.count_nonzero(site_obs_tst) == 30
+    assert np.count_nonzero(np.isfinite(site_obs_trn)) == 70
+    assert np.count_nonzero(np.isfinite(site_obs_tst)) == 30
 
     #make directory if not exist
     if not os.path.exists("../../data/processed/"+site_id): 
