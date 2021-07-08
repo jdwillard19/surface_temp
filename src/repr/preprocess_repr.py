@@ -87,11 +87,6 @@ for site_ct, site_id in enumerate(site_ids):
     feats_256random = np.concatenate((rand_vec_rep[:,:256],og_feats),axis=1)
     feats_512random = np.concatenate((rand_vec_rep[:,:512],og_feats),axis=1)
 
-    #(2,8,32,128,256,512)
-
-
-    pdb.set_trace()
-
     #data structs to fill
     site_obs_trn = np.empty((n_dates))
     site_obs_tst = np.empty((n_dates))
