@@ -36,11 +36,11 @@ for site_ct, site_id in enumerate(site_ids):
 
     #get and sort obs
     site_obs = pd.read_feather("../../data/raw/obs/"+site_id+"_100obs.feather")
-    site_obs_trn = site_obs[site_obs['subset']=='train']
-    site_obs_tst = site_obs[site_obs['subset']=='test']
+    site_obs_trn_df = site_obs[site_obs['subset']=='train']
+    site_obs_tst_df = site_obs[site_obs['subset']=='test']
     # print(site_obs.shape[0], " obs")
-    site_obs_trn = site_obs_trn.sort_values("Date")    
-    site_obs_tst = site_obs_tst.sort_values("Date")    
+    site_obs_trn_df = site_obs_trn_df.sort_values("Date")    
+    site_obs_tst_df = site_obs_tst_df.sort_values("Date")    
 
     start_date = dates[0]
     end_date = dates[-1]
@@ -97,30 +97,29 @@ for site_ct, site_id in enumerate(site_ids):
 
 
     # get unique observation days
-    pdb.set_trace()
-    unq_obs_dates_trn = np.unique(site_obs_trn['Date'].values)
-    unq_obs_dates_tst = np.unique(site_obs_tst['Date'].values)
+    unq_obs_dates_trn = np.unique(site_obs_trn_df['Date'].values)
+    unq_obs_dates_tst = np.unique(site_obs_tst_df['Date'].values)
     n_obs_trn = unq_obs_dates_trn.shape[0]
     n_obs_tst = unq_obs_dates_tst.shape[0]
     n_obs_placed_trn = 0
     n_obs_placed_tst = 0
     for o in range(0,n_obs_trn):
-        if len(np.where(dates == pd.Timestamp(site_obs_trn['Date'].values[o]).to_datetime64())[0]) < 1:
+        if len(np.where(dates == pd.Timestamp(site_obs_trn_df['Date'].values[o]).to_datetime64())[0]) < 1:
             print("not within meteo dates")
             pdb.set_trace() #deprecated?
             obs_d += 1
             continue
-        date_ind = np.where(dates == pd.Timestamp(site_obs_trn['Date'].values[o]).to_datetime64())[0][0]
-        site_obs_trn[date_ind] = site_obs_trn['wtemp_obs'].values[o]
+        date_ind = np.where(dates == pd.Timestamp(site_obs_trn_df['Date'].values[o]).to_datetime64())[0][0]
+        site_obs_trn[date_ind] = site_obs_trn_df['wtemp_obs'].values[o]
         n_obs_placed_trn += 1
     for o in range(0,n_obs_tst):
-        if len(np.where(dates == pd.Timestamp(site_obs_tst['Date'].values[o]).to_datetime64())[0]) < 1:
+        if len(np.where(dates == pd.Timestamp(site_obs_tst_df['Date'].values[o]).to_datetime64())[0]) < 1:
             print("not within meteo dates")
             pdb.set_trace() #deprecated?
             obs_d += 1
             continue
-        date_ind = np.where(dates == pd.Timestamp(site_obs_tst['Date'].values[o]).to_datetime64())[0][0]
-        site_obs_tst[date_ind] = site_obs_tst['wtemp_obs'].values[o]
+        date_ind = np.where(dates == pd.Timestamp(site_obs_tst_df['Date'].values[o]).to_datetime64())[0][0]
+        site_obs_tst[date_ind] = site_obs_tst_df['wtemp_obs'].values[o]
         n_obs_placed_tst += 1
 
     assert np.count_nonzero(site_obs_trn) == 70
