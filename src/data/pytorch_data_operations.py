@@ -24,7 +24,7 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDe
         n_features += 345
 
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
-    trn_dates_comp = torch.Tensor(0, seq_length)
+    trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
 
     for lake_ct, lakename in enumerate(lakenames):
         if verbose:
@@ -65,7 +65,7 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDe
 
 
             X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-            trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
+            trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
 
 
 
@@ -82,10 +82,10 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth
         n_features += 345
 
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
-    trn_dates_comp = torch.Tensor(0, seq_length)
+    trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
     X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
     tst_dates_comp = torch.Tensor(0, seq_length)
-
+# 
     for lake_ct, lakename in enumerate(lakenames):
         if verbose:
             print("loading data for lake ",lake_ct,"/",len(lakenames))
@@ -126,7 +126,7 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth
                 X_trn[0,-1,-1] = trn[ind]
                 trn_dates = dates[start_ind:end_ind]
             X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-            trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
+            trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
             
 
         for ind in tst_obs_inds:
