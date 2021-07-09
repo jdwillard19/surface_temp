@@ -14,7 +14,7 @@ from scipy import interpolate
 
 
 def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,wDepth=False,win_shift=175,
-                             oneHot=False):
+                             oneHot=False,verbose=True):
     n_features = 9
     if wDepth:
         n_features += 1
