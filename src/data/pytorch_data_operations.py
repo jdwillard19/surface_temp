@@ -47,25 +47,25 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDe
         n_trn_obs = np.count_nonzero(np.isfinite(trn))
 
         trn_obs_inds = np.where(np.isfinite(trn))[0]
-
-        for ind in trn_obs_inds:
-            X_trn = np.empty(shape=(1, seq_length, n_features+1))
-            X_trn[:] = np.nan
-            trn_dates = np.empty(shape=(1,seq_length))
+        X_trn = np.empty(shape=(n_trn_obs, seq_length, n_features+1))
+        X_trn[:] = np.nan
+        trn_dates = np.empty(shape=(n_trn_obs,seq_length))
+        trn_dates[:] = np.nan
+        for trn_ct,ind in enumerate(trn_obs_inds):
             if ind < seq_length-1:
-                X_trn[0,:,:n_features] = feat_mat[:seq_length,:]
-                X_trn[0,ind,-1] = trn[ind]
+                X_trn[trn_ct,:,:n_features] = feat_mat[:seq_length,:]
+                X_trn[trn_ct,ind,-1] = trn[ind]
                 trn_dates = dates[:seq_length]
             else:
                 start_ind = ind - seq_length + 1
                 end_ind = ind+1
-                X_trn[0,:,:n_features] = feat_mat[start_ind:end_ind,:]
-                X_trn[0,-1,-1] = trn[ind]
+                X_trn[trn_ct,:,:n_features] = feat_mat[start_ind:end_ind,:]
+                X_trn[trn_ct,-1,-1] = trn[ind]
                 trn_dates = dates[start_ind:end_ind]
 
 
-            X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-            trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
+        X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
+        trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
 
 
 
