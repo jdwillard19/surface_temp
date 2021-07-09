@@ -29,7 +29,7 @@ from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataF
 #get site Iids
 site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
 
-(trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids) 
+(trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,areaDepth=True) 
 
 
 # trn_path = 
