@@ -29,10 +29,18 @@ from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataF
 #get site Iids
 site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
 
-(trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,areaDepth=True) 
 
+trn_path = "./ctlstm_areadepth_trn_data.npy"
+trn_date_path = "./ctlstm_areadepth_trn_dates.npy"
+if not os.path.exists(trn_path):
+	(trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,areaDepth=True) 
+	np.save(trn_path,trn_data)
+	np.save(trn_date_path,trn_dates)
+else:
+	trn_data = torch.from_numpy(np.load(trn_path))
+	trn_dates = np.load(trn_date_path,allow_pickle=True)
 pdb.set_trace()
-# trn_path = 
+
 # if not os.path.exists("./ctlstm_trn_data.npy"):
 #     np.save("./ealstm_trn_data_062321.npy",trn_data)
 # else:
