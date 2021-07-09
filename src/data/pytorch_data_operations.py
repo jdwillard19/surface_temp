@@ -13,11 +13,11 @@ import pdb
 from scipy import interpolate
 
 
-def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,wDepth=False,win_shift=175,
-                             oneHot=False,verbose=True,areaDepth=False):
+def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDepth=False,win_shift=175,
+                             oneHot=False,verbose=True):
     n_features = 9
-    if wDepth:
-        n_features += 1
+    if areaDepth:
+        n_features = 7 #5 dynamic 2 static
     if randomFeat is not None:
         n_features += randomFeat
     if oneHot:
@@ -39,7 +39,7 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,wDepth
             feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wOneHot.npy"))
         elif areaDepth:
             feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wDepth.npy"))
-            pdb.set_trace()        
+            feat_mat = np.delete(feat_mat,(2,3,4),axis=1)       
 
         trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/trn.npy"))
         dates = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/dates.npy"))
@@ -51,21 +51,25 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,wDepth
         for ind in trn_obs_inds:
             X_trn = np.empty(shape=(1, seq_length, n_features+1))
             X_trn[:] = np.nan
+            trn_dates = np.empty(shape=(1,seq_length))
             if ind < seq_length-1:
                 X_trn[0,:,:n_features] = feat_mat[:seq_length,:]
                 X_trn[0,ind,-1] = trn[ind]
+                trn_dates = dates[:seq_length]
             else:
-                pdb.set_trace()
                 start_ind = ind - seq_length + 1
                 end_ind = ind+1
                 X_trn[0,:,:n_features] = feat_mat[start_ind:end_ind,:]
                 X_trn[0,-1,-1] = trn[ind]
+                trn_dates = dates[start_ind:end_ind]
+
 
             X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-            
+            trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates).float()],dim=0)
 
 
-    return (None)
+
+    return (X_trn_comp,trn_dates_comp)
 
 def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth=False,win_shift=175,
                              oneHot=False):
@@ -109,6 +113,7 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth
 
         for ind in trn_obs_inds:
             X_trn = np.empty(shape=(1, seq_length, n_features+1))
+            trn_dates = np.empty(shape=(1,seq_length))
             X_trn[:] = np.nan
             if ind < seq_length-1:
                 X_trn[0,:,:n_features] = feat_mat[:seq_length,:]
@@ -119,8 +124,9 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth
                 end_ind = ind+1
                 X_trn[0,:,:n_features] = feat_mat[start_ind:end_ind,:]
                 X_trn[0,-1,-1] = trn[ind]
-
+                trn_dates = dates[start_ind:end_ind]
             X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
+            trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates).float()],dim=0)
             
 
         for ind in tst_obs_inds:
