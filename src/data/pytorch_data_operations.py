@@ -65,7 +65,7 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDe
 
 
             X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-            trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates).float()],dim=0)
+            trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
 
 
 
@@ -126,7 +126,7 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth
                 X_trn[0,-1,-1] = trn[ind]
                 trn_dates = dates[start_ind:end_ind]
             X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-            trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates).float()],dim=0)
+            trn_dates_comp = torch.cat([trn_dates_comp,torch.from_numpy(trn_dates)],dim=0)
             
 
         for ind in tst_obs_inds:
