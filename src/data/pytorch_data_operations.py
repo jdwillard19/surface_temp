@@ -14,7 +14,7 @@ from scipy import interpolate
 
 
 def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,wDepth=False,win_shift=175,
-                             oneHot=False,verbose=True):
+                             oneHot=False,verbose=True,areaDepth=False):
     n_features = 9
     if wDepth:
         n_features += 1
@@ -35,11 +35,11 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,wDepth
         feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features.npy"))
         if randomFeat is not None:
             feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_"+str(randomFeat)+"rand.npy"))
-        elif wDepth:
-            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wDepth.npy"))
         elif oneHot:
             feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wOneHot.npy"))
-
+        elif areaDepth:
+            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wDepth.npy"))
+            pdb.set_trace()        
 
         trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/trn.npy"))
         dates = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/dates.npy"))
