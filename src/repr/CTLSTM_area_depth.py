@@ -31,7 +31,7 @@ site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
 
 (trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,areaDepth=True) 
 
-
+pdb.set_trace()
 # trn_path = 
 # if not os.path.exists("./ctlstm_trn_data.npy"):
 #     np.save("./ealstm_trn_data_062321.npy",trn_data)
