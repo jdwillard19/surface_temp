@@ -526,7 +526,7 @@ for r in range(n_runs):
                 #parse data into inputs and targets
                 inputs = data[0].float()
                 targets = data[1].float()
-                tmp_dates = tst_dates
+                # tmp_dates = tst_dates
                 # depths = inputs[:,:,0]
 
 
