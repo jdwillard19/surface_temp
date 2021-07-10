@@ -83,8 +83,8 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,areaDe
     if oneHot:
         n_features += 345
 
-    X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
-    trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
+    X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
+    tst_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
 
     for lake_ct, lakename in enumerate(lakenames):
         if verbose:
