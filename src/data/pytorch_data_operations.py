@@ -71,11 +71,13 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDe
 
     return (X_trn_comp,trn_dates_comp)
 
-def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth=False,win_shift=175,
-                             oneHot=False):
+
+
+def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,areaDepth=False,win_shift=175,
+                             oneHot=False,verbose=True):
     n_features = 9
-    if wDepth:
-        n_features += 1
+    if areaDepth:
+        n_features = 7 #5 dynamic 2 static
     if randomFeat is not None:
         n_features += randomFeat
     if oneHot:
@@ -83,9 +85,7 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth
 
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
     trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
-    X_tst_comp = torch.Tensor(0, seq_length, n_features+1)
-    tst_dates_comp = torch.Tensor(0, seq_length)
-# 
+
     for lake_ct, lakename in enumerate(lakenames):
         if verbose:
             print("loading data for lake ",lake_ct,"/",len(lakenames))
@@ -95,45 +95,44 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,wDepth
         feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/processed_features.npy"))
         if randomFeat is not None:
             feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_"+str(randomFeat)+"rand.npy"))
-        elif wDepth:
-            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wDepth.npy"))
         elif oneHot:
             feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wOneHot.npy"))
-
+        elif areaDepth:
+            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wDepth.npy"))
+            feat_mat = np.delete(feat_mat,(2,3,4),axis=1)       
 
         tst = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/tst.npy"))
-        trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/trn.npy"))
         dates = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/dates.npy"))
 
-        n_trn_obs = np.count_nonzero(np.isfinite(trn))
         n_tst_obs = np.count_nonzero(np.isfinite(tst))
 
-        trn_obs_inds = np.where(np.isfinite(trn))[0]
         tst_obs_inds = np.where(np.isfinite(tst))[0]
-
-        for ind in trn_obs_inds:
-            X_trn = np.empty(shape=(1, seq_length, n_features+1))
-            trn_dates = np.empty(shape=(1,seq_length))
-            X_trn[:] = np.nan
+        X_tst = np.empty(shape=(n_tst_obs, seq_length, n_features+1))
+        X_tst[:] = np.nan
+        tst_dates = np.empty(shape=(n_tst_obs,seq_length))
+        tst_dates[:] = np.nan
+        for trn_ct,ind in enumerate(trn_obs_inds):
             if ind < seq_length-1:
-                X_trn[0,:,:n_features] = feat_mat[:seq_length,:]
-                X_trn[0,ind,-1] = trn[ind]
+                X_tst[tst_ct,:,:n_features] = feat_mat[:seq_length,:]
+                X_tst[tst_ct,ind,-1] = tst[ind]
+                tst_dates = dates[:seq_length]
             else:
-                pdb.set_trace()
                 start_ind = ind - seq_length + 1
                 end_ind = ind+1
-                X_trn[0,:,:n_features] = feat_mat[start_ind:end_ind,:]
-                X_trn[0,-1,-1] = trn[ind]
-                trn_dates = dates[start_ind:end_ind]
-            X_trn_comp = torch.cat([X_trn_comp,torch.from_numpy(X_trn).float()],dim=0)
-            trn_dates_comp = np.vstack([trn_dates_comp,trn_dates])
-            
-
-        for ind in tst_obs_inds:
+                X_tst[tst_ct,:,:n_features] = feat_mat[start_ind:end_ind,:]
+                X_tst[tst_ct,-1,-1] = tst[ind]
+                tst_dates = dates[start_ind:end_ind]
 
 
-            X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
-    return (None,None,None,None)
+        X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
+        tst_dates_comp = np.vstack([tst_dates_comp,tst_dates])
+
+
+
+    return (X_tst_comp,tst_dates_comp,dates)
+
+
+
 
 def buildLakeDataForRNN_multilakemodel(lakenames, seq_length, n_features, \
                                             win_shift= 1, begin_loss_ind = 100, \
