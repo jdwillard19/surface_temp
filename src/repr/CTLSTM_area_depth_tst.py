@@ -549,7 +549,7 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
 
     site_df['avg_pred'] = site_df.iloc[:,2:(2+n_runs)].mean(axis=1)
 
-    mat_rmse = np.sqrt(((df['avg_pred'] - df['actual']) ** 2).mean())
+    mat_rmse = np.sqrt(((site_df['avg_pred'] - site_df['actual']) ** 2).mean())
 
     print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
