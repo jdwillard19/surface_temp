@@ -87,8 +87,6 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,areaDe
     tst_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
 
     for lake_ct, lakename in enumerate(lakenames):
-        if verbose:
-            print("loading data for lake ",lake_ct,"/",len(lakenames))
         my_path = os.path.abspath(os.path.dirname(__file__))
 
        
