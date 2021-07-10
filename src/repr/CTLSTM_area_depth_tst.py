@@ -475,28 +475,9 @@ for r in range(n_runs):
 #test model
 rmse_per_lake = np.empty((len(site_ids)))
 rmse_per_lake[:] = np.nan
-run_df = pd.DataFrame()
 for targ_ct, target_id in enumerate(site_ids): #for each target lake
-    # if targ_ct %100 == 0:
-    #     print(str(targ_ct),'/',len(test_lakes),':',target_id)
+    site_df = pd.DataFrame()
     lake_id = target_id
-
-    # lake_df = pd.read_feather("../../metadata/diffs/target_nhdhr_"+lake_id+".feather")
-    # lake_df = lake_df[np.isin(lake_df['site_id'], train_lakes_wp)]
-    # X = pd.DataFrame(lake_df[feats])
-
-
-    # y_pred = model.predict(X)
-    # lake_df['rmse_pred'] = y_pred
-
-    # lake_df.sort_values(by=['rmse_pred'], inplace=True)
-    # lowest_rmse = lake_df.iloc[0]['rmse_pred']
-# 
-    # top_ids = [str(j) for j in lake_df.iloc[:k]['site_id']]
-    
-    # best_site = top_ids[0]
-
-
 
 
     #target agnostic model and data params
@@ -509,73 +490,71 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
 
     testloader = torch.utils.data.DataLoader(tst_data, batch_size=tst_data.size()[0], shuffle=False, pin_memory=True)
 
-    with torch.no_grad():
-        avg_mse = 0
-        ct = 0
-        for m, data in enumerate(testloader, 0):
-            #now for mendota data
-            #this loop is dated, there is now only one item in testloader
+    for r in range(n_runs):
+        with torch.no_grad():
+            avg_mse = 0
+            ct = 0
+            for m, data in enumerate(testloader, 0):
+                #now for mendota data
+                #this loop is dated, there is now only one item in testloader
 
-            #parse data into inputs and targets
-            inputs = data[:,:,:-1].float()
-            targets = data[:,:,-1].float()
-            tmp_dates = tst_dates[:, :]
+                #parse data into inputs and targets
+                inputs = data[:,:,:-1].float()
+                targets = data[:,:,-1].float()
+                tmp_dates = tst_dates[:, :]
 
-            if use_gpu:
-                inputs = inputs.cuda()
-                targets = targets.cuda()
+                if use_gpu:
+                    inputs = inputs.cuda()
+                    targets = targets.cuda()
 
-            #run model
-            h_state = None
-            # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
-            # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-            pdb.set_trace()
+                #run model
+                h_state = None
+                # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
+                # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+                pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+                pred = pred.view(pred.size()[0],-1)
+                pred = pred[:, :]
 
-            pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
-            pred = pred.view(pred.size()[0],-1)
-            pred = pred[:, :]
+                #calculate error
+                targets = targets.cpu()
+                loss_indices = np.where(np.isfinite(targets))
+                if use_gpu:
+                    targets = targets.cuda()
+                inputs = inputs[:, :, :]
+                mse = mse_criterion(pred[loss_indices], targets[loss_indices])
+                # print("test loss = ",mse)
+                avg_mse += mse
+                ct += 1
+                # if mse > 0: #obsolete i think
+                #     ct += 1
+            avg_mse = avg_mse / ct
 
-            #calculate error
-            targets = targets.cpu()
-            loss_indices = np.where(np.isfinite(targets))
-            if use_gpu:
-                targets = targets.cuda()
-            inputs = inputs[:, :, :]
-            mse = mse_criterion(pred[loss_indices], targets[loss_indices])
-            # print("test loss = ",mse)
-            avg_mse += mse
-            ct += 1
-            # if mse > 0: #obsolete i think
-            #     ct += 1
-        avg_mse = avg_mse / ct
-
-        (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
-                                                        n_test_dates,
-                                                        all_dates) 
-
-
-        #to store output
-        # output_mats[i,:,:] = outputm_npy
-        loss_output = outputm_npy[~np.isnan(labelm_npy)]
-        loss_label = labelm_npy[~np.isnan(labelm_npy)]
-        loss_days = all_dates[~np.isnan(labelm_npy)]
-        # print(unique_tst_dates_target)
-        # output_df = pd.DataFrame()
-        # output_df['Date'] = loss_days
-        # output_df['site_id'] = target_id
-        # output_df['wtemp_predicted'] = loss_output
-        # output_df['wtemp_actual'] =loss_label
-        # output_df['fold'] = k
+            (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
+                                                            n_test_dates,
+                                                            all_dates) 
 
 
-        mat_rmse = np.sqrt(((loss_output - loss_label) ** 2).mean())
-        output_df = pd.DataFrame()
-        output_df['site_id'] = [target_id]
-        output_df['rmse'] = [mat_rmse]
-        final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
-        pdb.set_trace()
-        # if targ_ct % 100
-        print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
+            #to store output
+            # output_mats[i,:,:] = outputm_npy
+            loss_output = outputm_npy[~np.isnan(labelm_npy)]
+            loss_label = labelm_npy[~np.isnan(labelm_npy)]
+            loss_days = all_dates[~np.isnan(labelm_npy)]
+
+            if r == 0:
+                site_df['date'] = loss_days
+                site_df['actual'] = loss_label
+                site_df['pred'+str(r)] = loss_output
+            else:
+                site_df['pred'+str(r)] = loss_output
+
+            df['avg_pred'] = df.iloc[:,2:(2+n_runs)].mean(axis=1)
+
+            mat_rmse = np.sqrt(((df['avg_pred'] - df['actual']) ** 2).mean())
+
+            print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
+final_output_df = pd.DataFrame()
+final_output_df['site_id'] = site_ids
+final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/randomFeatureExperiment_EALSTM_noRandom_252extra.csv")
+final_output_df.to_csv("../../results/CTLSTM_warea_depth.csv")
