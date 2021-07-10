@@ -72,7 +72,7 @@ print(len(site_ids), " lakes of data")
 # batch_size = int(math.floor(trn_data.size()[0])/150)
 # batch_size = int(math.floor(trn_data.size()[0])/20)
 batch_size = 3000
-n_runs = 5
+n_runs = 3
 
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
