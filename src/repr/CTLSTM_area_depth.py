@@ -526,8 +526,7 @@ for r in range(n_runs):
                 #parse data into inputs and targets
                 inputs = data[0].float()
                 targets = data[1].float()
-                # targets = targets[:, begin_loss_ind:]
-                # tmp_dates = tst_dates_target[:, begin_loss_ind:]
+                tmp_dates = tst_dates
                 # depths = inputs[:,:,0]
 
 
@@ -549,8 +548,8 @@ for r in range(n_runs):
                     reg1_loss = calculate_l1_loss(lstm_net)
 
 
-                loss_outputs = outputs[:,begin_loss_ind:]
-                loss_targets = targets[:,begin_loss_ind:].cpu()
+                loss_outputs = outputs[:,:]
+                loss_targets = targets[:,:].cpu()
 
 
                 #get indices to calculate loss
@@ -628,12 +627,6 @@ for r in range(n_runs):
         # n_hidden = 20
         seq_length = 350
         win_shift = 175
-        begin_loss_ind = 0
-        # (_, _, tst_data_target, tst_dates, unique_tst_dates_target) = buildLakeDataForRNN_manylakes_gauged([lake_id], seq_length, n_features, \
-        #                                             win_shift= win_shift, begin_loss_ind = 0, \
-        #                                             outputFullTestMatrix=False, sparseCustom=None, \
-        #                                             allTestSeq=False, static_feats=True,n_static_feats=4,\
-        #                                             postProcessSplits=True)  
         (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst(site_ids,areaDepth=True) 
 
 
@@ -653,8 +646,7 @@ for r in range(n_runs):
                 #parse data into inputs and targets
                 inputs = data[:,:,:-1].float()
                 targets = data[:,:,-1].float()
-                # targets = targets[:, begin_loss_ind:]
-                tmp_dates = tst_dates[:, begin_loss_ind:]
+                tmp_dates = tst_dates[:, :]
 
                 if use_gpu:
                     inputs = inputs.cuda()
@@ -666,14 +658,14 @@ for r in range(n_runs):
                 # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
                 pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
                 pred = pred.view(pred.size()[0],-1)
-                pred = pred[:, begin_loss_ind:]
+                pred = pred[:, :]
 
                 #calculate error
                 targets = targets.cpu()
                 loss_indices = np.where(np.isfinite(targets))
                 if use_gpu:
                     targets = targets.cuda()
-                inputs = inputs[:, begin_loss_ind:, :]
+                inputs = inputs[:, :, :]
                 mse = mse_criterion(pred[loss_indices], targets[loss_indices])
                 # print("test loss = ",mse)
                 avg_mse += mse
