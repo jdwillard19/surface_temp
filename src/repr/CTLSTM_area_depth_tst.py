@@ -472,7 +472,7 @@ for r in range(n_runs):
         pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
         model_dict.update(pretrain_dict)
         lstm_net.load_state_dict(pretrain_dict)
-
+        pdb.set_trace()
     else:
         if use_gpu:
             lstm_net = lstm_net.cuda()
@@ -594,7 +594,7 @@ for r in range(n_runs):
                 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
                 break
 
-
+    print("starting model testing")
     #test model
     rmse_per_lake = np.empty((len(site_ids)))
     rmse_per_lake[:] = np.nan
