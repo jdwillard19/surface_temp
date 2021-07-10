@@ -454,7 +454,7 @@ class Model(nn.Module):
     # Blog
     # About
 
-
+final_output_df = pd.DataFrame()
 for r in range(n_runs):
 
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
