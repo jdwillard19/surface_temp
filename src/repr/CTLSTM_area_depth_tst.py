@@ -511,7 +511,7 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
                 h_state = None
                 # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
                 # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
-                pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
+                pred, h_state, _ = models[r](inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
                 pred = pred.view(pred.size()[0],-1)
                 pred = pred[:, :]
 
@@ -547,11 +547,12 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
             else:
                 site_df['pred'+str(r)] = loss_output
 
-            df['avg_pred'] = df.iloc[:,2:(2+n_runs)].mean(axis=1)
+    pdb.set_trace()
+    df['avg_pred'] = site_df.iloc[:,2:(2+n_runs)].mean(axis=1)
 
-            mat_rmse = np.sqrt(((df['avg_pred'] - df['actual']) ** 2).mean())
+    mat_rmse = np.sqrt(((df['avg_pred'] - df['actual']) ** 2).mean())
 
-            print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
+    print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
 # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
 final_output_df = pd.DataFrame()
 final_output_df['site_id'] = site_ids
