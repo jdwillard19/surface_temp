@@ -110,7 +110,7 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,areaDe
         X_tst = np.empty(shape=(n_tst_obs, seq_length, n_features+1))
         X_tst[:] = np.nan
         tst_dates = np.empty(shape=(n_tst_obs,seq_length),dtype='datetime64[ns]')
-        tst_dates[:] = np.nan
+        # tst_dates[:] = np.nan
         for tst_ct,ind in enumerate(tst_obs_inds):
             if ind < seq_length-1:
                 X_tst[tst_ct,:,:n_features] = feat_mat[:seq_length,:]
