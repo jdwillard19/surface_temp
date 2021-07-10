@@ -472,6 +472,7 @@ for r in range(n_runs):
         pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
         model_dict.update(pretrain_dict)
         lstm_net.load_state_dict(pretrain_dict)
+        mse_criterion = nn.MSELoss()
 
     else:
         if use_gpu:
