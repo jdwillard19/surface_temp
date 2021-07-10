@@ -23,7 +23,7 @@ from pytorch_model_operations import saveModel
 import pytorch_data_operations
 import datetime
 from torch.utils.data import DataLoader
-from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataForRNN_repr_tst
+from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataForRNN_repr_tst, parseMatricesFromSeqs
 
 
 #get site Iids
