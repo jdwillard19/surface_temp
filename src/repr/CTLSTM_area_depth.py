@@ -63,7 +63,7 @@ targ_ep = 30
 targ_rmse = 2.03
 
 #
-n_features = trn_data.shape[0]-1
+n_features = trn_data.shape[2]-1
 n_static_feats = 0
 
 print("train_data size: ",trn_data.size())
