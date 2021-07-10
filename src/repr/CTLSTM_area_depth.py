@@ -384,7 +384,7 @@ class Model(nn.Module):
 for r in range(n_runs):
 
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-    lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden)
+    lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
     save_path = '../../../models/CTLSTM_area_depth_run'+str(r)
 
     if not train:
