@@ -115,17 +115,16 @@ def buildLakeDataForRNN_repr_tst(lakenames,seq_length=350,randomFeat=None,areaDe
             if ind < seq_length-1:
                 X_tst[tst_ct,:,:n_features] = feat_mat[:seq_length,:]
                 X_tst[tst_ct,ind,-1] = tst[ind]
-                tst_dates = dates[:seq_length]
+                tst_dates[tst_ct] = dates[:seq_length]
             else:
                 start_ind = ind - seq_length + 1
                 end_ind = ind+1
                 X_tst[tst_ct,:,:n_features] = feat_mat[start_ind:end_ind,:]
                 X_tst[tst_ct,-1,-1] = tst[ind]
-                tst_dates = dates[start_ind:end_ind]
+                tst_dates[tst_ct] = dates[start_ind:end_ind]
 
 
         X_tst_comp = torch.cat([X_tst_comp,torch.from_numpy(X_tst).float()],dim=0)
-        pdb.set_trace()
         tst_dates_comp = np.vstack([tst_dates_comp,tst_dates])
 
 
