@@ -476,6 +476,7 @@ for r in range(n_runs):
 rmse_per_lake = np.empty((len(site_ids)))
 rmse_per_lake[:] = np.nan
 for targ_ct, target_id in enumerate(site_ids): #for each target lake
+    print("testing lake ",targ_ct,"/",len(site_ids))
     site_df = pd.DataFrame()
     lake_id = target_id
 
@@ -558,3 +559,4 @@ final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
 final_output_df.to_csv("../../results/CTLSTM_warea_depth.csv")
+pdb.set_trace()
