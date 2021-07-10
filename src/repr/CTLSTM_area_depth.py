@@ -622,13 +622,8 @@ for r in range(n_runs):
 
 
 
-        data_dir_target = "../../data/processed/"+target_id+"/" 
         #target agnostic model and data params
-        use_gpu = True
-        # n_hidden = 20
-        seq_length = 350
-        win_shift = 175
-        (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst(site_ids,areaDepth=True) 
+        (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],areaDepth=True) 
 
 
         #useful values, LSTM params
@@ -699,7 +694,7 @@ for r in range(n_runs):
             output_df['site_id'] = [target_id]
             output_df['rmse'] = [mat_rmse]
             final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
-
+            pdb.set_trace()
             # if targ_ct % 100
             print("globLSTM rmse(",loss_output.shape[0]," obs)=", mat_rmse)
     # final_output_df.to_feather("../../results/err_est_outputs_225hid_EALSTM_fold"+str(k)+".feather")
