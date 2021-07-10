@@ -582,6 +582,7 @@ for r in range(n_runs):
                 print("train rmse loss=", avg_loss)
             
             if avg_loss < min_train_rmse:
+                min_train_rmse = avg_loss
                 print("model saved")
                 saveModel(lstm_net.state_dict(), optimizer.state_dict(), save_path)
 
