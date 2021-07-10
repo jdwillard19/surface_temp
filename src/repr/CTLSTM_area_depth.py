@@ -675,15 +675,15 @@ for r in range(n_runs):
             avg_mse = avg_mse / ct
 
             (outputm_npy, labelm_npy) = parseMatricesFromSeqs(pred.cpu().numpy(), targets.cpu().numpy(), tmp_dates, 
-                                                            n_test_dates_target,
-                                                            unique_tst_dates_target) 
+                                                            n_test_dates,
+                                                            all_dates) 
 
 
             #to store output
             # output_mats[i,:,:] = outputm_npy
             loss_output = outputm_npy[~np.isnan(labelm_npy)]
             loss_label = labelm_npy[~np.isnan(labelm_npy)]
-            loss_days = unique_tst_dates_target[~np.isnan(labelm_npy)]
+            loss_days = all_dates[~np.isnan(labelm_npy)]
             # print(unique_tst_dates_target)
             # output_df = pd.DataFrame()
             # output_df['Date'] = loss_days
