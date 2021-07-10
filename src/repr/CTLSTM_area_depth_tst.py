@@ -628,6 +628,7 @@ for r in range(n_runs):
         # n_hidden = 20
         seq_length = 350
         win_shift = 175
+        pdb.set_trace()
         (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],areaDepth=True) 
 
 
