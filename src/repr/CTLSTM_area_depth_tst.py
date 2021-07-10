@@ -454,24 +454,23 @@ class Model(nn.Module):
     # About
 
 final_output_df = pd.DataFrame()
+models = []
+#load all models for testing
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-    pdb.set_trace()
-    save_path = '../../models/CTLSTM_area_depth_run'+str(r)
-
-    if not train[r]:
-        load_path = save_path
-        n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-        lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-        if use_gpu:
-            lstm_net = lstm_net.cuda(0)
-        pretrain_dict = torch.load(load_path)['state_dict']
-        model_dict = lstm_net.state_dict()
-        pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
-        model_dict.update(pretrain_dict)
-        lstm_net.load_state_dict(pretrain_dict)
-        mse_criterion = nn.MSELoss()
+    load_path = '../../models/CTLSTM_area_depth_run'+str(r)
+    n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
+    lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
+    if use_gpu:
+        lstm_net = lstm_net.cuda(0)
+    pretrain_dict = torch.load(load_path)['state_dict']
+    model_dict = lstm_net.state_dict()
+    pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
+    model_dict.update(pretrain_dict)
+    lstm_net.load_state_dict(pretrain_dict)
+    mse_criterion = nn.MSELoss()
+    models.append(lstm_net)
 
 #test model
 rmse_per_lake = np.empty((len(site_ids)))
@@ -530,6 +529,8 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
             h_state = None
             # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
             # outputs, h_state, c_state = lstm_net(inputs[:,:,:n_features], inputs[:,0,n_features:])
+            pdb.set_trace()
+
             pred, h_state, _ = lstm_net(inputs[:,:,n_static_feats:], inputs[:,0,:n_static_feats])
             pred = pred.view(pred.size()[0],-1)
             pred = pred[:, :]
