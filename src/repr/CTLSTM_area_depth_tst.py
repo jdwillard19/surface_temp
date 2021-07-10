@@ -628,7 +628,7 @@ for r in range(n_runs):
         # n_hidden = 20
         seq_length = 350
         win_shift = 175
-        (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst(site_ids,areaDepth=True) 
+        (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],areaDepth=True) 
 
 
         #useful values, LSTM params
@@ -698,6 +698,7 @@ for r in range(n_runs):
             output_df = pd.DataFrame()
             output_df['site_id'] = [target_id]
             output_df['rmse'] = [mat_rmse]
+            pdb.set_trace()
             final_output_df = pd.concat([final_output_df, output_df],ignore_index=True)
 
             # if targ_ct % 100
