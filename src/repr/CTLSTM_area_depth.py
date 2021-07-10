@@ -58,7 +58,7 @@ n_hidden = 256
 lambda1 = 0.000
 
 # n_eps = 10000
-n_eps = 6000
+n_eps = 1000
 targ_ep = 30
 targ_rmse = 2.03
 
