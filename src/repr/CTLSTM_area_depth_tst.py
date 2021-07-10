@@ -547,8 +547,7 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
             else:
                 site_df['pred'+str(r)] = loss_output
 
-    pdb.set_trace()
-    df['avg_pred'] = site_df.iloc[:,2:(2+n_runs)].mean(axis=1)
+    site_df['avg_pred'] = site_df.iloc[:,2:(2+n_runs)].mean(axis=1)
 
     mat_rmse = np.sqrt(((df['avg_pred'] - df['actual']) ** 2).mean())
 
