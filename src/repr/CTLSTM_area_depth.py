@@ -502,7 +502,7 @@ for r in range(n_runs):
                 break
             # if verbose and epoch % 10 == 0:
             if verbose:
-                print("run ",r,", ",train epoch: ", epoch)
+                print("r",r,", ","train epoch: ", epoch)
 
             running_loss = 0.0
 
