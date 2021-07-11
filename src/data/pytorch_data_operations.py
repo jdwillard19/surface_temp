@@ -22,7 +22,10 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDe
         n_features += randomFeat
     if oneHot:
         n_features += 345
-
+    if allStatic:
+        n_features = 10
+    if areaOnly:
+        n_features = 6
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
     trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
 
