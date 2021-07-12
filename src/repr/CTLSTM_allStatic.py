@@ -77,6 +77,7 @@ n_runs = 5
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
 train = [True,True,True,True,True]
+train = [False,False,False,False,False]
 
 
 #Dataset classes
@@ -461,17 +462,18 @@ for r in range(n_runs):
     save_path = '../../models/CTLSTM_allstatic_run'+str(r)
 
     if not train[r]:
-        load_path = save_path
-        n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-        lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-        if use_gpu:
-            lstm_net = lstm_net.cuda(0)
-        pretrain_dict = torch.load(load_path)['state_dict']
-        model_dict = lstm_net.state_dict()
-        pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
-        model_dict.update(pretrain_dict)
-        lstm_net.load_state_dict(pretrain_dict)
-        mse_criterion = nn.MSELoss()
+        continue
+        # load_path = save_path
+        # n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
+        # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
+        # if use_gpu:
+        #     lstm_net = lstm_net.cuda(0)
+        # pretrain_dict = torch.load(load_path)['state_dict']
+        # model_dict = lstm_net.state_dict()
+        # pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
+        # model_dict.update(pretrain_dict)
+        # lstm_net.load_state_dict(pretrain_dict)
+        # mse_criterion = nn.MSELoss()
 
     else:
         if use_gpu:
@@ -602,7 +604,7 @@ models = []
 #load all models for testing
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-    lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
+    # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
     load_path = '../../models/CTLSTM_allstatic_run'+str(r)
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
