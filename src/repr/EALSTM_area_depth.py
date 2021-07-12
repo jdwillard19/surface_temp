@@ -617,26 +617,7 @@ for r in range(n_runs):
     mse_criterion = nn.MSELoss()
     models.append(lstm_net)
 
-#test model
 
-final_output_df = pd.DataFrame()
-models = []
-#load all models for testing
-for r in range(n_runs):
-    # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-    # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-    load_path = '../../models/EALSTM_area_depth_run'+str(r)
-    n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-    lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-    if use_gpu:
-        lstm_net = lstm_net.cuda(0)
-    pretrain_dict = torch.load(load_path)['state_dict']
-    model_dict = lstm_net.state_dict()
-    pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
-    model_dict.update(pretrain_dict)
-    lstm_net.load_state_dict(pretrain_dict)
-    mse_criterion = nn.MSELoss()
-    models.append(lstm_net)
 
 #test model
 rmse_per_lake = np.empty((len(site_ids)))
