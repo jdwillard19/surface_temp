@@ -629,7 +629,7 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
 
 
     #target agnostic model and data params
-    (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],depthArea=True) 
+    (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],areaDepth=True) 
 
 
     #useful values, LSTM params
