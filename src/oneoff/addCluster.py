@@ -17,3 +17,4 @@ for site_id in df_dr['site_id'].values:
 pdb.set_trace()
 
 df_dr['cluster'] = cluster
+df_dr.rename(columns={"cluster_id": "fold_id"})
