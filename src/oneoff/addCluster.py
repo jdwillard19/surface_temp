@@ -9,7 +9,7 @@ ct = 0
 for site_id in df_dr['site_id'].values:
 	ct+=1
 	print(ct)
-	if df_old.loc[site_id]['cluster'].values.shape[0] == 0:
+	if site_id not in df_old.index:
 		cluster.append(None)
 	else:
 		df_old.loc[site_id]['cluster'].values[0]
