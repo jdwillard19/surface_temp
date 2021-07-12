@@ -77,6 +77,7 @@ n_runs = 5
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
 train = [True,True,True,True,True]
+train = [False,False,False,False,False]
 
 
 #Dataset classes
@@ -703,4 +704,3 @@ final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
 final_output_df.to_csv("../../results/EALSTM_warea_depth.csv")
-pdb.set_trace()
