@@ -77,6 +77,7 @@ n_runs = 5
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
 train = [True,True,True,True,True]
+train = [False,False,False,False,False]
 
 
 #Dataset classes
@@ -626,7 +627,7 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
 
 
     #target agnostic model and data params
-    (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],areaDepth=True) 
+    (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],areaOnly=True) 
 
 
     #useful values, LSTM params
