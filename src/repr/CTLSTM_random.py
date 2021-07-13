@@ -705,4 +705,4 @@ final_output_df = pd.DataFrame()
 final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/CTLSTM_"+str(n_rand)+'rand.csv'
+final_output_df.to_csv("../../results/CTLSTM_"+str(n_rand)+'rand.csv')
