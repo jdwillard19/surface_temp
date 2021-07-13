@@ -29,14 +29,14 @@ from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataF
 #get site Iids
 site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
 
-
-trn_path = "./ctlstm_onehot_trn_data.npy"
-trn_date_path = "./ctlstm_onehot_trn_dates.npy"
+n_rand = int(sys.argv[1])
+trn_path = "./ctlstm_"+str(n_rand)+"rand_trn_data.npy"
+trn_date_path = "./ctlstm_"+str(n_rand)+"rand_trn_dates.npy"
 
 
 #load train data
 if not os.path.exists(trn_path):
-    (trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,oneHot=True) 
+    (trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,randomFeat=n_rand) 
     np.save(trn_path,trn_data)
     np.save(trn_date_path,trn_dates)
 else:
@@ -64,7 +64,7 @@ targ_rmse = 2.03
 
 #
 n_features = trn_data.shape[2]-1
-n_static_feats = 345
+n_static_feats = n_rand
 
 print("train_data size: ",trn_data.size())
 print(len(site_ids), " lakes of data")
@@ -76,8 +76,8 @@ n_runs = 5
 
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
-# train = [True,True,True,True,True]
-train = [False,False,False,False,False]
+train = [True,True,True,True,True]
+# train = [False,False,False,False,False]
 
 
 #Dataset classes
@@ -458,8 +458,9 @@ class Model(nn.Module):
 final_output_df = pd.DataFrame()
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-    lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=False)
-    save_path = '../../models/EALSTM_onehot_run'+str(r)
+    lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,
+                     hidden_size=n_hidden,no_static=False)
+    save_path = '../../models/EALSTM_'+str(n_rand)+'rand_run'+str(r)
 
     if not train[r]:
         continue
@@ -605,9 +606,10 @@ models = []
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
     # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-    load_path = '../../models/EALSTM_onehot_run'+str(r)
+    load_path = '../../models/EALSTM_'+str(n_rand)+'rand_run'+str(r)
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-    lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=False)
+    lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,\
+                     hidden_size=n_hidden,no_static=False)
     if use_gpu:
         lstm_net = lstm_net.cuda(0)
     pretrain_dict = torch.load(load_path)['state_dict']
@@ -628,7 +630,7 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
 
 
     #target agnostic model and data params
-    (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],oneHot=True) 
+    (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],randomFeat=n_rand) 
 
 
     #useful values, LSTM params
@@ -704,4 +706,4 @@ final_output_df = pd.DataFrame()
 final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/EALSTM_onehot.csv")
+final_output_df.to_csv("../../results/EALSTM_"+str(n_rand)+'rand.csv')
