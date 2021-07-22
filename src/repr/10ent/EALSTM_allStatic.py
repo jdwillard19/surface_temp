@@ -48,7 +48,7 @@ for site_range in site_ranges:
 
     #load train data
     if not os.path.exists(trn_path):
-        (trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,allStatic=True) 
+        (trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_range,allStatic=True) 
         np.save(trn_path,trn_data)
         np.save(trn_date_path,trn_dates)
     else:
@@ -79,7 +79,7 @@ for site_range in site_ranges:
     n_static_feats = 5
 
     print("train_data size: ",trn_data.size())
-    print(len(site_ids), " lakes of data")
+    print(len(site_range), " lakes of data")
     # trn_data = tst_data
     # batch_size = int(math.floor(trn_data.size()[0])/150)
     # batch_size = int(math.floor(trn_data.size()[0])/20)
@@ -632,7 +632,7 @@ for site_range in site_ranges:
     
     for targ_ct, target_id in enumerate(site_range): #for each target lake
         site_ct += 1
-        print("testing lake ",site_ct,"/",len(site_ids))
+        print("testing lake ",site_ct,"/",len(site_range))
         site_df = pd.DataFrame()
         lake_id = target_id
 
