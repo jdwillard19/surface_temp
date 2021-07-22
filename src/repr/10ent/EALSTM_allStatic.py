@@ -43,8 +43,8 @@ final_output_df = pd.DataFrame()
 
 for site_range in site_ranges:
 
-    trn_path = "./10ent_"+str(site_ct)+"to"+str(len(site_range))"_ctlstm_allstatic_trn_data.npy"
-    trn_date_path = "./10ent_"+str(site_ct)+"to"+str(len(site_range))"_ctlstm_allstatic_trn_dates.npy"
+    trn_path = "./10ent_"+str(site_ct)+"to"+str(len(site_range))+"_ctlstm_allstatic_trn_data.npy"
+    trn_date_path = "./10ent_"+str(site_ct)+"to"+str(len(site_range))+"_ctlstm_allstatic_trn_dates.npy"
 
     #load train data
     if not os.path.exists(trn_path):
