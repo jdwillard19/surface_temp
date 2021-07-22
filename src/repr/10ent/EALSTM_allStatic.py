@@ -27,7 +27,7 @@ from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataF
 
 
 #get site Iids
-site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
+site_ids = np.load("../../../metadata/lakeset.npy",allow_pickle=True)
 np.random.shuffle(site_ids)
 
 site_ids = site_ids[:340]
@@ -470,7 +470,7 @@ for site_range in site_ranges:
     for r in range(n_runs):
         # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
         lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-        save_path = '../../models/10ent_EALSTM_allstatic_run'+str(r)
+        save_path = '../../../models/10ent_EALSTM_allstatic_run'+str(r)
 
         if not train[r]:
             continue
@@ -616,7 +616,7 @@ for site_range in site_ranges:
     for r in range(n_runs):
         # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
         # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-        load_path = '../../models/10ent_EALSTM_allstatic_run'+str(r)
+        load_path = '../../../models/10ent_EALSTM_allstatic_run'+str(r)
         n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
         lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
         if use_gpu:
@@ -715,4 +715,4 @@ final_output_df = pd.DataFrame()
 final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/10ent_EALSTM_allstatic.csv")
+final_output_df.to_csv("../../../results/10ent_EALSTM_allstatic.csv")
