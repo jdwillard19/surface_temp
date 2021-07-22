@@ -641,7 +641,7 @@ for site_range in site_ranges:
 
 
         #target agnostic model and data params
-        (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],allStatic=True) 
+        (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],oneHot=True) 
 
 
         #useful values, LSTM params
