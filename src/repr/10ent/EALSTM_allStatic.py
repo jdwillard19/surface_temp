@@ -117,7 +117,8 @@ for site_range in site_ranges:
 
     #format total y-hat data for loading
     # total_data = TotalModelOutputDataset(all_data, all_phys_data, all_dates)
-    n_batches = math.floor(trn_data.size()[0] / batch_size)
+    # n_batches = math.floor(trn_data.size()[0] / batch_size)
+    n_batches = 1
 
     #batch samplers used to draw samples in dataloaders
     batch_sampler = pytorch_data_operations.ContiguousBatchSampler(batch_size, n_batches)
@@ -550,7 +551,6 @@ for site_range in site_ranges:
                         inputs = inputs.cuda()
                         targets = targets.cuda()
 
-                    pdb.set_trace()
                     #forward  prop
                     # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
                     # lstm_net.reset_parameters()
