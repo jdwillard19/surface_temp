@@ -550,6 +550,7 @@ for site_range in site_ranges:
                         inputs = inputs.cuda()
                         targets = targets.cuda()
 
+                    pdb.set_trace()
                     #forward  prop
                     # lstm_net.hidden = lstm_net.init_hidden(batch_size=inputs.size()[0])
                     # lstm_net.reset_parameters()
