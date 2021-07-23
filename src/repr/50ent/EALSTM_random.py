@@ -32,8 +32,9 @@ np.random.shuffle(site_ids)
 
 # n_rand = int(sys.argv[1])
 n_rand = 32
-site_ids = site_ids[:340]
-site_ranges = np.split(site_ids, 34)
+site_ranges = np.array([site_ids[:50],site_ids[50:100],site_ids[100:150],
+                        site_ids[150:200],site_ids[200:250],site_ids[250:300],
+                        site_ids[300:]])
 
 site_ct = -1
 rmse_per_lake = np.empty((len(site_ids)))
@@ -47,8 +48,8 @@ final_output_df = pd.DataFrame()
 
 for site_range in site_ranges:
 
-    trn_path = "./10ent_"+str(site_ct)+"to"+str(len(site_range))+"_ctlstm_32rand_trn_data.npy"
-    trn_date_path = "./10ent_"+str(site_ct)+"to"+str(len(site_range))+"_ctlstm_32rand_trn_dates.npy"
+    trn_path = "./50ent_"+str(site_ct)+"to"+str(len(site_range))+"_ctlstm_32rand_trn_data.npy"
+    trn_date_path = "./50ent_"+str(site_ct)+"to"+str(len(site_range))+"_ctlstm_32rand_trn_dates.npy"
 
     #load train data
     if not os.path.exists(trn_path):
@@ -475,7 +476,7 @@ for site_range in site_ranges:
     for r in range(n_runs):
         # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
         lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=no_static)
-        save_path = '../../../models/10ent_EALSTM_32rand_run'+str(r)
+        save_path = '../../../models/50ent_EALSTM_32rand_run'+str(r)
 
         if not train[r]:
             continue
@@ -621,7 +622,7 @@ for site_range in site_ranges:
     for r in range(n_runs):
         # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
         # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-        load_path = '../../../models/10ent_EALSTM_32rand_run'+str(r)
+        load_path = '../../../models/50ent_EALSTM_32rand_run'+str(r)
         n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
         lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=no_static)
         if use_gpu:
@@ -720,4 +721,4 @@ final_output_df = pd.DataFrame()
 final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../../results/10ent_EALSTM_32rand.csv")
+final_output_df.to_csv("../../../results/50ent_EALSTM_32rand.csv")
