@@ -474,7 +474,7 @@ for site_range in site_ranges:
     for r in range(n_runs):
         # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
         lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=no_static)
-        save_path = '../../../models/10ent_EALSTM_allstatic_run'+str(r)
+        save_path = '../../../models/50ent_EALSTM_allstatic_run'+str(r)
 
         if not train[r]:
             continue
