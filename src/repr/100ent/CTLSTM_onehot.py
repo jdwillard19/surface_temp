@@ -513,7 +513,6 @@ for site_range in site_ranges:
             #stop training if true
             min_train_rmse = 999
             min_train_ep = -1
-            done = False
             for epoch in range(n_eps):
                 if done:
                     break
