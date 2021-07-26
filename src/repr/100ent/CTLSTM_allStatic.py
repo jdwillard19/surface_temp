@@ -85,7 +85,7 @@ for site_range in site_ranges:
     # trn_data = tst_data
     # batch_size = int(math.floor(trn_data.size()[0])/150)
     # batch_size = int(math.floor(trn_data.size()[0])/20)
-    batch_size = trn_data.size()[0]
+    batch_size = 3000
     n_runs = 5
 
     # batch_size = trn_data.size()[0] #DEBUG VALUE
