@@ -27,16 +27,16 @@ from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataF
 
 
 #get site Iids
-site_ids = np.load("../../metadata/lakeset.npy",allow_pickle=True)
+site_ids = np.load("../../metadata/sites_s1.npy",allow_pickle=True)
 
-n_rand = int(sys.argv[1])
-trn_path = "./ctlstm_"+str(n_rand)+"rand_trn_data.npy"
-trn_date_path = "./ctlstm_"+str(n_rand)+"rand_trn_dates.npy"
+
+trn_path = "./s1_ctlstm_allstatic_trn_data.npy"
+trn_date_path = "./s1_ctlstm_allstatic_trn_dates.npy"
 
 
 #load train data
 if not os.path.exists(trn_path):
-    (trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,randomFeat=n_rand) 
+    (trn_data, trn_dates) = buildLakeDataForRNN_repr_trn(site_ids,allStatic=True) 
     np.save(trn_path,trn_data)
     np.save(trn_date_path,trn_dates)
 else:
@@ -52,7 +52,7 @@ use_gpu = True
 verbose = True
 grad_clip = 1.0 #how much to clip the gradient 2-norm in training
 dropout = 0.
-num_layers = 1P
+num_layers = 1
 n_hidden = 256
 # lambda1 = 1e-
 lambda1 = 0.000
@@ -64,22 +64,20 @@ targ_rmse = 2.03
 
 #
 n_features = trn_data.shape[2]-1
-n_static_feats = n_rand
+n_static_feats = 0
 
 print("train_data size: ",trn_data.size())
 print(len(site_ids), " lakes of data")
 # trn_data = tst_data
 # batch_size = int(math.floor(trn_data.size()[0])/150)
 # batch_size = int(math.floor(trn_data.size()[0])/20)
-batch_size = 1500 #maybe have to adjust
-if n_rand == 512:
-    batch_size = 750
+batch_size = 3000
 n_runs = 5
 
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
-train = [True,True,True,True,True]
 # train = [False,False,False,False,False]
+train = [True,True,True,True,True]
 
 
 #Dataset classes
@@ -460,23 +458,21 @@ class Model(nn.Module):
 final_output_df = pd.DataFrame()
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-    lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,
-                     hidden_size=n_hidden,no_static=False)
-    save_path = '../../models/EALSTM_'+str(n_rand)+'rand_run'+str(r)
+    lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
+    save_path = '../../models/S1_CTLSTM_allStatic_run'+str(r)
 
     if not train[r]:
-        continue
-        # load_path = save_path
-        # n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-        # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-        # if use_gpu:
-        #     lstm_net = lstm_net.cuda(0)
-        # pretrain_dict = torch.load(load_path)['state_dict']
-        # model_dict = lstm_net.state_dict()
-        # pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
-        # model_dict.update(pretrain_dict)
-        # lstm_net.load_state_dict(pretrain_dict)
-        # mse_criterion = nn.MSELoss()
+        load_path = save_path
+        n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
+        lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
+        if use_gpu:
+            lstm_net = lstm_net.cuda(0)
+        pretrain_dict = torch.load(load_path)['state_dict']
+        model_dict = lstm_net.state_dict()
+        pretrain_dict = {key: v for key, v in pretrain_dict.items() if key in model_dict}
+        model_dict.update(pretrain_dict)
+        lstm_net.load_state_dict(pretrain_dict)
+        mse_criterion = nn.MSELoss()
 
     else:
         if use_gpu:
@@ -607,11 +603,10 @@ models = []
 #load all models for testing
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
-    # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-    load_path = '../../models/EALSTM_'+str(n_rand)+'rand_run'+str(r)
+    lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
+    load_path = '../../models/S1_CTLSTM_allStatic_run'+str(r)
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
-    lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,\
-                     hidden_size=n_hidden,no_static=False)
+    lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
     if use_gpu:
         lstm_net = lstm_net.cuda(0)
     pretrain_dict = torch.load(load_path)['state_dict']
@@ -632,7 +627,7 @@ for targ_ct, target_id in enumerate(site_ids): #for each target lake
 
 
     #target agnostic model and data params
-    (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],randomFeat=n_rand) 
+    (tst_data, tst_dates, all_dates) = buildLakeDataForRNN_repr_tst([target_id],areaDepth=True) 
 
 
     #useful values, LSTM params
@@ -708,4 +703,4 @@ final_output_df = pd.DataFrame()
 final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/EALSTM_"+str(n_rand)+'rand.csv')
+final_output_df.to_csv("../../results/S1_CTLSTM_allStatic_run.csv")

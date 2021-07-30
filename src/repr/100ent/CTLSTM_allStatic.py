@@ -24,10 +24,17 @@ import pytorch_data_operations
 import datetime
 from torch.utils.data import DataLoader
 from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataForRNN_repr_tst, parseMatricesFromSeqs
-
+import matplotlib.pyplot as plt
 
 #get site Iids
+metadata = pd.read_feather("../../../metadata/lake_metadata_MTL.feather")
 site_ids = np.load("../../../metadata/lakeset.npy",allow_pickle=True)
+pdb.set_trace()
+depths = np.array([metadata[metadata['site_id']==i_d]['max_depth'].values[0] for i_d in site_ids])
+areas = np.array([np.log(metadata[metadata['site_id']==i_d]['surface_area'].values[0]) for i_d in site_ids])
+pdb.set_trace()
+plt.scatter(areas,depths)
+plt.show()
 np.random.shuffle(site_ids)
 
 # site_ids = site_ids[:340]
