@@ -76,8 +76,8 @@ n_runs = 5
 
 # batch_size = trn_data.size()[0] #DEBUG VALUE
 
-# train = [False,False,False,False,False]
-train = [True,True,True,True,True]
+train = [False,False,False,False,False]
+# train = [True,True,True,True,True]
 
 
 #Dataset classes
