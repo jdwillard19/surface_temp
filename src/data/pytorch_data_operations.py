@@ -14,7 +14,7 @@ from scipy import interpolate
 
 
 def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDepth=False,win_shift=175,
-                             oneHot=False,verbose=True,allStatic=False,areaOnly=False):
+                             oneHot=False,verbose=True,allStatic=False,areaOnly=False,noStatic=False):
     n_features = 9
     if areaDepth:
         n_features = 7 #5 dynamic 2 static
@@ -26,6 +26,8 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDe
         n_features = 10
     if areaOnly:
         n_features = 6
+    if noStatic:
+        n_features = 5
     X_trn_comp = torch.Tensor(0, seq_length, n_features+1)
     trn_dates_comp = np.array(torch.Tensor(0, seq_length),dtype=np.datetime64)
 
@@ -48,6 +50,9 @@ def buildLakeDataForRNN_repr_trn(lakenames,seq_length=350,randomFeat=None,areaDe
         elif areaOnly:
             feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wDepth.npy"))
             feat_mat = np.delete(feat_mat,(0,2,3,4),axis=1)   
+        elif noStatic:
+            feat_mat = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/features_wDepth.npy"))
+            feat_mat = np.delete(feat_mat,(0,1,2,3,4),axis=1)   
         trn = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/trn.npy"))
         dates = np.load(os.path.join(my_path, "../../data/processed/"+lakename+"/dates.npy"))
 
