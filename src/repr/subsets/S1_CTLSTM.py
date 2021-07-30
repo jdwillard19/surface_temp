@@ -15,10 +15,10 @@ import math
 import sys
 import re
 import os
+sys.path.append('../../../data')
 sys.path.append('../../data')
-sys.path.append('../data')
+sys.path.append('../../../models')
 sys.path.append('../../models')
-sys.path.append('../models')
 from pytorch_model_operations import saveModel
 import pytorch_data_operations
 import datetime
@@ -27,7 +27,7 @@ from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataF
 
 
 #get site Iids
-site_ids = np.load("../../metadata/sites_s1.npy",allow_pickle=True)
+site_ids = np.load("../../../metadata/sites_s1.npy",allow_pickle=True)
 
 
 trn_path = "./s1_ctlstm_allstatic_trn_data.npy"
@@ -459,7 +459,7 @@ final_output_df = pd.DataFrame()
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-    save_path = '../../models/S1_CTLSTM_allStatic_run'+str(r)
+    save_path = '../../../models/S1_CTLSTM_allStatic_run'+str(r)
 
     if not train[r]:
         load_path = save_path
@@ -604,7 +604,7 @@ models = []
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-    load_path = '../../models/S1_CTLSTM_allStatic_run'+str(r)
+    load_path = '../../../models/S1_CTLSTM_allStatic_run'+str(r)
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
     if use_gpu:
@@ -703,4 +703,4 @@ final_output_df = pd.DataFrame()
 final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../results/S1_CTLSTM_allStatic_run.csv")
+final_output_df.to_csv("../../../results/S1_CTLSTM_allStatic_run.csv")
