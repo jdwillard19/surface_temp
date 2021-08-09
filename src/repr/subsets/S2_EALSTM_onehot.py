@@ -27,11 +27,11 @@ from pytorch_data_operations import buildLakeDataForRNN_repr_trn, buildLakeDataF
 
 
 #get site Iids
-site_ids = np.load("../../../metadata/sites_s1.npy",allow_pickle=True)
+site_ids = np.load("../../../metadata/sites_s2.npy",allow_pickle=True)
 
 
-trn_path = "./s1_ctlstm_onehot_trn_data.npy"
-trn_date_path = "./s1_ctlstm_onehot_trn_dates.npy"
+trn_path = "./s2_ctlstm_onehot_trn_data.npy"
+trn_date_path = "./s2_ctlstm_onehot_trn_dates.npy"
 
 
 #load train data
@@ -459,7 +459,7 @@ final_output_df = pd.DataFrame()
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
     lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=False)
-    save_path = '../../../models/S1_EALSTM_onehot_run'+str(r)
+    save_path = '../../../models/S2_EALSTM_onehot_run'+str(r)
 
     if not train[r]:
         continue
@@ -605,7 +605,7 @@ models = []
 for r in range(n_runs):
     # lstm_net = myLSTM_Net(n_total_feats, n_hidden, batch_size)
     # lstm_net = Model(input_size_dyn=n_features,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=True)
-    load_path = '../../../models/S1_EALSTM_onehot_run'+str(r)
+    load_path = '../../../models/S2_EALSTM_onehot_run'+str(r)
     n_hidden = torch.load(load_path)['state_dict']['lstm.weight_hh'].shape[0]
     lstm_net = Model(input_size_dyn=n_features-n_static_feats,input_size_stat=n_static_feats,hidden_size=n_hidden,no_static=False)
     if use_gpu:
@@ -704,4 +704,4 @@ final_output_df = pd.DataFrame()
 final_output_df['site_id'] = site_ids
 final_output_df['rmse'] = rmse_per_lake
 final_output_df.reset_index(inplace=True)
-final_output_df.to_csv("../../../results/S1_EALSTM_onehot.csv")
+final_output_df.to_csv("../../../results/S2_EALSTM_onehot.csv")
